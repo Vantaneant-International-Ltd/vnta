@@ -1,0 +1,334 @@
+<script lang="ts">
+	const packages = [
+		{
+			name: 'FOUNDATION',
+			price: '€667',
+			period: '/month ',
+			oneTime: 'or €7,299 one-time',
+			features: [
+				'Brand strategy, positioning, identity',
+				'Team coordination & creative direction',
+				'Monthly deliverables & oversight',
+				'Complimentary 3-month post-service for new clients'
+			]
+		},
+		{
+			name: 'GROWTH',
+			price: '€1,083',
+			period: '/month ',
+			oneTime: 'or €11,999 one-time',
+			features: [
+				'Everything in FOUNDATION + advanced positioning',
+				'Narrative, campaigns, content & marketing alignment',
+				'Team motivation & performance oversight',
+				'Monthly rhythm & momentum building'
+			],
+			featured: true
+		},
+		{
+			name: 'SIGNATURE',
+			price: '€1,500',
+			period: '/month ',
+			oneTime: 'or €15,999 one-time',
+			features: [
+				'Everything in GROWTH + long-term brand/business architecture',
+				'Market expansion & flagship initiatives',
+				'Full leadership advisory',
+				'VNTA as external Brand Director / Vision Steward'
+			]
+		}
+	];
+
+	const retainers = [
+		{
+			name: 'Continuity',
+			price: '€750/m',
+			description: 'Monthly strategic call, oversight'
+		},
+		{
+			name: 'Oversight',
+			price: '€1,250/m',
+			description: 'Bi-monthly calls, team guidance, priority access'
+		},
+		{
+			name: 'Stewardship',
+			price: '€1,750–€2,000/m',
+			description: 'Full vision leadership & brand direction',
+			inviteOnly: true
+		}
+	];
+</script>
+
+<svelte:head>
+	<title>Packages — VNTA</title>
+	<meta
+		name="description"
+		content="12-month brand leadership packages with clear monthly deliverables."
+	/>
+</svelte:head>
+
+<div class="page-container">
+	<header class="header">
+		<a href="/" class="logo-link">
+			<picture class="logo">
+				<source srcset="/MAIN LIGHT.png" media="(prefers-color-scheme: dark)" />
+				<img src="/MAIN DARK.png" alt="VNTA" width="120" height="120" />
+			</picture>
+		</a>
+	</header>
+
+	<main class="content content-width">
+		<h1 class="title">Packages</h1>
+		<p class="subtitle">12 months of brand leadership in residence</p>
+
+		<div class="packages">
+			{#each packages as pkg}
+				<div class="package" class:featured={pkg.featured}>
+					<div class="package-header">
+
+						<h2>{pkg.name}</h2>
+						<div class="pricing-options">
+							<div class="price">
+								{pkg.price}<span>{pkg.period}</span>
+							</div>
+							<div class="price-alt">{pkg.oneTime}</div>
+						</div>
+					</div>
+					<ul class="features">
+						{#each pkg.features as feature}
+							<li>{feature}</li>
+						{/each}
+					</ul>
+				</div>
+			{/each}
+		</div>
+
+		<section class="retainers">
+			<h2 class="section-title">Optional Post-Engagement Retainers</h2>
+			<p class="section-note">After 12 months, new clients only</p>
+
+			<div class="retainer-grid">
+				{#each retainers as retainer}
+					<div class="retainer">
+						<h3>{retainer.name}</h3>
+						<div class="retainer-price">{retainer.price}</div>
+						{#if retainer.inviteOnly}
+							<p class="invite">Invite-only</p>
+						{/if}
+						<p>{retainer.description}</p>
+					</div>
+				{/each}
+			</div>
+		</section>
+
+		<div class="footer-section">
+			<a href="/" class="secondary-logo-link">
+				<picture class="secondary-logo">
+					<source srcset="/SECONDARY LIGHT.png" media="(prefers-color-scheme: dark)" />
+					<img src="/SECONDARY DARK.png" alt="VNTA" width="200" height="60" />
+				</picture>
+			</a>
+			<a href="mailto:studio@vnta.xyz" class="email-link">studio@vnta.xyz</a>
+		</div>
+	</main>
+</div>
+
+<style>
+	.header {
+		padding: 0 0 40px;
+	}
+
+	.logo-link {
+		display: inline-block;
+		transition: opacity 0.2s ease;
+	}
+
+	.logo-link:hover {
+		opacity: 0.8;
+	}
+
+	.title {
+		font-family: 'Playfair Display', serif;
+		font-size: clamp(2.5rem, 5vw, 4rem);
+		font-weight: 700;
+		margin: 0 0 0.5rem;
+		letter-spacing: -0.02em;
+	}
+
+	.subtitle {
+		font-size: 1.125rem;
+		line-height: 1.6;
+		color: rgba(255, 255, 255, 0.65);
+		margin: 0 0 4rem;
+	}
+
+	.packages {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: 2rem;
+		margin-bottom: 6rem;
+	}
+
+	.package {
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 18px;
+		padding: 28px 24px;
+		background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), transparent);
+		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	}
+
+	.package.featured {
+		border-color: rgba(255, 255, 255, 0.25);
+		box-shadow: 0 8px 32px rgba(255, 255, 255, 0.08);
+	}
+
+	.package:hover {
+		border-color: rgba(255, 255, 255, 0.3);
+		transform: translateY(-2px);
+		box-shadow: 0 12px 40px rgba(255, 255, 255, 0.1);
+	}
+
+	.package-header {
+		margin-bottom: 2rem;
+		padding-bottom: 2rem;
+		border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.pill {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		padding: 8px 12px;
+		border-radius: 999px;
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		background: rgba(255, 255, 255, 0.02);
+		color: #ffffff;
+		font-size: 0.85rem;
+		letter-spacing: 0.02em;
+		margin-bottom: 12px;
+	}
+
+	.package h2 {
+		font-size: 1.5rem;
+		font-weight: 600;
+		margin: 0 0 1.5rem;
+		letter-spacing: 0.02em;
+	}
+
+	.pricing-options {
+		display: flex;
+		flex-direction: column;
+		gap: 0.5rem;
+	}
+
+	.price {
+		font-size: 2rem;
+		font-weight: 700;
+		line-height: 1;
+	}
+
+	.price span {
+		font-size: 1rem;
+		font-weight: 400;
+		color: rgba(255, 255, 255, 0.6);
+	}
+
+	.price-alt {
+		font-size: 0.9375rem;
+		color: rgba(255, 255, 255, 0.6);
+	}
+
+	.features {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+	}
+
+	.features li {
+		font-size: 0.9375rem;
+		line-height: 1.6;
+		color: rgba(255, 255, 255, 0.85);
+		padding-left: 1.5rem;
+		position: relative;
+	}
+
+	.features li::before {
+		content: '→';
+		position: absolute;
+		left: 0;
+		color: rgba(255, 255, 255, 0.4);
+	}
+
+	.retainers {
+		margin-top: 6rem;
+		padding-top: 3rem;
+		border-top: 1px solid rgba(255, 255, 255, 0.1);
+	}
+
+	.section-title {
+		font-family: 'Playfair Display', serif;
+		font-size: 2rem;
+		font-weight: 600;
+		margin: 0 0 0.5rem;
+	}
+
+	.section-note {
+		font-size: 0.9375rem;
+		color: rgba(255, 255, 255, 0.6);
+		margin: 0 0 3rem;
+	}
+
+	.retainer-grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+		gap: 2rem;
+	}
+
+	.retainer {
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 14px;
+		padding: 20px 24px;
+		background: rgba(255, 255, 255, 0.02);
+		transition: all 0.25s ease;
+	}
+
+	.retainer:hover {
+		border-color: rgba(255, 255, 255, 0.2);
+		background: rgba(255, 255, 255, 0.04);
+		transform: translateY(-2px);
+	}
+
+	.retainer h3 {
+		font-size: 1.25rem;
+		font-weight: 600;
+		margin: 0 0 1rem;
+	}
+
+	.retainer-price {
+		font-size: 1.5rem;
+		font-weight: 700;
+		margin-bottom: 1rem;
+	}
+
+	.retainer p {
+		font-size: 0.9375rem;
+		line-height: 1.6;
+		color: rgba(255, 255, 255, 0.75);
+		margin: 0;
+	}
+
+	.invite {
+		color: rgba(255, 255, 255, 0.5);
+		font-style: italic;
+		margin-bottom: 0.5rem !important;
+	}
+
+	@media (max-width: 768px) {
+		.packages {
+			grid-template-columns: 1fr;
+		}
+	}
+</style>
