@@ -1,7 +1,6 @@
 
 <script lang="ts">
 	import { base } from '$app/paths';
-	import Partners from '$lib/components/+page.svelte';
 	const contactEmail = 'studio@vnta.xyz';
 </script>
 
@@ -61,9 +60,6 @@
 		</a>
 		<a href="mailto:studio@vnta.xyz" class="email-link">studio@vnta.xyz</a>
 	</div>
-
-<Partners />
-
 </main>
 
 <style>
