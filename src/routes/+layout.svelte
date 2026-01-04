@@ -1,3 +1,4 @@
+
 <script lang="ts">
 	import '@fontsource/manrope/400.css';
 	import '@fontsource/manrope/500.css';
