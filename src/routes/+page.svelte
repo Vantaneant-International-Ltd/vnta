@@ -1,9 +1,7 @@
-<script lang="ts">
-	import Partners from '$lib/components/+page.svelte';
-</script>
 
 <script lang="ts">
 	import { base } from '$app/paths';
+	import Partners from '$lib/components/+page.svelte';
 	const contactEmail = 'studio@vnta.xyz';
 </script>
 
