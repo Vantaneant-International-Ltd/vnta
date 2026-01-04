@@ -18,22 +18,6 @@
 </svelte:head>
 
 <main class="page-container">
-	<header class="top">
-		<picture class="logo">
-			<source srcset="{base}/main-dark.png" media="(prefers-color-scheme: dark)" />
-			<img src="{base}/main-dark.png" alt="VNTA" width="120" height="120" />
-		</picture>
-
-		<div class="nav-wrap">
-			<nav class="nav" aria-label="Primary">
-				<a class="nav-link" href="{base}/about">The Studio</a>
-				<a class="nav-link" href="{base}/explore">Explore</a>
-				<a class="nav-link" href="{base}/pricing">Packages</a>
-			</nav>
-			<span class="coming-soon" aria-label="Status: Coming soon">Coming Soon</span>
-		</div>
-	</header>
-
 	<section class="hero content-width">
 		<p class="eyebrow">Vantanéant International Ltd</p>
 		<h1>Brand Leadership in Residence</h1>
@@ -58,73 +42,7 @@
 </main>
 
 <style>
-	.top {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		margin-bottom: 44px;
-		position: relative;
-		z-index: 1;
-	}
-
-	.nav-wrap {
-		display: flex;
-		align-items: center;
-		gap: 14px;
-	}
-
-	.nav {
-		display: flex;
-		align-items: center;
-		gap: 18px;
-	}
-
-	.nav-link {
-		font-size: 0.78rem;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-		color: rgba(255, 255, 255, 0.6);
-		font-weight: 600;
-		text-decoration: none;
-		padding: 6px 0;
-		position: relative;
-		transition: color 0.2s ease;
-	}
-
-	.nav-link:hover {
-		color: rgba(255, 255, 255, 0.92);
-	}
-
-	.nav-link::after {
-		content: '';
-		position: absolute;
-		left: 0;
-		bottom: 0px;
-		width: 100%;
-		height: 1px;
-		background: rgba(255, 255, 255, 0.35);
-		transform: scaleX(0);
-		transform-origin: left;
-		transition: transform 0.2s ease;
-	}
-
-	.nav-link:hover::after {
-		transform: scaleX(1);
-	}
-
-	.coming-soon {
-		font-size: 0.78rem;
-		letter-spacing: 0.15em;
-		text-transform: uppercase;
-		color: rgba(255, 255, 255, 0.5);
-		font-weight: 600;
-		padding: 8px 14px;
-		border-radius: 999px;
-		border: 1px solid rgba(255, 255, 255, 0.15);
-		background: rgba(255, 255, 255, 0.03);
-		backdrop-filter: blur(10px);
-		white-space: nowrap;
-	}
+	/* Page content only — header/nav is now in +layout.svelte */
 
 	.hero {
 		position: relative;
@@ -190,22 +108,5 @@
 		color: rgba(255, 255, 255, 0.85);
 		line-height: 1.65;
 		font-size: 1rem;
-	}
-
-	@media (max-width: 720px) {
-		.top {
-			gap: 16px;
-			align-items: flex-start;
-		}
-
-		.nav-wrap {
-			flex-wrap: wrap;
-			justify-content: flex-end;
-			row-gap: 10px;
-		}
-
-		.nav {
-			gap: 14px;
-		}
 	}
 </style>
