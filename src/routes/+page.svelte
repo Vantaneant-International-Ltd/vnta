@@ -25,11 +25,14 @@
 			<img src="{base}/main-dark.png" alt="VNTA" width="120" height="120" />
 		</picture>
 
-		<nav class="nav">
-			<a class="nav-link" href="{base}/model">Model</a>
-			<a class="nav-link" href="{base}/pricing">Packages</a>
-			<span class="coming-soon">Coming Soon</span>
-		</nav>
+		<div class="nav-wrap">
+			<nav class="nav" aria-label="Primary">
+				<a class="nav-link" href="{base}/about">About</a>
+				<a class="nav-link" href="{base}/explore">Explore</a>
+				<a class="nav-link" href="{base}/pricing">Packages</a>
+			</nav>
+			<span class="coming-soon" aria-label="Status: Coming soon">Coming Soon</span>
+		</div>
 	</header>
 
 	<section class="hero content-width">
@@ -40,6 +43,8 @@
 			execute the strategy, team, and brand for 12 months. At the end, they have a scaled
 			business with clear monthly deliverables and a high-functioning team (small or big).
 		</p>
+
+		<a href="{base}/explore" class="btn-primary">Explore</a>
 	</section>
 
 	<section class="keypoint content-width">
@@ -52,8 +57,6 @@
 		</div>
 	</section>
 
-	<a href="{base}/pricing" class="btn-primary">View Packages</a>
-
 	<div class="footer-section content-width">
 		<a href="{base}/" class="secondary-logo-link">
 			<picture class="secondary-logo">
@@ -61,7 +64,7 @@
 				<img src="{base}/secondary-dark.png" alt="VNTA" width="200" height="60" />
 			</picture>
 		</a>
-		<a href="mailto:studio@vnta.xyz" class="email-link">studio@vnta.xyz</a>
+		<a href="mailto:studio@vnta.xyz" class="email-link">{contactEmail}</a>
 	</div>
 </main>
 
@@ -70,60 +73,79 @@
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		margin-bottom: 48px;
+		margin-bottom: 44px;
 		position: relative;
 		z-index: 1;
 	}
 
-	/* NEW: top-right nav pills */
+	/* NEW: nav links + status badge */
+	.nav-wrap {
+		display: flex;
+		align-items: center;
+		gap: 14px;
+	}
+
 	.nav {
 		display: flex;
 		align-items: center;
-		gap: 12px;
+		gap: 18px;
 	}
 
+	/* Text-only links */
 	.nav-link {
-		font-size: 0.8125rem;
-		letter-spacing: 0.12em;
+		font-size: 0.78rem;
+		letter-spacing: 0.14em;
 		text-transform: uppercase;
 		color: rgba(255, 255, 255, 0.6);
 		font-weight: 600;
-		padding: 8px 14px;
-		border-radius: 999px;
-		border: 1px solid rgba(255, 255, 255, 0.12);
-		background: rgba(255, 255, 255, 0.02);
-		backdrop-filter: blur(10px);
-		transition: all 0.2s ease;
 		text-decoration: none;
+		padding: 6px 0;
+		position: relative;
+		transition: color 0.2s ease;
 	}
 
 	.nav-link:hover {
-		color: rgba(255, 255, 255, 0.9);
-		border-color: rgba(255, 255, 255, 0.22);
-		background: rgba(255, 255, 255, 0.035);
-		transform: translateY(-1px);
+		color: rgba(255, 255, 255, 0.92);
 	}
 
-	/* existing coming-soon pill stays the same */
+	/* subtle underline on hover (premium, not noisy) */
+	.nav-link::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		bottom: 0px;
+		width: 100%;
+		height: 1px;
+		background: rgba(255, 255, 255, 0.35);
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.2s ease;
+	}
+
+	.nav-link:hover::after {
+		transform: scaleX(1);
+	}
+
+	/* Status badge only */
 	.coming-soon {
-		font-size: 0.8125rem;
+		font-size: 0.78rem;
 		letter-spacing: 0.15em;
 		text-transform: uppercase;
 		color: rgba(255, 255, 255, 0.5);
 		font-weight: 600;
-		padding: 8px 16px;
-		border-radius: 24px;
+		padding: 8px 14px;
+		border-radius: 999px;
 		border: 1px solid rgba(255, 255, 255, 0.15);
 		background: rgba(255, 255, 255, 0.03);
 		backdrop-filter: blur(10px);
-		align-self: center;
+		white-space: nowrap;
 	}
 
 	.hero {
 		position: relative;
 		z-index: 1;
 		line-height: 1.6;
-		margin-bottom: 64px;
+		margin-bottom: 44px; /* reduced to keep page short */
 	}
 
 	.eyebrow {
@@ -136,7 +158,7 @@
 	}
 
 	h1 {
-		margin: 0 0 20px;
+		margin: 0 0 18px;
 		font-size: clamp(2.4rem, 4vw, 3.4rem);
 		line-height: 1.15;
 		font-family: 'Playfair Display', 'Times New Roman', serif;
@@ -146,24 +168,25 @@
 	}
 
 	.lede {
-		margin: 0 0 32px;
+		margin: 0 0 22px; /* tighter */
 		font-size: 1.0625rem;
 		line-height: 1.7;
 		color: rgba(255, 255, 255, 0.8);
 		max-width: 820px;
 	}
 
+	/* Keypoint kept, but slightly tighter to reduce scroll */
 	.keypoint {
-		margin-top: 56px;
+		margin-top: 28px;
 		position: relative;
 		z-index: 1;
-		margin-bottom: 48px;
+		margin-bottom: 0;
 	}
 
 	.keypoint__body {
 		border-radius: 18px;
 		border: 1px solid rgba(255, 255, 255, 0.12);
-		padding: 28px 32px;
+		padding: 22px 26px; /* tighter */
 		background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
 		backdrop-filter: blur(10px);
 		box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
@@ -185,20 +208,21 @@
 		font-size: 1rem;
 	}
 
-	.btn-primary {
-		margin-bottom: 32px;
-	}
-
-	/* Optional: make header wrap nicely on mobile */
-	@media (max-width: 600px) {
+	/* Make header wrap nicely on mobile */
+	@media (max-width: 720px) {
 		.top {
 			gap: 16px;
 			align-items: flex-start;
 		}
 
-		.nav {
+		.nav-wrap {
 			flex-wrap: wrap;
 			justify-content: flex-end;
+			row-gap: 10px;
+		}
+
+		.nav {
+			gap: 14px;
 		}
 	}
 </style>
