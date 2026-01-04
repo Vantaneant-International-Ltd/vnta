@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { base } from '$app/paths';
-
 	const pillars = [
 		{
 			title: 'Leadership',
@@ -25,67 +23,43 @@
 	/>
 </svelte:head>
 
-<div class="page-container">
-	<header class="header">
-		<a href="{base}/" class="logo-link" aria-label="Back to home">
-			<picture class="logo">
-				<source srcset="{base}/main-dark.png" media="(prefers-color-scheme: dark)" />
-				<img src="{base}/main-dark.png" alt="VNTA" width="120" height="120" />
-			</picture>
-		</a>
-	</header>
+<main class="page-container">
+	<section class="hero content-width">
+		<h1 class="title">The Studio</h1>
+		<p class="subtitle">Vantanéant International Ltd</p>
 
-	<main class="content content-width">
-		<section class="hero">
-			<h1 class="title">The Studio</h1>
-			<p class="subtitle">Vantanéant International Ltd</p>
+		<p class="lede">
+			VNTA is a brand leadership studio operating in residence with founders. We lead direction,
+			coordinate teams, and execute against clear monthly deliverables over a 12-month engagement —
+			so businesses scale with clarity, not chaos.
+		</p>
 
-			<p class="lede">
-				VNTA is a brand leadership studio operating in residence with founders.
-				We lead direction, coordinate teams, and execute against clear monthly deliverables
-				over a 12-month engagement — so businesses scale with clarity, not chaos.
-			</p>
+		<p class="note">Selected work and references available on request.</p>
+	</section>
 
-			<p class="note">Selected work and references available on request.</p>
-		</section>
-
-		<section class="section">
-			<div class="grid">
-				{#each pillars as item}
-					<div class="card">
-						<h3>{item.title}</h3>
-						<p>{item.body}</p>
-					</div>
-				{/each}
-			</div>
-		</section>
-
-		<section class="cta">
-			<div class="cta-inner">
-				<div class="cta-text">
-					<h2>Contact</h2>
-					<p>If you’re building something serious, start a conversation.</p>
+	<section class="section content-width">
+		<div class="grid">
+			{#each pillars as item}
+				<div class="card">
+					<h3>{item.title}</h3>
+					<p>{item.body}</p>
 				</div>
-				<a class="btn-primary" href="mailto:studio@vnta.xyz">studio@vnta.xyz</a>
+			{/each}
+		</div>
+	</section>
+
+	<section class="cta content-width">
+		<div class="cta-inner">
+			<div class="cta-text">
+				<h2>Contact</h2>
+				<p>If you’re building something serious, start a conversation.</p>
 			</div>
-		</section>
-	</main>
-</div>
+			<a class="btn-primary" href="mailto:studio@vnta.xyz">studio@vnta.xyz</a>
+		</div>
+	</section>
+</main>
 
 <style>
-	.header {
-		padding: 0 0 40px;
-	}
-
-	.logo-link {
-		display: inline-block;
-		transition: opacity 0.2s ease;
-	}
-
-	.logo-link:hover {
-		opacity: 0.8;
-	}
-
 	.hero {
 		margin-bottom: 64px;
 	}
