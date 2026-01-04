@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { base } from '$app/paths';
-
 	const packages = [
 		{
 			name: 'FOUNDATION',
@@ -69,17 +67,8 @@
 	/>
 </svelte:head>
 
-<div class="page-container">
-	<header class="header">
-		<a href="{base}/" class="logo-link">
-			<picture class="logo">
-				<source srcset="{base}/main-dark.png" media="(prefers-color-scheme: dark)" />
-				<img src="{base}/main-dark.png" alt="VNTA" width="120" height="120" />
-			</picture>
-		</a>
-	</header>
-
-	<main class="content content-width">
+<main class="page-container">
+	<div class="content content-width">
 		<h1 class="title">Packages</h1>
 
 		<p class="subtitle">
@@ -137,9 +126,8 @@
 			<h2 class="section-title">Tailored Engagements</h2>
 
 			<p class="tailored-lede">
-				Not every business requires full brand leadership in residence.
-				Some engagements focus on a specific phase — refinement, repositioning,
-				or go-to-market execution.
+				Not every business requires full brand leadership in residence. Some engagements focus on a
+				specific phase — refinement, repositioning, or go-to-market execution.
 			</p>
 
 			<div class="tailored-steps">
@@ -164,25 +152,10 @@
 				<a href="mailto:studio@vnta.xyz" class="tailored-link">studio@vnta.xyz</a>
 			</div>
 		</section>
-	</main>
-</div>
+	</div>
+</main>
 
 <style>
-	/* HEADER */
-	.header {
-		padding: 0 0 40px;
-	}
-
-	.logo-link {
-		display: inline-block;
-		transition: opacity 0.2s ease;
-	}
-
-	.logo-link:hover {
-		opacity: 0.8;
-	}
-
-	/* TITLE */
 	.title {
 		font-family: 'Playfair Display', serif;
 		font-size: clamp(2.5rem, 5vw, 4rem);
@@ -281,6 +254,7 @@
 		color: rgba(255, 255, 255, 0.85);
 		padding-left: 1.5rem;
 		position: relative;
+		line-height: 1.6;
 	}
 
 	.features li::before {
@@ -333,6 +307,7 @@
 	.retainer h3 {
 		font-size: 1.25rem;
 		font-weight: 600;
+		margin: 0 0 10px;
 	}
 
 	.retainer-price {
@@ -344,11 +319,14 @@
 	.retainer p {
 		font-size: 0.9375rem;
 		color: rgba(255, 255, 255, 0.75);
+		margin: 0;
+		line-height: 1.6;
 	}
 
 	.invite {
 		color: rgba(255, 255, 255, 0.5);
 		font-style: italic;
+		margin-top: 10px;
 	}
 
 	/* TAILORED */
@@ -363,6 +341,7 @@
 		font-size: 1.0625rem;
 		color: rgba(255, 255, 255, 0.75);
 		margin: 0 0 3rem;
+		line-height: 1.7;
 	}
 
 	.tailored-steps {
@@ -388,12 +367,15 @@
 	.tailored-step p {
 		font-size: 0.95rem;
 		color: rgba(255, 255, 255, 0.75);
+		margin: 0;
+		line-height: 1.65;
 	}
 
 	.tailored-cta {
 		display: flex;
 		align-items: center;
 		gap: 1.5rem;
+		flex-wrap: wrap;
 	}
 
 	.tailored-cta p {
