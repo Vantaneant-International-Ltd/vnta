@@ -125,3 +125,5 @@ The official VNTA Brand Guidelines (Felixto Brandworks) are **not included** in 
 * Proprietary design assets remain private
 * This repository references guidelines conceptually only
 * Public-facing rules are enforced through implementation, not distribution
+
+## Notes - Favicon lives in static/favicon.svg. - Contact link uses mailto:hello@vnta.studio — update if needed. - All styles live in src/routes/+page.svelte; globals in src/routes/+layout.svelte.
