@@ -164,16 +164,6 @@
 				<a href="mailto:studio@vnta.xyz" class="tailored-link">studio@vnta.xyz</a>
 			</div>
 		</section>
-
-		<div class="footer-section">
-			<a href="{base}/" class="secondary-logo-link">
-				<picture class="secondary-logo">
-					<source srcset="{base}/secondary-dark.png" media="(prefers-color-scheme: dark)" />
-					<img src="{base}/secondary-dark.png" alt="VNTA" width="200" height="60" />
-				</picture>
-			</a>
-			<a href="mailto:studio@vnta.xyz" class="email-link">studio@vnta.xyz</a>
-		</div>
 	</main>
 </div>
 
