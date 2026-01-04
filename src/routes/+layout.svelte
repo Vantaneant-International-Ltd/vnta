@@ -5,12 +5,21 @@
 	import '@fontsource/manrope/700.css';
 	import '@fontsource/playfair-display/600.css';
 	import '@fontsource/playfair-display/700.css';
-	import { base } from '$app/paths';
 
+	import { base } from '$app/paths';
 	import { page } from '$app/stores';
 	import { fade } from 'svelte/transition';
 
 	let { children } = $props();
+
+	// Svelte 5 runes (works in SvelteKit 2)
+	let mobileOpen = $state(false);
+
+	const nav = [
+		{ label: 'The Studio', href: `${base}/about` },
+		{ label: 'Explore', href: `${base}/explore` },
+		{ label: 'Packages', href: `${base}/pricing` }
+	];
 
 	const socials = [
 		{ name: 'Instagram', href: 'https://www.instagram.com/vntaofficial/' },
@@ -22,6 +31,18 @@
 		{ name: 'eirvox.ie', href: 'https://eirvox.ie' },
 		{ name: 'vendr.ie', href: 'https://vendr.ie' }
 	];
+
+	function isActive(href: string) {
+		// normalize with base + handle trailing slashes
+		const path = $page.url.pathname.replace(/\/$/, '');
+		const target = href.replace(base, '').replace(/\/$/, '') || '/';
+		const current = path || '/';
+		return current === target;
+	}
+
+	function closeMobile() {
+		mobileOpen = false;
+	}
 </script>
 
 <svelte:head>
@@ -34,8 +55,82 @@
 <div class="app-shell" data-sveltekit-preload-data="hover">
 	{#key $page.url.pathname}
 		<div class="page" in:fade={{ duration: 180 }}>
-			{@render children()}
+			<!-- GLOBAL HEADER (shows on every page) -->
+			<header class="site-header" aria-label="VNTA header">
+				<div class="site-header__inner">
+					<a class="brand" href="{base}/" aria-label="VNTA home" on:click={closeMobile}>
+						<picture class="logo">
+							<source srcset="{base}/main-dark.png" media="(prefers-color-scheme: dark)" />
+							<img src="{base}/main-dark.png" alt="VNTA" width="120" height="120" />
+						</picture>
+					</a>
 
+					<nav class="nav" aria-label="Primary navigation">
+						{#each nav as item}
+							<a
+								class="nav-link"
+								class:is-active={isActive(item.href)}
+								href={item.href}
+								aria-current={isActive(item.href) ? 'page' : undefined}
+							>
+								{item.label}
+							</a>
+						{/each}
+
+						<span class="status" aria-label="Status: Coming soon">Coming Soon</span>
+					</nav>
+
+					<!-- MOBILE MENU BUTTON -->
+					<button
+						type="button"
+						class="menu-btn"
+						aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+						aria-expanded={mobileOpen}
+						on:click={() => (mobileOpen = !mobileOpen)}
+					>
+						{#if mobileOpen}
+							<span class="menu-x" aria-hidden="true">×</span>
+						{:else}
+							<span class="menu-bars" aria-hidden="true">≡</span>
+						{/if}
+					</button>
+				</div>
+
+				<!-- MOBILE DROPDOWN -->
+				{#if mobileOpen}
+					<div class="mobile" role="dialog" aria-label="Menu">
+						<div class="mobile__panel">
+							<nav class="mobile__nav" aria-label="Mobile navigation">
+								{#each nav as item}
+									<a
+										class="mobile__link"
+										class:is-active={isActive(item.href)}
+										href={item.href}
+										on:click={closeMobile}
+									>
+										{item.label}
+									</a>
+								{/each}
+
+								<div class="mobile__divider" aria-hidden="true"></div>
+
+								<div class="mobile__status" aria-label="Status">
+									<span>Coming Soon</span>
+								</div>
+							</nav>
+						</div>
+
+						<button type="button" class="mobile__backdrop" aria-label="Close menu" on:click={closeMobile} />
+					</div>
+				{/if}
+			</header>
+
+			<!-- PAGE CONTENT -->
+			<main class="site-main">
+				{@render children()}
+			</main>
+
+			<!-- GLOBAL FOOTER (shows on every page) -->
 			<footer class="site-footer" aria-label="VNTA footer">
 				<div class="site-footer__inner">
 					<div class="site-footer__left">
@@ -113,17 +208,18 @@
 		border-radius: 4px;
 	}
 
+	/* Keep your existing page container utility */
 	:global(.page-container) {
 		max-width: 1120px;
 		margin: 0 auto;
 		padding: 64px 48px 96px;
-		min-height: 100vh;
 	}
 
 	:global(.content-width) {
 		max-width: 880px;
 	}
 
+	/* Shared logo styles (kept) */
 	:global(.logo) {
 		display: block;
 		transition: transform 0.3s ease;
@@ -181,7 +277,204 @@
 		box-shadow: 0 2px 6px rgba(255, 255, 255, 0.08);
 	}
 
-	/* Footer */
+	.app-shell {
+		min-height: 100vh;
+	}
+
+	.page {
+		min-height: 100vh;
+		display: flex;
+		flex-direction: column;
+	}
+
+	.site-main {
+		flex: 1 0 auto;
+	}
+
+	/* -------------------- HEADER -------------------- */
+	.site-header {
+		position: sticky;
+		top: 0;
+		z-index: 50;
+		background: rgba(0, 0, 0, 0.78);
+		backdrop-filter: blur(10px);
+		border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+	}
+
+	.site-header__inner {
+		max-width: 1120px;
+		margin: 0 auto;
+		padding: 18px 48px;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 18px;
+	}
+
+	.brand {
+		display: inline-flex;
+		align-items: center;
+	}
+
+	.nav {
+		display: flex;
+		align-items: center;
+		gap: 26px;
+	}
+
+	/* Text links (not pills) */
+	.nav-link {
+		font-size: 0.78rem;
+		letter-spacing: 0.16em;
+		text-transform: uppercase;
+		font-weight: 600;
+		color: rgba(255, 255, 255, 0.55);
+		padding: 8px 0;
+		position: relative;
+		transition: color 0.2s ease;
+	}
+
+	.nav-link:hover {
+		color: rgba(255, 255, 255, 0.92);
+	}
+
+	.nav-link::after {
+		content: '';
+		position: absolute;
+		left: 0;
+		bottom: 4px;
+		width: 100%;
+		height: 1px;
+		background: rgba(255, 255, 255, 0.35);
+		transform: scaleX(0);
+		transform-origin: left;
+		transition: transform 0.2s ease;
+	}
+
+	.nav-link:hover::after {
+		transform: scaleX(1);
+	}
+
+	.nav-link.is-active {
+		color: rgba(255, 255, 255, 0.95);
+	}
+
+	.nav-link.is-active::after {
+		transform: scaleX(1);
+		background: rgba(255, 255, 255, 0.55);
+	}
+
+	/* Status stays as the only pill */
+	.status {
+		font-size: 0.78rem;
+		letter-spacing: 0.15em;
+		text-transform: uppercase;
+		color: rgba(255, 255, 255, 0.5);
+		font-weight: 600;
+		padding: 8px 14px;
+		border-radius: 999px;
+		border: 1px solid rgba(255, 255, 255, 0.15);
+		background: rgba(255, 255, 255, 0.03);
+		white-space: nowrap;
+	}
+
+	/* Mobile button hidden on desktop */
+	.menu-btn {
+		display: none;
+		border: 1px solid rgba(255, 255, 255, 0.14);
+		background: rgba(255, 255, 255, 0.03);
+		color: rgba(255, 255, 255, 0.9);
+		border-radius: 14px;
+		width: 44px;
+		height: 44px;
+		align-items: center;
+		justify-content: center;
+		cursor: pointer;
+		transition: all 0.2s ease;
+	}
+
+	.menu-btn:hover {
+		border-color: rgba(255, 255, 255, 0.28);
+		background: rgba(255, 255, 255, 0.05);
+		transform: translateY(-1px);
+	}
+
+	.menu-bars,
+	.menu-x {
+		font-size: 22px;
+		line-height: 1;
+	}
+
+	/* Mobile dropdown */
+	.mobile {
+		position: relative;
+	}
+
+	.mobile__panel {
+		position: absolute;
+		right: 18px;
+		top: 8px;
+		width: min(340px, calc(100vw - 36px));
+		border-radius: 18px;
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		background: rgba(0, 0, 0, 0.92);
+		backdrop-filter: blur(10px);
+		box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
+		z-index: 60;
+		overflow: hidden;
+	}
+
+	.mobile__nav {
+		display: flex;
+		flex-direction: column;
+		padding: 10px;
+	}
+
+	.mobile__link {
+		padding: 14px 14px;
+		border-radius: 12px;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		font-size: 0.82rem;
+		color: rgba(255, 255, 255, 0.78);
+		transition: background 0.15s ease, color 0.15s ease;
+	}
+
+	.mobile__link:hover {
+		background: rgba(255, 255, 255, 0.06);
+		color: rgba(255, 255, 255, 0.95);
+	}
+
+	.mobile__link.is-active {
+		background: rgba(255, 255, 255, 0.06);
+		color: rgba(255, 255, 255, 0.98);
+	}
+
+	.mobile__divider {
+		height: 1px;
+		margin: 8px 10px;
+		background: rgba(255, 255, 255, 0.08);
+	}
+
+	.mobile__status {
+		padding: 12px 14px;
+		color: rgba(255, 255, 255, 0.5);
+		letter-spacing: 0.12em;
+		text-transform: uppercase;
+		font-size: 0.78rem;
+	}
+
+	.mobile__backdrop {
+		position: fixed;
+		inset: 0;
+		background: transparent;
+		border: 0;
+		z-index: 55;
+		cursor: default;
+	}
+
+	/* -------------------- FOOTER -------------------- */
 	.site-footer {
 		margin-top: 72px;
 		padding-top: 32px;
@@ -262,12 +555,11 @@
 		color: rgba(255, 255, 255, 0.95);
 	}
 
-	.app-shell {
-		min-height: 100vh;
-	}
-
-	.page {
-		min-height: 100vh;
+	/* -------------------- RESPONSIVE -------------------- */
+	@media (max-width: 900px) {
+		.nav {
+			gap: 18px;
+		}
 	}
 
 	@media (max-width: 768px) {
@@ -278,6 +570,19 @@
 		:global(.logo img) {
 			width: 80px;
 			height: 80px;
+		}
+
+		.site-header__inner {
+			padding: 14px 24px;
+		}
+
+		/* hide desktop nav, show menu button */
+		.nav {
+			display: none;
+		}
+
+		.menu-btn {
+			display: inline-flex;
 		}
 
 		.site-footer__inner {
