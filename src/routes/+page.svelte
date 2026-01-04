@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { base } from '$app/paths';
-	const contactEmail = 'studio@vnta.xyz';
 </script>
 
 <svelte:head>
@@ -27,7 +26,7 @@
 
 		<div class="nav-wrap">
 			<nav class="nav" aria-label="Primary">
-				<a class="nav-link" href="{base}/about">About</a>
+				<a class="nav-link" href="{base}/about">The Studio</a>
 				<a class="nav-link" href="{base}/explore">Explore</a>
 				<a class="nav-link" href="{base}/pricing">Packages</a>
 			</nav>
@@ -56,16 +55,6 @@
 			</p>
 		</div>
 	</section>
-
-	<div class="footer-section content-width">
-		<a href="{base}/" class="secondary-logo-link">
-			<picture class="secondary-logo">
-				<source srcset="{base}/secondary-dark.png" media="(prefers-color-scheme: dark)" />
-				<img src="{base}/secondary-dark.png" alt="VNTA" width="200" height="60" />
-			</picture>
-		</a>
-		<a href="mailto:studio@vnta.xyz" class="email-link">{contactEmail}</a>
-	</div>
 </main>
 
 <style>
@@ -78,7 +67,6 @@
 		z-index: 1;
 	}
 
-	/* NEW: nav links + status badge */
 	.nav-wrap {
 		display: flex;
 		align-items: center;
@@ -91,7 +79,6 @@
 		gap: 18px;
 	}
 
-	/* Text-only links */
 	.nav-link {
 		font-size: 0.78rem;
 		letter-spacing: 0.14em;
@@ -108,7 +95,6 @@
 		color: rgba(255, 255, 255, 0.92);
 	}
 
-	/* subtle underline on hover (premium, not noisy) */
 	.nav-link::after {
 		content: '';
 		position: absolute;
@@ -126,7 +112,6 @@
 		transform: scaleX(1);
 	}
 
-	/* Status badge only */
 	.coming-soon {
 		font-size: 0.78rem;
 		letter-spacing: 0.15em;
@@ -145,7 +130,7 @@
 		position: relative;
 		z-index: 1;
 		line-height: 1.6;
-		margin-bottom: 44px; /* reduced to keep page short */
+		margin-bottom: 44px;
 	}
 
 	.eyebrow {
@@ -168,14 +153,13 @@
 	}
 
 	.lede {
-		margin: 0 0 22px; /* tighter */
+		margin: 0 0 22px;
 		font-size: 1.0625rem;
 		line-height: 1.7;
 		color: rgba(255, 255, 255, 0.8);
 		max-width: 820px;
 	}
 
-	/* Keypoint kept, but slightly tighter to reduce scroll */
 	.keypoint {
 		margin-top: 28px;
 		position: relative;
@@ -186,7 +170,7 @@
 	.keypoint__body {
 		border-radius: 18px;
 		border: 1px solid rgba(255, 255, 255, 0.12);
-		padding: 22px 26px; /* tighter */
+		padding: 22px 26px;
 		background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
 		backdrop-filter: blur(10px);
 		box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
@@ -208,7 +192,6 @@
 		font-size: 1rem;
 	}
 
-	/* Make header wrap nicely on mobile */
 	@media (max-width: 720px) {
 		.top {
 			gap: 16px;
