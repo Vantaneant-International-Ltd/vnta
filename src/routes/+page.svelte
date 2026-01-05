@@ -1,15 +1,14 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 
-	const partners = [
-		{ name: 'Felixto Brandworks', src: 'https://felixtobrandworks.com/logo.png' },  // Real logo for Felixto
-		{ name: 'Partner 2', src: `${base}/partners/placeholder.png` },  // Placeholder logo
-		{ name: 'Partner 3', src: `${base}/partners/placeholder.png` },  // Placeholder logo
-		{ name: 'Partner 4', src: `${base}/partners/placeholder.png` }   // Placeholder logo
+	// No logos yet: keep this minimal + safe.
+	// Use `href: null` to render a non-clickable cell.
+	const partners: Array<{ name: string; href: string | null }> = [
+		{ name: 'Felixto Brandworks', href: 'https://felixtobrandworks.com/' },
+		{ name: '', href: null },
+		{ name: '', href: null },
+		{ name: '', href: null }
 	];
-
-	// Duplicate once so the marquee can loop cleanly
-	const track = [...partners, ...partners];
 </script>
 
 <svelte:head>
@@ -50,19 +49,33 @@
 		</div>
 	</section>
 
-	<!-- PARTNERS CAROUSEL -->
+	<!-- PARTNERS (STATIC GRID, NO LOGOS YET) -->
 	<section class="partners" aria-label="Our partners">
-		<div class="partners__inner">
-			<h2 class="partners__title">Our Partners</h2>
-
-			<div class="partners__rail" tabindex="0" aria-label="Partner logos">
-				<div class="partners__track">
-					{#each track as p, i (p.name + i)}
-						<a class="partner-tile" href={p.name === 'Felixto Brandworks' ? 'https://felixtobrandworks.com' : '#'} aria-label={p.name}>
-							<img class="partner-logo" src={p.src} alt={p.name} loading="lazy" />
-						</a>
-					{/each}
+		<div class="partners__frame">
+			<div class="partners__grid" role="list">
+				<div class="partners__label" role="listitem" aria-label="Our Partners label">
+					<h2>Our<br />Partners</h2>
 				</div>
+
+				{#each partners as p}
+					{#if p.href}
+						<a
+							role="listitem"
+							class="partner-cell partner-cell--link"
+							href={p.href}
+							target="_blank"
+							rel="noreferrer"
+							aria-label={p.name}
+						>
+							<span class="partner-mark">{p.name}</span>
+							<span class="partner-arrow" aria-hidden="true">↗</span>
+						</a>
+					{:else}
+						<div role="listitem" class="partner-cell partner-cell--empty" aria-hidden="true">
+							<span class="empty-mark">—</span>
+						</div>
+					{/if}
+				{/each}
 			</div>
 		</div>
 	</section>
@@ -74,8 +87,7 @@
 		padding-bottom: 56px;
 	}
 
-	/* Page content only — header/nav is now in +layout.svelte */
-
+	/* Page content only — header/nav is in +layout.svelte */
 	.hero {
 		position: relative;
 		z-index: 1;
@@ -142,118 +154,132 @@
 		font-size: 1rem;
 	}
 
-	/* --- PARTNERS --- */
+	/* --- PARTNERS (STATIC) --- */
 	.partners {
 		margin-top: 56px;
-		padding-top: 34px;
+		padding-top: 28px;
 		border-top: 1px solid rgba(255, 255, 255, 0.08);
 	}
 
-	.partners__inner {
+	.partners__frame {
 		max-width: 1120px;
 		margin: 0 auto;
 		padding: 0 48px;
 	}
 
-	.partners__title {
-		margin: 0 0 18px;
-		font-size: 1.2rem;
-		font-weight: 600;
-		letter-spacing: -0.01em;
+	.partners__grid {
+		display: grid;
+		grid-template-columns: 1.1fr repeat(4, 1fr);
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		background: rgba(255, 255, 255, 0.02);
+		backdrop-filter: blur(10px);
+		border-radius: 22px;
+		overflow: hidden;
+	}
+
+	.partners__label {
+		padding: 28px 26px;
+		border-right: 1px solid rgba(255, 255, 255, 0.10);
+		display: flex;
+		align-items: center;
+		min-height: 140px;
+	}
+
+	.partners__label h2 {
+		margin: 0;
+		font-size: 2rem;
+		line-height: 1.05;
+		letter-spacing: -0.02em;
+		font-weight: 500;
 		color: rgba(255, 255, 255, 0.92);
 	}
 
-	/* rail = the visible window */
-	.partners__rail {
-		position: relative;
-		overflow: hidden;
-		border-radius: 20px;
-		border: 1px solid rgba(255, 255, 255, 0.1);
-		background: rgba(255, 255, 255, 0.03);
-		backdrop-filter: blur(10px);
-	}
-
-	/* track = moving row */
-	.partners__track {
-		display: flex;
-		align-items: stretch;
-		gap: 0;
-		width: max-content;
-		animation: marquee 26s linear infinite;
-		will-change: transform;
-	}
-
-	/* pause on hover/focus */
-	.partners__strip:hover .partners__track,
-	.partners__strip:focus-within .partners__track {
-		animation-play-state: paused;
-	}
-
-	/* each logo tile mimics the Wix grid cards */
-	.partner-tile {
-		width: 240px;
-		min-height: 124px;
+	.partner-cell {
+		min-height: 140px;
 		display: flex;
 		align-items: center;
 		justify-content: center;
 		border-right: 1px solid rgba(255, 255, 255, 0.10);
 		background: rgba(0, 0, 0, 0.10);
-		transition: background 0.2s ease;
+		position: relative;
 	}
 
-	.partner-tile:hover {
+	/* last column border off */
+	.partner-cell:last-child {
+		border-right: 0;
+	}
+
+	.partner-cell--link {
+		transition: background 0.2s ease, transform 0.2s ease;
+		gap: 10px;
+	}
+
+	.partner-cell--link:hover {
 		background: rgba(255, 255, 255, 0.03);
-	}
-
-	.partner-logo {
-		max-width: 72%;
-		max-height: 52%;
-		opacity: 0.70;
-		transition: opacity 0.2s ease, transform 0.2s ease;
-	}
-
-	.partner-tile:hover .partner-logo {
-		opacity: 0.92;
 		transform: translateY(-1px);
 	}
 
-	.partners__hint {
-		max-width: 1120px;
-		margin: 10px auto 0;
-		padding: 0 48px;
+	.partner-mark {
 		font-size: 0.78rem;
-		letter-spacing: 0.14em;
+		letter-spacing: 0.18em;
 		text-transform: uppercase;
-		color: rgba(255, 255, 255, 0.40);
+		color: rgba(255, 255, 255, 0.55);
 	}
 
-	@keyframes marquee {
-		from {
-			transform: translateX(0);
-		}
-		to {
-			transform: translateX(-50%);
-		}
+	.partner-arrow {
+		color: rgba(255, 255, 255, 0.35);
+		font-size: 0.9rem;
+		transform: translateY(-1px);
 	}
 
-	/* reduced motion */
-	@media (prefers-reduced-motion: reduce) {
-		.partners__track {
-			animation: none;
+	.partner-cell--empty {
+		cursor: default;
+	}
+
+	.empty-mark {
+		font-size: 1.2rem;
+		color: rgba(255, 255, 255, 0.10);
+	}
+
+	@media (max-width: 980px) {
+		.partners__grid {
+			grid-template-columns: 1fr 1fr;
 		}
-		.partners__rail {
-			overflow-x: auto;
+
+		.partners__label {
+			min-height: 120px;
+			border-right: 1px solid rgba(255, 255, 255, 0.10);
+			border-bottom: 1px solid rgba(255, 255, 255, 0.10);
+		}
+
+		.partners__label h2 {
+			font-size: 1.6rem;
+		}
+
+		.partner-cell {
+			min-height: 120px;
+			border-right: 0;
+			border-bottom: 1px solid rgba(255, 255, 255, 0.10);
 		}
 	}
 
 	@media (max-width: 768px) {
-		.partners__inner {
+		.partners__frame {
 			padding: 0 24px;
 		}
 
-		.partner-card {
-			width: 180px;
-			height: 84px;
+		.partners__grid {
+			border-radius: 20px;
+		}
+	}
+
+	@media (max-width: 520px) {
+		.partners__grid {
+			grid-template-columns: 1fr;
+		}
+
+		.partners__label {
+			border-right: 0;
 		}
 	}
 </style>
