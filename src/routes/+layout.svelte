@@ -184,7 +184,7 @@
 
 							<!-- Link is the CTA; email stays hidden -->
 							<a class="footer-link footer-link--plain" href="mailto:studio@vnta.xyz" aria-label="Email VNTA">
-								Contact
+								Email Us
 							</a>
 
 							<p class="footer-muted">Selected client work available on request.</p>
