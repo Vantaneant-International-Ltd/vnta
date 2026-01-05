@@ -52,7 +52,7 @@
 		mobileOpen = false;
 	}
 
-	// Only animate like "pages" for top-level tabs
+	// Only animate like "pages" for top-level tabs (and footer pages)
 	const tabRoutes = new Set(['/about', '/explore', '/pricing', '/', '/houses', '/legal', '/privacy', '/terms']);
 	function shouldAnimate(pathname: string) {
 		const clean = pathname.replace(/\/$/, '') || '/';
@@ -166,10 +166,6 @@
 								<span>View Houses</span>
 								<span class="footer-arrow" aria-hidden="true">→</span>
 							</a>
-
-							<p class="footer-muted">
-								Maison Seul® · Eirvox™ · Vendr™
-							</p>
 						</div>
 
 						<!-- Legal -->
@@ -181,21 +177,18 @@
 									<a class="footer-link footer-link--plain" href={l.href}>{l.label}</a>
 								{/each}
 							</div>
-
-							<p class="footer-legal">
-								VNTA® is a registered trademark of Vantanéant International Ltd.
-							</p>
-							<p class="footer-legal">
-								Vantanéant International Ltd is the holding company for Maison Seul®,
-								Eirvox™ and Vendr™.
-							</p>
 						</div>
 
 						<!-- Contact + socials -->
 						<div class="footer-col" aria-label="Contact">
 							<p class="footer-title">Contact</p>
 
-							<a class="footer-link footer-link--plain" href="mailto:studio@vnta.xyz">studio@vnta.xyz</a>
+							<!-- Link is the CTA; email stays hidden -->
+							<a class="footer-link footer-link--plain" href="mailto:studio@vnta.xyz" aria-label="Email VNTA">
+								Contact
+							</a>
+
+							<p class="footer-muted">Selected client work available on request.</p>
 
 							<div class="footer-socials" aria-label="Social links">
 								{#each socials as s}
@@ -537,14 +530,7 @@
 		color: rgba(255, 255, 255, 0.45);
 		font-size: 0.9rem;
 		line-height: 1.6;
-	}
-
-	.footer-legal {
-		margin: 12px 0 0;
-		color: rgba(255, 255, 255, 0.5);
-		font-size: 0.9rem;
-		line-height: 1.6;
-		max-width: 60ch;
+		max-width: 42ch;
 	}
 
 	.footer-socials {
