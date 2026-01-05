@@ -174,8 +174,13 @@
 			<div class="faq">
 				{#each faqs as f}
 					<details class="faq-item">
-						<summary>{f.q}</summary>
-						<p>{f.a}</p>
+						<summary>
+							<span class="faq-q">{f.q}</span>
+							<span class="faq-chev" aria-hidden="true">▾</span>
+						</summary>
+						<div class="faq-a">
+							<p>{f.a}</p>
+						</div>
 					</details>
 				{/each}
 			</div>
@@ -392,7 +397,7 @@
 		color: rgba(255, 255, 255, 0.4);
 	}
 
-	/* FAQ */
+	/* FAQ (arrow chevron, no "+") */
 	.faq {
 		display: flex;
 		flex-direction: column;
@@ -402,8 +407,8 @@
 	.faq-item {
 		border: 1px solid rgba(255, 255, 255, 0.1);
 		border-radius: 14px;
-		padding: 16px 18px;
 		background: rgba(255, 255, 255, 0.02);
+		overflow: hidden;
 	}
 
 	.faq-item summary {
@@ -411,13 +416,39 @@
 		font-weight: 600;
 		color: rgba(255, 255, 255, 0.9);
 		list-style: none;
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 18px;
+		padding: 16px 18px;
 	}
 
 	.faq-item summary::-webkit-details-marker {
 		display: none;
 	}
 
-	.faq-item p {
+	.faq-q {
+		line-height: 1.35;
+	}
+
+	.faq-chev {
+		color: rgba(255, 255, 255, 0.6);
+		transition: transform 0.18s ease, color 0.18s ease;
+		font-size: 1rem;
+		line-height: 1;
+	}
+
+	.faq-item[open] .faq-chev {
+		transform: rotate(180deg);
+		color: rgba(255, 255, 255, 0.9);
+	}
+
+	.faq-a {
+		padding: 0 18px 16px;
+		border-top: 1px solid rgba(255, 255, 255, 0.08);
+	}
+
+	.faq-a p {
 		margin: 12px 0 0;
 		color: rgba(255, 255, 255, 0.75);
 		line-height: 1.65;
