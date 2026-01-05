@@ -226,8 +226,8 @@
 </main>
 
 <!-- IMPORTANT: render modal at BODY level so it can’t be trapped by transformed parents -->
-<svelte:body>
-	{#if tailoredModalOpen}
+{#if tailoredModalOpen}
+	<svelte:portal target="body">
 		<div class="vnta-modal-backdrop" on:click={closeTailoredModal}>
 			<div
 				class="vnta-modal"
@@ -320,8 +320,9 @@
 				</div>
 			</div>
 		</div>
-	{/if}
-</svelte:body>
+	</svelte:portal>
+{/if}
+
 
 <style>
 	.title {
