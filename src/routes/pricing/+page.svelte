@@ -58,9 +58,7 @@
 		}
 	];
 
-	/* ===========================
-	   MODAL ADDITION (no layout changes)
-	   =========================== */
+	/* ========= Tailored modal ========= */
 
 	let tailoredModalOpen = false;
 
@@ -85,6 +83,7 @@
 	const timelineOptions = ['ASAP', '1–2 months', '3–6 months', '6–12 months', 'Not sure'];
 	const budgetOptions = ['< €5k', '€5k–€10k', '€10k–€20k', '€20k+', 'Not sure'];
 
+	// Portal action: mounts node into document.body (compatible with older Svelte)
 	function portal(node: HTMLElement, target = 'body') {
 		if (typeof document === 'undefined') return;
 
@@ -101,14 +100,37 @@
 		};
 	}
 
+	let prevBodyOverflow = '';
+	let prevBodyPaddingRight = '';
+
+	function lockScroll() {
+		if (typeof document === 'undefined') return;
+		const body = document.body;
+
+		prevBodyOverflow = body.style.overflow;
+		prevBodyPaddingRight = body.style.paddingRight;
+
+		// prevent layout shift when scrollbar disappears (desktop)
+		const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+		body.style.overflow = 'hidden';
+		if (scrollbarWidth > 0) body.style.paddingRight = `${scrollbarWidth}px`;
+	}
+
+	function unlockScroll() {
+		if (typeof document === 'undefined') return;
+		const body = document.body;
+		body.style.overflow = prevBodyOverflow;
+		body.style.paddingRight = prevBodyPaddingRight;
+	}
+
 	function openTailoredModal() {
 		tailoredModalOpen = true;
-		if (typeof document !== 'undefined') document.documentElement.style.overflow = 'hidden';
+		lockScroll();
 	}
 
 	function closeTailoredModal() {
 		tailoredModalOpen = false;
-		if (typeof document !== 'undefined') document.documentElement.style.overflow = '';
+		unlockScroll();
 	}
 
 	function openTailoredEmail() {
@@ -227,7 +249,6 @@
 				</div>
 			</div>
 
-			<!-- ORIGINAL CTA COPY, but button instead of showing email -->
 			<div class="tailored-cta">
 				<p>To discuss a tailored engagement:</p>
 				<button class="tailored-btn" type="button" on:click={openTailoredModal}>
@@ -238,7 +259,7 @@
 	</div>
 </main>
 
-<!-- MODAL (ported to document.body, does not affect original layout) -->
+<!-- MODAL (ported to body, does not affect page layout) -->
 {#if tailoredModalOpen}
 	<div use:portal class="vnta-modal-backdrop" on:click={closeTailoredModal}>
 		<div
@@ -254,7 +275,13 @@
 					<p class="vnta-modal-subtitle">Short application. High-signal only.</p>
 				</div>
 
-				<button class="vnta-modal-close" type="button" on:click={closeTailoredModal} aria-label="Close">
+				<!-- FIX: type="button" + stopPropagation -->
+				<button
+					class="vnta-modal-close"
+					type="button"
+					on:click|stopPropagation={closeTailoredModal}
+					aria-label="Close"
+				>
 					×
 				</button>
 			</div>
@@ -323,7 +350,12 @@
 						Compose inquiry
 					</button>
 
-					<button class="vnta-modal-secondary" type="button" on:click={closeTailoredModal}>
+					<!-- FIX: type="button" + stopPropagation -->
+					<button
+						class="vnta-modal-secondary"
+						type="button"
+						on:click|stopPropagation={closeTailoredModal}
+					>
 						Not now
 					</button>
 
@@ -580,29 +612,52 @@
 		transform: translateY(-1px);
 	}
 
-	/* ========= MODAL (namespaced; doesn’t touch page layout) ========= */
+	/* ========= MODAL (mobile-safe) ========= */
+
+	/* KEY MOBILE FIXES:
+	   - backdrop scrolls (overflow:auto)
+	   - modal constrained to viewport height (max-height)
+	   - modal body scrolls (overflow:auto)
+	   - header sticky so close is always reachable
+	*/
 	.vnta-modal-backdrop {
 		position: fixed;
 		inset: 0;
 		background: rgba(0, 0, 0, 0.72);
 		backdrop-filter: blur(10px);
+
 		display: flex;
-		align-items: center;
+		align-items: flex-start;
 		justify-content: center;
-		padding: 1.25rem;
+
+		padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
 		z-index: 9999;
+
+		overflow: auto;
+		-webkit-overflow-scrolling: touch;
 	}
 
 	.vnta-modal {
 		width: min(860px, 100%);
+		max-height: calc(100dvh - 24px);
+
 		border: 1px solid rgba(255, 255, 255, 0.12);
 		border-radius: 22px;
 		background: rgba(10, 10, 10, 0.86);
 		box-shadow: 0 30px 120px rgba(0, 0, 0, 0.6);
+
+		display: flex;
+		flex-direction: column;
 		overflow: hidden;
 	}
 
 	.vnta-modal-header {
+		position: sticky;
+		top: 0;
+		z-index: 2;
+		background: rgba(10, 10, 10, 0.92);
+		backdrop-filter: blur(10px);
+
 		display: flex;
 		align-items: flex-start;
 		justify-content: space-between;
@@ -637,6 +692,7 @@
 		line-height: 1;
 		cursor: pointer;
 		transition: all 0.2s ease;
+		flex: 0 0 auto;
 	}
 
 	.vnta-modal-close:hover {
@@ -647,6 +703,8 @@
 
 	.vnta-modal-body {
 		padding: 22px 22px 24px;
+		overflow: auto;
+		-webkit-overflow-scrolling: touch;
 	}
 
 	.vnta-form-grid {
@@ -757,6 +815,14 @@
 
 		.span-2 {
 			grid-column: auto;
+		}
+
+		.vnta-modal-body {
+			padding: 18px 18px 20px;
+		}
+
+		.vnta-modal-header {
+			padding: 18px 18px;
 		}
 	}
 </style>
