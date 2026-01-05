@@ -15,6 +15,7 @@
 	// Svelte 5 runes (SvelteKit 2)
 	let mobileOpen = $state(false);
 
+	// Minimal header tabs (soft launch): keep core only
 	const nav = [
 		{ label: 'The Studio', href: `${base}/about` },
 		{ label: 'Explore', href: `${base}/explore` },
@@ -30,6 +31,7 @@
 	const footerNav = {
 		houses: { label: 'Houses', href: `${base}/houses` },
 		legal: [
+			{ label: 'Approach', href: `${base}/approach` },
 			{ label: 'Legal', href: `${base}/legal` },
 			{ label: 'Privacy', href: `${base}/privacy` },
 			{ label: 'Terms', href: `${base}/terms` }
@@ -53,7 +55,18 @@
 	}
 
 	// Only animate like "pages" for top-level tabs (and footer pages)
-	const tabRoutes = new Set(['/about', '/explore', '/pricing', '/', '/houses', '/legal', '/privacy', '/terms']);
+	const tabRoutes = new Set([
+		'/about',
+		'/explore',
+		'/pricing',
+		'/approach',
+		'/',
+		'/houses',
+		'/legal',
+		'/privacy',
+		'/terms'
+	]);
+
 	function shouldAnimate(pathname: string) {
 		const clean = pathname.replace(/\/$/, '') || '/';
 		return tabRoutes.has(clean);
@@ -167,8 +180,8 @@
 							</a>
 						</div>
 
-						<!-- Legal -->
-						<div class="footer-col" aria-label="Legal">
+						<!-- The Company -->
+						<div class="footer-col" aria-label="The Company">
 							<p class="footer-title">The Company</p>
 
 							<div class="footer-links">
