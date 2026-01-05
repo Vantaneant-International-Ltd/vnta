@@ -160,17 +160,16 @@
 					<div class="footer-grid">
 						<!-- Houses -->
 						<div class="footer-col" aria-label="Houses">
-							<p class="footer-title">Houses</p>
+							<p class="footer-title">Lineage</p>
 
 							<a class="footer-link" href={footerNav.houses.href}>
-								<span>View Houses</span>
-								<span class="footer-arrow" aria-hidden="true">→</span>
+								<span>Houses</span>
 							</a>
 						</div>
 
 						<!-- Legal -->
 						<div class="footer-col" aria-label="Legal">
-							<p class="footer-title">Legal</p>
+							<p class="footer-title">The Company</p>
 
 							<div class="footer-links">
 								{#each footerNav.legal as l}
