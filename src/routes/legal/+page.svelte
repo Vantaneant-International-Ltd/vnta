@@ -1,5 +1,5 @@
 <svelte:head>
-	<title>Terms — VNTA</title>
+	<title>Legal — VNTA</title>
 	<meta
 		name="description"
 		content="Terms and conditions governing the use of VNTA and its associated services."
