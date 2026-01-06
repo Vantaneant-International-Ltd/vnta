@@ -12,34 +12,24 @@
 
 		<p class="lede">
 			VNTA operates at the intersection of strategy, narrative, and stewardship.
-			The work is shaped less by outputs and more by sustained involvement at moments
-			where clarity, direction, and long-term thinking are required.
+			The work is shaped by sustained involvement at moments where clarity,
+			direction, and long-term thinking are required.
 		</p>
 
 		<p class="lede secondary">
-			This page outlines how VNTA approaches brand leadership — not as a service layer,
-			but as an embedded strategic role.
+			This page outlines how VNTA approaches brand leadership — not as a service
+			layer, but as an embedded strategic role.
 		</p>
-
-		<!-- HOW WE WORK -->
-		<section class="section">
-			<h2 class="section-title">How VNTA Works</h2>
-
-			<p class="body-text">
-				Most engagements begin without a predefined brief. Instead, VNTA enters at a
-				point of ambiguity — where a business knows something must change, but not yet
-				how it should be articulated or structured.
-			</p>
-
-			<p class="body-text">
-				The role is advisory by default, often operating alongside founders or senior
-				decision-makers to establish direction before execution is delegated or scaled.
-			</p>
-		</section>
 
 		<!-- NATURE OF ENGAGEMENTS -->
 		<section class="section">
 			<h2 class="section-title">Nature of Engagements</h2>
+
+			<p class="body-text">
+				Most engagements begin without a predefined brief. VNTA typically enters
+				at points of ambiguity — where direction is unclear, alignment is incomplete,
+				or the next phase requires definition before execution.
+			</p>
 
 			<ul class="list">
 				<li>Strategic and creative advisory</li>
@@ -50,7 +40,7 @@
 			</ul>
 
 			<p class="body-text muted">
-				Engagements vary in duration and scope, but typically prioritise depth,
+				Engagements vary in duration and scope, but consistently prioritise depth,
 				continuity, and long-term coherence over short-term campaigns.
 			</p>
 		</section>
@@ -60,14 +50,14 @@
 			<h2 class="section-title">Philosophy</h2>
 
 			<p class="body-text">
-				VNTA treats brand as a system — cultural, operational, and narrative — rather
-				than a surface expression. Visibility follows structure, not the other way
-				around.
+				VNTA treats brand as a system — cultural, operational, and narrative —
+				rather than a surface expression. Visibility follows structure, not the
+				other way around.
 			</p>
 
 			<p class="body-text">
-				The work resists trends, accelerations, and performative gestures in favour of
-				clarity, restraint, and durability.
+				The work resists trends, accelerations, and performative gestures in favour
+				of clarity, restraint, and durability.
 			</p>
 		</section>
 
@@ -79,32 +69,32 @@
 				<div class="process-step">
 					<h3>Observation</h3>
 					<p>
-						Listening, diagnosing, and understanding context — market, internal
-						dynamics, and intent — before proposing direction.
+						Immersion in context — market, internal dynamics, and intent —
+						before any directional commitments are made.
 					</p>
 				</div>
 
 				<div class="process-step">
 					<h3>Definition</h3>
 					<p>
-						Clarifying position, principles, and internal alignment to establish a
-						coherent foundation.
+						Clarifying position, principles, and internal alignment to establish
+						a coherent foundation.
 					</p>
 				</div>
 
 				<div class="process-step">
 					<h3>Direction</h3>
 					<p>
-						Setting a strategic and creative trajectory that can guide decisions
-						over time.
+						Setting a strategic and creative trajectory capable of guiding
+						decisions over time.
 					</p>
 				</div>
 
 				<div class="process-step">
 					<h3>Stewardship</h3>
 					<p>
-						Ongoing oversight to protect coherence, quality, and intent as the
-						brand evolves.
+						Ongoing oversight to protect coherence, quality, and intent as
+						the brand evolves.
 					</p>
 				</div>
 			</div>
@@ -114,8 +104,8 @@
 		<section class="section note">
 			<p class="note-text">
 				The approach outlined above is informed by experience across early-stage
-				ventures, founder-led brands, and positioning work conducted both before and
-				after VNTA’s formal incorporation in 2025.
+				ventures, founder-led brands, and positioning work conducted both before
+				and after VNTA’s formal incorporation in 2025.
 			</p>
 		</section>
 	</div>
