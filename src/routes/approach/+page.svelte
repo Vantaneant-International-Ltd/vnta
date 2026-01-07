@@ -31,6 +31,13 @@
 				or the next phase requires definition before execution.
 			</p>
 
+			<!-- CLARIFYING ROLE (EXECUTIVE ORIENTATION) -->
+			<p class="body-text">
+				In practice, VNTA often operates in a role comparable to an external head of
+				product or brand — aligning vision, narrative, and decision-making at the
+				leadership level while internal teams and partners carry out execution.
+			</p>
+
 			<ul class="list">
 				<li>Strategic and creative advisory</li>
 				<li>Brand positioning and architectural definition</li>
