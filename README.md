@@ -1,3 +1,5 @@
+![VNTA Roadmap](docs/vnta-roadmap-doctrine.svg)
+
 ## VNTA — Coming Soon (SvelteKit)
 
 A restrained, premium “coming soon” landing page for **VNTA (Vantanéant International)**, built with **SvelteKit + Vite**.
