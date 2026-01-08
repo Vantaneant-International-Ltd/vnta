@@ -30,8 +30,10 @@
 	// Footer routes (internal)
 	const footerNav = {
 		houses: { label: 'Houses', href: `${base}/houses` },
-		legal: [
+		company: [
 			{ label: 'Approach', href: `${base}/approach` },
+			{ label: 'Horizon', href: `${base}/horizon` },
+			{ label: 'Careers', href: `${base}/careers` },
 			{ label: 'Legal', href: `${base}/legal` },
 			{ label: 'Privacy', href: `${base}/privacy` },
 			{ label: 'Terms', href: `${base}/terms` }
@@ -60,6 +62,8 @@
 		'/explore',
 		'/pricing',
 		'/approach',
+		'/horizon',
+		'/careers',
 		'/',
 		'/houses',
 		'/legal',
@@ -185,7 +189,7 @@
 							<p class="footer-title">The Company</p>
 
 							<div class="footer-links">
-								{#each footerNav.legal as l}
+								{#each footerNav.company as l}
 									<a class="footer-link footer-link--plain" href={l.href}>{l.label}</a>
 								{/each}
 							</div>
