@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1600" height="900" viewBox="0 0 1600 900" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="VNTA Roadmap Doctrine">
+  <defs>
+<style>
+  .bg { fill:#0B0B0B; }
+  .h1 { font: 700 38px Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial; fill:#FFFFFF; letter-spacing:0.02em;}
+  .sub { font: 400 16px Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial; fill:rgba(255,255,255,0.70);}
+  .kicker { font: 600 12px Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial; fill:rgba(255,255,255,0.70); letter-spacing:0.14em; text-transform:uppercase;}
+  .pill { fill: rgba(255,255,255,0.06); stroke: rgba(255,255,255,0.18); stroke-width:1; }
+  .pillText { font: 700 13px Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial; fill:rgba(255,255,255,0.88); letter-spacing:0.04em;}
+  .card { fill: rgba(255,255,255,0.04); stroke: rgba(255,255,255,0.12); stroke-width:1; }
+  .cardTitle { font: 700 16px Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial; fill:rgba(255,255,255,0.92); }
+  .cardNum { font: 700 12px Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial; fill:rgba(255,255,255,0.70); letter-spacing:0.12em; }
+  .text { font: 400 14px Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial; fill:rgba(255,255,255,0.74); }
+  .tiny { font: 400 12px Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial; fill:rgba(255,255,255,0.55); }
+  .rule { stroke: rgba(255,255,255,0.12); stroke-width:1; }
+</style>
+  </defs>
+
+  <rect class="bg" x="0" y="0" width="1600" height="900"/>
+
+  <text class="kicker" x="80" y="70">Internal Operating Standard</text>
+  <text class="h1" x="80" y="110">VNTA Roadmap Doctrine</text>
+  <text class="sub" x="80" y="142">A scope-first, operator-led roadmap method reusable across all VNTA houses.</text>
+
+  <line class="rule" x1="80" y1="158" x2="1520" y2="158"/>
+
+  <rect class="pill" x="80" y="180" width="1440" height="70" rx="18"/>
+  <text class="pillText" x="106" y="210">VNTA houses do not follow timelines — they follow readiness.</text>
+  <text class="tiny" x="106" y="234">Roadmaps govern operational reality: scope → phases → gates → tools → launch (as stability).</text>
+
+  <!-- Pillars -->
+  <rect class="card" x="80" y="280" width="480" height="170" rx="16"/>
+    <text class="cardNum" x="102" y="314">01</text>
+    <text class="cardTitle" x="102" y="340">Lock scope before roadmap</text>
+    <text class="text" x="102" y="368">• Who/where/what (and what it isn’t)</text>
+    <text class="text" x="102" y="390">• Scope ≤ 1 page, exclusionary</text>
+    <text class="text" x="102" y="412">• If scope moves, roadmap is invalid</text>
+<rect class="card" x="600" y="280" width="480" height="170" rx="16"/>
+    <text class="cardNum" x="622" y="314">02</text>
+    <text class="cardTitle" x="622" y="340">Use phases (states of reality)</text>
+    <text class="text" x="622" y="368">• Phases describe behaviour + operating state</text>
+    <text class="text" x="622" y="390">• Not features, not deliverables</text>
+    <text class="text" x="622" y="412">• House labels can differ; logic can’t</text>
+<rect class="card" x="1120" y="280" width="480" height="170" rx="16"/>
+    <text class="cardNum" x="1142" y="314">03</text>
+    <text class="cardTitle" x="1142" y="340">Advance via gates, not dates</text>
+    <text class="text" x="1142" y="368">• Each phase ends with conditions to prove</text>
+    <text class="text" x="1142" y="390">• No heroics; repeatable stability</text>
+    <text class="text" x="1142" y="412">• If gate fails, phase continues</text>
+<rect class="card" x="80" y="480" width="480" height="170" rx="16"/>
+    <text class="cardNum" x="102" y="514">04</text>
+    <text class="cardTitle" x="102" y="540">Tools follow operational pressure</text>
+    <text class="text" x="102" y="568">• Start tool-light; stay manual while viable</text>
+    <text class="text" x="102" y="590">• Add tools only when complexity forces it</text>
+    <text class="text" x="102" y="612">• No custom tech until clearly necessary</text>
+<rect class="card" x="600" y="480" width="480" height="170" rx="16"/>
+    <text class="cardNum" x="622" y="514">05</text>
+    <text class="cardTitle" x="622" y="540">Launch is an operational signal</text>
+    <text class="text" x="622" y="568">• Stable operation, demand met without drift</text>
+    <text class="text" x="622" y="590">• Tone + quality hold under use</text>
+    <text class="text" x="622" y="612">• Visibility optional; readiness mandatory</text>
+<rect class="card" x="1120" y="480" width="480" height="170" rx="16"/>
+    <text class="cardNum" x="1142" y="514">06</text>
+    <text class="cardTitle" x="1142" y="540">Keep roadmaps internal + non-promissory</text>
+    <text class="text" x="1142" y="568">• No numbers, forecasts, or external commitments</text>
+    <text class="text" x="1142" y="590">• Used to guide decisions + prevent creep</text>
+    <text class="text" x="1142" y="612">• VNTA enforces consistency across houses</text>
+
+  <text class="tiny" x="80" y="860">© VNTA — Roadmaps govern readiness, not marketing, timelines, or ambition.</text>
+</svg>
