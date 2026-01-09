@@ -20,7 +20,12 @@
 <main class="page-container">
 	<section class="hero content-width">
 		<p class="eyebrow">Vantanéant International Ltd</p>
+
 		<h1>Brand Leadership in Residence</h1>
+
+		<!-- Aesthetic Gaeilge (single line) -->
+		<p class="gaelic" lang="ga">Ceannaireacht branda, i gcroílár an ghnó — ar feadh 12 mhí.</p>
+
 		<p class="lede">
 			We're the visionaries & operators. Founders focus on their passion; we lead, guide, and execute the
 			strategy, team, and brand for 12 months. At the end, they have a scaled business with clear monthly
@@ -65,13 +70,22 @@
 	}
 
 	h1 {
-		margin: 0 0 18px;
+		margin: 0 0 14px;
 		font-size: clamp(2.4rem, 4vw, 3.4rem);
 		line-height: 1.15;
 		font-family: 'Playfair Display', 'Times New Roman', serif;
 		font-weight: 700;
 		color: #ffffff;
 		letter-spacing: -0.015em;
+	}
+
+	/* Aesthetic Gaeilge line (quiet, premium) */
+	.gaelic {
+		margin: 0 0 18px;
+		font-family: 'Playfair Display', 'Times New Roman', serif;
+		font-size: 1.02rem;
+		letter-spacing: -0.01em;
+		color: rgba(255, 255, 255, 0.62);
 	}
 
 	.lede {
