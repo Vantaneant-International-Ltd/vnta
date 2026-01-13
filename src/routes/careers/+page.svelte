@@ -22,6 +22,9 @@
 		};
 	};
 
+	const APPLY_ENDPOINT = '/careers/apply';
+	const FALLBACK_EMAIL = 'studio@vnta.xyz';
+
 	const roles: Role[] = [
 		{
 			id: 'operator-in-residence',
@@ -29,8 +32,7 @@
 			meta: '3-month trial engagement · Independent contractor · Commission-based',
 			status: 'Open',
 			applySubject: 'VNTA Operator-in-Residence (Trial) — Application',
-			applyLead:
-				'Short note + signal. If you can operate without structure, this will make sense.',
+			applyLead: 'Short note + signal. If you can operate without structure, this will make sense.',
 			form: { requiresCv: true, requiresPortfolio: false, ackPay: true },
 			sections: [
 				{
@@ -126,10 +128,19 @@
 	let applyOpen = false;
 	let shareToast = '';
 
+	// Apply UX state (prevents silent failures + gives fallback)
+	let submitState: 'idle' | 'submitting' | 'success' | 'error' = 'idle';
+	let submitError = '';
+	let fallbackCopied = false;
+
 	function openApply(role: Role) {
 		activeRole = role;
 		applyOpen = true;
 		shareToast = '';
+		submitState = 'idle';
+		submitError = '';
+		fallbackCopied = false;
+
 		// lock scroll
 		document.documentElement.style.overflow = 'hidden';
 	}
@@ -137,8 +148,13 @@
 	function closeApply() {
 		applyOpen = false;
 		shareToast = '';
+		submitState = 'idle';
+		submitError = '';
+		fallbackCopied = false;
+
 		// unlock scroll
 		document.documentElement.style.overflow = '';
+
 		// small delay so DOM updates before clearing
 		setTimeout(() => {
 			activeRole = null;
@@ -176,8 +192,76 @@
 		}
 	}
 
-	// Open accordion + modal when visiting with #hash
-	// Also ensures roles are minimized by default unless deep-linked.
+	function mailtoForRole(role: Role) {
+		const subject = encodeURIComponent(role.applySubject);
+		const body = encodeURIComponent(
+			`Hi VNTA,\n\nI'm applying for: ${role.title}\n\nName:\nEmail:\nLocation/Timezone:\nLinks:\n\nWhy this role + why this structure?\n\n(Attach CV/portfolio if relevant.)\n`
+		);
+		return `mailto:${FALLBACK_EMAIL}?subject=${subject}&body=${body}`;
+	}
+
+	async function copyFallback(role: Role) {
+		try {
+			await navigator.clipboard.writeText(`${FALLBACK_EMAIL} — ${role.applySubject}`);
+			fallbackCopied = true;
+			setTimeout(() => (fallbackCopied = false), 1600);
+		} catch {
+			// ignore
+		}
+	}
+
+	async function onSubmit(e: SubmitEvent) {
+		e.preventDefault();
+		if (!activeRole) return;
+		if (submitState === 'submitting') return;
+
+		submitState = 'submitting';
+		submitError = '';
+		fallbackCopied = false;
+
+		const form = e.currentTarget as HTMLFormElement;
+		const data = new FormData(form);
+
+		// Basic honeypot check (should be empty)
+		if ((data.get('company_website') as string | null)?.trim()) {
+			submitState = 'error';
+			submitError = 'Submission blocked.';
+			return;
+		}
+
+		try {
+			const res = await fetch(APPLY_ENDPOINT, {
+				method: 'POST',
+				body: data
+			});
+
+			if (!res.ok) {
+				// 405 is common if POST handler is missing/misrouted; show useful fallback
+				const hint =
+					res.status === 405
+						? 'This form endpoint is currently not accepting submissions.'
+						: `Submission failed (HTTP ${res.status}).`;
+				submitState = 'error';
+				submitError = hint;
+				return;
+			}
+
+			// Accept either JSON or plain response
+			submitState = 'success';
+
+			// Reset form for cleanliness
+			form.reset();
+
+			// Optional: keep modal open so they see confirmation
+			// If you prefer auto-close, uncomment below:
+			// setTimeout(() => closeApply(), 900);
+		} catch (err) {
+			submitState = 'error';
+			submitError = 'Network error. Please use the email fallback below.';
+		}
+	}
+
+	// Open accordion when visiting with #hash (minimized by default otherwise)
 	function handleHashOpen() {
 		if (typeof window === 'undefined') return;
 		const id = window.location.hash?.replace('#', '');
@@ -185,7 +269,6 @@
 		const role = roles.find((r) => r.id === id);
 		if (!role) return;
 
-		// open the details element for that role
 		const el = document.getElementById(`role-${id}`) as HTMLDetailsElement | null;
 		if (el) el.open = true;
 	}
@@ -282,12 +365,7 @@
 					<button class="icon-btn" type="button" aria-label="Close" on:click={closeApply}>✕</button>
 				</div>
 
-				<form
-					class="form"
-					method="POST"
-					action="/careers/apply"
-					enctype="multipart/form-data"
-				>
+				<form class="form" method="POST" action={APPLY_ENDPOINT} enctype="multipart/form-data" on:submit={onSubmit}>
 					<!-- role payload -->
 					<input type="hidden" name="role_id" value={activeRole.id} />
 					<input type="hidden" name="role_title" value={activeRole.title} />
@@ -301,6 +379,21 @@
 						tabindex="-1"
 						style="position:absolute; left:-9999px; opacity:0; height:0; width:0;"
 					/>
+
+					{#if submitState === 'success'}
+						<div class="notice success" role="status" aria-live="polite">
+							<strong>Submitted.</strong>
+							<span>We’ll review and respond selectively.</span>
+						</div>
+					{:else if submitState === 'error'}
+						<div class="notice error" role="alert">
+							<strong>Submission failed.</strong>
+							<span>{submitError}</span>
+							<span class="muted small">
+								Use the fallback below to apply via email.
+							</span>
+						</div>
+					{/if}
 
 					<div class="grid">
 						<label>
@@ -326,12 +419,7 @@
 
 					<label>
 						Why this role + why this structure? *
-						<textarea
-							name="pitch"
-							required
-							rows="5"
-							placeholder="2–8 sentences. Be specific."
-						></textarea>
+						<textarea name="pitch" required rows="5" placeholder="2–8 sentences. Be specific."></textarea>
 					</label>
 
 					<label>
@@ -362,7 +450,12 @@
 
 						<label>
 							Share 1–3 examples you’re proud of (links) *
-							<textarea name="vendr_examples" required rows="3" placeholder="Paste links, one per line"></textarea>
+							<textarea
+								name="vendr_examples"
+								required
+								rows="3"
+								placeholder="Paste links, one per line"
+							></textarea>
 						</label>
 					{/if}
 
@@ -398,11 +491,30 @@
 
 					<div class="form-actions">
 						<button class="btn" type="button" on:click={closeApply}>Cancel</button>
-						<button class="btn primary" type="submit">Submit application</button>
+						<button class="btn primary" type="submit" disabled={submitState === 'submitting'}>
+							{submitState === 'submitting' ? 'Submitting…' : 'Submit application'}
+						</button>
+					</div>
+
+					<!-- Always-visible fallback (prevents lost applicants if endpoint breaks again) -->
+					<div class="fallback">
+						<p class="muted small">
+							If submission fails, email
+							<a href={`mailto:${FALLBACK_EMAIL}?subject=${encodeURIComponent(activeRole.applySubject)}`}
+								>{FALLBACK_EMAIL}</a
+							>
+							with subject: <span class="mono">{activeRole.applySubject}</span>.
+						</p>
+						<div class="fallback-actions">
+							<a class="btn" href={mailtoForRole(activeRole)}>Open email draft</a>
+							<button class="btn" type="button" on:click={() => copyFallback(activeRole)}>
+								{fallbackCopied ? 'Copied' : 'Copy email + subject'}
+							</button>
+						</div>
 					</div>
 
 					<p class="muted small">
-						This submits to <a href="mailto:studio@vnta.xyz">studio@vnta.xyz</a>. We respond selectively.
+						We respond selectively and only when there is clear alignment.
 					</p>
 				</form>
 			</div>
@@ -490,6 +602,10 @@
 
 	.footnote {
 		margin: 14px 0 0;
+	}
+
+	.mono {
+		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 	}
 
 	/* Toast */
@@ -629,6 +745,7 @@
 		color: rgba(255, 255, 255, 0.92);
 		font-weight: 600;
 		cursor: pointer;
+		text-decoration: none;
 	}
 	.btn:hover {
 		background: rgba(255, 255, 255, 0.09);
@@ -636,6 +753,10 @@
 	.btn.primary {
 		background: rgba(255, 255, 255, 0.12);
 		border-color: rgba(255, 255, 255, 0.18);
+	}
+	.btn[disabled] {
+		opacity: 0.65;
+		cursor: not-allowed;
 	}
 
 	/* Modal */
@@ -751,6 +872,37 @@
 		display: flex;
 		gap: 10px;
 		margin-top: 6px;
+	}
+
+	.notice {
+		padding: 12px 12px;
+		border-radius: 14px;
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		background: rgba(0, 0, 0, 0.22);
+		display: flex;
+		flex-direction: column;
+		gap: 4px;
+	}
+	.notice.success {
+		border-color: rgba(255, 255, 255, 0.18);
+	}
+	.notice.error {
+		border-color: rgba(255, 255, 255, 0.18);
+	}
+
+	.fallback {
+		margin-top: 8px;
+		padding: 12px;
+		border-radius: 14px;
+		border: 1px solid rgba(255, 255, 255, 0.12);
+		background: rgba(0, 0, 0, 0.18);
+	}
+
+	.fallback-actions {
+		margin-top: 8px;
+		display: flex;
+		gap: 10px;
+		flex-wrap: wrap;
 	}
 
 	@media (min-width: 840px) {
