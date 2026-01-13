@@ -58,11 +58,11 @@
 		}
 	];
 
-	/* ========= Tailored modal ========= */
+	/* ========= Inquiry modal ========= */
 
 	let tailoredModalOpen = false;
 
-	const tailored = {
+	let tailored = {
 		name: '',
 		email: '',
 		company: '',
@@ -133,6 +133,33 @@
 		unlockScroll();
 	}
 
+	// Package CTA: opens modal + prefill notes (high-signal template)
+	function openInquiryForPackage(pkgName: string) {
+		tailored.engagement = 'Brand Leadership Advisory';
+
+		const header = `Interested in ${pkgName}.`;
+		const template = [
+			header,
+			'',
+			'Context:',
+			'- What we do:',
+			'- What needs to change:',
+			'- Constraints:',
+			'- Success looks like:',
+			'',
+			'Anything else:'
+		].join('\n');
+
+		// Only overwrite if empty; otherwise prepend a one-liner.
+		if (!tailored.notes.trim()) {
+			tailored.notes = template;
+		} else if (!tailored.notes.includes(header)) {
+			tailored.notes = `${header}\n\n${tailored.notes}`;
+		}
+
+		openTailoredModal();
+	}
+
 	function openTailoredEmail() {
 		const to = 'studio@vnta.xyz';
 		const subject = encodeURIComponent('Tailored engagement inquiry — VNTA');
@@ -187,6 +214,7 @@
 				<div class="package" class:featured={pkg.featured}>
 					<div class="package-header">
 						<h2>{pkg.name}</h2>
+
 						<div class="pricing-options">
 							<div class="price">
 								{pkg.price}<span>{pkg.period}</span>
@@ -200,8 +228,32 @@
 							<li>{feature}</li>
 						{/each}
 					</ul>
+
+					<div class="package-actions">
+						<button class="package-btn" type="button" on:click={() => openInquiryForPackage(pkg.name)}>
+							Enquire about {pkg.name}
+						</button>
+						<p class="package-hint">Opens a short inquiry form.</p>
+					</div>
 				</div>
 			{/each}
+		</div>
+
+		<!-- Tailored CTA card (separate from pricing tiers) -->
+		<div class="tailored-card" role="region" aria-label="Tailored engagements CTA">
+			<div class="tailored-card-left">
+				<h2 class="tailored-card-title">Tailored / Custom</h2>
+				<p class="tailored-card-copy">
+					For audits, repositioning, launches, or advisory work that doesn’t fit a fixed tier.
+				</p>
+			</div>
+
+			<div class="tailored-card-right">
+				<button class="tailored-card-btn" type="button" on:click={openTailoredModal}>
+					Request tailored scope
+				</button>
+				<p class="tailored-card-hint">High-signal only. Short application.</p>
+			</div>
 		</div>
 
 		<!-- OPTIONAL RETAINERS -->
@@ -261,20 +313,12 @@
 
 <!-- MODAL (ported to body, does not affect page layout) -->
 {#if tailoredModalOpen}
-	<div
-		use:portal
-		class="vnta-modal-backdrop"
-		on:pointerdown={closeTailoredModal}
-		on:click={closeTailoredModal}
-	>
-		<div
-			class="vnta-modal"
-			role="dialog"
-			aria-modal="true"
-			aria-label="Tailored engagement inquiry"
-			on:pointerdown|stopPropagation={() => {}}
-			on:click|stopPropagation={() => {}}
-		>
+	<!--
+		Fix: Use click|self on backdrop so it closes reliably
+		and never depends on stopPropagation edge cases.
+	-->
+	<div use:portal class="vnta-modal-backdrop" on:click|self={closeTailoredModal}>
+		<div class="vnta-modal" role="dialog" aria-modal="true" aria-label="Tailored engagement inquiry">
 			<div class="vnta-modal-header">
 				<div class="vnta-modal-title-wrap">
 					<h3 class="vnta-modal-title">Tailored Inquiry</h3>
@@ -284,7 +328,7 @@
 				<button
 					class="vnta-modal-close"
 					type="button"
-					on:click|stopPropagation={closeTailoredModal}
+					on:click={closeTailoredModal}
 					aria-label="Close"
 				>
 					×
@@ -355,11 +399,7 @@
 						Compose inquiry
 					</button>
 
-					<button
-						class="vnta-modal-secondary"
-						type="button"
-						on:click|stopPropagation={closeTailoredModal}
-					>
+					<button class="vnta-modal-secondary" type="button" on:click={closeTailoredModal}>
 						Not now
 					</button>
 
@@ -399,7 +439,7 @@
 		display: grid;
 		grid-template-columns: repeat(3, 1fr);
 		gap: 2rem;
-		margin-bottom: 6rem;
+		margin-bottom: 2rem;
 	}
 
 	.package {
@@ -408,6 +448,8 @@
 		padding: 28px 24px;
 		background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), transparent);
 		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		display: flex;
+		flex-direction: column;
 	}
 
 	.package.featured {
@@ -477,6 +519,102 @@
 		position: absolute;
 		left: 0;
 		color: rgba(255, 255, 255, 0.4);
+	}
+
+	.package-actions {
+		margin-top: 1.75rem;
+		padding-top: 1.25rem;
+		border-top: 1px solid rgba(255, 255, 255, 0.08);
+		display: flex;
+		flex-direction: column;
+		gap: 0.6rem;
+	}
+
+	.package-btn {
+		border: 1px solid rgba(255, 255, 255, 0.18);
+		background: rgba(255, 255, 255, 0.03);
+		color: rgba(255, 255, 255, 0.92);
+		border-radius: 14px;
+		padding: 0.85rem 1rem;
+		font-weight: 600;
+		font-size: 0.95rem;
+		cursor: pointer;
+		transition: all 0.2s ease;
+		width: 100%;
+	}
+
+	.package-btn:hover {
+		border-color: rgba(255, 255, 255, 0.32);
+		background: rgba(255, 255, 255, 0.06);
+		transform: translateY(-1px);
+	}
+
+	.package-hint {
+		margin: 0;
+		color: rgba(255, 255, 255, 0.55);
+		font-size: 0.9rem;
+		line-height: 1.5;
+	}
+
+	/* Tailored CTA card */
+	.tailored-card {
+		border: 1px solid rgba(255, 255, 255, 0.1);
+		border-radius: 18px;
+		padding: 22px 24px;
+		background: rgba(255, 255, 255, 0.02);
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 1.5rem;
+		flex-wrap: wrap;
+		margin-bottom: 6rem;
+	}
+
+	.tailored-card-title {
+		font-family: 'Playfair Display', serif;
+		font-size: 1.65rem;
+		font-weight: 700;
+		margin: 0 0 0.35rem;
+		letter-spacing: -0.02em;
+	}
+
+	.tailored-card-copy {
+		margin: 0;
+		color: rgba(255, 255, 255, 0.68);
+		line-height: 1.6;
+		max-width: 680px;
+	}
+
+	.tailored-card-right {
+		display: flex;
+		flex-direction: column;
+		gap: 0.55rem;
+		align-items: flex-start;
+	}
+
+	.tailored-card-btn {
+		border: 1px solid rgba(255, 255, 255, 0.18);
+		background: rgba(255, 255, 255, 0.03);
+		color: rgba(255, 255, 255, 0.9);
+		border-radius: 999px;
+		padding: 0.85rem 1.1rem;
+		font-weight: 600;
+		font-size: 0.95rem;
+		cursor: pointer;
+		transition: all 0.2s ease;
+	}
+
+	.tailored-card-btn:hover {
+		border-color: rgba(255, 255, 255, 0.3);
+		background: rgba(255, 255, 255, 0.06);
+		transform: translateY(-1px);
+	}
+
+	.tailored-card-hint {
+		margin: 0;
+		color: rgba(255, 255, 255, 0.55);
+		font-size: 0.9rem;
+		line-height: 1.5;
 	}
 
 	/* RETAINERS */
@@ -805,6 +943,10 @@
 	@media (max-width: 768px) {
 		.packages {
 			grid-template-columns: 1fr;
+		}
+
+		.tailored-card {
+			align-items: flex-start;
 		}
 
 		.vnta-form-grid {
