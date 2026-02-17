@@ -281,8 +281,15 @@
 
 <!-- MODAL (ported to body, does not affect page layout) -->
 {#if tailoredModalOpen}
-	<div use:portal class="vnta-modal-backdrop" on:click|self={closeTailoredModal}>
-		<div class="vnta-modal" role="dialog" aria-modal="true" aria-label="Tailored engagement inquiry">
+	<!-- Backdrop click closes. Modal stops propagation so buttons work reliably. -->
+	<div use:portal class="vnta-modal-backdrop" on:click={closeTailoredModal}>
+		<div
+			class="vnta-modal"
+			role="dialog"
+			aria-modal="true"
+			aria-label="Tailored engagement inquiry"
+			on:click|stopPropagation
+		>
 			<div class="vnta-modal-header">
 				<div class="vnta-modal-title-wrap">
 					<h3 class="vnta-modal-title">Tailored Inquiry</h3>
@@ -719,7 +726,7 @@
 	.vnta-modal-header {
 		position: sticky;
 		top: 0;
-		z-index: 2;
+		z-index: 4;
 		background: rgba(10, 10, 10, 0.92);
 		backdrop-filter: blur(10px);
 
@@ -746,7 +753,12 @@
 		line-height: 1.5;
 	}
 
+	/* Ensure close button is always clickable */
 	.vnta-modal-close {
+		position: relative;
+		z-index: 5;
+		pointer-events: auto;
+
 		border: 1px solid rgba(255, 255, 255, 0.16);
 		background: rgba(255, 255, 255, 0.04);
 		color: rgba(255, 255, 255, 0.85);
