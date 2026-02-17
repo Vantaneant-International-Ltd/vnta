@@ -247,14 +247,6 @@
 		}
 	}
 
-	function mailtoForRole(role: Role) {
-		const subject = encodeURIComponent(role.applySubject);
-		const body = encodeURIComponent(
-			`Hi VNTA,\n\nI'm applying for: ${role.title}\n\nName:\nEmail:\nLocation/Timezone:\nLinks:\n\nWhy this role + why this structure?\n\n(Attach CV/portfolio if relevant.)\n`
-		);
-		return `mailto:${FALLBACK_EMAIL}?subject=${subject}&body=${body}`;
-	}
-
 	function composeMailDraft(role: Role) {
 		const subject = encodeURIComponent(role.applySubject);
 
@@ -296,7 +288,6 @@
 		if (!activeRole) return;
 
 		// honeypot: if filled, treat as blocked
-		// (we keep the input in DOM; value read via querySelector)
 		const hp = document.querySelector<HTMLInputElement>('input[name="company_website"]');
 		if (hp?.value?.trim()) {
 			submitState = 'error';
@@ -322,11 +313,10 @@
 		try {
 			const href = composeMailDraft(activeRole);
 			window.location.href = href;
-
 			submitState = 'success';
 		} catch {
 			submitState = 'error';
-			submitError = 'Could not open your email client. Use the fallback below.';
+			submitError = 'Could not open your email client. Please email us manually using the fallback below.';
 		}
 	}
 
@@ -443,6 +433,7 @@
 				</div>
 
 				<form class="form" on:submit|preventDefault={openMailDraft}>
+					<!-- role payload (for future backend; harmless on static) -->
 					<input type="hidden" name="role_id" value={activeRole.id} />
 					<input type="hidden" name="role_title" value={activeRole.title} />
 					<input type="hidden" name="subject" value={activeRole.applySubject} />
@@ -456,16 +447,10 @@
 						style="position:absolute; left:-9999px; opacity:0; height:0; width:0;"
 					/>
 
-					{#if submitState === 'success'}
-						<div class="notice success" role="status" aria-live="polite">
-							<strong>Email draft opened.</strong>
-							<span>Attach your CV/portfolio and press send.</span>
-						</div>
-					{:else if submitState === 'error'}
+					{#if submitState === 'error'}
 						<div class="notice error" role="alert">
 							<strong>Couldn’t open your email client.</strong>
 							<span>{submitError}</span>
-							<span class="muted small">Use the fallback below.</span>
 						</div>
 					{/if}
 
@@ -561,8 +546,8 @@
 
 					<div class="uploads-note">
 						<p class="muted small">
-							After the email draft opens, attach your CV (PDF){activeRole.form.requiresPortfolio
-								? ' and portfolio (optional)'
+							After your email draft opens, attach your CV (PDF){activeRole.form.requiresPortfolio
+								? ' and portfolio'
 								: ''} before sending.
 						</p>
 					</div>
@@ -574,22 +559,19 @@
 						</button>
 					</div>
 
-					<div class="fallback">
-						<p class="muted small">
-							If your email client doesn’t open, email
-							<a
-								href={`mailto:${FALLBACK_EMAIL}?subject=${encodeURIComponent(activeRole.applySubject)}`}
-								>{FALLBACK_EMAIL}</a
-							>
-							with subject: <span class="mono">{activeRole.applySubject}</span>.
-						</p>
-						<div class="fallback-actions">
-							<a class="btn" href={mailtoForRole(activeRole)}>Blank email draft</a>
-							<button class="btn" type="button" on:click={() => copyFallback(activeRole)}>
-								{fallbackCopied ? 'Copied' : 'Copy email + subject'}
-							</button>
-						</div>
-					</div>
+					<!-- Minimal fallback only (no extra buttons) -->
+					<p class="muted small" style="margin-top: 8px;">
+						If your email client doesn’t open, email
+						<a
+							href={`mailto:${FALLBACK_EMAIL}?subject=${encodeURIComponent(activeRole.applySubject)}`}
+							>{FALLBACK_EMAIL}</a
+						>
+						with subject: <span class="mono">{activeRole.applySubject}</span>.
+					</p>
+
+					<button class="btn" type="button" on:click={() => copyFallback(activeRole)}>
+						{fallbackCopied ? 'Copied' : 'Copy email + subject'}
+					</button>
 
 					<p class="muted small">We respond selectively and only when there is clear alignment.</p>
 				</form>
