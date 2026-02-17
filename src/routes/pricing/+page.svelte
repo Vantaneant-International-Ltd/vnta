@@ -133,33 +133,6 @@
 		unlockScroll();
 	}
 
-	// Package CTA: opens modal + prefill notes (high-signal template)
-	function openInquiryForPackage(pkgName: string) {
-		tailored.engagement = 'Brand Leadership Advisory';
-
-		const header = `Interested in ${pkgName}.`;
-		const template = [
-			header,
-			'',
-			'Context:',
-			'- What we do:',
-			'- What needs to change:',
-			'- Constraints:',
-			'- Success looks like:',
-			'',
-			'Anything else:'
-		].join('\n');
-
-		// Only overwrite if empty; otherwise prepend a one-liner.
-		if (!tailored.notes.trim()) {
-			tailored.notes = template;
-		} else if (!tailored.notes.includes(header)) {
-			tailored.notes = `${header}\n\n${tailored.notes}`;
-		}
-
-		openTailoredModal();
-	}
-
 	function openTailoredEmail() {
 		const to = 'studio@vnta.xyz';
 		const subject = encodeURIComponent('Tailored engagement inquiry — VNTA');
@@ -229,17 +202,12 @@
 						{/each}
 					</ul>
 
-					<div class="package-actions">
-						<button class="package-btn" type="button" on:click={() => openInquiryForPackage(pkg.name)}>
-							Enquire about {pkg.name}
-						</button>
-						<p class="package-hint">Opens a short inquiry form.</p>
-					</div>
+					<!-- No package-specific modal -->
 				</div>
 			{/each}
 		</div>
 
-		<!-- Tailored CTA card (separate from pricing tiers) -->
+		<!-- Tailored CTA card (single modal only) -->
 		<div class="tailored-card" role="region" aria-label="Tailored engagements CTA">
 			<div class="tailored-card-left">
 				<h2 class="tailored-card-title">Tailored / Custom</h2>
@@ -313,10 +281,6 @@
 
 <!-- MODAL (ported to body, does not affect page layout) -->
 {#if tailoredModalOpen}
-	<!--
-		Fix: Use click|self on backdrop so it closes reliably
-		and never depends on stopPropagation edge cases.
-	-->
 	<div use:portal class="vnta-modal-backdrop" on:click|self={closeTailoredModal}>
 		<div class="vnta-modal" role="dialog" aria-modal="true" aria-label="Tailored engagement inquiry">
 			<div class="vnta-modal-header">
@@ -400,7 +364,7 @@
 					</button>
 
 					<button class="vnta-modal-secondary" type="button" on:click={closeTailoredModal}>
-						Not now
+						Cancel
 					</button>
 
 					<p class="vnta-modal-hint">Opens your email client with everything prefilled.</p>
@@ -519,41 +483,6 @@
 		position: absolute;
 		left: 0;
 		color: rgba(255, 255, 255, 0.4);
-	}
-
-	.package-actions {
-		margin-top: 1.75rem;
-		padding-top: 1.25rem;
-		border-top: 1px solid rgba(255, 255, 255, 0.08);
-		display: flex;
-		flex-direction: column;
-		gap: 0.6rem;
-	}
-
-	.package-btn {
-		border: 1px solid rgba(255, 255, 255, 0.18);
-		background: rgba(255, 255, 255, 0.03);
-		color: rgba(255, 255, 255, 0.92);
-		border-radius: 14px;
-		padding: 0.85rem 1rem;
-		font-weight: 600;
-		font-size: 0.95rem;
-		cursor: pointer;
-		transition: all 0.2s ease;
-		width: 100%;
-	}
-
-	.package-btn:hover {
-		border-color: rgba(255, 255, 255, 0.32);
-		background: rgba(255, 255, 255, 0.06);
-		transform: translateY(-1px);
-	}
-
-	.package-hint {
-		margin: 0;
-		color: rgba(255, 255, 255, 0.55);
-		font-size: 0.9rem;
-		line-height: 1.5;
 	}
 
 	/* Tailored CTA card */
