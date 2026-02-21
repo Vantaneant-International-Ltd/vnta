@@ -179,6 +179,7 @@
 
 	let f_vendr_lane = '';
 	let f_vendr_examples = '';
+	let f_cv_files: FileList;
 
 	function resetFormState() {
 		submitState = 'idle';
@@ -346,6 +347,19 @@
 		submitError = '';
 
 		try {
+			let cvBase64 = '';
+			let cvFilename = '';
+			if (f_cv_files && f_cv_files.length > 0) {
+				const file = f_cv_files[0];
+				cvBase64 = await new Promise((resolve, reject) => {
+					const reader = new FileReader();
+					reader.onload = () => resolve((reader.result as string).split(',')[1]);
+					reader.onerror = reject;
+					reader.readAsDataURL(file);
+				});
+				cvFilename = file.name;
+			}
+
 			const apiUrl = typeof window !== 'undefined' && window.location.hostname === 'localhost'
 				? 'http://localhost:3000/api/contact'
 				: 'https://vnta.vercel.app/api/contact';
@@ -356,7 +370,9 @@
 				body: JSON.stringify({
 					name: f_name,
 					email: f_email,
-					role: activeRole.title
+					role: activeRole.title,
+					cvBase64,
+					cvFilename
 				})
 			});
 
@@ -560,6 +576,11 @@
 							<option>Design / Creative</option>
 							<option>Other</option>
 						</select>
+					</label>
+
+					<label>
+						Upload CV (PDF) *
+						<input type="file" name="cv" accept=".pdf" required bind:files={f_cv_files} />
 					</label>
 
 					{#if activeRole.id === 'vendr-cinematic-artist'}
