@@ -31,6 +31,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
+    // Check for Resend API key
+    if (!process.env.SEND_EMAIL) {
+      console.error('SEND_EMAIL environment variable not set');
+      return res.status(500).json({ error: 'Email service not configured' });
+    }
+
     // Limit CV size to 5MB
     if (cvBase64 && cvBase64.length > 5 * 1024 * 1024) {
       return res.status(400).json({ error: 'CV file too large (max 5MB)' });
