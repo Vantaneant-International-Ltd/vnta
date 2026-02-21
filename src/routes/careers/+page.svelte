@@ -602,11 +602,7 @@
 
 					<div class="uploads-note">
 						<p class="muted small">
-							After your email draft opens, attach your CV (PDF){activeRole.form.requiresPortfolio
-								? ' and portfolio'
-								: ''} before sending.
-						</p>
-					</div>
+						Fill out the form and submit. Then reply to the confirmation email with your CV{activeRole.form.requiresPortfolio ? ' and portfolio' : ''} attached.
 
 					<div class="form-actions">
 						<button class="btn" type="button" on:click={closeApply}>Cancel</button>
