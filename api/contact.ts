@@ -82,7 +82,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     res.status(200).json({ success: true, cvUrl });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Failed to submit application' });
+    console.error('API Error:', error instanceof Error ? error.message : String(error));
+    res.status(500).json({ error: 'Failed to submit application', details: error instanceof Error ? error.message : String(error) });
   }
 }
