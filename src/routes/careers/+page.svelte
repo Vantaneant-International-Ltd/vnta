@@ -320,6 +320,62 @@
 		}
 	}
 
+	async function submitApplication() {
+		if (!activeRole) return;
+
+		const hp = document.querySelector<HTMLInputElement>('input[name="company_website"]');
+		if (hp?.value?.trim()) {
+			submitState = 'error';
+			submitError = 'Submission blocked.';
+			return;
+		}
+
+		if (!f_name || !f_email || !f_location || !f_pitch) {
+			submitState = 'error';
+			submitError = 'Please complete the required fields.';
+			return;
+		}
+
+		if (activeRole.id === 'vendr-cinematic-artist' && (!f_vendr_lane || !f_vendr_examples)) {
+			submitState = 'error';
+			submitError = 'Please complete the Vendr questions.';
+			return;
+		}
+
+		submitState = 'loading';
+		submitError = '';
+
+		try {
+			const apiUrl = typeof window !== 'undefined' && window.location.hostname === 'localhost'
+				? 'http://localhost:3000/api/contact'
+				: 'https://vnta.vercel.app/api/contact';
+
+			const response = await fetch(apiUrl, {
+				method: 'POST',
+				headers: { 'Content-Type': 'application/json' },
+				body: JSON.stringify({
+					name: f_name,
+					email: f_email,
+					role: activeRole.title
+				})
+			});
+
+			if (response.ok) {
+				submitState = 'success';
+				submitError = '';
+				setTimeout(() => {
+					closeApply();
+				}, 1500);
+			} else {
+				submitState = 'error';
+				submitError = 'Failed to submit. Please try the email option below.';
+			}
+		} catch (err) {
+			submitState = 'error';
+			submitError = 'Could not submit. Please try the email option below.';
+		}
+	}
+
 	async function copyFallback(role: Role) {
 		try {
 			await navigator.clipboard.writeText(`${FALLBACK_EMAIL} — ${role.applySubject}`);
@@ -432,7 +488,7 @@
 					<button class="icon-btn" type="button" aria-label="Close" on:click={closeApply}>✕</button>
 				</div>
 
-				<form class="form" on:submit|preventDefault={openMailDraft}>
+				<form class="form" on:submit|preventDefault={submitApplication}>
 					<!-- role payload (for future backend; harmless on static) -->
 					<input type="hidden" name="role_id" value={activeRole.id} />
 					<input type="hidden" name="role_title" value={activeRole.title} />
@@ -554,12 +610,10 @@
 
 					<div class="form-actions">
 						<button class="btn" type="button" on:click={closeApply}>Cancel</button>
-						<button class="btn primary" type="submit" disabled={submitState === 'opening'}>
-							{submitState === 'opening' ? 'Opening…' : 'Open email draft'}
-						</button>
-					</div>
-
-					<!-- Minimal fallback only (no extra buttons) -->
+					<button class="btn primary" type="submit" disabled={submitState === 'loading'}>
+						{submitState === 'loading' ? 'Sending…' : submitState === 'success' ? 'Sent!' : 'Send Enquiry'}
+					</button>
+				</div>
 					<p class="muted small" style="margin-top: 8px;">
 						If your email client doesn’t open, email
 						<a

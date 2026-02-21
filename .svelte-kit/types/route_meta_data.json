@@ -3,7 +3,34 @@
 		"src/routes/+layout.ts",
 		"src/routes/+layout.ts"
 	],
+	"/about": [
+		"src/routes/+layout.ts"
+	],
+	"/approach": [
+		"src/routes/+layout.ts"
+	],
+	"/careers": [
+		"src/routes/+layout.ts"
+	],
+	"/explore": [
+		"src/routes/+layout.ts"
+	],
+	"/horizon": [
+		"src/routes/+layout.ts"
+	],
+	"/houses": [
+		"src/routes/+layout.ts"
+	],
+	"/legal": [
+		"src/routes/+layout.ts"
+	],
 	"/pricing": [
+		"src/routes/+layout.ts"
+	],
+	"/privacy": [
+		"src/routes/+layout.ts"
+	],
+	"/terms": [
 		"src/routes/+layout.ts"
 	]
 }

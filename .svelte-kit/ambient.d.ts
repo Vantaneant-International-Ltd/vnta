@@ -26,6 +26,7 @@
  * ```
  */
 declare module '$env/static/private' {
+	export const RESEND_API_KEY: string;
 	export const MANPATH: string;
 	export const TERM_PROGRAM: string;
 	export const NODE: string;
@@ -75,15 +76,18 @@ declare module '$env/static/private' {
 	export const VSCODE_GIT_ASKPASS_MAIN: string;
 	export const PYTHON_BASIC_REPL: string;
 	export const HOMEBREW_PREFIX: string;
+	export const GK_GL_ADDR: string;
 	export const npm_config_cache: string;
 	export const LOGNAME: string;
 	export const npm_lifecycle_script: string;
 	export const VSCODE_GIT_IPC_HANDLE: string;
+	export const GK_GL_PATH: string;
 	export const npm_config_user_agent: string;
 	export const VSCODE_GIT_ASKPASS_NODE: string;
 	export const GIT_ASKPASS: string;
 	export const INFOPATH: string;
 	export const HOMEBREW_CELLAR: string;
+	export const OSLogRateLimit: string;
 	export const GIT_PAGER: string;
 	export const npm_node_execpath: string;
 	export const npm_config_prefix: string;
@@ -118,6 +122,7 @@ declare module '$env/static/public' {
  */
 declare module '$env/dynamic/private' {
 	export const env: {
+		RESEND_API_KEY: string;
 		MANPATH: string;
 		TERM_PROGRAM: string;
 		NODE: string;
@@ -167,15 +172,18 @@ declare module '$env/dynamic/private' {
 		VSCODE_GIT_ASKPASS_MAIN: string;
 		PYTHON_BASIC_REPL: string;
 		HOMEBREW_PREFIX: string;
+		GK_GL_ADDR: string;
 		npm_config_cache: string;
 		LOGNAME: string;
 		npm_lifecycle_script: string;
 		VSCODE_GIT_IPC_HANDLE: string;
+		GK_GL_PATH: string;
 		npm_config_user_agent: string;
 		VSCODE_GIT_ASKPASS_NODE: string;
 		GIT_ASKPASS: string;
 		INFOPATH: string;
 		HOMEBREW_CELLAR: string;
+		OSLogRateLimit: string;
 		GIT_PAGER: string;
 		npm_node_execpath: string;
 		npm_config_prefix: string;
