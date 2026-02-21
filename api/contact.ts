@@ -31,6 +31,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
+    // Limit CV size to 5MB
+    if (cvBase64 && cvBase64.length > 5 * 1024 * 1024) {
+      return res.status(400).json({ error: 'CV file too large (max 5MB)' });
+    }
+
     let cvUrl = '';
     
     // Upload CV if provided
@@ -70,7 +75,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     });
 
     if (!response.ok) {
-      throw new Error('Failed to send email');
+      const errorText = await response.text();
+      console.error('Resend error:', errorText);
+      throw new Error(`Resend API failed: ${response.status}`);
     }
 
     res.status(200).json({ success: true, cvUrl });
