@@ -82,8 +82,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Resend error:', errorText);
-      throw new Error(`Resend API failed: ${response.status}`);
+      console.error('Resend error (status:', response.status, '):', errorText);
+      throw new Error(`Resend API failed: ${response.status} - ${errorText}`);
     }
 
     res.status(200).json({ success: true, cvUrl });
