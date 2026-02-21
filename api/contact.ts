@@ -16,14 +16,14 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${process.env.RESEND_API_KEY}`
+        'Authorization': `Bearer ${process.env.SEND_EMAIL}`
       },
       body: JSON.stringify({
         from: 'noreply@vnta.xyz',
         to: 'studio@vnta.xyz',
         subject: `New Enquiry: ${role}`,
         html: `<p><strong>${name}</strong></p><p>Email: ${email}</p><p>Role: ${role}</p>`
-      })
+      }),
     });
 
     if (!response.ok) {
