@@ -70,6 +70,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       if (!blobToken) {
         console.error('Vercel Blob token missing; skipping upload. Set BLOB_READ_WRITE_TOKEN in project env.');
       } else {
+        console.log('Attempting blob upload:', { 
+          blobName, 
+          bufferSize: buffer.length,
+          tokenLength: blobToken.length,
+          tokenPrefix: blobToken.substring(0, 20) + '...'
+        });
         try {
           const blob = await put(blobName, buffer, {
             access: 'public',
@@ -77,8 +83,12 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
             token: blobToken,
           });
           cvUrl = blob.url;
+          console.log('Blob upload successful:', cvUrl);
         } catch (uploadErr) {
-          console.error('Vercel Blob upload failed:', uploadErr instanceof Error ? uploadErr.message : String(uploadErr));
+          console.error('Vercel Blob upload failed:', {
+            error: uploadErr instanceof Error ? uploadErr.message : String(uploadErr),
+            errorStack: uploadErr instanceof Error ? uploadErr.stack : undefined,
+          });
           // don't throw — allow email to be sent without CV link so the user flow continues
         }
       }
