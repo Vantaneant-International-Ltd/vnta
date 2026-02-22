@@ -116,19 +116,33 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       .filter(Boolean)
       .join('\n');
 
+    // If upload failed but user provided CV data, attach the CV directly to the email as a fallback.
+    const attachments = (!cvUrl && cvBase64 && cvFilename)
+      ? [
+          {
+            filename: cvFilename,
+            content: cvBase64,
+          },
+        ]
+      : undefined;
+
+    const emailPayload: any = {
+      from: 'noreply@vnta.xyz',
+      to: 'studio@vnta.xyz',
+      subject: subject || `New Enquiry: ${role_title}`,
+      html: emailHtml,
+      text: plainText,
+    };
+
+    if (attachments) emailPayload.attachments = attachments;
+
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${process.env.SEND_EMAIL}`,
       },
-      body: JSON.stringify({
-        from: 'noreply@vnta.xyz',
-        to: 'studio@vnta.xyz',
-        subject: subject || `New Enquiry: ${role_title}`,
-        html: emailHtml,
-        text: plainText,
-      }),
+      body: JSON.stringify(emailPayload),
     });
 
     if (!response.ok) {
@@ -137,9 +151,10 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       throw new Error(`Resend API failed: ${response.status} - ${errorText}`);
     }
 
-    res.status(200).json({ success: true, cvUrl });
+    res.status(200).json({ success: true, cvUrl, uploadError: undefined });
   } catch (error) {
     console.error('API Error:', error instanceof Error ? error.message : String(error));
+    // If the error originated from the upload step we may have a message to help debugging.
     res.status(500).json({ error: 'Failed to submit application', details: error instanceof Error ? error.message : String(error) });
   }
 }
