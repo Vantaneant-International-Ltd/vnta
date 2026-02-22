@@ -370,7 +370,15 @@
 				body: JSON.stringify({
 					name: f_name,
 					email: f_email,
-					role: activeRole.title,
+					role_id: activeRole.id,
+					role_title: activeRole.title,
+					subject: activeRole.applySubject,
+					location: f_location,
+					links: f_links,
+					lane: f_lane,
+					vendr_lane: f_vendr_lane,
+					vendr_examples: f_vendr_examples,
+					pitch: f_pitch,
 					cvBase64,
 					cvFilename
 				})

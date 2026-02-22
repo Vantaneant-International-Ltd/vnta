@@ -25,9 +25,23 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const { name, email, role, cvBase64, cvFilename } = req.body;
+    const {
+      name,
+      email,
+      role_id,
+      role_title,
+      subject,
+      location,
+      links,
+      lane,
+      vendr_lane,
+      vendr_examples,
+      pitch,
+      cvBase64,
+      cvFilename,
+    } = req.body;
 
-    if (!name || !email || !role) {
+    if (!name || !email || !role_title) {
       return res.status(400).json({ error: 'Missing required fields' });
     }
 
@@ -49,22 +63,58 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const buffer = Buffer.from(cvBase64, 'base64');
       const timestamp = Date.now();
       const blobName = `cv-${timestamp}-${cvFilename}`;
-      
-      const blob = await put(blobName, buffer, {
-        access: 'public',
-        contentType: 'application/pdf',
-      });
-      
-      cvUrl = blob.url;
+
+      // Accept several common env var names for the blob token to be robust
+      const blobToken = process.env.BLOB_READ_WRITE_TOKEN || process.env.VERCEL_BLOB_READ_WRITE_TOKEN || process.env.VERCEL_BLOB_TOKEN || '';
+
+      if (!blobToken) {
+        console.error('Vercel Blob token missing; skipping upload. Set BLOB_READ_WRITE_TOKEN in project env.');
+      } else {
+        try {
+          const blob = await put(blobName, buffer, {
+            access: 'public',
+            contentType: 'application/pdf',
+            token: blobToken,
+          });
+          cvUrl = blob.url;
+        } catch (uploadErr) {
+          console.error('Vercel Blob upload failed:', uploadErr instanceof Error ? uploadErr.message : String(uploadErr));
+          // don't throw — allow email to be sent without CV link so the user flow continues
+        }
+      }
     }
 
-    // Send email with Resend
+    // Send email with Resend — include all submitted text fields
     const emailHtml = `
-      <h3>${name}</h3>
+      <h3>Application: ${role_title}</h3>
+      <p><strong>Name:</strong> ${name}</p>
       <p><strong>Email:</strong> ${email}</p>
-      <p><strong>Role:</strong> ${role}</p>
+      ${location ? `<p><strong>Location/Timezone:</strong> ${location}</p>` : ''}
+      ${links ? `<p><strong>Links:</strong> ${links}</p>` : ''}
+      ${lane ? `<p><strong>Lane:</strong> ${lane}</p>` : ''}
+      ${vendr_lane ? `<p><strong>Vendr lane:</strong> ${vendr_lane}</p>` : ''}
+      ${vendr_examples ? `<p><strong>Vendr examples:</strong><br/>${vendr_examples.replace(/\n/g, '<br/>')}</p>` : ''}
+      <h4>Why this role + why this structure?</h4>
+      <p>${pitch || '<em>—</em>'}</p>
       ${cvUrl ? `<p><strong>CV:</strong> <a href="${cvUrl}">${cvFilename}</a></p>` : '<p><em>No CV uploaded</em></p>'}
     `;
+
+    const plainText = [
+      `Application: ${role_title}`,
+      `Name: ${name}`,
+      `Email: ${email}`,
+      location ? `Location/Timezone: ${location}` : null,
+      links ? `Links: ${links}` : null,
+      lane ? `Lane: ${lane}` : null,
+      vendr_lane ? `Vendr lane: ${vendr_lane}` : null,
+      vendr_examples ? `Vendr examples:\n${vendr_examples}` : null,
+      '',
+      'Why this role + why this structure?',
+      pitch || '-',
+      cvUrl ? `CV: ${cvUrl}` : 'No CV uploaded',
+    ]
+      .filter(Boolean)
+      .join('\n');
 
     const response = await fetch('https://api.resend.com/emails', {
       method: 'POST',
@@ -75,8 +125,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       body: JSON.stringify({
         from: 'noreply@vnta.xyz',
         to: 'studio@vnta.xyz',
-        subject: `New Enquiry: ${role}`,
+        subject: subject || `New Enquiry: ${role_title}`,
         html: emailHtml,
+        text: plainText,
       }),
     });
 
