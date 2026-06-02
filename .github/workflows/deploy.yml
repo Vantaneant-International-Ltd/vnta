@@ -21,7 +21,9 @@ jobs:
       
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          # Node 22+ required: supabase-js needs native WebSocket (Node 21+),
+          # otherwise the build-time prerender of /careers + /pricing fails.
+          node-version: '22'
           cache: 'npm'
       
       - run: npm ci
