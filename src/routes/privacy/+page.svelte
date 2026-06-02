@@ -107,7 +107,7 @@
 		padding: 28px 32px;
 		border-radius: var(--radius);
 		border: 1px solid rgba(255, 255, 255, 0.12);
-		background: rgba(255, 255, 255, 0.02);
+		background: var(--surface);
 	}
 
 	.statement p {
@@ -145,7 +145,7 @@
 		border: 1px solid rgba(255, 255, 255, 0.1);
 		border-radius: var(--radius);
 		padding: 22px 22px;
-		background: rgba(255, 255, 255, 0.02);
+		background: var(--surface);
 	}
 
 	.panel--muted {

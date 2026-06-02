@@ -820,7 +820,7 @@
 	.item {
 		border-radius: var(--radius);
 		border: 1px solid rgba(255, 255, 255, 0.12);
-		background: rgba(255, 255, 255, 0.02);
+		background: var(--surface);
 		overflow: hidden;
 	}
 

@@ -41,8 +41,7 @@
 				<span class="eyebrow">Est. MMXXV · Dublin</span>
 			</div>
 
-			<h1 class="vis-hidden">VNTA — a modern holding company building and guiding premium maisons.</h1>
-			<img class="hero__wordmark" src="{base}/wordmark.svg" alt="" aria-hidden="true" />
+			<h1 class="hero__title">Brand leadership <span class="hero__title-em">in residence.</span></h1>
 
 			<hr class="rule" />
 
@@ -136,18 +135,6 @@
 </main>
 
 <style>
-	.vis-hidden {
-		position: absolute;
-		width: 1px;
-		height: 1px;
-		padding: 0;
-		margin: -1px;
-		overflow: hidden;
-		clip: rect(0, 0, 0, 0);
-		white-space: nowrap;
-		border: 0;
-	}
-
 	.wrap {
 		max-width: var(--maxw);
 		margin: 0 auto;
@@ -167,11 +154,19 @@
 		margin-bottom: clamp(28px, 5vw, 56px);
 	}
 
-	.hero__wordmark {
-		display: block;
-		width: clamp(260px, 72vw, 760px);
-		height: auto;
-		margin-bottom: clamp(26px, 4vw, 44px);
+	.hero__title {
+		margin: 0 0 clamp(26px, 4vw, 44px);
+		font-family: var(--font-display);
+		font-weight: 400;
+		font-size: clamp(2.6rem, 6.4vw, 4.2rem);
+		line-height: 1.04;
+		letter-spacing: -0.015em;
+		color: var(--fg);
+		max-width: 16ch;
+	}
+
+	.hero__title-em {
+		color: var(--ink-55);
 	}
 
 	.rule {
@@ -260,8 +255,21 @@
 	.values {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
-		gap: clamp(20px, 3vw, 40px);
+		gap: clamp(16px, 2vw, 24px);
 		padding-top: clamp(28px, 4vw, 48px);
+	}
+
+	.value {
+		padding: clamp(20px, 2vw, 28px);
+		background: var(--surface);
+		border: 1px solid var(--line-soft);
+		border-radius: var(--radius);
+		transition: background 0.25s ease, transform 0.25s ease;
+	}
+
+	.value:hover {
+		background: var(--surface-2);
+		transform: translateY(-2px);
 	}
 
 	.value__n {
@@ -312,13 +320,15 @@
 		grid-template-columns: 48px minmax(120px, 0.8fr) 2fr auto 28px;
 		gap: clamp(18px, 3vw, 40px);
 		align-items: center;
-		padding: clamp(22px, 3vw, 30px) 0;
+		padding: clamp(22px, 3vw, 30px) clamp(14px, 2vw, 22px);
+		margin: 0 calc(-1 * clamp(14px, 2vw, 22px));
 		border-bottom: 1px solid var(--line-soft);
-		transition: padding-left 0.25s ease;
+		border-radius: var(--radius);
+		transition: background 0.25s ease;
 	}
 
 	.row:hover {
-		padding-left: 8px;
+		background: var(--surface);
 	}
 
 	.row__n {
@@ -425,10 +435,6 @@
 		}
 		.row__arrow {
 			display: none;
-		}
-
-		.row:hover {
-			padding-left: 0;
 		}
 	}
 </style>

@@ -113,7 +113,7 @@
 		border: 1px solid rgba(255, 255, 255, 0.1);
 		border-radius: var(--radius);
 		padding: 24px 22px;
-		background: rgba(255, 255, 255, 0.02);
+		background: var(--surface);
 		transition: all 0.25s ease;
 	}
 
@@ -146,7 +146,7 @@
 		padding: 22px 24px;
 		border-radius: var(--radius);
 		border: 1px solid rgba(255, 255, 255, 0.12);
-		background: rgba(255, 255, 255, 0.02);
+		background: var(--surface);
 	}
 
 	.cta-text h2 {

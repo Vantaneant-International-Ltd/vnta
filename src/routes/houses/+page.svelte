@@ -184,7 +184,7 @@
 		text-decoration: none;
 		padding: 8px 10px;
 		border-radius: var(--radius);
-		background: rgba(255, 255, 255, 0.02);
+		background: var(--surface);
 		border: 1px solid rgba(255, 255, 255, 0.06);
 		transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 	}

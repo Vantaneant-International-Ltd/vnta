@@ -233,7 +233,7 @@
 		padding: 28px 32px;
 		border-radius: var(--radius);
 		border: 1px solid rgba(255, 255, 255, 0.12);
-		background: rgba(255, 255, 255, 0.02);
+		background: var(--surface);
 	}
 
 	.statement p {
@@ -280,7 +280,7 @@
 		border: 1px solid rgba(255, 255, 255, 0.1);
 		border-radius: var(--radius);
 		padding: 24px 22px;
-		background: rgba(255, 255, 255, 0.02);
+		background: var(--surface);
 		transition: all 0.25s ease;
 	}
 
@@ -312,7 +312,7 @@
 		border: 1px solid rgba(255, 255, 255, 0.1);
 		border-radius: var(--radius);
 		padding: 22px 22px;
-		background: rgba(255, 255, 255, 0.02);
+		background: var(--surface);
 		transition: all 0.25s ease;
 	}
 
@@ -332,7 +332,7 @@
 		padding: 8px 12px;
 		border-radius: 999px;
 		border: 1px solid rgba(255, 255, 255, 0.12);
-		background: rgba(255, 255, 255, 0.02);
+		background: var(--surface);
 		color: rgba(255, 255, 255, 0.85);
 		font-size: 0.85rem;
 		letter-spacing: 0.06em;
@@ -356,7 +356,7 @@
 		border: 1px solid rgba(255, 255, 255, 0.1);
 		border-radius: var(--radius);
 		padding: 22px 22px;
-		background: rgba(255, 255, 255, 0.02);
+		background: var(--surface);
 	}
 
 	.panel--muted {
@@ -404,7 +404,7 @@
 	.faq-item {
 		border: 1px solid rgba(255, 255, 255, 0.1);
 		border-radius: var(--radius);
-		background: rgba(255, 255, 255, 0.02);
+		background: var(--surface);
 		overflow: hidden;
 	}
 
@@ -436,7 +436,7 @@
 		height: 26px;
 		border-radius: 999px;
 		border: 1px solid rgba(255, 255, 255, 0.12);
-		background: rgba(255, 255, 255, 0.02);
+		background: var(--surface);
 		color: rgba(255, 255, 255, 0.7);
 		font-size: 1.05rem;
 		line-height: 1;
@@ -471,7 +471,7 @@
 		padding: 22px 24px;
 		border-radius: var(--radius);
 		border: 1px solid rgba(255, 255, 255, 0.12);
-		background: rgba(255, 255, 255, 0.02);
+		background: var(--surface);
 	}
 
 	.cta-text h2 {

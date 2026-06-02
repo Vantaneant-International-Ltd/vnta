@@ -1,17 +1,16 @@
 <script lang="ts">
-	// VNTA Brand Guidelines v1.0 (Felixto) — Optima throughout, pure black/white.
-	// Optima is licensed; Marcellus is the closest free flared-humanist stand-in
-	// for display + lockup + labels. Mulish carries body at the smaller scale.
+	// Balanced direction: Marcellus (flared Optima-alike) carries the display
+	// voice from the Felixto guide; Manrope returns for body so text reads warm.
 	import '@fontsource/marcellus/400.css';
 	import '@fontsource/marcellus-sc/400.css';
-	import '@fontsource/mulish/300.css';
-	import '@fontsource/mulish/400.css';
-	import '@fontsource/mulish/500.css';
-	import '@fontsource/mulish/600.css';
-	import '@fontsource/mulish/700.css';
+	import '@fontsource/manrope/400.css';
+	import '@fontsource/manrope/500.css';
+	import '@fontsource/manrope/600.css';
+	import '@fontsource/manrope/700.css';
 
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
+	import { fade } from 'svelte/transition';
 
 	let { children } = $props();
 
@@ -156,8 +155,9 @@
 </svelte:head>
 
 <div class="app-shell" data-sveltekit-preload-data="hover">
-	<div class="page">
-		<header class="site-header" aria-label="VNTA header">
+	{#key $page.url.pathname}
+		<div class="page" in:fade={{ duration: 140 }}>
+			<header class="site-header" aria-label="VNTA header">
 				<div class="site-header__inner">
 					<a class="brand" href="{base}/" aria-label="VNTA home" onclick={closeMobile}>
 						<img class="brand__mark" src="{base}/symbol.svg" alt="" width="22" height="22" aria-hidden="true" />
@@ -369,42 +369,48 @@
 					</div>
 				</div>
 			</footer>
-	</div>
+		</div>
+	{/key}
 </div>
 
 <style>
 	/* --- Design tokens (single source) ------------------------------------- */
 	:root {
-		/* Palette — §3.1 pure black / white only, with tints for hierarchy. */
+		/* Palette — monochrome, but with soft greys/surfaces kept for warmth. */
 		--bg: #000000;
 		--fg: #ffffff;
-		/* §3.1 white shades 80/60/40/20 — used as ink hierarchy on black. */
 		--ink-92: rgba(255, 255, 255, 0.92);
 		--ink-80: rgba(255, 255, 255, 0.8);
-		--ink-65: rgba(255, 255, 255, 0.62);
-		--ink-55: rgba(255, 255, 255, 0.5);
-		--ink-45: rgba(255, 255, 255, 0.38);
-		--line: rgba(255, 255, 255, 0.14);
-		--line-soft: rgba(255, 255, 255, 0.07);
-		--surface: rgba(255, 255, 255, 0.02);
-		/* Restraint — near-square corners read more corporate than pills (§1.4). */
-		--radius: 2px;
+		--ink-65: rgba(255, 255, 255, 0.65);
+		--ink-55: rgba(255, 255, 255, 0.55);
+		--ink-45: rgba(255, 255, 255, 0.45);
+		--line: rgba(255, 255, 255, 0.12);
+		--line-soft: rgba(255, 255, 255, 0.08);
+		/* Soft surface fills — the old softness, kept deliberately. */
+		--surface: rgba(255, 255, 255, 0.035);
+		--surface-2: rgba(255, 255, 255, 0.05);
+		/* Gentle depth (used sparingly — the middle ground, not heavy glass). */
+		--shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.22);
+		--shadow-card: 0 14px 40px rgba(0, 0, 0, 0.2);
+		/* Corners — softened back to a warm middle (not square, not the old 18px). */
+		--radius: 12px;
+		--radius-sm: 10px;
 		--radius-pill: 999px;
 		--maxw: 1180px;
 
-		/* Typeface — Optima stand-ins (Marcellus display, Mulish body). */
+		/* Typeface — Marcellus display (the flared brand voice) + Manrope body. */
 		--font-display: 'Marcellus', 'Optima', 'Times New Roman', serif;
 		--font-sc: 'Marcellus SC', 'Marcellus', serif;
-		--font-body: 'Mulish', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+		--font-body: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 
-		/* Type scale — §4.3 (64 / 48 / 36 / 24), fluid for cosy mobile. */
-		--t-h1: clamp(2.75rem, 7vw, 4rem); /* 64 */
-		--t-h2: clamp(2.25rem, 5vw, 3rem); /* 48 */
-		--t-h3: clamp(1.6rem, 3.4vw, 2.25rem); /* 36 */
-		--t-h4: clamp(1.25rem, 2.4vw, 1.5rem); /* 24 */
-		/* Labels — tracked-out small caps, the connective tissue of the system. */
-		--t-label: 0.7rem;
-		--track-label: 0.22em;
+		/* Display scale (64 / 48 / 36 / 24), fluid for cosy mobile. */
+		--t-h1: clamp(2.6rem, 6vw, 3.6rem);
+		--t-h2: clamp(2.1rem, 4.6vw, 2.85rem);
+		--t-h3: clamp(1.55rem, 3.2vw, 2.1rem);
+		--t-h4: clamp(1.2rem, 2.2vw, 1.45rem);
+		/* Labels — tracked-out small caps. */
+		--t-label: 0.72rem;
+		--track-label: 0.18em;
 	}
 
 	:global(body) {
@@ -473,50 +479,53 @@
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		gap: 10px;
-		padding: 14px 28px;
-		border-radius: var(--radius);
+		gap: 8px;
+		padding: 13px 26px;
+		border-radius: var(--radius-pill);
 		background: var(--fg);
-		color: #000;
+		color: #0a0a0a;
 		border: 1px solid var(--fg);
-		font-family: var(--font-sc);
-		font-weight: 400;
-		font-size: var(--t-label);
-		letter-spacing: var(--track-label);
-		text-transform: uppercase;
+		font-family: var(--font-body);
+		font-weight: 600;
+		font-size: 0.9rem;
+		letter-spacing: 0.02em;
 		cursor: pointer;
-		transition: background 0.25s ease, color 0.25s ease;
+		transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 	}
 
 	:global(.btn-primary:hover) {
-		background: transparent;
-		color: var(--fg);
+		transform: translateY(-1px);
+		background: rgba(255, 255, 255, 0.92);
+		box-shadow: var(--shadow-soft);
 	}
 
-	/* Ghost variant — hairline outline, inverts on hover. */
+	:global(.btn-primary:active) {
+		transform: translateY(0);
+	}
+
+	/* Ghost variant — hairline pill, warms on hover. */
 	:global(.btn-ghost) {
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		gap: 10px;
-		padding: 14px 28px;
-		border-radius: var(--radius);
-		background: transparent;
+		gap: 8px;
+		padding: 13px 26px;
+		border-radius: var(--radius-pill);
+		background: var(--surface);
 		color: var(--fg);
 		border: 1px solid var(--line);
-		font-family: var(--font-sc);
-		font-weight: 400;
-		font-size: var(--t-label);
-		letter-spacing: var(--track-label);
-		text-transform: uppercase;
+		font-family: var(--font-body);
+		font-weight: 600;
+		font-size: 0.9rem;
+		letter-spacing: 0.02em;
 		cursor: pointer;
-		transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+		transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
 	}
 
 	:global(.btn-ghost:hover) {
-		background: var(--fg);
-		color: #000;
-		border-color: var(--fg);
+		transform: translateY(-1px);
+		background: var(--surface-2);
+		border-color: rgba(255, 255, 255, 0.28);
 	}
 
 	:global(.logo) {

@@ -477,7 +477,7 @@
 		border: 1px solid rgba(255, 255, 255, 0.1);
 		border-radius: var(--radius);
 		padding: 28px 24px;
-		background: rgba(255, 255, 255, 0.02);
+		background: var(--surface);
 		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 		display: flex;
 		flex-direction: column;
@@ -555,7 +555,7 @@
 		border: 1px solid rgba(255, 255, 255, 0.1);
 		border-radius: var(--radius);
 		padding: 22px 24px;
-		background: rgba(255, 255, 255, 0.02);
+		background: var(--surface);
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
@@ -641,7 +641,7 @@
 		border: 1px solid rgba(255, 255, 255, 0.1);
 		border-radius: var(--radius);
 		padding: 20px 24px;
-		background: rgba(255, 255, 255, 0.02);
+		background: var(--surface);
 		transition: all 0.25s ease;
 	}
 
@@ -702,7 +702,7 @@
 		border: 1px solid rgba(255, 255, 255, 0.1);
 		border-radius: var(--radius);
 		padding: 22px 24px;
-		background: rgba(255, 255, 255, 0.02);
+		background: var(--surface);
 	}
 
 	.tailored-step h3 {

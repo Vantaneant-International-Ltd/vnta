@@ -349,8 +349,8 @@
 		min-width: 0;
 		padding: 9px 14px;
 		border: 1px solid var(--line);
-		border-radius: var(--radius);
-		background: rgba(255, 255, 255, 0.02);
+		border-radius: var(--radius-sm);
+		background: var(--surface);
 		white-space: nowrap;
 		overflow: hidden;
 	}
