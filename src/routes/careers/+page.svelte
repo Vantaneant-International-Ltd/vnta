@@ -165,7 +165,7 @@
 	let shareToast = '';
 
 	// Apply UX state (static-safe)
-	let submitState: 'idle' | 'opening' | 'success' | 'error' = 'idle';
+	let submitState: 'idle' | 'opening' | 'loading' | 'success' | 'error' = 'idle';
 	let submitError = '';
 	let fallbackCopied = false;
 
@@ -400,7 +400,8 @@
 		}
 	}
 
-	async function copyFallback(role: Role) {
+	async function copyFallback(role: Role | null) {
+		if (!role) return;
 		try {
 			await navigator.clipboard.writeText(`${FALLBACK_EMAIL} — ${role.applySubject}`);
 			fallbackCopied = true;
@@ -631,7 +632,9 @@
 
 					<div class="uploads-note">
 						<p class="muted small">
-						Fill out the form and submit. Then reply to the confirmation email with your CV{activeRole.form.requiresPortfolio ? ' and portfolio' : ''} attached.
+							Fill out the form and submit. Then reply to the confirmation email with your CV{activeRole.form.requiresPortfolio ? ' and portfolio' : ''} attached.
+						</p>
+					</div>
 
 					<div class="form-actions">
 						<button class="btn" type="button" on:click={closeApply}>Cancel</button>
