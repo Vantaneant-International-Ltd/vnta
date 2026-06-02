@@ -73,7 +73,7 @@
 		margin: 0 0 14px;
 		font-size: clamp(2.4rem, 4vw, 3.4rem);
 		line-height: 1.15;
-		font-family: 'Playfair Display', 'Times New Roman', serif;
+		font-family: var(--font-display);
 		font-weight: 700;
 		color: #ffffff;
 		letter-spacing: -0.015em;
@@ -82,7 +82,7 @@
 	/* Aesthetic Gaeilge line (quiet, premium) */
 	.gaelic {
 		margin: 0 0 18px;
-		font-family: 'Playfair Display', 'Times New Roman', serif;
+		font-family: var(--font-display);
 		font-size: 1.02rem;
 		letter-spacing: -0.01em;
 		color: rgba(255, 255, 255, 0.62);

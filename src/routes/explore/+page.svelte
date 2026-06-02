@@ -205,7 +205,7 @@
 	}
 
 	.title {
-		font-family: 'Playfair Display', serif;
+		font-family: var(--font-display);
 		font-size: clamp(2.5rem, 5vw, 4rem);
 		font-weight: 700;
 		margin: 0 0 0.5rem;
@@ -240,7 +240,7 @@
 
 	.statement p {
 		margin: 0;
-		font-family: 'Playfair Display', serif;
+		font-family: var(--font-display);
 		font-size: 1.75rem;
 		line-height: 1.35;
 		color: rgba(255, 255, 255, 0.92);
@@ -258,7 +258,7 @@
 
 	.section-head h2 {
 		margin: 0 0 10px;
-		font-family: 'Playfair Display', serif;
+		font-family: var(--font-display);
 		font-size: 2rem;
 		font-weight: 600;
 		letter-spacing: -0.01em;
@@ -479,7 +479,7 @@
 
 	.cta-text h2 {
 		margin: 0 0 8px;
-		font-family: 'Playfair Display', serif;
+		font-family: var(--font-display);
 		font-size: 1.75rem;
 		font-weight: 600;
 	}

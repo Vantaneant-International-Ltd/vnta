@@ -29,7 +29,7 @@
 		margin: 0 0 14px;
 		font-size: clamp(2.2rem, 3.6vw, 3rem);
 		line-height: 1.15;
-		font-family: 'Playfair Display', 'Times New Roman', serif;
+		font-family: var(--font-display);
 		font-weight: 700;
 		color: #fff;
 		letter-spacing: -0.015em;

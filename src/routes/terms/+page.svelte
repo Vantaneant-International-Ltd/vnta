@@ -193,7 +193,7 @@
 	}
 
 	.title {
-		font-family: 'Playfair Display', serif;
+		font-family: var(--font-display);
 		font-size: clamp(2.4rem, 5vw, 3.8rem);
 		font-weight: 700;
 		margin: 0 0 0.5rem;
@@ -219,7 +219,7 @@
 
 	.section h2 {
 		margin: 0 0 14px;
-		font-family: 'Playfair Display', serif;
+		font-family: var(--font-display);
 		font-size: 1.6rem;
 		font-weight: 600;
 		letter-spacing: -0.01em;

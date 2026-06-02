@@ -443,7 +443,7 @@
 
 <style>
 	.title {
-		font-family: 'Playfair Display', serif;
+		font-family: var(--font-display);
 		font-size: clamp(2.5rem, 5vw, 4rem);
 		font-weight: 700;
 		margin: 0 0 0.5rem;
@@ -567,7 +567,7 @@
 	}
 
 	.tailored-card-title {
-		font-family: 'Playfair Display', serif;
+		font-family: var(--font-display);
 		font-size: 1.65rem;
 		font-weight: 700;
 		margin: 0 0 0.35rem;
@@ -621,7 +621,7 @@
 	}
 
 	.section-title {
-		font-family: 'Playfair Display', serif;
+		font-family: var(--font-display);
 		font-size: 2rem;
 		font-weight: 600;
 		margin: 0 0 0.5rem;
@@ -800,7 +800,7 @@
 
 	.vnta-modal-title {
 		margin: 0;
-		font-family: 'Playfair Display', serif;
+		font-family: var(--font-display);
 		font-size: 1.6rem;
 		font-weight: 700;
 		letter-spacing: -0.02em;

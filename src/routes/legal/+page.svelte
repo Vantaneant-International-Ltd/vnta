@@ -104,7 +104,7 @@
 	}
 
 	.title {
-		font-family: 'Playfair Display', serif;
+		font-family: var(--font-display);
 		font-size: clamp(2.6rem, 5vw, 4rem);
 		font-weight: 700;
 		margin: 0 0 0.75rem;

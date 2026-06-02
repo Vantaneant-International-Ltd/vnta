@@ -94,7 +94,7 @@
 	}
 
 	.title {
-		font-family: 'Playfair Display', serif;
+		font-family: var(--font-display);
 		font-size: clamp(3.1rem, 6vw, 5rem);
 		font-weight: 700;
 		margin: 0 0 0.9rem;
@@ -123,7 +123,7 @@
 
 	.statement p {
 		margin: 0;
-		font-family: 'Playfair Display', serif;
+		font-family: var(--font-display);
 		font-size: clamp(2.05rem, 3vw, 2.75rem);
 		line-height: 1.2;
 		color: rgba(255, 255, 255, 0.94);

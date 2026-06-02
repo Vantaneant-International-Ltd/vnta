@@ -1,14 +1,17 @@
 <script lang="ts">
-	import '@fontsource/manrope/400.css';
-	import '@fontsource/manrope/500.css';
-	import '@fontsource/manrope/600.css';
-	import '@fontsource/manrope/700.css';
-	import '@fontsource/playfair-display/600.css';
-	import '@fontsource/playfair-display/700.css';
+	// VNTA Brand Guidelines v1.0 (Felixto) — Optima throughout, pure black/white.
+	// Optima is licensed; Marcellus is the closest free flared-humanist stand-in
+	// for display + lockup + labels. Mulish carries body at the smaller scale.
+	import '@fontsource/marcellus/400.css';
+	import '@fontsource/marcellus-sc/400.css';
+	import '@fontsource/mulish/300.css';
+	import '@fontsource/mulish/400.css';
+	import '@fontsource/mulish/500.css';
+	import '@fontsource/mulish/600.css';
+	import '@fontsource/mulish/700.css';
 
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
-	import { fly } from 'svelte/transition';
 
 	let { children } = $props();
 
@@ -137,25 +140,6 @@
 	function closeMobile() {
 		mobileOpen = false;
 	}
-
-	const tabRoutes = new Set([
-		'/about',
-		'/explore',
-		'/pricing',
-		'/approach',
-		'/horizon',
-		'/careers',
-		'/',
-		'/houses',
-		'/legal',
-		'/privacy',
-		'/terms'
-	]);
-
-	function shouldAnimate(pathname: string) {
-		const clean = pathname.replace(/\/$/, '') || '/';
-		return tabRoutes.has(clean);
-	}
 </script>
 
 <svelte:head>
@@ -172,21 +156,12 @@
 </svelte:head>
 
 <div class="app-shell" data-sveltekit-preload-data="hover">
-	{#key $page.url.pathname}
-		<div
-			class="page"
-			in:fly={{
-				y: shouldAnimate($page.url.pathname) ? 10 : 0,
-				opacity: 0,
-				duration: shouldAnimate($page.url.pathname) ? 180 : 0
-			}}
-		>
-			<header class="site-header" aria-label="VNTA header">
+	<div class="page">
+		<header class="site-header" aria-label="VNTA header">
 				<div class="site-header__inner">
 					<a class="brand" href="{base}/" aria-label="VNTA home" onclick={closeMobile}>
-						<picture class="logo">
-							<img src="{base}/wordmark.svg" alt="VNTA" width="127" height="30" />
-						</picture>
+						<img class="brand__mark" src="{base}/symbol.svg" alt="" width="22" height="22" aria-hidden="true" />
+						<img class="brand__word" src="{base}/wordmark.svg" alt="VNTA" width="106" height="25" />
 					</a>
 
 					<nav class="nav" aria-label="Primary navigation">
@@ -394,27 +369,42 @@
 					</div>
 				</div>
 			</footer>
-		</div>
-	{/key}
+	</div>
 </div>
 
 <style>
 	/* --- Design tokens (single source) ------------------------------------- */
 	:root {
+		/* Palette — §3.1 pure black / white only, with tints for hierarchy. */
 		--bg: #000000;
 		--fg: #ffffff;
+		/* §3.1 white shades 80/60/40/20 — used as ink hierarchy on black. */
 		--ink-92: rgba(255, 255, 255, 0.92);
 		--ink-80: rgba(255, 255, 255, 0.8);
-		--ink-65: rgba(255, 255, 255, 0.65);
-		--ink-55: rgba(255, 255, 255, 0.55);
-		--ink-45: rgba(255, 255, 255, 0.45);
-		--line: rgba(255, 255, 255, 0.12);
-		--line-soft: rgba(255, 255, 255, 0.08);
+		--ink-65: rgba(255, 255, 255, 0.62);
+		--ink-55: rgba(255, 255, 255, 0.5);
+		--ink-45: rgba(255, 255, 255, 0.38);
+		--line: rgba(255, 255, 255, 0.14);
+		--line-soft: rgba(255, 255, 255, 0.07);
 		--surface: rgba(255, 255, 255, 0.02);
-		--radius: 18px;
-		--maxw: 1120px;
-		--font-display: 'Playfair Display', 'Times New Roman', serif;
-		--font-body: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+		/* Restraint — near-square corners read more corporate than pills (§1.4). */
+		--radius: 2px;
+		--radius-pill: 999px;
+		--maxw: 1180px;
+
+		/* Typeface — Optima stand-ins (Marcellus display, Mulish body). */
+		--font-display: 'Marcellus', 'Optima', 'Times New Roman', serif;
+		--font-sc: 'Marcellus SC', 'Marcellus', serif;
+		--font-body: 'Mulish', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+		/* Type scale — §4.3 (64 / 48 / 36 / 24), fluid for cosy mobile. */
+		--t-h1: clamp(2.75rem, 7vw, 4rem); /* 64 */
+		--t-h2: clamp(2.25rem, 5vw, 3rem); /* 48 */
+		--t-h3: clamp(1.6rem, 3.4vw, 2.25rem); /* 36 */
+		--t-h4: clamp(1.25rem, 2.4vw, 1.5rem); /* 24 */
+		/* Labels — tracked-out small caps, the connective tissue of the system. */
+		--t-label: 0.7rem;
+		--track-label: 0.22em;
 	}
 
 	:global(body) {
@@ -422,7 +412,7 @@
 		min-height: 100vh;
 		background: var(--bg);
 		color: var(--fg);
-		font-family: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+		font-family: var(--font-body);
 		text-rendering: optimizeLegibility;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
@@ -433,6 +423,32 @@
 		text-decoration: none;
 	}
 
+	/* Headings — Marcellus throughout, restrained weight, the §4.3 scale. */
+	:global(h1, h2, h3, h4, h5, h6) {
+		font-family: var(--font-display);
+		font-weight: 400;
+		letter-spacing: -0.01em;
+		line-height: 1.08;
+	}
+
+	/* Tracked-out small-caps label — the connective tissue of the system. */
+	:global(.eyebrow) {
+		font-family: var(--font-sc);
+		font-size: var(--t-label);
+		letter-spacing: var(--track-label);
+		text-transform: uppercase;
+		color: var(--ink-45);
+		margin: 0;
+	}
+
+	/* Hairline rule — §1.4 restraint, structure over decoration. */
+	:global(.rule) {
+		height: 1px;
+		background: var(--line);
+		border: 0;
+		margin: 0;
+	}
+
 	:global(*:focus-visible) {
 		outline: 2px solid rgba(255, 255, 255, 0.5);
 		outline-offset: 3px;
@@ -440,7 +456,7 @@
 	}
 
 	:global(.page-container) {
-		max-width: 1120px;
+		max-width: var(--maxw);
 		margin: 0 auto;
 		padding: 64px 48px 96px;
 	}
@@ -454,37 +470,54 @@
 		display: inline-flex;
 		align-items: center;
 		justify-content: center;
-		gap: 8px;
-		padding: 13px 24px;
-		border-radius: 999px;
+		gap: 10px;
+		padding: 14px 28px;
+		border-radius: var(--radius);
 		background: var(--fg);
-		color: #0a0a0a;
+		color: #000;
 		border: 1px solid var(--fg);
-		font-family: var(--font-body);
-		font-weight: 600;
-		font-size: 0.92rem;
-		letter-spacing: 0.01em;
+		font-family: var(--font-sc);
+		font-weight: 400;
+		font-size: var(--t-label);
+		letter-spacing: var(--track-label);
+		text-transform: uppercase;
 		cursor: pointer;
-		transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+		transition: background 0.25s ease, color 0.25s ease;
 	}
 
 	:global(.btn-primary:hover) {
-		transform: translateY(-1px);
-		background: rgba(255, 255, 255, 0.92);
-		box-shadow: 0 10px 30px rgba(255, 255, 255, 0.12);
+		background: transparent;
+		color: var(--fg);
 	}
 
-	:global(.btn-primary:active) {
-		transform: translateY(0);
+	/* Ghost variant — hairline outline, inverts on hover. */
+	:global(.btn-ghost) {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 10px;
+		padding: 14px 28px;
+		border-radius: var(--radius);
+		background: transparent;
+		color: var(--fg);
+		border: 1px solid var(--line);
+		font-family: var(--font-sc);
+		font-weight: 400;
+		font-size: var(--t-label);
+		letter-spacing: var(--track-label);
+		text-transform: uppercase;
+		cursor: pointer;
+		transition: background 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+	}
+
+	:global(.btn-ghost:hover) {
+		background: var(--fg);
+		color: #000;
+		border-color: var(--fg);
 	}
 
 	:global(.logo) {
 		display: block;
-		transition: transform 0.3s ease;
-	}
-
-	:global(.logo:hover) {
-		transform: scale(1.02);
 	}
 
 	:global(.logo img) {
@@ -526,13 +559,34 @@
 	}
 
 	.site-header__inner {
-		max-width: 1120px;
+		max-width: var(--maxw);
 		margin: 0 auto;
 		padding: 12px 48px;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		gap: 18px;
+	}
+
+	.brand {
+		display: inline-flex;
+		align-items: center;
+		gap: 11px;
+	}
+
+	.brand__mark {
+		display: block;
+		width: 22px;
+		height: 22px;
+		/* symbol.svg is OS-scheme adaptive; the header is always black, so
+		   force the mark white regardless of the visitor's OS appearance. */
+		filter: brightness(0) invert(1);
+	}
+
+	.brand__word {
+		display: block;
+		height: 22px;
+		width: auto;
 	}
 
 	.nav {
@@ -828,14 +882,14 @@
 	}
 
 	.site-footer__inner {
-		max-width: 1120px;
+		max-width: var(--maxw);
 		margin: 0 auto;
 		padding: 0 48px 44px;
 	}
 
 	.footer-slogan {
 		margin: 0 0 18px;
-		font-family: 'Playfair Display', serif;
+		font-family: var(--font-display);
 		font-size: 1.05rem;
 		letter-spacing: -0.01em;
 		color: rgba(255, 255, 255, 0.9);
@@ -970,9 +1024,13 @@
 			padding: 48px 24px 80px;
 		}
 
-		:global(.logo img) {
-			height: 24px;
-			width: auto;
+		.brand__mark {
+			width: 19px;
+			height: 19px;
+		}
+
+		.brand__word {
+			height: 19px;
 		}
 
 		.site-header__inner {

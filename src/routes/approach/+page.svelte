@@ -126,7 +126,7 @@
 
 <style>
 	.title {
-		font-family: 'Playfair Display', serif;
+		font-family: var(--font-display);
 		font-size: clamp(2.5rem, 5vw, 4rem);
 		font-weight: 700;
 		margin: 0 0 1.5rem;
@@ -157,7 +157,7 @@
 	}
 
 	.section-title {
-		font-family: 'Playfair Display', serif;
+		font-family: var(--font-display);
 		font-size: 2rem;
 		font-weight: 600;
 		margin-bottom: 2rem;
