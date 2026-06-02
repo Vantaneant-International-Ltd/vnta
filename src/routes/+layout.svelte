@@ -14,6 +14,15 @@
 
 	let { children } = $props();
 
+	// --- Maintenance lock ------------------------------------------------------
+	// Flip to false to take the public site live again. /admin stays reachable
+	// so operators can keep triaging applications + inquiries during the lock.
+	const MAINTENANCE = true;
+	const maintenance = $derived(
+		MAINTENANCE && !$page.url.pathname.startsWith(`${base}/admin`)
+	);
+	// ---------------------------------------------------------------------------
+
 	// Svelte 5 runes (SvelteKit 2)
 	let mobileOpen = $state(false);
 
@@ -142,6 +151,9 @@
 </script>
 
 <svelte:head>
+	{#if maintenance}
+		<meta name="robots" content="noindex" />
+	{/if}
 	<link rel="icon" type="image/svg+xml" href="{base}/symbol.svg" />
 	<link rel="apple-touch-icon" href="{base}/symbol.svg" />
 	<meta name="theme-color" content="#000000" />
@@ -154,6 +166,39 @@
 	<meta name="twitter:image" content="https://vnta.xyz/og.png" />
 </svelte:head>
 
+{#if maintenance}
+	<main class="maint" in:fade={{ duration: 240 }}>
+		<header class="maint__bar">
+			<span class="brand maint__lockup">
+				<img class="brand__mark" src="{base}/symbol.svg" alt="" width="20" height="20" aria-hidden="true" />
+				<img class="brand__word" src="{base}/wordmark.svg" alt="VNTA" width="96" height="22" />
+			</span>
+			<span class="eyebrow">Est. MMXXV · Dublin</span>
+		</header>
+
+		<section class="maint__core">
+			<p class="eyebrow maint__eyebrow">Maintenance</p>
+			<h1 class="maint__title">A quiet moment.</h1>
+			<p class="maint__lede">
+				The site is briefly closed for refinement. The maisons continue, quietly stewarded
+				under one system — the studio returns shortly.
+			</p>
+			<p class="maint__gaelic" lang="ga">Ar ais go luath.</p>
+
+			<hr class="rule maint__rule" />
+
+			<a class="maint__contact" href="mailto:studio@vnta.xyz">
+				<span class="eyebrow">Inquiries</span>
+				<span class="maint__email">studio@vnta.xyz</span>
+			</a>
+		</section>
+
+		<footer class="maint__bar maint__bar--bottom">
+			<span class="eyebrow">Vantanéant International Ltd</span>
+			<span class="eyebrow">Dublin / Worldwide</span>
+		</footer>
+	</main>
+{:else}
 <div class="app-shell" data-sveltekit-preload-data="hover">
 	{#key $page.url.pathname}
 		<div class="page" in:fade={{ duration: 140 }}>
@@ -372,8 +417,122 @@
 		</div>
 	{/key}
 </div>
+{/if}
 
 <style>
+	/* --- Maintenance lock — VNTA's own restrained, editorial holding page --- */
+	.maint {
+		min-height: 100vh;
+		min-height: 100dvh;
+		background: var(--bg);
+		color: var(--fg);
+		display: flex;
+		flex-direction: column;
+		gap: clamp(36px, 8vh, 72px);
+		padding: clamp(22px, 4vw, 44px) clamp(24px, 7vw, 96px);
+	}
+
+	.maint__bar {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: 18px;
+		flex-wrap: wrap;
+	}
+
+	.maint__bar--bottom {
+		opacity: 0.85;
+	}
+
+	.maint__lockup {
+		gap: 10px;
+	}
+
+	.maint__lockup .brand__mark {
+		width: 20px;
+		height: 20px;
+		filter: brightness(0) invert(1);
+	}
+
+	.maint__lockup .brand__word {
+		height: 20px;
+		width: auto;
+	}
+
+	.maint__core {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: center;
+		max-width: 34ch;
+	}
+
+	.maint__eyebrow {
+		margin-bottom: clamp(20px, 4vh, 30px);
+		color: var(--ink-55);
+	}
+
+	.maint__title {
+		margin: 0;
+		font-family: var(--font-display);
+		font-weight: 400;
+		font-size: clamp(2.4rem, 6.2vw, 4rem);
+		line-height: 1.04;
+		letter-spacing: -0.015em;
+		color: var(--fg);
+	}
+
+	.maint__lede {
+		margin: clamp(18px, 3vh, 26px) 0 0;
+		max-width: 44ch;
+		font-size: 1.04rem;
+		line-height: 1.65;
+		color: var(--ink-65);
+	}
+
+	.maint__gaelic {
+		margin: 14px 0 0;
+		font-family: var(--font-display);
+		font-size: 1.1rem;
+		color: var(--ink-45);
+	}
+
+	.maint__rule {
+		margin: clamp(30px, 5vh, 44px) 0 22px;
+		max-width: 320px;
+	}
+
+	.maint__contact {
+		display: inline-flex;
+		align-items: baseline;
+		gap: 12px;
+		transition: color 0.2s ease;
+	}
+
+	.maint__email {
+		font-size: 0.96rem;
+		color: var(--ink-80);
+		border-bottom: 1px solid var(--line);
+		padding-bottom: 2px;
+		transition: border-color 0.2s ease, color 0.2s ease;
+	}
+
+	.maint__contact:hover .maint__email {
+		color: var(--fg);
+		border-bottom-color: rgba(255, 255, 255, 0.4);
+	}
+
+	@media (max-width: 600px) {
+		.maint {
+			padding: 26px 22px 30px;
+			gap: 36px;
+		}
+
+		.maint__bar .eyebrow {
+			font-size: 0.62rem;
+		}
+	}
+
 	/* --- Design tokens (single source) ------------------------------------- */
 	:root {
 		/* Palette — monochrome, but with soft greys/surfaces kept for warmth. */
