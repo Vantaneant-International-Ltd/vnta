@@ -6,6 +6,10 @@
 	"/about": [
 		"src/routes/+layout.ts"
 	],
+	"/admin": [
+		"src/routes/admin/+page.ts",
+		"src/routes/+layout.ts"
+	],
 	"/approach": [
 		"src/routes/+layout.ts"
 	],

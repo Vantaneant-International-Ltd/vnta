@@ -6,9 +6,14 @@ const config = {
 	preprocess: vitePreprocess(),
 
 	kit: {
-		adapter: adapter(),
+		// GitHub Pages + custom domain (vnta.xyz). The 404.html fallback lets the
+		// client-only /admin route hydrate and serves a styled error for unknown URLs.
+		adapter: adapter({ fallback: '404.html' }),
 		paths: {
 			base: ''
+		},
+		prerender: {
+			entries: ['*']
 		}
 	}
 };
