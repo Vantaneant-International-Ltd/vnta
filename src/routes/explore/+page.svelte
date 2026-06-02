@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { base } from '$app/paths';
+
 	const pillars = [
 		{
 			title: 'Cadence',
@@ -190,7 +192,7 @@
 					<h2>Ready to see packages?</h2>
 					<p>Choose the level of leadership you need for the next 12 months.</p>
 				</div>
-				<a href="/pricing" class="btn-primary">View Packages</a>
+				<a href="{base}/pricing" class="btn-primary">View Packages</a>
 			</div>
 		</section>
 	</div>

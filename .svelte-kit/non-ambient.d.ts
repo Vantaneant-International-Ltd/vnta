@@ -47,6 +47,6 @@ declare module "$app/types" {
 		};
 		Pathname(): "/" | "/about" | "/about/" | "/admin" | "/admin/" | "/approach" | "/approach/" | "/careers" | "/careers/" | "/explore" | "/explore/" | "/horizon" | "/horizon/" | "/houses" | "/houses/" | "/legal" | "/legal/" | "/pricing" | "/pricing/" | "/privacy" | "/privacy/" | "/terms" | "/terms/";
 		ResolvedPathname(): `${"" | `/${string}`}${ReturnType<AppTypes['Pathname']>}`;
-		Asset(): "/CNAME" | "/main-dark.png" | "/main-light.png" | "/partners/felixto.png" | "/robots.txt" | "/secondary-dark.png" | "/secondary-light.png" | "/symbol.svg" | "/vnta-directional-horizon.svg" | "/wordmark.svg" | string & {};
+		Asset(): "/CNAME" | "/main-dark.png" | "/main-light.png" | "/partners/felixto.png" | "/robots.txt" | "/secondary-dark.png" | "/secondary-light.png" | "/sitemap.xml" | "/symbol.svg" | "/vnta-directional-horizon.svg" | "/wordmark.svg" | string & {};
 	}
 }

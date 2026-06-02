@@ -4,6 +4,12 @@
 		name="description"
 		content="Open positions at VNTA. Operator-led, outcome-defined engagements."
 	/>
+	<meta property="og:title" content="Careers — VNTA" />
+	<meta
+		property="og:description"
+		content="Open positions at VNTA. Operator-led, outcome-defined engagements."
+	/>
+	<meta property="og:type" content="website" />
 </svelte:head>
 
 <script lang="ts">

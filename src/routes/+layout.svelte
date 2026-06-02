@@ -163,6 +163,13 @@
 	<link rel="alternate icon" type="image/png" href="{base}/main-dark.png" />
 	<link rel="apple-touch-icon" href="{base}/symbol.svg" />
 	<meta name="theme-color" content="#000000" />
+
+	<!-- Canonical + social defaults (per-page og:title/description override these). -->
+	<link rel="canonical" href={`https://vnta.xyz${$page.url.pathname}`} />
+	<meta property="og:site_name" content="VNTA" />
+	<meta property="og:image" content="https://vnta.xyz/main-dark.png" />
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:image" content="https://vnta.xyz/main-dark.png" />
 </svelte:head>
 
 <div class="app-shell" data-sveltekit-preload-data="hover">
@@ -927,7 +934,7 @@
 
 	.footer-copy {
 		margin: 0;
-		color: rgba(255, 255, 255, 0.34);
+		color: rgba(255, 255, 255, 0.5);
 		font-size: 0.78rem;
 		letter-spacing: 0.02em;
 	}
@@ -940,7 +947,7 @@
 
 	.footer-legal-link {
 		font-size: 0.78rem;
-		color: rgba(255, 255, 255, 0.38);
+		color: rgba(255, 255, 255, 0.55);
 		letter-spacing: 0.02em;
 		transition: color 0.2s ease;
 	}

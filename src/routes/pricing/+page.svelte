@@ -202,6 +202,12 @@
 		name="description"
 		content="Baseline engagement structures for brand leadership in residence. Most engagements are tailored."
 	/>
+	<meta property="og:title" content="Packages — VNTA" />
+	<meta
+		property="og:description"
+		content="Baseline engagement structures for brand leadership in residence. Most engagements are tailored."
+	/>
+	<meta property="og:type" content="website" />
 </svelte:head>
 
 <main class="page-container">

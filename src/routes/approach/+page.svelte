@@ -4,6 +4,12 @@
 		name="description"
 		content="VNTA’s approach to brand leadership, advisory work, and long-horizon positioning."
 	/>
+	<meta property="og:title" content="Approach — VNTA" />
+	<meta
+		property="og:description"
+		content="VNTA’s approach to brand leadership, advisory work, and long-horizon positioning."
+	/>
+	<meta property="og:type" content="website" />
 </svelte:head>
 
 <main class="page-container">

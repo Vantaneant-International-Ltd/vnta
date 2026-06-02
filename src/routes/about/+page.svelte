@@ -21,6 +21,12 @@
 		name="description"
 		content="VNTA is a brand leadership studio operating in residence with founders for 12 months."
 	/>
+	<meta property="og:title" content="The Studio — VNTA" />
+	<meta
+		property="og:description"
+		content="VNTA is a brand leadership studio operating in residence with founders for 12 months."
+	/>
+	<meta property="og:type" content="website" />
 </svelte:head>
 
 <main class="page-container">

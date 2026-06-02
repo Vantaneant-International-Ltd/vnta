@@ -1,3 +1,7 @@
+<script lang="ts">
+	import { base } from '$app/paths';
+</script>
+
 <svelte:head>
 	<title>Legal — VNTA</title>
 	<meta
@@ -88,7 +92,7 @@
 			</p>
 
 			<p class="muted">
-				Related pages: <a class="inline-link" href="/privacy">Privacy</a> · <a class="inline-link" href="/terms">Terms</a>
+				Related pages: <a class="inline-link" href="{base}/privacy">Privacy</a> · <a class="inline-link" href="{base}/terms">Terms</a>
 			</p>
 		</section>
 	</div>
