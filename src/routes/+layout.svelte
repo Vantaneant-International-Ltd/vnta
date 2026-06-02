@@ -185,7 +185,7 @@
 				<div class="site-header__inner">
 					<a class="brand" href="{base}/" aria-label="VNTA home" onclick={closeMobile}>
 						<picture class="logo">
-							<img src="{base}/wordmark.svg" alt="VNTA" width="104" height="104" />
+							<img src="{base}/wordmark.svg" alt="VNTA" width="127" height="30" />
 						</picture>
 					</a>
 
@@ -489,9 +489,8 @@
 
 	:global(.logo img) {
 		display: block;
-		width: 104px;
-		height: 104px;
-		object-fit: contain;
+		height: 30px;
+		width: auto;
 	}
 
 	.app-shell {
@@ -972,8 +971,8 @@
 		}
 
 		:global(.logo img) {
-			width: 72px;
-			height: 72px;
+			height: 24px;
+			width: auto;
 		}
 
 		.site-header__inner {
