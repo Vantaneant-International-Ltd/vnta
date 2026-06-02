@@ -111,16 +111,15 @@
 
 	.card {
 		border: 1px solid rgba(255, 255, 255, 0.1);
-		border-radius: 18px;
+		border-radius: var(--radius);
 		padding: 24px 22px;
-		background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), transparent);
+		background: rgba(255, 255, 255, 0.02);
 		transition: all 0.25s ease;
 	}
 
 	.card:hover {
 		border-color: rgba(255, 255, 255, 0.2);
 		transform: translateY(-2px);
-		box-shadow: 0 12px 40px rgba(255, 255, 255, 0.06);
 	}
 
 	.card h3 {
@@ -145,9 +144,9 @@
 		justify-content: space-between;
 		gap: 24px;
 		padding: 22px 24px;
-		border-radius: 18px;
+		border-radius: var(--radius);
 		border: 1px solid rgba(255, 255, 255, 0.12);
-		background: linear-gradient(135deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.015));
+		background: rgba(255, 255, 255, 0.02);
 	}
 
 	.cta-text h2 {

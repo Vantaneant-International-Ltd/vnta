@@ -802,10 +802,9 @@
 		bottom: 18px;
 		z-index: 50;
 		padding: 10px 12px;
-		border-radius: 12px;
+		border-radius: var(--radius);
 		border: 1px solid rgba(255, 255, 255, 0.14);
 		background: rgba(0, 0, 0, 0.55);
-		backdrop-filter: blur(12px);
 		color: rgba(255, 255, 255, 0.9);
 		font-size: 0.95rem;
 	}
@@ -819,11 +818,9 @@
 	}
 
 	.item {
-		border-radius: 18px;
+		border-radius: var(--radius);
 		border: 1px solid rgba(255, 255, 255, 0.12);
-		background: linear-gradient(135deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.018));
-		backdrop-filter: blur(10px);
-		box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+		background: rgba(255, 255, 255, 0.02);
 		overflow: hidden;
 	}
 
@@ -926,7 +923,7 @@
 		align-items: center;
 		justify-content: center;
 		padding: 10px 14px;
-		border-radius: 12px;
+		border-radius: var(--radius);
 		border: 1px solid rgba(255, 255, 255, 0.14);
 		background: rgba(255, 255, 255, 0.06);
 		color: rgba(255, 255, 255, 0.92);
@@ -952,7 +949,6 @@
 		inset: 0;
 		z-index: 60;
 		background: rgba(0, 0, 0, 0.55);
-		backdrop-filter: blur(8px);
 		display: grid;
 		place-items: center;
 		padding: 18px;
@@ -962,10 +958,9 @@
 		width: min(860px, 100%);
 		max-height: min(84vh, 820px);
 		overflow: auto;
-		border-radius: 18px;
+		border-radius: var(--radius);
 		border: 1px solid rgba(255, 255, 255, 0.12);
-		background: linear-gradient(135deg, rgba(20, 20, 20, 0.92), rgba(10, 10, 10, 0.88));
-		box-shadow: 0 14px 60px rgba(0, 0, 0, 0.6);
+		background: #0a0a0a;
 	}
 
 	.modal-header {
@@ -986,7 +981,7 @@
 		border: 1px solid rgba(255, 255, 255, 0.14);
 		background: rgba(255, 255, 255, 0.06);
 		color: rgba(255, 255, 255, 0.92);
-		border-radius: 12px;
+		border-radius: var(--radius);
 		padding: 8px 10px;
 		cursor: pointer;
 	}
@@ -1013,7 +1008,7 @@
 	textarea,
 	select {
 		padding: 10px 12px;
-		border-radius: 12px;
+		border-radius: var(--radius);
 		border: 1px solid rgba(255, 255, 255, 0.14);
 		background: rgba(255, 255, 255, 0.06);
 		color: rgba(255, 255, 255, 0.92);
@@ -1057,7 +1052,7 @@
 
 	.notice {
 		padding: 12px 12px;
-		border-radius: 14px;
+		border-radius: var(--radius);
 		border: 1px solid rgba(255, 255, 255, 0.12);
 		background: rgba(0, 0, 0, 0.22);
 		display: flex;
@@ -1068,7 +1063,7 @@
 	.uploads-note {
 		margin-top: 2px;
 		padding: 10px 12px;
-		border-radius: 14px;
+		border-radius: var(--radius);
 		border: 1px solid rgba(255, 255, 255, 0.12);
 		background: rgba(0, 0, 0, 0.16);
 	}

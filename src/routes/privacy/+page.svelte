@@ -105,10 +105,9 @@
 	.statement {
 		margin: 0 0 72px;
 		padding: 28px 32px;
-		border-radius: 18px;
+		border-radius: var(--radius);
 		border: 1px solid rgba(255, 255, 255, 0.12);
-		background: linear-gradient(135deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
-		backdrop-filter: blur(10px);
+		background: rgba(255, 255, 255, 0.02);
 	}
 
 	.statement p {
@@ -144,7 +143,7 @@
 
 	.panel {
 		border: 1px solid rgba(255, 255, 255, 0.1);
-		border-radius: 18px;
+		border-radius: var(--radius);
 		padding: 22px 22px;
 		background: rgba(255, 255, 255, 0.02);
 	}

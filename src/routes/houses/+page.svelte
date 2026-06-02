@@ -116,8 +116,6 @@
 		border-radius: 22px;
 		border: 1px solid rgba(255, 255, 255, 0.08);
 		background: radial-gradient(120% 120% at 15% 10%, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
-		backdrop-filter: blur(10px);
-		box-shadow: 0 28px 90px rgba(0, 0, 0, 0.55);
 		padding: 44px 40px;
 	}
 
@@ -185,7 +183,7 @@
 		gap: 8px;
 		text-decoration: none;
 		padding: 8px 10px;
-		border-radius: 14px;
+		border-radius: var(--radius);
 		background: rgba(255, 255, 255, 0.02);
 		border: 1px solid rgba(255, 255, 255, 0.06);
 		transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
@@ -239,7 +237,7 @@
 	@media (max-width: 768px) {
 		.statement {
 			padding: 28px 22px;
-			border-radius: 18px;
+			border-radius: var(--radius);
 		}
 
 		.row-top {

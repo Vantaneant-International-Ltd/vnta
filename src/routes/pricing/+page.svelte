@@ -475,9 +475,9 @@
 
 	.package {
 		border: 1px solid rgba(255, 255, 255, 0.1);
-		border-radius: 18px;
+		border-radius: var(--radius);
 		padding: 28px 24px;
-		background: linear-gradient(135deg, rgba(255, 255, 255, 0.02), transparent);
+		background: rgba(255, 255, 255, 0.02);
 		transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 		display: flex;
 		flex-direction: column;
@@ -485,13 +485,11 @@
 
 	.package.featured {
 		border-color: rgba(255, 255, 255, 0.25);
-		box-shadow: 0 8px 32px rgba(255, 255, 255, 0.08);
 	}
 
 	.package:hover {
 		border-color: rgba(255, 255, 255, 0.3);
 		transform: translateY(-2px);
-		box-shadow: 0 12px 40px rgba(255, 255, 255, 0.1);
 	}
 
 	.package-header {
@@ -555,7 +553,7 @@
 	/* Tailored CTA card */
 	.tailored-card {
 		border: 1px solid rgba(255, 255, 255, 0.1);
-		border-radius: 18px;
+		border-radius: var(--radius);
 		padding: 22px 24px;
 		background: rgba(255, 255, 255, 0.02);
 		display: flex;
@@ -641,7 +639,7 @@
 
 	.retainer {
 		border: 1px solid rgba(255, 255, 255, 0.1);
-		border-radius: 14px;
+		border-radius: var(--radius);
 		padding: 20px 24px;
 		background: rgba(255, 255, 255, 0.02);
 		transition: all 0.25s ease;
@@ -702,7 +700,7 @@
 
 	.tailored-step {
 		border: 1px solid rgba(255, 255, 255, 0.1);
-		border-radius: 18px;
+		border-radius: var(--radius);
 		padding: 22px 24px;
 		background: rgba(255, 255, 255, 0.02);
 	}
@@ -756,7 +754,6 @@
 		position: fixed;
 		inset: 0;
 		background: rgba(0, 0, 0, 0.72);
-		backdrop-filter: blur(10px);
 
 		display: flex;
 		align-items: flex-start;
@@ -776,7 +773,6 @@
 		border: 1px solid rgba(255, 255, 255, 0.12);
 		border-radius: 22px;
 		background: rgba(10, 10, 10, 0.86);
-		box-shadow: 0 30px 120px rgba(0, 0, 0, 0.6);
 
 		display: flex;
 		flex-direction: column;
@@ -788,7 +784,6 @@
 		top: 0;
 		z-index: 4;
 		background: rgba(10, 10, 10, 0.92);
-		backdrop-filter: blur(10px);
 
 		display: flex;
 		align-items: flex-start;
@@ -822,7 +817,7 @@
 		border: 1px solid rgba(255, 255, 255, 0.16);
 		background: rgba(255, 255, 255, 0.04);
 		color: rgba(255, 255, 255, 0.85);
-		border-radius: 12px;
+		border-radius: var(--radius);
 		width: 44px;
 		height: 44px;
 		font-size: 1.6rem;
@@ -867,7 +862,7 @@
 		border: 1px solid rgba(255, 255, 255, 0.12);
 		background: rgba(0, 0, 0, 0.25);
 		color: rgba(255, 255, 255, 0.92);
-		border-radius: 12px;
+		border-radius: var(--radius);
 		padding: 0.75rem 0.85rem;
 		font-size: 0.95rem;
 		outline: none;
@@ -905,7 +900,7 @@
 		border: 1px solid rgba(255, 255, 255, 0.22);
 		background: rgba(255, 255, 255, 0.06);
 		color: rgba(255, 255, 255, 0.92);
-		border-radius: 14px;
+		border-radius: var(--radius);
 		padding: 0.85rem 1rem;
 		font-weight: 600;
 		cursor: pointer;
@@ -921,7 +916,7 @@
 		border: 1px solid rgba(255, 255, 255, 0.14);
 		background: rgba(255, 255, 255, 0.03);
 		color: rgba(255, 255, 255, 0.75);
-		border-radius: 14px;
+		border-radius: var(--radius);
 		padding: 0.85rem 1rem;
 		font-weight: 600;
 		cursor: pointer;

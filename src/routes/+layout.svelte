@@ -416,6 +416,9 @@
 		text-rendering: optimizeLegibility;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
+		/* Marcellus ships a single weight; never let the browser fake a bold.
+		   Mulish keeps its real 300–700 for body/UI. */
+		font-synthesis: none;
 	}
 
 	:global(a) {
