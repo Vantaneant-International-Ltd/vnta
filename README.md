@@ -43,9 +43,15 @@ src/routes/
 ├── legal/
 ├── pricing/
 ├── privacy/
-└── terms/
+├── terms/
+├── admin/             # Supabase-backed operator console (client-only)
+└── +error.svelte      # Styled 404 / error page
+src/lib/
+└── supabase.ts        # Browser Supabase client (publishable key; RLS-protected)
 static/
-├── favicon.svg
+├── symbol.svg         # Favicon / app icon (burst mark)
+├── wordmark.svg       # Header logo (vector VNTA wordmark)
+├── sitemap.xml
 ├── robots.txt
 └── ...                 # Brand assets (logos, SVGs)
 Design Principles
@@ -60,5 +66,14 @@ Brand
 Design language follows the VNTA Brand Guidelines (Felixto Brandworks, v1.0).
 Proprietary assets are not included in this repository.
 
-Contact: hello@vnta.studio
+## Admin
+
+`/admin` is a client-only console (auth + live data) backed by Supabase. VNTA
+shares the vendr Supabase project; all VNTA objects are namespaced `vnta_*` with
+their own RLS and `vnta_admins` / `vnta_is_admin()`. It manages job postings,
+applications (CVs in the private `vnta-cvs` Storage bucket), and inquiries.
+Public Supabase config lives in `vite.config.ts` (publishable key — safe to
+expose; RLS protects the data).
+
+Contact: studio@vnta.xyz
 

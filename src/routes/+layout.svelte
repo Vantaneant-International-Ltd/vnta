@@ -184,7 +184,7 @@
 		>
 			<header class="site-header" aria-label="VNTA header">
 				<div class="site-header__inner">
-					<a class="brand" href="{base}/" aria-label="VNTA home" on:click={closeMobile}>
+					<a class="brand" href="{base}/" aria-label="VNTA home" onclick={closeMobile}>
 						<picture class="logo">
 							<img src="{base}/wordmark.svg" alt="VNTA" width="104" height="104" />
 						</picture>
@@ -209,7 +209,7 @@
 							<button
 								type="button"
 								class="lang-trigger"
-								on:click={toggleLangMenu}
+								onclick={toggleLangMenu}
 								aria-label="Change language"
 								aria-expanded={langOpen}
 							>
@@ -231,7 +231,7 @@
 										class="lang-item"
 										role="menuitemradio"
 										aria-checked={lang === 'en'}
-										on:click={() => setLang('en')}
+										onclick={() => setLang('en')}
 									>
 										<span class="lang-item__label">{t('langEnglish')}</span>
 										<span class="lang-item__meta">EN</span>
@@ -242,7 +242,7 @@
 										class="lang-item"
 										role="menuitemradio"
 										aria-checked={lang === 'ga'}
-										on:click={() => setLang('ga')}
+										onclick={() => setLang('ga')}
 									>
 										<span class="lang-item__label">{t('langIrish')}</span>
 										<span class="lang-item__meta">GA</span>
@@ -253,8 +253,8 @@
 									type="button"
 									class="lang-backdrop"
 									aria-label="Close language menu"
-									on:click={closeLangMenu}
-								/>
+									onclick={closeLangMenu}
+								></button>
 							{/if}
 						</div>
 					</nav>
@@ -267,7 +267,7 @@
 							class="menu-btn"
 							aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
 							aria-expanded={mobileOpen}
-							on:click={() => (mobileOpen = !mobileOpen)}
+							onclick={() => (mobileOpen = !mobileOpen)}
 						>
 							{#if mobileOpen}
 								<span class="menu-x" aria-hidden="true">×</span>
@@ -279,7 +279,7 @@
 				</div>
 
 				{#if mobileOpen}
-					<div class="mobile" role="dialog" aria-label="Menu">
+					<div class="mobile" role="dialog" aria-label="Menu" tabindex="-1">
 						<div class="mobile__panel">
 							<nav class="mobile__nav" aria-label="Mobile navigation">
 								{#each nav as item}
@@ -287,7 +287,7 @@
 										class="mobile__link"
 										class:is-active={isActive(item.href)}
 										href={item.href}
-										on:click={closeMobile}
+										onclick={closeMobile}
 									>
 										{t(item.key)}
 									</a>
@@ -300,7 +300,7 @@
 										type="button"
 										class="mobile__lang-item"
 										aria-pressed={lang === 'en'}
-										on:click={() => setLang('en')}
+										onclick={() => setLang('en')}
 									>
 										English <span class="mobile__lang-code">EN</span>
 									</button>
@@ -308,7 +308,7 @@
 										type="button"
 										class="mobile__lang-item"
 										aria-pressed={lang === 'ga'}
-										on:click={() => setLang('ga')}
+										onclick={() => setLang('ga')}
 									>
 										Gaeilge <span class="mobile__lang-code">GA</span>
 									</button>
@@ -316,7 +316,7 @@
 							</div>
 						</div>
 
-						<button type="button" class="mobile__backdrop" aria-label="Close menu" on:click={closeMobile} />
+						<button type="button" class="mobile__backdrop" aria-label="Close menu" onclick={closeMobile}></button>
 					</div>
 				{/if}
 			</header>

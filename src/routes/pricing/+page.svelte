@@ -194,7 +194,7 @@
 	}
 </script>
 
-<svelte:window on:keydown={onKeydown} />
+<svelte:window onkeydown={onKeydown} />
 
 <svelte:head>
 	<title>Packages — VNTA</title>
@@ -258,7 +258,7 @@
 			</div>
 
 			<div class="tailored-card-right">
-				<button class="tailored-card-btn" type="button" on:click={openTailoredModal}>
+				<button class="tailored-card-btn" type="button" onclick={openTailoredModal}>
 					Request tailored scope
 				</button>
 				<p class="tailored-card-hint">High-signal only. Short application.</p>
@@ -312,7 +312,7 @@
 
 			<div class="tailored-cta">
 				<p>To discuss a tailored engagement:</p>
-				<button class="tailored-btn" type="button" on:click={openTailoredModal}>
+				<button class="tailored-btn" type="button" onclick={openTailoredModal}>
 					Request tailored scope
 				</button>
 			</div>
@@ -323,13 +323,15 @@
 <!-- MODAL (ported to body, does not affect page layout) -->
 {#if tailoredModalOpen}
 	<!-- Backdrop click closes. Modal stops propagation so buttons work reliably. -->
-	<div use:portal class="vnta-modal-backdrop" on:click={closeTailoredModal}>
+	<!-- svelte-ignore a11y_no_static_element_interactions a11y_click_events_have_key_events -->
+	<div use:portal class="vnta-modal-backdrop" onclick={closeTailoredModal}>
 		<div
 			class="vnta-modal"
 			role="dialog"
 			aria-modal="true"
 			aria-label="Tailored engagement inquiry"
-			on:click|stopPropagation
+			tabindex="-1"
+			onclick={(e) => e.stopPropagation()}
 		>
 			<div class="vnta-modal-header">
 				<div class="vnta-modal-title-wrap">
@@ -340,7 +342,7 @@
 				<button
 					class="vnta-modal-close"
 					type="button"
-					on:click={closeTailoredModal}
+					onclick={closeTailoredModal}
 					aria-label="Close"
 				>
 					×
@@ -402,7 +404,7 @@
 							bind:value={tailored.notes}
 							rows="6"
 							placeholder="Where you are now, what you’re trying to change, constraints, and what success looks like."
-						/>
+						></textarea>
 					</label>
 				</div>
 
@@ -410,7 +412,7 @@
 					<button
 						class="vnta-modal-primary"
 						type="button"
-						on:click={submitInquiry}
+						onclick={submitInquiry}
 						disabled={inquiryState === 'sending' || inquiryState === 'sent'}
 					>
 						{inquiryState === 'sending'
@@ -420,11 +422,11 @@
 								: 'Send inquiry'}
 					</button>
 
-					<button class="vnta-modal-secondary" type="button" on:click={openTailoredEmail}>
+					<button class="vnta-modal-secondary" type="button" onclick={openTailoredEmail}>
 						Email instead
 					</button>
 
-					<button class="vnta-modal-secondary" type="button" on:click={closeTailoredModal}>
+					<button class="vnta-modal-secondary" type="button" onclick={closeTailoredModal}>
 						Cancel
 					</button>
 

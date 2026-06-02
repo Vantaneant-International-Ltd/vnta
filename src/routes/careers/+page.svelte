@@ -512,8 +512,8 @@
 							{/each}
 
 							<div class="actions">
-								<button class="btn" type="button" on:click={() => shareRole(role)}>Share</button>
-								<button class="btn primary" type="button" on:click={() => openApply(role)}>Apply</button>
+								<button class="btn" type="button" onclick={() => shareRole(role)}>Share</button>
+								<button class="btn primary" type="button" onclick={() => openApply(role)}>Apply</button>
 							</div>
 						</div>
 					</details>
@@ -528,13 +528,21 @@
 	</div>
 
 	{#if applyOpen && activeRole}
-		<div class="modal-backdrop" role="presentation" on:click|self={closeApply}>
+		<!-- svelte-ignore a11y_no_static_element_interactions a11y_click_events_have_key_events -->
+		<div
+			class="modal-backdrop"
+			role="presentation"
+			onclick={(e) => {
+				if (e.target === e.currentTarget) closeApply();
+			}}
+		>
 			<div
 				class="modal"
 				role="dialog"
 				aria-modal="true"
 				aria-labelledby="apply-title"
-				on:keydown={(e) => e.key === 'Escape' && closeApply()}
+				tabindex="-1"
+				onkeydown={(e) => e.key === 'Escape' && closeApply()}
 			>
 				<div class="modal-header">
 					<div>
@@ -542,10 +550,16 @@
 						<h3 id="apply-title" class="modal-title">{activeRole.title}</h3>
 						<p class="muted meta">{activeRole.meta}</p>
 					</div>
-					<button class="icon-btn" type="button" aria-label="Close" on:click={closeApply}>✕</button>
+					<button class="icon-btn" type="button" aria-label="Close" onclick={closeApply}>✕</button>
 				</div>
 
-				<form class="form" on:submit|preventDefault={submitApplication}>
+				<form
+				class="form"
+				onsubmit={(e) => {
+					e.preventDefault();
+					submitApplication();
+				}}
+			>
 					<!-- role payload (for future backend; harmless on static) -->
 					<input type="hidden" name="role_id" value={activeRole.id} />
 					<input type="hidden" name="role_title" value={activeRole.title} />
@@ -669,7 +683,7 @@
 					</div>
 
 					<div class="form-actions">
-						<button class="btn" type="button" on:click={closeApply}>Cancel</button>
+						<button class="btn" type="button" onclick={closeApply}>Cancel</button>
 					<button class="btn primary" type="submit" disabled={submitState === 'loading'}>
 						{submitState === 'loading' ? 'Sending…' : submitState === 'success' ? 'Sent!' : 'Send Enquiry'}
 					</button>
@@ -683,7 +697,7 @@
 						with subject: <span class="mono">{activeRole.applySubject}</span>.
 					</p>
 
-					<button class="btn" type="button" on:click={() => copyFallback(activeRole)}>
+					<button class="btn" type="button" onclick={() => copyFallback(activeRole)}>
 						{fallbackCopied ? 'Copied' : 'Copy email + subject'}
 					</button>
 
@@ -1049,21 +1063,6 @@
 		display: flex;
 		flex-direction: column;
 		gap: 4px;
-	}
-
-	.fallback {
-		margin-top: 8px;
-		padding: 12px;
-		border-radius: 14px;
-		border: 1px solid rgba(255, 255, 255, 0.12);
-		background: rgba(0, 0, 0, 0.18);
-	}
-
-	.fallback-actions {
-		margin-top: 8px;
-		display: flex;
-		gap: 10px;
-		flex-wrap: wrap;
 	}
 
 	.uploads-note {
