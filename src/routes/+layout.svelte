@@ -159,9 +159,9 @@
 </script>
 
 <svelte:head>
-	<link rel="icon" type="image/png" href="{base}/main-dark.png" media="(prefers-color-scheme: light)" />
-	<link rel="icon" type="image/png" href="{base}/main-dark.png" media="(prefers-color-scheme: dark)" />
-	<link rel="icon" type="image/png" href="{base}/main-dark.png" />
+	<link rel="icon" type="image/svg+xml" href="{base}/symbol.svg" />
+	<link rel="alternate icon" type="image/png" href="{base}/main-dark.png" />
+	<link rel="apple-touch-icon" href="{base}/symbol.svg" />
 	<meta name="theme-color" content="#000000" />
 </svelte:head>
 
@@ -179,8 +179,7 @@
 				<div class="site-header__inner">
 					<a class="brand" href="{base}/" aria-label="VNTA home" on:click={closeMobile}>
 						<picture class="logo">
-							<source srcset="{base}/main-dark.png" media="(prefers-color-scheme: dark)" />
-							<img src="{base}/main-dark.png" alt="VNTA" width="120" height="120" />
+							<img src="{base}/wordmark.svg" alt="VNTA" width="104" height="104" />
 						</picture>
 					</a>
 
