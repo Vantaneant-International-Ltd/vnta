@@ -160,16 +160,15 @@
 
 <svelte:head>
 	<link rel="icon" type="image/svg+xml" href="{base}/symbol.svg" />
-	<link rel="alternate icon" type="image/png" href="{base}/main-dark.png" />
 	<link rel="apple-touch-icon" href="{base}/symbol.svg" />
 	<meta name="theme-color" content="#000000" />
 
 	<!-- Canonical + social defaults (per-page og:title/description override these). -->
 	<link rel="canonical" href={`https://vnta.xyz${$page.url.pathname}`} />
 	<meta property="og:site_name" content="VNTA" />
-	<meta property="og:image" content="https://vnta.xyz/main-dark.png" />
+	<meta property="og:image" content="https://vnta.xyz/og.png" />
 	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:image" content="https://vnta.xyz/main-dark.png" />
+	<meta name="twitter:image" content="https://vnta.xyz/og.png" />
 </svelte:head>
 
 <div class="app-shell" data-sveltekit-preload-data="hover">
