@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { supabase } from '$lib/supabase';
+
 	const packages = [
 		{
 			name: 'FOUNDATION',
@@ -123,9 +125,42 @@
 		body.style.paddingRight = prevBodyPaddingRight;
 	}
 
+	let inquiryState: 'idle' | 'sending' | 'sent' | 'error' = 'idle';
+	let inquiryError = '';
+
 	function openTailoredModal() {
 		tailoredModalOpen = true;
+		inquiryState = 'idle';
+		inquiryError = '';
 		lockScroll();
+	}
+
+	async function submitInquiry() {
+		if (!tailored.name && !tailored.email && !tailored.notes) {
+			inquiryState = 'error';
+			inquiryError = 'Add your name, email, or a note first.';
+			return;
+		}
+		inquiryState = 'sending';
+		inquiryError = '';
+		const { error } = await supabase.from('vnta_inquiries').insert({
+			kind: 'tailored',
+			name: tailored.name,
+			email: tailored.email,
+			company: tailored.company,
+			engagement: tailored.engagement,
+			timeline: tailored.timeline,
+			budget: tailored.budget,
+			notes: tailored.notes,
+			source: '/pricing'
+		});
+		if (error) {
+			inquiryState = 'error';
+			inquiryError = error.message;
+			return;
+		}
+		inquiryState = 'sent';
+		setTimeout(() => closeTailoredModal(), 1400);
 	}
 
 	function closeTailoredModal() {
@@ -366,15 +401,32 @@
 				</div>
 
 				<div class="vnta-modal-actions">
-					<button class="vnta-modal-primary" type="button" on:click={openTailoredEmail}>
-						Compose inquiry
+					<button
+						class="vnta-modal-primary"
+						type="button"
+						on:click={submitInquiry}
+						disabled={inquiryState === 'sending' || inquiryState === 'sent'}
+					>
+						{inquiryState === 'sending'
+							? 'Sending…'
+							: inquiryState === 'sent'
+								? 'Sent ✓'
+								: 'Send inquiry'}
+					</button>
+
+					<button class="vnta-modal-secondary" type="button" on:click={openTailoredEmail}>
+						Email instead
 					</button>
 
 					<button class="vnta-modal-secondary" type="button" on:click={closeTailoredModal}>
 						Cancel
 					</button>
 
-					<p class="vnta-modal-hint">Opens your email client with everything prefilled.</p>
+					{#if inquiryState === 'error'}
+						<p class="vnta-modal-hint error-hint">{inquiryError}</p>
+					{:else}
+						<p class="vnta-modal-hint">Sent securely to VNTA — or email instead, everything prefilled.</p>
+					{/if}
 				</div>
 			</div>
 		</div>
@@ -879,6 +931,10 @@
 		color: rgba(255, 255, 255, 0.55);
 		font-size: 0.9rem;
 		line-height: 1.5;
+	}
+
+	.error-hint {
+		color: rgba(255, 150, 150, 0.9);
 	}
 
 	@media (max-width: 768px) {
