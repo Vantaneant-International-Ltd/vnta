@@ -7,6 +7,9 @@
 </svelte:head>
 
 <script lang="ts">
+	import { onMount } from 'svelte';
+	import { supabase } from '$lib/supabase';
+
 	type Role = {
 		id: string;
 		title: string;
@@ -25,7 +28,8 @@
 	// Static hosting: no POST endpoints. Use mailto + clipboard fallback.
 	const FALLBACK_EMAIL = 'studio@vnta.xyz';
 
-	const roles: Role[] = [
+	// Offline fallback — the live list is loaded from Supabase on mount.
+	const FALLBACK_ROLES: Role[] = [
 		{
 			id: 'sales-executive-trial',
 			title: 'Sales Executive (Trial)',
@@ -160,6 +164,33 @@
 		}
 	];
 
+	let roles: Role[] = FALLBACK_ROLES;
+
+	onMount(async () => {
+		const { data, error } = await supabase
+			.from('vnta_job_postings')
+			.select('*')
+			.eq('is_published', true)
+			.order('sort_order')
+			.order('created_at');
+		if (!error && data && data.length) {
+			roles = data.map((r) => ({
+				id: r.slug,
+				title: r.title,
+				meta: r.meta ?? '',
+				status: r.status as Role['status'],
+				applySubject: r.apply_subject ?? `${r.title} — Application`,
+				applyLead: r.apply_lead ?? '',
+				form: {
+					requiresCv: r.requires_cv,
+					requiresPortfolio: r.requires_portfolio,
+					ackPay: r.ack_pay
+				},
+				sections: Array.isArray(r.sections) ? r.sections : []
+			}));
+		}
+	});
+
 	let activeRole: Role | null = null;
 	let applyOpen = false;
 	let shareToast = '';
@@ -180,6 +211,8 @@
 	let f_vendr_lane = '';
 	let f_vendr_examples = '';
 	let f_cv_files: FileList;
+	let f_ack_contractor = false;
+	let f_ack_pay = false;
 
 	function resetFormState() {
 		submitState = 'idle';
@@ -195,6 +228,8 @@
 
 		f_vendr_lane = '';
 		f_vendr_examples = '';
+		f_ack_contractor = false;
+		f_ack_pay = false;
 	}
 
 	function openApply(role: Role) {
@@ -347,56 +382,47 @@
 		submitError = '';
 
 		try {
-			let cvBase64 = '';
+			// 1) Upload the CV to private Supabase Storage (PDF, ≤5MB enforced by the bucket).
+			let cvPath = '';
 			let cvFilename = '';
 			if (f_cv_files && f_cv_files.length > 0) {
 				const file = f_cv_files[0];
-				cvBase64 = await new Promise((resolve, reject) => {
-					const reader = new FileReader();
-					reader.onload = () => resolve((reader.result as string).split(',')[1]);
-					reader.onerror = reject;
-					reader.readAsDataURL(file);
-				});
 				cvFilename = file.name;
+				const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(-80);
+				const path = `${activeRole.id}/${Date.now()}-${safe}`;
+				const { error: upErr } = await supabase.storage
+					.from('vnta-cvs')
+					.upload(path, file, { contentType: 'application/pdf', upsert: false });
+				if (upErr) throw upErr;
+				cvPath = path;
 			}
 
-			const apiUrl = typeof window !== 'undefined' && window.location.hostname === 'localhost'
-				? 'http://localhost:3000/api/contact'
-				: 'https://vnta.vercel.app/api/contact';
-
-			const response = await fetch(apiUrl, {
-				method: 'POST',
-				headers: { 'Content-Type': 'application/json' },
-				body: JSON.stringify({
-					name: f_name,
-					email: f_email,
-					role_id: activeRole.id,
-					role_title: activeRole.title,
-					subject: activeRole.applySubject,
-					location: f_location,
-					links: f_links,
-					lane: f_lane,
-					vendr_lane: f_vendr_lane,
-					vendr_examples: f_vendr_examples,
-					pitch: f_pitch,
-					cvBase64,
-					cvFilename
-				})
+			// 2) Record the application. Admins read it in the operator console.
+			const { error: insErr } = await supabase.from('vnta_applications').insert({
+				posting_slug: activeRole.id,
+				role_title: activeRole.title,
+				name: f_name,
+				email: f_email,
+				location: f_location,
+				links: f_links,
+				lane: f_lane,
+				vendr_lane: f_vendr_lane,
+				vendr_examples: f_vendr_examples,
+				pitch: f_pitch,
+				cv_path: cvPath,
+				cv_filename: cvFilename,
+				ack_contractor: f_ack_contractor,
+				ack_pay: f_ack_pay
 			});
+			if (insErr) throw insErr;
 
-			if (response.ok) {
-				submitState = 'success';
-				submitError = '';
-				setTimeout(() => {
-					closeApply();
-				}, 1500);
-			} else {
-				submitState = 'error';
-				submitError = 'Failed to submit. Please try the email option below.';
-			}
+			submitState = 'success';
+			submitError = '';
+			setTimeout(() => closeApply(), 1500);
 		} catch (err) {
 			submitState = 'error';
-			submitError = 'Could not submit. Please try the email option below.';
+			submitError =
+				err instanceof Error ? err.message : 'Could not submit. Please try the email option below.';
 		}
 	}
 
@@ -618,13 +644,13 @@
 
 					<div class="acks">
 						<label class="check">
-							<input type="checkbox" name="ack_contractor" required />
+							<input type="checkbox" name="ack_contractor" required bind:checked={f_ack_contractor} />
 							I understand this is an independent contractor engagement (not employment).
 						</label>
 
 						{#if activeRole.form.ackPay}
 							<label class="check">
-								<input type="checkbox" name="ack_pay" required />
+								<input type="checkbox" name="ack_pay" required bind:checked={f_ack_pay} />
 								I understand this role is commission-based and there is no salary or hourly pay.
 							</label>
 						{/if}
