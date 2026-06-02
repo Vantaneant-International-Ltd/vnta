@@ -394,11 +394,29 @@
 </div>
 
 <style>
+	/* --- Design tokens (single source) ------------------------------------- */
+	:root {
+		--bg: #000000;
+		--fg: #ffffff;
+		--ink-92: rgba(255, 255, 255, 0.92);
+		--ink-80: rgba(255, 255, 255, 0.8);
+		--ink-65: rgba(255, 255, 255, 0.65);
+		--ink-55: rgba(255, 255, 255, 0.55);
+		--ink-45: rgba(255, 255, 255, 0.45);
+		--line: rgba(255, 255, 255, 0.12);
+		--line-soft: rgba(255, 255, 255, 0.08);
+		--surface: rgba(255, 255, 255, 0.02);
+		--radius: 18px;
+		--maxw: 1120px;
+		--font-display: 'Playfair Display', 'Times New Roman', serif;
+		--font-body: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+	}
+
 	:global(body) {
 		margin: 0;
 		min-height: 100vh;
-		background: #000000;
-		color: #ffffff;
+		background: var(--bg);
+		color: var(--fg);
 		font-family: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 		text-rendering: optimizeLegibility;
 		-webkit-font-smoothing: antialiased;
@@ -424,6 +442,35 @@
 
 	:global(.content-width) {
 		max-width: 880px;
+	}
+
+	/* Primary call-to-action — solid, premium, restrained. */
+	:global(.btn-primary) {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		gap: 8px;
+		padding: 13px 24px;
+		border-radius: 999px;
+		background: var(--fg);
+		color: #0a0a0a;
+		border: 1px solid var(--fg);
+		font-family: var(--font-body);
+		font-weight: 600;
+		font-size: 0.92rem;
+		letter-spacing: 0.01em;
+		cursor: pointer;
+		transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+	}
+
+	:global(.btn-primary:hover) {
+		transform: translateY(-1px);
+		background: rgba(255, 255, 255, 0.92);
+		box-shadow: 0 10px 30px rgba(255, 255, 255, 0.12);
+	}
+
+	:global(.btn-primary:active) {
+		transform: translateY(0);
 	}
 
 	:global(.logo) {
