@@ -10,9 +10,17 @@
 
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
+	import { afterNavigate } from '$app/navigation';
 	import { fade } from 'svelte/transition';
+	import { trackPageView } from '$lib/analytics';
+	import CookieBanner from '$lib/components/CookieBanner.svelte';
 
 	let { children } = $props();
+
+	// GA page_view on every client navigation (also fires on first mount).
+	afterNavigate(({ to }) => {
+		if (to?.url) trackPageView(to.url);
+	});
 
 	// --- Maintenance lock ------------------------------------------------------
 	// Flip to false to take the public site live again. /admin stays reachable
@@ -418,6 +426,8 @@
 	{/key}
 </div>
 {/if}
+
+<CookieBanner />
 
 <style>
 	/* --- Maintenance lock — VNTA's own restrained, editorial holding page --- */
