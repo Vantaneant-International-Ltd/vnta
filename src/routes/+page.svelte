@@ -26,7 +26,7 @@
 	<meta property="og:title" content="VNTA · A Modern Holding Company" />
 	<meta
 		property="og:description"
-		content="Building and guiding premium maisons through strategy, design systems, and clear long-term direction. Inspired by the restraint of groups such as LVMH and Alphabet."
+		content="Building and guiding premium maisons through strategy, design systems, and clear long-term direction. Authority through restraint, not noise."
 	/>
 	<meta property="og:type" content="website" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
