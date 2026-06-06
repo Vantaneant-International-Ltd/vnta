@@ -25,7 +25,7 @@
 	// --- Maintenance lock ------------------------------------------------------
 	// Flip to false to take the public site live again. /admin stays reachable
 	// so operators can keep triaging applications + inquiries during the lock.
-	const MAINTENANCE = true;
+	const MAINTENANCE = false;
 	const maintenance = $derived(
 		MAINTENANCE && !$page.url.pathname.startsWith(`${base}/admin`)
 	);
@@ -178,8 +178,7 @@
 	<main class="maint" in:fade={{ duration: 240 }}>
 		<header class="maint__bar">
 			<span class="brand maint__lockup">
-				<img class="brand__mark" src="{base}/symbol.svg" alt="" width="20" height="20" aria-hidden="true" />
-				<img class="brand__word" src="{base}/wordmark.svg" alt="VNTA" width="96" height="22" />
+				<img class="brand__word" src="{base}/wordmark.svg" alt="VNTA" width="100" height="23" />
 			</span>
 			<span class="eyebrow">Est. MMXXV · Dublin</span>
 		</header>
@@ -213,8 +212,7 @@
 			<header class="site-header" aria-label="VNTA header">
 				<div class="site-header__inner">
 					<a class="brand" href="{base}/" aria-label="VNTA home" onclick={closeMobile}>
-						<img class="brand__mark" src="{base}/symbol.svg" alt="" width="22" height="22" aria-hidden="true" />
-						<img class="brand__word" src="{base}/wordmark.svg" alt="VNTA" width="106" height="25" />
+						<img class="brand__word" src="{base}/wordmark.svg" alt="VNTA" width="118" height="28" />
 					</a>
 
 					<nav class="nav" aria-label="Primary navigation">
@@ -454,18 +452,8 @@
 		opacity: 0.85;
 	}
 
-	.maint__lockup {
-		gap: 10px;
-	}
-
-	.maint__lockup .brand__mark {
-		width: 20px;
-		height: 20px;
-		filter: brightness(0) invert(1);
-	}
-
 	.maint__lockup .brand__word {
-		height: 20px;
+		height: 22px;
 		width: auto;
 	}
 
@@ -752,21 +740,11 @@
 	.brand {
 		display: inline-flex;
 		align-items: center;
-		gap: 11px;
-	}
-
-	.brand__mark {
-		display: block;
-		width: 22px;
-		height: 22px;
-		/* symbol.svg is OS-scheme adaptive; the header is always black, so
-		   force the mark white regardless of the visitor's OS appearance. */
-		filter: brightness(0) invert(1);
 	}
 
 	.brand__word {
 		display: block;
-		height: 22px;
+		height: 28px;
 		width: auto;
 	}
 
@@ -1205,13 +1183,8 @@
 			padding: 48px 24px 80px;
 		}
 
-		.brand__mark {
-			width: 19px;
-			height: 19px;
-		}
-
 		.brand__word {
-			height: 19px;
+			height: 23px;
 		}
 
 		.site-header__inner {
