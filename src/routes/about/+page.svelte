@@ -16,12 +16,12 @@
 </script>
 
 <svelte:head>
-	<title>The Studio — VNTA</title>
+	<title>The Studio · VNTA</title>
 	<meta
 		name="description"
 		content="VNTA is a brand leadership studio operating in residence with founders for 12 months."
 	/>
-	<meta property="og:title" content="The Studio — VNTA" />
+	<meta property="og:title" content="The Studio · VNTA" />
 	<meta
 		property="og:description"
 		content="VNTA is a brand leadership studio operating in residence with founders for 12 months."
@@ -35,9 +35,9 @@
 		<p class="subtitle">Vantanéant International Ltd</p>
 
 		<p class="lede">
-			VNTA is a brand leadership studio operating in residence with founders. We lead direction,
-			coordinate teams, and execute against clear monthly deliverables over a 12-month engagement —
-			so businesses scale with clarity, not chaos.
+			VNTA is a brand leadership studio operating in residence with founders. We set direction,
+			coordinate teams, and ship to clear monthly deliverables over a twelve-month engagement.
+			The business comes out of it scaled, with structure in place.
 		</p>
 
 		<p class="note">Selected work and references available on request.</p>

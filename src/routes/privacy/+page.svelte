@@ -1,10 +1,10 @@
 <svelte:head>
-	<title>Privacy — VNTA</title>
+	<title>Privacy · VNTA</title>
 	<meta
 		name="description"
 		content="Privacy policy for VNTA (Vantanéant International Ltd)."
 	/>
-	<meta property="og:title" content="Privacy — VNTA" />
+	<meta property="og:title" content="Privacy · VNTA" />
 	<meta property="og:description" content="Privacy policy for VNTA." />
 	<meta property="og:type" content="website" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -29,14 +29,19 @@
 		<section class="section">
 			<div class="section-head">
 				<h2>What we collect</h2>
-				<p>Currently, this site does not use analytics or tracking tools by default.</p>
+				<p>Only what the site needs to work and to reply to you.</p>
 			</div>
 
 			<div class="panel">
 				<ul class="list">
 					<li>
-						<b>Emails you send us</b> (e.g. to <a class="inline-link" href="mailto:studio@vnta.xyz">studio@vnta.xyz</a>).
-						We use the information you provide to respond.
+						<b>Messages and inquiries</b> you send us, by email to
+						<a class="inline-link" href="mailto:studio@vnta.xyz">studio@vnta.xyz</a> or through the inquiry form
+						(name, email, company, and your message). We use them to respond and to keep a record of the request.
+					</li>
+					<li>
+						<b>Anonymous analytics</b> through Google Analytics, with IP anonymisation. It loads only after you
+						accept cookies. Decline and it sets no cookies and sends no analytics.
 					</li>
 					<li>
 						<b>Basic server logs</b> (standard hosting logs such as IP address, user agent, and request time),
@@ -49,12 +54,13 @@
 		<section class="section">
 			<div class="section-head">
 				<h2>Cookies</h2>
-				<p>If we add analytics or cookies later, we’ll update this page.</p>
+				<p>One analytics tool, and only with your consent.</p>
 			</div>
 
 			<div class="panel panel--muted">
 				<p class="body">
-					At the time of writing, VNTA does not intentionally set marketing or analytics cookies.
+					VNTA uses Google Analytics for anonymous usage measurement. It runs only after you accept cookies.
+					We set no marketing or advertising cookies.
 				</p>
 			</div>
 		</section>
@@ -75,7 +81,7 @@
 		<section class="section">
 			<div class="section-head">
 				<h2>Last updated</h2>
-				<p>January 2026</p>
+				<p>June 2026</p>
 			</div>
 		</section>
 	</div>

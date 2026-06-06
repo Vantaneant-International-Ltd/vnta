@@ -144,7 +144,7 @@
 
 	const foundedYear = 2025;
 	const year = new Date().getFullYear();
-	const yearLabel = year > foundedYear ? `${foundedYear}–${year}` : `${foundedYear}`;
+	const yearLabel = year > foundedYear ? `${foundedYear}-${year}` : `${foundedYear}`;
 
 	function isActive(href: string) {
 		const path = $page.url.pathname.replace(/\/$/, '');
@@ -188,7 +188,7 @@
 			<h1 class="maint__title">A quiet moment.</h1>
 			<p class="maint__lede">
 				The site is briefly closed for refinement. The maisons continue, quietly stewarded
-				under one system — the studio returns shortly.
+				under one system. The studio returns shortly.
 			</p>
 			<p class="maint__gaelic" lang="ga">Ar ais go luath.</p>
 

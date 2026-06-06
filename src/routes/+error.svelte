@@ -4,7 +4,7 @@
 </script>
 
 <svelte:head>
-	<title>{$page.status} — VNTA</title>
+	<title>{$page.status} · VNTA</title>
 	<meta name="robots" content="noindex" />
 </svelte:head>
 

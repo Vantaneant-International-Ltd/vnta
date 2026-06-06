@@ -54,7 +54,7 @@
 		},
 		{
 			name: 'Stewardship',
-			price: '€1,750–€2,000/m',
+			price: '€1,750 to €2,000/m',
 			description: 'Full vision leadership & brand direction',
 			inviteOnly: true
 		}
@@ -69,7 +69,7 @@
 		email: '',
 		company: '',
 		engagement: 'Audit & Diagnosis',
-		timeline: '1–2 months',
+		timeline: '1 to 2 months',
 		budget: 'Not sure',
 		notes: ''
 	};
@@ -82,8 +82,8 @@
 		'Other'
 	];
 
-	const timelineOptions = ['ASAP', '1–2 months', '3–6 months', '6–12 months', 'Not sure'];
-	const budgetOptions = ['< €5k', '€5k–€10k', '€10k–€20k', '€20k+', 'Not sure'];
+	const timelineOptions = ['ASAP', '1 to 2 months', '3 to 6 months', '6 to 12 months', 'Not sure'];
+	const budgetOptions = ['< €5k', '€5k to €10k', '€10k to €20k', '€20k+', 'Not sure'];
 
 	// Portal action: mounts node into document.body (compatible with older Svelte)
 	function portal(node: HTMLElement, target = 'body') {
@@ -170,7 +170,7 @@
 
 	function openTailoredEmail() {
 		const to = 'studio@vnta.xyz';
-		const subject = encodeURIComponent('Tailored engagement inquiry — VNTA');
+		const subject = encodeURIComponent('Tailored engagement inquiry · VNTA');
 
 		const bodyLines = [
 			`Name: ${tailored.name || '-'}`,
@@ -197,12 +197,12 @@
 <svelte:window onkeydown={onKeydown} />
 
 <svelte:head>
-	<title>Packages — VNTA</title>
+	<title>Packages · VNTA</title>
 	<meta
 		name="description"
 		content="Baseline engagement structures for brand leadership in residence. Most engagements are tailored."
 	/>
-	<meta property="og:title" content="Packages — VNTA" />
+	<meta property="og:title" content="Packages · VNTA" />
 	<meta
 		property="og:description"
 		content="Baseline engagement structures for brand leadership in residence. Most engagements are tailored."
@@ -290,7 +290,7 @@
 
 			<p class="tailored-lede">
 				Not every business requires full brand leadership in residence. Some engagements focus on a
-				specific phase — refinement, repositioning, or go-to-market execution.
+				specific phase. Refinement, repositioning, or go-to-market execution.
 			</p>
 
 			<div class="tailored-steps">
@@ -433,7 +433,7 @@
 					{#if inquiryState === 'error'}
 						<p class="vnta-modal-hint error-hint">{inquiryError}</p>
 					{:else}
-						<p class="vnta-modal-hint">Sent securely to VNTA — or email instead, everything prefilled.</p>
+						<p class="vnta-modal-hint">Sent securely to VNTA. Or email instead, everything prefilled.</p>
 					{/if}
 				</div>
 			</div>

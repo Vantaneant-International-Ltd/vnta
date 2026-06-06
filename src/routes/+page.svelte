@@ -1,29 +1,29 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 
-	// §1.4 Brand Values — verbatim from VNTA Brand Guidelines v1.0.
+	// §1.4 Brand Values — VNTA Brand Guidelines v1.0.
 	const values = [
-		{ n: '01', name: 'Restraint', body: 'Strong brands are built through reduction, clarity, and careful decision-making — rather than excess.' },
-		{ n: '02', name: 'Silence', body: 'Confidence without noise. Form, consistency, and presence in place of explanation.' },
-		{ n: '03', name: 'Precision', body: 'Every decision is intentional, structured, and aligned with long-term strategic goals.' },
-		{ n: '04', name: 'Timelessness', body: 'We avoid trends and focus on systems designed to remain relevant across years, not seasons.' }
+		{ n: '01', name: 'Restraint', body: 'Strong brands are built by reduction. Clarity over excess. Fewer decisions, made well.' },
+		{ n: '02', name: 'Silence', body: 'Confidence without noise. Form and consistency in place of explanation.' },
+		{ n: '03', name: 'Precision', body: 'Every decision is deliberate. Structured. Aligned to the long term.' },
+		{ n: '04', name: 'Timelessness', body: 'We avoid trends. Systems are built to last years, not seasons.' }
 	];
 
 	// Maisons — stewarded under one system. Window dates per Horizon.
 	const maisons = [
-		{ n: '01', name: 'Vendr', body: 'A commerce-led venture. Operational clarity, modern distribution, brand-first thinking.', when: 'March 2026' },
-		{ n: '02', name: 'Eirvox', body: 'Communications and signal. Voice, narrative, modern transmission — built to scale quietly.', when: 'Summer 2026' },
-		{ n: '03', name: 'Maison Seul', body: 'Restraint, form, cultural permanence. Designed for longevity, not velocity.', when: '2027' }
+		{ n: '01', name: 'Vendr', body: 'A commerce-led venture. Operational clarity. Modern distribution. Brand-first thinking.', when: 'March 2026' },
+		{ n: '02', name: 'Eirvox', body: 'Communications and signal. Voice, narrative, and modern transmission. Built to scale quietly.', when: 'Summer 2026' },
+		{ n: '03', name: 'Maison Seul', body: 'Restraint, form, and cultural permanence. Designed for longevity, not velocity.', when: '2027' }
 	];
 </script>
 
 <svelte:head>
-	<title>VNTA — A Modern Holding Company</title>
+	<title>VNTA · A Modern Holding Company</title>
 	<meta
 		name="description"
-		content="Vantanéant International — a modern holding company building and guiding premium maisons through strategy, design systems, and clear long-term direction."
+		content="Vantanéant International. A modern holding company building and guiding premium maisons through strategy, design systems, and clear long-term direction."
 	/>
-	<meta property="og:title" content="VNTA — A Modern Holding Company" />
+	<meta property="og:title" content="VNTA · A Modern Holding Company" />
 	<meta
 		property="og:description"
 		content="Building and guiding premium maisons through strategy, design systems, and clear long-term direction. Inspired by the restraint of groups such as LVMH and Alphabet."
@@ -58,7 +58,7 @@
 					</div>
 					<div class="fact">
 						<span class="eyebrow">Availability</span>
-						<p>One seat — Q3 2026</p>
+						<p>One seat. Q3 2026.</p>
 					</div>
 				</div>
 			</div>
@@ -67,26 +67,25 @@
 		</div>
 	</section>
 
-	<!-- AIM & VISION — §1.3 -->
+	<!-- AIM & VISION · 1.3 -->
 	<section class="band">
 		<div class="wrap statement">
-			<span class="eyebrow statement__label">Aim &amp; Vision — 1.3</span>
+			<span class="eyebrow statement__label">Aim &amp; Vision · 1.3</span>
 			<p class="statement__body">
-				A refined corporate platform where design, fashion, and strategy coexist under one
-				disciplined and unified system.
+				A single house for design, fashion, and strategy. One system. One standard.
 				<span class="muted">
-					Inspired by the authority and restraint of groups such as LVMH and Alphabet.
+					Authority through restraint, not noise.
 				</span>
 			</p>
 		</div>
 	</section>
 
-	<!-- BRAND VALUES — §1.4 -->
+	<!-- BRAND VALUES · 1.4 -->
 	<section class="band">
 		<div class="wrap">
 			<div class="band__head">
 				<span class="eyebrow">Brand Values</span>
-				<span class="eyebrow">01 — 04</span>
+				<span class="eyebrow">01 / 04</span>
 			</div>
 
 			<hr class="rule" />
@@ -103,11 +102,11 @@
 		</div>
 	</section>
 
-	<!-- MAISONS — INDEX -->
+	<!-- MAISONS · INDEX -->
 	<section class="band">
 		<div class="wrap">
 			<div class="maisons__head">
-				<span class="eyebrow">Maisons — Index</span>
+				<span class="eyebrow">Maisons · Index</span>
 				<h2 class="maisons__title">Quietly stewarded under one disciplined system.</h2>
 			</div>
 

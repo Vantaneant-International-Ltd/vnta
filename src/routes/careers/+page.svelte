@@ -1,13 +1,13 @@
 <svelte:head>
-	<title>Careers — VNTA</title>
+	<title>Careers · VNTA</title>
 	<meta
 		name="description"
-		content="Open positions at VNTA. Operator-led, outcome-defined engagements."
+		content="Careers at VNTA. Hiring is quiet and occasional."
 	/>
-	<meta property="og:title" content="Careers — VNTA" />
+	<meta property="og:title" content="Careers · VNTA" />
 	<meta
 		property="og:description"
-		content="Open positions at VNTA. Operator-led, outcome-defined engagements."
+		content="Careers at VNTA. Hiring is quiet and occasional."
 	/>
 	<meta property="og:type" content="website" />
 </svelte:head>
@@ -34,141 +34,8 @@
 	// Static hosting: no POST endpoints. Use mailto + clipboard fallback.
 	const FALLBACK_EMAIL = 'studio@vnta.xyz';
 
-	// Offline fallback — the live list is loaded from Supabase on mount.
-	const FALLBACK_ROLES: Role[] = [
-		{
-			id: 'sales-executive-trial',
-			title: 'Sales Executive (Trial)',
-			meta: '14-day trial · Independent contractor · High commission contract',
-			status: 'Open',
-			applySubject: 'VNTA Sales Executive (Trial) — Application',
-			applyLead:
-				'Outcome-defined. Pre-launch. Your mandate is to secure first placements and build commercial traction.',
-			form: { requiresCv: true, requiresPortfolio: false, ackPay: true },
-			sections: [
-				{
-					heading: 'Overview',
-					body:
-						'Vendr is pre-launch. There are no live locations yet. This 14-day trial phase evaluates traction fast. Clear alignment converts into a 6 to 12 month high-commission performance contract.'
-				},
-				{
-					heading: 'Structure',
-					bullets: [
-						'14-day full immersion trial',
-						'Company resources provided',
-						'Free daily lunch',
-						'End-of-trial performance review',
-						'6 to 12 month contract offered to top performers'
-					]
-				},
-				{
-					heading: 'What you will do',
-					bullets: [
-						'Secure meetings',
-						'Pitch Vendr Stations across B2B and B2I',
-						'Acquire clients',
-						'Lock commercial locations',
-						'Build and manage pipeline',
-						'Track conversions and territory signal'
-					]
-				},
-				{
-					heading: 'Trial requirement',
-					body:
-						'Maintain a detailed activity log for the full 14-day period and submit it at completion. We measure traction, not effort.',
-					bullets: [
-						'Meetings held',
-						'Prospects contacted',
-						'Sales closed',
-						'Locations secured',
-						'Partnerships explored',
-						'Revenue generated or forecasted',
-						'Strategy adjustments'
-					]
-				},
-				{
-					heading: 'Compensation (post-trial contract)',
-					bullets: [
-						'10 to 12.5 percent commission on all sales',
-						'1,000 EUR annual performance bonus',
-						'Additional percentage on campaigns you contribute to',
-						'Performance incentives and company benefits',
-						'No fixed retainer at this stage (retainer may be introduced once revenue positive)'
-					]
-				},
-				{
-					heading: 'Who this fits',
-					bullets: [
-						'Self-directed operators',
-						'Commercially sharp closers',
-						'People who want an early footprint and can execute without hand-holding'
-					]
-				}
-			]
-		},
-		{
-			id: 'vendr-cinematic-artist',
-			title: 'Cinematic Artist (Vendr)',
-			meta: 'Contract engagement · Hybrid (on-site + remote) · Per-unit + performance incentives · Revenue share',
-			status: 'Open',
-			applySubject: 'Vendr Cinematic Artist — Application',
-			applyLead:
-				'Pre-launch teaser mandate. Taste over volume. Cinematic restraint. Build tone before deployment.',
-			form: { requiresCv: true, requiresPortfolio: true, ackPay: false },
-			sections: [
-				{
-					heading: 'Overview',
-					body:
-						'Vendr is pre-launch. There are no live stations yet. Your first mandate is a teaser campaign that defines tone before deployment. This is not a volume posting role.'
-				},
-				{
-					heading: 'What you will do',
-					bullets: [
-						'Create cinematic video content and high-signal stills',
-						'Direct teaser and campaign visuals',
-						'Shape spatial mood and installation tone',
-						'Establish brand atmosphere across platforms',
-						'Operate solo or with a small setup as required'
-					]
-				},
-				{
-					heading: 'How this works',
-					bullets: [
-						'Hybrid: on-site for filming and key moments; remote for editing and ideation',
-						'Per-unit compensation plus performance incentives and campaign revenue share',
-						'You will build and lead creative direction as we scale'
-					]
-				},
-				{
-					heading: 'Compensation',
-					bullets: [
-						'150 to 200 EUR per cinematic video',
-						'30 EUR per still image',
-						'250 EUR per on-site filming session including 8 to 10 edited select images',
-						'3 to 5 percent revenue share on assigned campaigns',
-						'500 EUR bonus for exceptional work shown',
-						'5 EUR per 1,000 views capped at 500 EUR per cinematic release'
-					]
-				},
-				{
-					heading: 'Signals / tools',
-					bullets: [
-						'Cinematography and lighting instincts',
-						'DaVinci Resolve, Flim.ai, Adobe suite (or equivalents)',
-						'Strong portfolio required'
-					]
-				},
-				{
-					heading: 'Who should not apply',
-					bullets: [
-						'Quantity-over-quality content spammers',
-						'People who treat every platform the same',
-						'Those who need heavy structure, constant feedback, or day-to-day management'
-					]
-				}
-			]
-		}
-	];
+	// Offline fallback. The live list is loaded from Supabase on mount.
+	const FALLBACK_ROLES: Role[] = [];
 
 	let roles: Role[] = FALLBACK_ROLES;
 
@@ -185,7 +52,7 @@
 				title: r.title,
 				meta: r.meta ?? '',
 				status: r.status as Role['status'],
-				applySubject: r.apply_subject ?? `${r.title} — Application`,
+				applySubject: r.apply_subject ?? `${r.title} · Application`,
 				applyLead: r.apply_lead ?? '',
 				form: {
 					requiresCv: r.requires_cv,
@@ -270,7 +137,7 @@
 
 	async function shareRole(role: Role) {
 		const url = roleUrl(role.id);
-		const title = `${role.title} — VNTA`;
+		const title = `${role.title} · VNTA`;
 		const text = `Open position: ${role.title}`;
 
 		try {
@@ -318,7 +185,7 @@
 		}
 
 		lines.push(
-			`—`,
+			``,
 			`Attach your CV (PDF) ${role.form.requiresPortfolio ? 'and portfolio (optional)' : ''} to this email.`
 		);
 
@@ -435,7 +302,7 @@
 	async function copyFallback(role: Role | null) {
 		if (!role) return;
 		try {
-			await navigator.clipboard.writeText(`${FALLBACK_EMAIL} — ${role.applySubject}`);
+			await navigator.clipboard.writeText(`${FALLBACK_EMAIL} · ${role.applySubject}`);
 			fallbackCopied = true;
 			setTimeout(() => (fallbackCopied = false), 1600);
 		} catch {
@@ -473,6 +340,17 @@
 
 			{#if shareToast}
 				<div class="toast" role="status" aria-live="polite">{shareToast}</div>
+			{/if}
+
+			{#if roles.length === 0}
+				<div class="empty">
+					<p class="empty-line">No open roles at present.</p>
+					<p class="empty-note">
+						Hiring here is quiet and occasional. If your work is a genuine fit, write to
+						<a class="empty-link" href="mailto:studio@vnta.xyz?subject=Speculative%20introduction">studio@vnta.xyz</a>.
+						Tell us what you do. Point us to the work.
+					</p>
+				</div>
 			{/if}
 
 			<div class="accordion">
@@ -521,7 +399,7 @@
 			</div>
 
 			<p class="muted footnote">
-				Geography: typically Ireland + EU. Engagements are structured as independent contractor relationships
+				Geography. Typically Ireland and EU. Engagements are structured as independent contractor relationships
 				and are not employment.
 			</p>
 		</section>
@@ -614,7 +492,7 @@
 							name="pitch"
 							required
 							rows="5"
-							placeholder="2–8 sentences. Be specific."
+							placeholder="2 to 8 sentences. Be specific."
 							bind:value={f_pitch}
 						></textarea>
 					</label>
@@ -651,7 +529,7 @@
 						</label>
 
 						<label>
-							Share 1–3 examples you’re proud of (links) *
+							Share 1 to 3 examples you’re proud of (links) *
 							<textarea
 								name="vendr_examples"
 								required
@@ -788,6 +666,39 @@
 
 	.footnote {
 		margin: 14px 0 0;
+	}
+
+	/* Empty state — quiet "no open roles". */
+	.empty {
+		border: 1px solid var(--line-soft);
+		border-radius: var(--radius);
+		background: var(--surface);
+		padding: clamp(26px, 4vw, 40px);
+		max-width: 60ch;
+	}
+
+	.empty-line {
+		margin: 0 0 12px;
+		font-family: var(--font-display);
+		font-size: 1.5rem;
+		color: var(--fg);
+	}
+
+	.empty-note {
+		margin: 0;
+		font-size: 1rem;
+		line-height: 1.65;
+		color: var(--ink-65);
+	}
+
+	.empty-link {
+		color: var(--fg);
+		border-bottom: 1px solid var(--line);
+		transition: border-color 0.2s ease;
+	}
+
+	.empty-link:hover {
+		border-bottom-color: rgba(255, 255, 255, 0.4);
 	}
 
 	.mono {

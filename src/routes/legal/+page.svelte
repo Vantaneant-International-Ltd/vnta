@@ -3,12 +3,12 @@
 </script>
 
 <svelte:head>
-	<title>Legal — VNTA</title>
+	<title>Legal · VNTA</title>
 	<meta
 		name="description"
 		content="Legal information and notices relating to VNTA and this website."
 	/>
-	<meta property="og:title" content="Legal — VNTA" />
+	<meta property="og:title" content="Legal · VNTA" />
 	<meta
 		property="og:description"
 		content="Legal information and notices relating to VNTA and this website."
@@ -60,7 +60,7 @@
 
 			<h2>Intellectual property</h2>
 			<p>
-				All content on this website — including text, visual identity, design elements, and materials —
+				All content on this website, including text, visual identity, design elements, and materials,
 				is owned by Vantanéant International Ltd or used under licence, unless otherwise stated. You may
 				not reproduce, distribute, modify, or republish any part of this website without prior written
 				permission.

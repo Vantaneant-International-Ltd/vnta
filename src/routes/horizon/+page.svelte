@@ -1,70 +1,41 @@
 <script lang="ts">
 	import { base } from '$app/paths';
 
-	// Active windows across the 2026–2027 horizon. Each window spans grid
-	// quarter-columns (1 = 2026 Q1 … 8 = 2027 Q4) on desktop.
+	// Active windows across the 2026 to 2027 horizon. Each window spans grid
+	// quarter-columns (1 = 2026 Q1 ... 8 = 2027 Q4) on desktop.
 	const windows = [
-		{ name: 'VNTA Studio', domain: 'vnta.xyz', status: 'Active residency — continuous', col: '1 / -1', tone: 'live' },
-		{ name: 'Vendr', domain: 'vendr.ie', status: 'In progress — March 2026', col: '1 / 2', tone: 'now' },
-		{ name: 'Eirvox', domain: 'eirvox.ie', status: 'Launching — Summer 2026', col: '3 / 4', tone: 'next' },
-		{ name: 'Maison Seul', domain: 'maisonseul.ie', status: 'Coming — 2027', col: '5 / 7', tone: 'soon' }
+		{ name: 'VNTA Studio', domain: 'vnta.xyz', status: 'Active residency. Continuous.', col: '1 / -1', tone: 'live' },
+		{ name: 'Vendr', domain: 'vendr.ie', status: 'In progress. March 2026.', col: '1 / 2', tone: 'now' },
+		{ name: 'Eirvox', domain: 'eirvox.ie', status: 'Launching Summer 2026.', col: '3 / 4', tone: 'next' },
+		{ name: 'Maison Seul', domain: 'maisonseul.ie', status: 'Coming 2027.', col: '5 / 7', tone: 'soon' }
 	];
 
-	const phases = ['Concept', 'Build', 'Soft launch', 'Live'];
-
-	// Register of maisons — readiness, phase stage (1–4), signal log.
+	// Register of maisons. State only. No invented metrics.
 	const register = [
 		{
 			n: '00', kind: 'Studio', name: 'VNTA Studio', domain: 'vnta.xyz', state: 'Operating',
-			body: 'The studio at the centre of the lineage. Brand leadership in residence for one founder at a time. Twelve-month cycles, structured handover at the end of the engagement.',
-			readiness: 'Active', readinessNote: 'One seat open for Q3 2026', stage: 4,
-			signals: [
-				{ when: 'Mar 2026', text: 'Soft launch of the studio site', tag: 'Done' },
-				{ when: 'May 2026', text: 'Inquiry pipeline opened — tailored scopes', tag: 'Now' },
-				{ when: 'Q3 2026', text: 'Next residency engagement begins', tag: 'Next' }
-			]
+			body: 'The studio at the centre of the lineage. Brand leadership in residence for one founder at a time. Twelve-month cycles. Structured handover at the end of the engagement.'
 		},
 		{
 			n: '01', kind: 'Commerce', name: 'Vendr', domain: 'vendr.ie', state: 'In progress',
-			body: 'A commerce-led venture in active development. Operational clarity, modern distribution, brand-first thinking — built for category leadership without the start-up velocity.',
-			readiness: '68%', readinessNote: 'Pre-launch hardening', stage: 3,
-			signals: [
-				{ when: 'Q4 2025', text: 'Architecture and operations defined', tag: 'Done' },
-				{ when: 'Q1 2026', text: 'Catalogue and distribution build', tag: 'Now' },
-				{ when: 'Q2 2026', text: 'Soft launch — first category', tag: 'Next' }
-			]
+			body: 'A commerce-led venture in active development. Operational clarity. Modern distribution. Brand-first thinking, built for category leadership without the start-up velocity.'
 		},
 		{
 			n: '02', kind: 'Communications', name: 'Eirvox', domain: 'eirvox.ie', state: 'Launching',
-			body: 'Communications and signal. Voice, narrative, modern transmission — built to scale quietly.',
-			readiness: 'Summer 2026', readinessNote: 'In build', stage: 2,
-			signals: [
-				{ when: 'Q1 2026', text: 'Positioning and narrative system', tag: 'Done' },
-				{ when: 'Q2 2026', text: 'Platform build', tag: 'Now' },
-				{ when: 'Summer 2026', text: 'Public launch', tag: 'Next' }
-			]
+			body: 'Communications and signal. Voice, narrative, and modern transmission. Built to scale quietly.'
 		},
 		{
 			n: '03', kind: 'Maison', name: 'Maison Seul', domain: 'maisonseul.ie', state: 'Coming',
-			body: 'Restraint, form, cultural permanence. Designed for longevity, not velocity.',
-			readiness: '2027', readinessNote: 'In concept', stage: 1,
-			signals: [
-				{ when: '2026', text: 'Concept and cultural direction', tag: 'Now' },
-				{ when: '2027', text: 'Founding collection', tag: 'Next' }
-			]
+			body: 'Restraint, form, and cultural permanence. Designed for longevity, not velocity.'
 		}
 	];
-
-	function tagClass(tag: string) {
-		return tag === 'Done' ? 'is-done' : tag === 'Now' ? 'is-now' : 'is-next';
-	}
 </script>
 
 <svelte:head>
-	<title>Horizon — VNTA</title>
-	<meta name="description" content="Not a roadmap. A directional horizon for VNTA across 2026–2027. Maisons advance by readiness, not timelines." />
-	<meta property="og:title" content="Directional Horizon — VNTA" />
-	<meta property="og:description" content="A statement of focus across two years. Active windows and the signal log for each maison." />
+	<title>Horizon · VNTA</title>
+	<meta name="description" content="Not a roadmap. A directional horizon for VNTA across 2026 and 2027. Maisons advance by readiness, not timelines." />
+	<meta property="og:title" content="Directional Horizon · VNTA" />
+	<meta property="og:description" content="A statement of focus across two years. The active window for each maison." />
 </svelte:head>
 
 <main class="horizon">
@@ -72,8 +43,8 @@
 	<section class="head">
 		<div class="wrap">
 			<div class="head__meta">
-				<span class="eyebrow">Section — Horizon</span>
-				<span class="eyebrow">2026 — 2027</span>
+				<span class="eyebrow">Section · Horizon</span>
+				<span class="eyebrow">2026 / 2027</span>
 			</div>
 
 			<h1 class="head__title">Directional Horizon</h1>
@@ -84,8 +55,8 @@
 					readiness, not timelines. Visibility follows stability, never the reverse.
 				</p>
 				<p class="note">
-					The timeline below records the active window for each maison. The signal log
-					records what has shipped, what is in motion, and what is next.
+					The timeline below records the active window for each maison. Windows are
+					indicative. They shift with readiness.
 				</p>
 			</div>
 		</div>
@@ -95,11 +66,11 @@
 	<section class="band">
 		<div class="wrap">
 			<div class="band__head">
-				<span class="eyebrow">Timeline — Active windows</span>
+				<span class="eyebrow">Timeline · Active windows</span>
 				<span class="eyebrow">As of May 2026</span>
 			</div>
 
-			<div class="timeline" role="img" aria-label="Active windows across 2026 and 2027: VNTA Studio continuous; Vendr in progress March 2026; Eirvox launching Summer 2026; Maison Seul coming 2027.">
+			<div class="timeline" role="img" aria-label="Active windows across 2026 and 2027. VNTA Studio continuous. Vendr in progress March 2026. Eirvox launching Summer 2026. Maison Seul coming 2027.">
 				<div class="scale" aria-hidden="true">
 					<span class="scale__year" style="grid-column: 1 / 5;">2026</span>
 					<span class="scale__year" style="grid-column: 5 / 9;">2027</span>
@@ -144,48 +115,16 @@
 				{#each register as m}
 					<article class="entry">
 						<div class="entry__side">
-							<span class="eyebrow">{m.n} — {m.kind}</span>
+							<span class="eyebrow">{m.n} · {m.kind}</span>
 						</div>
 
 						<div class="entry__main">
 							<div class="entry__top">
 								<h2 class="entry__name">{m.name}</h2>
-								<span class="eyebrow entry__state">{m.domain} — {m.state}</span>
+								<span class="eyebrow entry__state">{m.domain} · {m.state}</span>
 							</div>
 
 							<p class="entry__body">{m.body}</p>
-
-							<div class="entry__readiness">
-								<span class="eyebrow">Readiness</span>
-								<span class="entry__read-val">{m.readiness}</span>
-								<span class="entry__read-note">{m.readinessNote}</span>
-							</div>
-
-							<ol class="phasetrack" aria-label="Phase: {phases[m.stage - 1]}">
-								{#each phases as p, i}
-									<li
-										class="phase"
-										class:is-done={i + 1 < m.stage}
-										class:is-current={i + 1 === m.stage}
-									>
-										<span class="phase__dot" aria-hidden="true"></span>
-										<span class="phase__label">{p}</span>
-									</li>
-								{/each}
-							</ol>
-
-							<div class="signals">
-								<span class="eyebrow">Signals</span>
-								<ul>
-									{#each m.signals as s}
-										<li class="signal">
-											<span class="signal__when eyebrow">{s.when}</span>
-											<span class="signal__text">{s.text}</span>
-											<span class="signal__tag {tagClass(s.tag)}">{s.tag}</span>
-										</li>
-									{/each}
-								</ul>
-							</div>
 						</div>
 					</article>
 				{/each}
@@ -297,7 +236,7 @@
 		color: var(--ink-45);
 	}
 
-	/* NOW marker — May 2026 ≈ mid-Q2 of 8 quarters (~19%). */
+	/* NOW marker. May 2026 is roughly mid-Q2 of 8 quarters (about 19%). */
 	.now {
 		position: absolute;
 		top: 0;
@@ -412,129 +351,11 @@
 	}
 
 	.entry__body {
-		margin: 16px 0 24px;
+		margin: 16px 0 0;
 		font-size: 1rem;
 		line-height: 1.6;
 		color: var(--ink-65);
 		max-width: 60ch;
-	}
-
-	.entry__readiness {
-		display: flex;
-		align-items: baseline;
-		gap: 14px;
-		padding: 16px 0;
-		border-top: 1px solid var(--line-soft);
-		flex-wrap: wrap;
-	}
-
-	.entry__read-val {
-		font-family: var(--font-display);
-		font-size: 1.15rem;
-		color: var(--fg);
-	}
-
-	.entry__read-note {
-		font-size: 0.9rem;
-		color: var(--ink-55);
-	}
-
-	.phasetrack {
-		list-style: none;
-		margin: 0 0 24px;
-		padding: 18px 0 0;
-		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		gap: 12px;
-		border-top: 1px solid var(--line-soft);
-	}
-
-	.phase {
-		display: flex;
-		align-items: center;
-		gap: 9px;
-		min-width: 0;
-	}
-
-	.phase__dot {
-		width: 7px;
-		height: 7px;
-		border-radius: 50%;
-		border: 1px solid var(--ink-45);
-		flex: none;
-	}
-
-	.phase__label {
-		font-family: var(--font-sc);
-		font-size: 0.62rem;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		color: var(--ink-45);
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
-	}
-
-	.phase.is-done .phase__dot {
-		background: var(--ink-65);
-		border-color: var(--ink-65);
-	}
-
-	.phase.is-done .phase__label {
-		color: var(--ink-65);
-	}
-
-	.phase.is-current .phase__dot {
-		background: var(--fg);
-		border-color: var(--fg);
-		outline: 3px solid rgba(255, 255, 255, 0.16);
-		outline-offset: 0;
-	}
-
-	.phase.is-current .phase__label {
-		color: var(--fg);
-	}
-
-	.signals ul {
-		list-style: none;
-		margin: 14px 0 0;
-		padding: 0;
-	}
-
-	.signal {
-		display: grid;
-		grid-template-columns: 110px 1fr auto;
-		gap: 16px;
-		align-items: baseline;
-		padding: 11px 0;
-		border-top: 1px solid var(--line-soft);
-	}
-
-	.signal__when {
-		white-space: nowrap;
-	}
-
-	.signal__text {
-		font-size: 0.95rem;
-		color: var(--ink-80);
-	}
-
-	.signal__tag {
-		font-family: var(--font-sc);
-		font-size: 0.6rem;
-		letter-spacing: 0.16em;
-		text-transform: uppercase;
-		white-space: nowrap;
-	}
-
-	.signal__tag.is-done {
-		color: var(--ink-45);
-	}
-	.signal__tag.is-now {
-		color: var(--fg);
-	}
-	.signal__tag.is-next {
-		color: var(--ink-55);
 	}
 
 	.register__cta {
@@ -587,30 +408,6 @@
 		.entry {
 			grid-template-columns: 1fr;
 			gap: 14px;
-		}
-
-		.phasetrack {
-			grid-template-columns: 1fr 1fr;
-			gap: 14px;
-		}
-
-		.signal {
-			grid-template-columns: 1fr auto;
-			grid-template-areas:
-				'when tag'
-				'text text';
-			gap: 4px 14px;
-		}
-
-		.signal__when {
-			grid-area: when;
-		}
-		.signal__tag {
-			grid-area: tag;
-			justify-self: end;
-		}
-		.signal__text {
-			grid-area: text;
 		}
 	}
 

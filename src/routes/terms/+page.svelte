@@ -3,12 +3,12 @@
 </script>
 
 <svelte:head>
-	<title>Terms — VNTA</title>
+	<title>Terms · VNTA</title>
 	<meta
 		name="description"
 		content="Engagement terms and commercial framework governing work with VNTA."
 	/>
-	<meta property="og:title" content="Terms — VNTA" />
+	<meta property="og:title" content="Terms · VNTA" />
 	<meta
 		property="og:description"
 		content="Engagement terms and commercial framework governing work with VNTA."

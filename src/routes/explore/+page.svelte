@@ -18,20 +18,20 @@
 
 	const phases = [
 		{
-			title: 'Month 1–2',
-			body: 'Diagnosis → positioning → narrative. We define what you are, who it’s for, and how it’s expressed.'
+			title: 'Months 1-2',
+			body: 'Diagnosis, positioning, narrative. We define what you are, who it is for, and how it shows up.'
 		},
 		{
-			title: 'Month 3–6',
-			body: 'Execution system. We ship deliverables, coordinate specialists, and install a monthly momentum loop.'
+			title: 'Months 3-6',
+			body: 'Execution system. We ship deliverables, coordinate specialists, and hold a monthly rhythm.'
 		},
 		{
-			title: 'Month 7–9',
-			body: 'Scale initiatives. Campaigns, distribution, partnerships, and flagship moves that widen the moat.'
+			title: 'Months 7-9',
+			body: 'Scale initiatives. Campaigns, distribution, partnerships, and flagship moves.'
 		},
 		{
-			title: 'Month 10–12',
-			body: 'Institutionalize. Documentation, team autonomy, handover, and a clear post-VNTA path.'
+			title: 'Months 10-12',
+			body: 'Hand over. Documentation, team autonomy, and a clear path after VNTA.'
 		}
 	];
 
@@ -54,15 +54,15 @@
 	const faqs = [
 		{
 			q: 'Who is this for?',
-			a: 'Founders who want a clear brand direction and a steady execution pace — without the mess.'
+			a: 'Founders who want clear brand direction and a steady pace of execution.'
 		},
 		{
 			q: 'Do you replace an internal team?',
-			a: 'No. We lead and coordinate. Sometimes we help you build the team; sometimes we guide the team you already have.'
+			a: 'No. We lead and coordinate. Sometimes we help build the team. Sometimes we guide the team you already have.'
 		},
 		{
 			q: 'What do monthly deliverables look like?',
-			a: 'Defined outcomes with owners and dates: brand assets, narrative systems, launches, partnerships, or operational brand infrastructure — depending on phase.'
+			a: 'Defined outcomes with owners and dates. Brand assets, narrative systems, launches, partnerships, or operational brand work. It depends on the phase.'
 		},
 		{
 			q: 'What happens after 12 months?',
@@ -72,15 +72,15 @@
 </script>
 
 <svelte:head>
-	<title>Engagement Model — VNTA</title>
+	<title>Engagement Model · VNTA</title>
 	<meta
 		name="description"
-		content="A structured 12-month brand leadership framework: cadence, phases, deliverables, and outcomes."
+		content="A structured 12-month brand leadership framework. Cadence, phases, deliverables, and outcomes."
 	/>
-	<meta property="og:title" content="Engagement Model — VNTA" />
+	<meta property="og:title" content="Engagement Model · VNTA" />
 	<meta
 		property="og:description"
-		content="A structured 12-month brand leadership framework: cadence, phases, deliverables, and outcomes."
+		content="A structured 12-month brand leadership framework. Cadence, phases, deliverables, and outcomes."
 	/>
 	<meta property="og:type" content="website" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -90,11 +90,11 @@
 	<div class="content content-width">
 		<section class="hero">
 			<h1 class="title">Engagement Model</h1>
-			<p class="subtitle">A–Z Brand Leadership in Residence</p>
+			<p class="subtitle">A to Z Brand Leadership in Residence</p>
 
 			<p class="lede">
-				A structured 12-month operating model designed to turn vision into a functioning brand system —
-				with clear cadence, decision-making, and execution momentum.
+				A structured 12-month operating model designed to turn vision into a working brand system.
+				With clear cadence, clear decisions, and steady execution.
 			</p>
 		</section>
 
@@ -143,7 +143,7 @@
 		<section class="section">
 			<div class="section-head">
 				<h2>What’s included</h2>
-				<p>What you’re actually getting — and what you’re not.</p>
+				<p>What you are actually getting. And what you are not.</p>
 			</div>
 
 			<div class="split">

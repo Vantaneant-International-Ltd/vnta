@@ -4,36 +4,39 @@
 			name: 'Maison Seul',
 			status: 'Coming 2027',
 			domain: 'maisonseul.ie',
-			href: 'https://maisonseul.ie',
+			href: '',
+			live: false,
 			description:
-				'A house built around restraint, form, and cultural permanence. Maison Seul moves slowly — designed for longevity, not velocity.'
+				'A house built around restraint, form, and cultural permanence. Maison Seul moves slowly. Designed for longevity, not velocity.'
 		},
 		{
 			name: 'Eirvox',
 			status: 'Launching Summer 2026',
 			domain: 'eirvox.ie',
 			href: 'https://eirvox.ie',
+			live: true,
 			description:
-				'A communications and signal platform emerging from VNTA. Eirvox explores voice, narrative, and modern transmission — built to scale quietly.'
+				'Communications and signal, emerging from VNTA. Eirvox works in voice, narrative, and modern transmission. Built to scale quietly.'
 		},
 		{
 			name: 'Vendr',
 			status: 'In Progress · March 2026',
 			domain: 'vendr.ie',
 			href: 'https://vendr.ie',
+			live: true,
 			description:
-				'Vendr is under active development — a commerce-led venture built with operational clarity, modern distribution, and brand-first thinking.'
+				'Vendr is under active development. A commerce-led venture built with operational clarity, modern distribution, and brand-first thinking.'
 		}
 	];
 </script>
 
 <svelte:head>
-	<title>Houses — VNTA</title>
+	<title>Houses · VNTA</title>
 	<meta
 		name="description"
-		content="The houses under VNTA: Maison Seul, Eirvox, and Vendr — independent ventures developed with long-term intent."
+		content="The houses under VNTA. Maison Seul, Eirvox, and Vendr. Independent ventures developed with long-term intent."
 	/>
-	<meta property="og:title" content="Houses — VNTA" />
+	<meta property="og:title" content="Houses · VNTA" />
 	<meta property="og:description" content="Independent ventures developed under VNTA with long-term intent." />
 	<meta property="og:type" content="website" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -45,8 +48,8 @@
 		<section class="hero">
 			<h1 class="title">Houses</h1>
 			<p class="lede">
-				VNTA develops and stewards a small number of independent houses — each with its own rhythm, market,
-				and horizon.
+				VNTA develops and stewards a small number of independent houses. Each with its own rhythm,
+				market, and horizon.
 			</p>
 		</section>
 
@@ -69,10 +72,16 @@
 								<span class="row-status">{h.status}</span>
 							</div>
 
-							<a class="row-domain" href={h.href} target="_blank" rel="noreferrer" aria-label={`Open ${h.domain}`}>
-								<span class="row-domain__text">{h.domain}</span>
-								<span class="row-domain__arrow" aria-hidden="true">↗</span>
-							</a>
+							{#if h.live}
+								<a class="row-domain" href={h.href} target="_blank" rel="noreferrer" aria-label={`Open ${h.domain}`}>
+									<span class="row-domain__text">{h.domain}</span>
+									<span class="row-domain__arrow" aria-hidden="true">↗</span>
+								</a>
+							{:else}
+								<span class="row-domain row-domain--soon">
+									<span class="row-domain__text">{h.domain}</span>
+								</span>
+							{/if}
 						</div>
 
 						<p class="row-desc">{h.description}</p>
@@ -81,7 +90,7 @@
 			</div>
 
 			<p class="footnote">
-				Release windows are indicative and may shift. Marks reflect current filing status: Maison Seul® · Eirvox™ · Vendr™.
+				Release windows are indicative and may shift. Marks reflect current filing status. Maison Seul® · Eirvox™ · Vendr™.
 			</p>
 		</section>
 	</div>
@@ -113,9 +122,9 @@
 	/* STATEMENT (matches your screenshot vibe) */
 	.statement {
 		margin: 0 0 72px;
-		border-radius: 22px;
-		border: 1px solid rgba(255, 255, 255, 0.08);
-		background: radial-gradient(120% 120% at 15% 10%, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02));
+		border-radius: var(--radius);
+		border: 1px solid var(--line-soft);
+		background: var(--surface);
 		padding: 44px 40px;
 	}
 
@@ -201,6 +210,12 @@
 		font-size: 0.8rem;
 		color: rgba(255, 255, 255, 0.28);
 		transition: color 0.2s ease, transform 0.2s ease;
+	}
+
+	/* Pre-launch house: domain shown, not linked (no live site yet). */
+	.row-domain--soon {
+		opacity: 0.55;
+		cursor: default;
 	}
 
 	.row-domain:hover {
