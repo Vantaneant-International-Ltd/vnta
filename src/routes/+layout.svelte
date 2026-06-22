@@ -25,7 +25,7 @@
 	// --- Maintenance lock ------------------------------------------------------
 	// Flip to false to take the public site live again. /admin stays reachable
 	// so operators can keep triaging applications + inquiries during the lock.
-	const MAINTENANCE = false;
+	const MAINTENANCE = true;
 	const maintenance = $derived(
 		MAINTENANCE && !$page.url.pathname.startsWith(`${base}/admin`)
 	);
