@@ -13,8 +13,9 @@
 </svelte:head>
 
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, tick } from 'svelte';
 	import { supabase } from '$lib/supabase';
+	import { renderTurnstile, resetTurnstile, submitVnta, turnstileConfigured } from '$lib/turnstile';
 
 	type Role = {
 		id: string;
@@ -66,6 +67,10 @@
 
 	let activeRole: Role | null = null;
 	let applyOpen = false;
+	// Cloudflare Turnstile: token verified server-side by vnta-submit before insert.
+	let tsToken = '';
+	let tsId: string | null = null;
+	let tsEl: HTMLElement;
 	let shareToast = '';
 
 	// Apply UX state (static-safe)
@@ -105,14 +110,24 @@
 		f_ack_pay = false;
 	}
 
-	function openApply(role: Role) {
+	async function openApply(role: Role) {
 		activeRole = role;
 		applyOpen = true;
 		shareToast = '';
 		resetFormState();
+		tsToken = '';
 
 		// lock scroll
 		document.documentElement.style.overflow = 'hidden';
+
+		await tick();
+		if (turnstileConfigured() && tsEl) {
+			tsId = await renderTurnstile(
+				tsEl,
+				(t) => (tsToken = t),
+				() => (tsToken = '')
+			);
+		}
 	}
 
 	function closeApply() {
@@ -251,6 +266,12 @@
 			return;
 		}
 
+		if (turnstileConfigured() && !tsToken) {
+			submitState = 'error';
+			submitError = 'Please complete the verification.';
+			return;
+		}
+
 		submitState = 'loading';
 		submitError = '';
 
@@ -270,24 +291,29 @@
 				cvPath = path;
 			}
 
-			// 2) Record the application. Admins read it in the operator console.
-			const { error: insErr } = await supabase.from('vnta_applications').insert({
-				posting_slug: activeRole.id,
-				role_title: activeRole.title,
-				name: f_name,
-				email: f_email,
-				location: f_location,
-				links: f_links,
-				lane: f_lane,
-				vendr_lane: f_vendr_lane,
-				vendr_examples: f_vendr_examples,
-				pitch: f_pitch,
-				cv_path: cvPath,
-				cv_filename: cvFilename,
-				ack_contractor: f_ack_contractor,
-				ack_pay: f_ack_pay
-			});
-			if (insErr) throw insErr;
+			// 2) Record the application via the verified edge function. Turnstile is
+			// checked server-side there; anon INSERT on vnta_applications is revoked.
+			const res = await submitVnta(
+				'application',
+				{
+					posting_slug: activeRole.id,
+					role_title: activeRole.title,
+					name: f_name,
+					email: f_email,
+					location: f_location,
+					links: f_links,
+					lane: f_lane,
+					vendr_lane: f_vendr_lane,
+					vendr_examples: f_vendr_examples,
+					pitch: f_pitch,
+					cv_path: cvPath,
+					cv_filename: cvFilename,
+					ack_contractor: f_ack_contractor,
+					ack_pay: f_ack_pay
+				},
+				tsToken
+			);
+			if (!res.ok) throw new Error(res.error || 'Could not submit.');
 
 			submitState = 'success';
 			submitError = '';
@@ -296,6 +322,8 @@
 			submitState = 'error';
 			submitError =
 				err instanceof Error ? err.message : 'Could not submit. Please try the email option below.';
+			resetTurnstile(tsId);
+			tsToken = '';
 		}
 	}
 
@@ -559,6 +587,8 @@
 							Fill out the form and submit. Then reply to the confirmation email with your CV{activeRole.form.requiresPortfolio ? ' and portfolio' : ''} attached.
 						</p>
 					</div>
+
+					<div class="ts" bind:this={tsEl}></div>
 
 					<div class="form-actions">
 						<button class="btn" type="button" onclick={closeApply}>Cancel</button>
@@ -954,6 +984,19 @@
 		width: 16px;
 		height: 16px;
 	}
+
+	.ts {
+
+		display: flex;
+
+		justify-content: center;
+
+		margin: 4px 0 2px;
+
+		min-height: 65px;
+
+	}
+
 
 	.form-actions {
 		display: flex;

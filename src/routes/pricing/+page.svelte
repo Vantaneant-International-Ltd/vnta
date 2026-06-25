@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { supabase } from '$lib/supabase';
+	import { tick } from 'svelte';
+	import { renderTurnstile, resetTurnstile, submitVnta, turnstileConfigured } from '$lib/turnstile';
 
 	const packages = [
 		{
@@ -63,6 +64,10 @@
 	/* ========= Inquiry modal ========= */
 
 	let tailoredModalOpen = false;
+	// Cloudflare Turnstile: token verified server-side by vnta-submit before insert.
+	let tsToken = '';
+	let tsId: string | null = null;
+	let tsEl: HTMLElement;
 
 	let tailored = {
 		name: '',
@@ -128,11 +133,20 @@
 	let inquiryState: 'idle' | 'sending' | 'sent' | 'error' = 'idle';
 	let inquiryError = '';
 
-	function openTailoredModal() {
+	async function openTailoredModal() {
 		tailoredModalOpen = true;
 		inquiryState = 'idle';
 		inquiryError = '';
+		tsToken = '';
 		lockScroll();
+		await tick();
+		if (turnstileConfigured() && tsEl) {
+			tsId = await renderTurnstile(
+				tsEl,
+				(t) => (tsToken = t),
+				() => (tsToken = '')
+			);
+		}
 	}
 
 	async function submitInquiry() {
@@ -141,22 +155,33 @@
 			inquiryError = 'Add your name, email, or a note first.';
 			return;
 		}
+		if (turnstileConfigured() && !tsToken) {
+			inquiryState = 'error';
+			inquiryError = 'Please complete the verification.';
+			return;
+		}
 		inquiryState = 'sending';
 		inquiryError = '';
-		const { error } = await supabase.from('vnta_inquiries').insert({
-			kind: 'tailored',
-			name: tailored.name,
-			email: tailored.email,
-			company: tailored.company,
-			engagement: tailored.engagement,
-			timeline: tailored.timeline,
-			budget: tailored.budget,
-			notes: tailored.notes,
-			source: '/pricing'
-		});
-		if (error) {
+		const res = await submitVnta(
+			'inquiry',
+			{
+				kind: 'tailored',
+				name: tailored.name,
+				email: tailored.email,
+				company: tailored.company,
+				engagement: tailored.engagement,
+				timeline: tailored.timeline,
+				budget: tailored.budget,
+				notes: tailored.notes,
+				source: '/pricing'
+			},
+			tsToken
+		);
+		if (!res.ok) {
 			inquiryState = 'error';
-			inquiryError = error.message;
+			inquiryError = res.error || 'Could not submit.';
+			resetTurnstile(tsId);
+			tsToken = '';
 			return;
 		}
 		inquiryState = 'sent';
@@ -407,6 +432,8 @@
 						></textarea>
 					</label>
 				</div>
+
+				<div class="vnta-ts" bind:this={tsEl}></div>
 
 				<div class="vnta-modal-actions">
 					<button
@@ -886,6 +913,12 @@
 		grid-column: span 2;
 	}
 
+	.vnta-ts {
+		display: flex;
+		justify-content: center;
+		margin: 4px 0 2px;
+		min-height: 65px;
+	}
 	.vnta-modal-actions {
 		display: flex;
 		align-items: center;
