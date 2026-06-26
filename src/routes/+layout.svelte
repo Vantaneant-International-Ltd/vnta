@@ -94,7 +94,7 @@
 	{/if}
 	<link rel="icon" type="image/svg+xml" href="{base}/symbol.svg" />
 	<link rel="apple-touch-icon" href="{base}/symbol.svg" />
-	<meta name="theme-color" content="#000000" />
+	<meta name="theme-color" content="#ffffff" />
 
 	<!-- Canonical + social defaults (per-page og:title/description override these). -->
 	<link rel="canonical" href={`https://vnta.xyz${$page.url.pathname}`} />

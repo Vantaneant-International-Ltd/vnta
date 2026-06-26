@@ -14,32 +14,32 @@
 
 :root {
 	/* --- Canvas — warm paper, warm ink (NOT pure #fff / #000) ----------- */
-	/* GROUND: fully-black (white-on-black — monochrome-compliant per guideline).
-	   The white-canvas alternative, if ever needed, is these 13 values:
-	   paper #ffffff · paper-2 #f4f4f4 · ink #0a0a0a · 85 #1a1a1a · 70 #404040 ·
-	   50 #6b6b6b · 35 #9b9b9b · 20 #c7c7c7 · line rgba(0,0,0,.14) ·
-	   line-soft rgba(0,0,0,.08) · accent #0a0a0a · ink-bg #000 · ink-fg #fff */
-	--paper:        #000000; /* black canvas */
-	--paper-2:      #121212; /* recessed panel / field / alt band */
-	--ink:          #f4f4f4; /* near-white text */
+	/* GROUND: white two-tone (black-on-white) — the brand-faithful cold
+	   monochrome. The footer/cookie invert to a softened "faded" black band.
+	   Fully-black alternative, if ever needed: paper #000 · paper-2 #121212 ·
+	   ink #f4f4f4 · 85 #d4d4d4 · 70 #a6a6a6 · 50 #7c7c7c · 35 #585858 ·
+	   20 #333 · line/line-soft white .14/.08 · accent #f4f4f4 · ink-bg #0a0a0a */
+	--paper:        #ffffff; /* white canvas */
+	--paper-2:      #f4f4f4; /* recessed panel / field / alt band */
+	--ink:          #0a0a0a; /* near-black text */
 
-	/* Pure-neutral grey ramp (light-on-dark) — no warm or cool tint. */
-	--ink-85:       #d4d4d4;
-	--ink-70:       #a6a6a6;
-	--ink-50:       #7c7c7c;
-	--ink-35:       #585858;
-	--ink-20:       #333333;
+	/* Pure-neutral grey ramp — no warm or cool tint (guideline §Palette). */
+	--ink-85:       #1a1a1a;
+	--ink-70:       #404040;
+	--ink-50:       #6b6b6b;
+	--ink-35:       #9b9b9b;
+	--ink-20:       #c7c7c7;
 
-	/* Hairlines — neutral light at low alpha. */
-	--line:         rgba(255, 255, 255, 0.14);
-	--line-soft:    rgba(255, 255, 255, 0.08);
+	/* Hairlines — neutral ink at low alpha. */
+	--line:         rgba(0, 0, 0, 0.14);
+	--line-soft:    rgba(0, 0, 0, 0.08);
 
 	/* No accent. The system is monochrome; any "accent" is just ink. */
-	--accent:       #f4f4f4;
+	--accent:       #0a0a0a;
 
-	/* Inverted surface — a hair-raised near-black so the footer reads as its
-	   own band on the black ground. */
-	--ink-bg:       #0a0a0a;
+	/* Inverted surface (footer, cookie). Softened "faded" black, not a stark
+	   #000 slab — the version preferred on review. */
+	--ink-bg:       #141414;
 	--ink-fg:       #ffffff;
 
 	/* --- Type ----------------------------------------------------------- */
