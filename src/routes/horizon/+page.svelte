@@ -175,7 +175,7 @@
 		font-size: clamp(1.05rem, 1.5vw, 1.25rem);
 		line-height: 1.55;
 		color: var(--ink-92);
-		font-weight: 300;
+		font-weight: 400;
 		max-width: 40ch;
 	}
 
@@ -305,7 +305,7 @@
 
 	.window--now .window__name,
 	.window--now .window__status {
-		color: #000;
+		color: var(--paper);
 	}
 
 	.window__name {

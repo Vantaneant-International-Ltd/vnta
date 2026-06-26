@@ -1,0 +1,113 @@
+/* =============================================================================
+   VNTA — Design Tokens (warm-editorial direction, June 2026)
+   -----------------------------------------------------------------------------
+   Reference register: Kering (house-of-houses, editorial) × BlackRock
+   (institutional authority) × Anthropic (warm, calm execution).
+
+   SUPERSEDES the pure-black monochrome tokens currently inlined in
+   +layout.svelte. This is the single source of truth for colour, type, space,
+   shape, and motion. Pages must consume these vars — never hardcode rgba().
+
+   Migration: phase 2 removes the inline :root from +layout.svelte and imports
+   this file globally. Until then it lives alongside; opt a page in by importing.
+   ========================================================================== */
+
+:root {
+	/* --- Canvas — warm paper, warm ink (NOT pure #fff / #000) ----------- */
+	/* GROUND: fully-black (white-on-black — monochrome-compliant per guideline).
+	   The white-canvas alternative, if ever needed, is these 13 values:
+	   paper #ffffff · paper-2 #f4f4f4 · ink #0a0a0a · 85 #1a1a1a · 70 #404040 ·
+	   50 #6b6b6b · 35 #9b9b9b · 20 #c7c7c7 · line rgba(0,0,0,.14) ·
+	   line-soft rgba(0,0,0,.08) · accent #0a0a0a · ink-bg #000 · ink-fg #fff */
+	--paper:        #000000; /* black canvas */
+	--paper-2:      #121212; /* recessed panel / field / alt band */
+	--ink:          #f4f4f4; /* near-white text */
+
+	/* Pure-neutral grey ramp (light-on-dark) — no warm or cool tint. */
+	--ink-85:       #d4d4d4;
+	--ink-70:       #a6a6a6;
+	--ink-50:       #7c7c7c;
+	--ink-35:       #585858;
+	--ink-20:       #333333;
+
+	/* Hairlines — neutral light at low alpha. */
+	--line:         rgba(255, 255, 255, 0.14);
+	--line-soft:    rgba(255, 255, 255, 0.08);
+
+	/* No accent. The system is monochrome; any "accent" is just ink. */
+	--accent:       #f4f4f4;
+
+	/* Inverted surface — a hair-raised near-black so the footer reads as its
+	   own band on the black ground. */
+	--ink-bg:       #0a0a0a;
+	--ink-fg:       #ffffff;
+
+	/* --- Type ----------------------------------------------------------- */
+	/* Display: Marcellus (Optima substitute, single 400 weight). Body: Manrope.
+	   Marcellus has ONE weight — never request 500/600/700 on display type. */
+	--font-display: 'Marcellus', 'Optima', 'Times New Roman', serif;
+	--font-sc:      'Marcellus SC', 'Marcellus', serif;
+	--font-body:    'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+	/* Book scale 64/48/36/24, fluid but cosy on mobile. */
+	--t-h1:   clamp(2.6rem, 5.6vw, 4rem);
+	--t-h2:   clamp(2.05rem, 4.2vw, 3rem);
+	--t-h3:   clamp(1.5rem, 2.8vw, 2.25rem);
+	--t-h4:   clamp(1.2rem, 1.8vw, 1.5rem);
+	--t-lede: clamp(1.12rem, 1.5vw, 1.35rem);
+	--t-body: 1.0625rem;
+	--t-label: 0.72rem;
+
+	--track-tight: -0.015em;  /* display */
+	--track-label: 0.16em;    /* small-caps labels */
+
+	/* --- Space — 4px grid, generous. Whitespace is the primary tool. ---- */
+	--s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px;
+	--s-6: 24px; --s-8: 32px; --s-12: 48px; --s-16: 64px;
+	--s-24: 96px; --s-32: 128px;
+	--section-y: clamp(56px, 8vw, 128px); /* vertical rhythm between bands */
+	--maxw: 1180px;
+	--measure: 64ch; /* readable text column */
+
+	/* --- Shape — square/near-square. NO pills. ------------------------- */
+	--radius: 2px;
+
+	/* --- Motion — opacity/position only, brief. NO hover lifts. -------- */
+	--ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+	--dur:  180ms;
+
+	/* NO --shadow-*, NO blur. Removed on purpose. Depth = hairlines + space. */
+}
+
+/* --- Backward-compat aliases (old pure-black token names) -----------------
+   Lets un-ported pages resolve to the warm palette while they are migrated
+   onto the new tokens one by one. Remove once every page is ported. */
+:root {
+	--bg:          var(--paper);
+	--fg:          var(--ink);
+	--ink-92:      var(--ink);
+	--ink-80:      var(--ink-85);
+	--ink-65:      var(--ink-70);
+	--ink-55:      var(--ink-50);
+	--ink-45:      var(--ink-35);
+	--surface:     var(--paper-2);
+	--surface-2:   var(--paper-2);
+	--shadow-soft: none;
+	--shadow-card: none;
+	--radius-sm:   var(--radius);
+	--radius-pill: var(--radius);
+}
+
+/* Deliberate inverted region (footer band, hero moment). */
+[data-theme='ink'] {
+	--paper:     var(--ink-bg);
+	--paper-2:   #141414;
+	--ink:       var(--ink-fg);
+	--ink-85:    rgba(255, 255, 255, 0.85);
+	--ink-70:    rgba(255, 255, 255, 0.70);
+	--ink-50:    rgba(255, 255, 255, 0.52);
+	--ink-35:    rgba(255, 255, 255, 0.38);
+	--ink-20:    rgba(255, 255, 255, 0.22);
+	--line:      rgba(255, 255, 255, 0.16);
+	--line-soft: rgba(255, 255, 255, 0.08);
+}

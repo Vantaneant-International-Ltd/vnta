@@ -104,37 +104,36 @@
 
 	.title {
 		font-family: var(--font-display);
-		font-size: clamp(3.1rem, 6vw, 5rem);
-		font-weight: 700;
-		margin: 0 0 0.9rem;
-		letter-spacing: -0.02em;
+		font-size: var(--t-h1);
+		font-weight: 400;
+		margin: 0 0 clamp(20px, 3vw, 32px);
+		letter-spacing: var(--track-tight);
 		line-height: 1.02;
 	}
 
 	.lede {
 		margin: 0;
-		font-size: 1.06rem;
-		line-height: 1.7;
-		color: rgba(255, 255, 255, 0.72);
-		max-width: 860px;
+		font-size: var(--t-lede);
+		line-height: 1.55;
+		color: var(--ink);
+		max-width: 56ch;
 	}
 
-	/* STATEMENT (matches your screenshot vibe) */
+	/* STATEMENT — open, hairline-framed, no panel */
 	.statement {
-		margin: 0 0 72px;
-		border-radius: var(--radius);
-		border: 1px solid var(--line-soft);
-		background: var(--surface);
-		padding: 44px 40px;
+		margin: var(--section-y) 0;
+		padding: clamp(36px, 5vw, 56px) 0;
+		border-top: 1px solid var(--line);
+		border-bottom: 1px solid var(--line);
 	}
 
 	.statement p {
 		margin: 0;
 		font-family: var(--font-display);
-		font-size: clamp(2.05rem, 3vw, 2.75rem);
-		line-height: 1.2;
-		color: rgba(255, 255, 255, 0.94);
-		letter-spacing: -0.01em;
+		font-size: var(--t-h2);
+		line-height: 1.12;
+		color: var(--ink);
+		letter-spacing: var(--track-tight);
 	}
 
 	/* SECTION */
@@ -146,13 +145,13 @@
 		display: flex;
 		flex-direction: column;
 		gap: 0;
-		border-top: 1px solid rgba(255, 255, 255, 0.08);
+		border-top: 1px solid var(--line-soft);
 	}
 
 	/* Each row is editorial (no card box) */
 	.row {
 		padding: 26px 0;
-		border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+		border-bottom: 1px solid var(--line-soft);
 	}
 
 	.row-top {
@@ -174,42 +173,39 @@
 		font-size: 1.22rem;
 		font-weight: 650;
 		letter-spacing: -0.01em;
-		color: rgba(255, 255, 255, 0.92);
+		color: var(--ink);
 	}
 
 	.row-status {
 		font-size: 0.72rem;
 		letter-spacing: 0.16em;
 		text-transform: uppercase;
-		color: rgba(255, 255, 255, 0.46);
+		color: var(--ink-50);
 		white-space: nowrap;
 	}
 
-	/* Right-side domain (muted, editorial) */
+	/* Right-side domain — plain editorial link, underline on hover */
 	.row-domain {
 		display: inline-flex;
 		align-items: baseline;
 		gap: 8px;
 		text-decoration: none;
-		padding: 8px 10px;
-		border-radius: var(--radius);
-		background: var(--surface);
-		border: 1px solid rgba(255, 255, 255, 0.06);
-		transition: transform 0.2s ease, border-color 0.2s ease, background 0.2s ease;
 	}
 
 	.row-domain__text {
 		font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
 		font-size: 0.72rem;
-		letter-spacing: 0.22em;
+		letter-spacing: 0.18em;
 		text-transform: lowercase;
-		color: rgba(255, 255, 255, 0.48);
+		color: var(--ink-50);
+		border-bottom: 1px solid transparent;
+		padding-bottom: 2px;
+		transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
 	}
 
 	.row-domain__arrow {
 		font-size: 0.8rem;
-		color: rgba(255, 255, 255, 0.28);
-		transition: color 0.2s ease, transform 0.2s ease;
+		color: var(--ink-35);
 	}
 
 	/* Pre-launch house: domain shown, not linked (no live site yet). */
@@ -218,24 +214,14 @@
 		cursor: default;
 	}
 
-	.row-domain:hover {
-		background: rgba(255, 255, 255, 0.03);
-		border-color: rgba(255, 255, 255, 0.12);
-		transform: translateY(-1px);
-	}
-
 	.row-domain:hover .row-domain__text {
-		color: rgba(255, 255, 255, 0.78);
-	}
-
-	.row-domain:hover .row-domain__arrow {
-		color: rgba(255, 255, 255, 0.55);
-		transform: translateY(-1px);
+		color: var(--ink);
+		border-bottom-color: var(--line);
 	}
 
 	.row-desc {
 		margin: 12px 0 0;
-		color: rgba(255, 255, 255, 0.70);
+		color: var(--ink-85);
 		line-height: 1.7;
 		max-width: 960px;
 		font-size: 0.98rem;
@@ -243,7 +229,7 @@
 
 	.footnote {
 		margin: 18px 0 0;
-		color: rgba(255, 255, 255, 0.40);
+		color: var(--ink-35);
 		font-size: 0.82rem;
 		line-height: 1.55;
 		max-width: 80ch;

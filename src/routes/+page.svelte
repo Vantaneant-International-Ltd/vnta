@@ -38,7 +38,7 @@
 		<div class="wrap">
 			<div class="hero__meta">
 				<span class="eyebrow">Vantanéant International Ltd</span>
-				<span class="eyebrow">Est. MMXXV · Dublin</span>
+				<span class="eyebrow">Est. 2025 · Dublin</span>
 			</div>
 
 			<h1 class="hero__title">Brand leadership <span class="hero__title-em">in residence.</span></h1>
@@ -137,13 +137,13 @@
 	.wrap {
 		max-width: var(--maxw);
 		margin: 0 auto;
-		padding-left: 48px;
-		padding-right: 48px;
+		padding-left: clamp(24px, 5vw, 48px);
+		padding-right: clamp(24px, 5vw, 48px);
 	}
 
 	/* --- Hero ------------------------------------------------------------- */
 	.hero {
-		padding: clamp(40px, 7vw, 84px) 0 clamp(48px, 6vw, 72px);
+		padding: clamp(48px, 7vw, 96px) 0 clamp(48px, 6vw, 80px);
 	}
 
 	.hero__meta {
@@ -154,25 +154,18 @@
 	}
 
 	.hero__title {
-		margin: 0 0 clamp(26px, 4vw, 44px);
+		margin: 0 0 clamp(28px, 4vw, 48px);
 		font-family: var(--font-display);
 		font-weight: 400;
-		font-size: clamp(2.6rem, 6.4vw, 4.2rem);
-		line-height: 1.04;
-		letter-spacing: -0.015em;
-		color: var(--fg);
+		font-size: clamp(2.7rem, 6.6vw, 4.4rem);
+		line-height: 1.02;
+		letter-spacing: var(--track-tight);
+		color: var(--ink);
 		max-width: 16ch;
 	}
 
 	.hero__title-em {
-		color: var(--ink-55);
-	}
-
-	.rule {
-		height: 1px;
-		background: var(--line);
-		border: 0;
-		margin: 0;
+		color: var(--ink-35);
 	}
 
 	.hero__grid {
@@ -180,16 +173,16 @@
 		grid-template-columns: 1.1fr 1fr;
 		gap: clamp(28px, 5vw, 72px);
 		align-items: start;
-		padding-top: clamp(26px, 4vw, 40px);
+		padding-top: clamp(28px, 4vw, 44px);
 	}
 
 	.lede {
 		margin: 0;
-		font-size: clamp(1.15rem, 1.7vw, 1.4rem);
+		font-size: var(--t-lede);
 		line-height: 1.5;
-		color: var(--ink-92);
+		color: var(--ink);
 		max-width: 30ch;
-		font-weight: 300;
+		font-weight: 400;
 	}
 
 	.hero__facts {
@@ -201,7 +194,7 @@
 	.fact p {
 		margin: 10px 0 0;
 		font-size: 1.02rem;
-		color: var(--ink-80);
+		color: var(--ink-70);
 	}
 
 	.gaelic {
@@ -209,12 +202,12 @@
 		font-family: var(--font-display);
 		font-size: 1.1rem;
 		letter-spacing: 0.01em;
-		color: var(--ink-55);
+		color: var(--ink-50);
 	}
 
 	/* --- Bands ------------------------------------------------------------ */
 	.band {
-		padding: clamp(48px, 7vw, 96px) 0;
+		padding: var(--section-y) 0;
 		border-top: 1px solid var(--line-soft);
 	}
 
@@ -235,15 +228,15 @@
 		font-family: var(--font-display);
 		font-size: var(--t-h3);
 		line-height: 1.32;
-		color: var(--fg);
+		color: var(--ink);
 		max-width: 24ch;
 	}
 
 	.statement__body .muted {
-		color: var(--ink-45);
+		color: var(--ink-35);
 	}
 
-	/* Brand values */
+	/* Brand values — open columns divided by a top hairline, no cards */
 	.band__head {
 		display: flex;
 		justify-content: space-between;
@@ -254,44 +247,36 @@
 	.values {
 		display: grid;
 		grid-template-columns: repeat(4, 1fr);
-		gap: clamp(16px, 2vw, 24px);
-		padding-top: clamp(28px, 4vw, 48px);
+		gap: clamp(20px, 2.5vw, 36px);
+		padding-top: clamp(32px, 4vw, 56px);
 	}
 
 	.value {
-		padding: clamp(20px, 2vw, 28px);
-		background: var(--surface);
-		border: 1px solid var(--line-soft);
-		border-radius: var(--radius);
-		transition: background 0.25s ease, transform 0.25s ease;
-	}
-
-	.value:hover {
-		background: var(--surface-2);
-		transform: translateY(-2px);
+		padding-top: 20px;
+		border-top: 1px solid var(--line);
 	}
 
 	.value__n {
 		font-family: var(--font-sc);
 		font-size: var(--t-label);
 		letter-spacing: var(--track-label);
-		color: var(--ink-45);
+		color: var(--ink-50);
 	}
 
 	.value__name {
-		margin: 18px 0 12px;
+		margin: 16px 0 12px;
 		font-size: var(--t-h4);
-		color: var(--fg);
+		color: var(--ink);
 	}
 
 	.value__body {
 		margin: 0;
 		font-size: 0.96rem;
 		line-height: 1.6;
-		color: var(--ink-65);
+		color: var(--ink-70);
 	}
 
-	/* Maisons register */
+	/* Maisons register — editorial rows, hairline-divided */
 	.maisons__head {
 		display: grid;
 		grid-template-columns: minmax(120px, 0.5fr) 1.5fr;
@@ -304,7 +289,7 @@
 		margin: 0;
 		font-size: var(--t-h3);
 		line-height: 1.18;
-		color: var(--fg);
+		color: var(--ink);
 		max-width: 18ch;
 	}
 
@@ -319,34 +304,27 @@
 		grid-template-columns: 48px minmax(120px, 0.8fr) 2fr auto 28px;
 		gap: clamp(18px, 3vw, 40px);
 		align-items: center;
-		padding: clamp(22px, 3vw, 30px) clamp(14px, 2vw, 22px);
-		margin: 0 calc(-1 * clamp(14px, 2vw, 22px));
+		padding: clamp(24px, 3vw, 32px) 0;
 		border-bottom: 1px solid var(--line-soft);
-		border-radius: var(--radius);
-		transition: background 0.25s ease;
-	}
-
-	.row:hover {
-		background: var(--surface);
 	}
 
 	.row__n {
 		font-family: var(--font-sc);
 		font-size: var(--t-label);
 		letter-spacing: var(--track-label);
-		color: var(--ink-45);
+		color: var(--ink-50);
 	}
 
 	.row__name {
 		font-family: var(--font-display);
-		font-size: 1.5rem;
-		color: var(--fg);
+		font-size: 1.6rem;
+		color: var(--ink);
 	}
 
 	.row__body {
 		font-size: 0.95rem;
 		line-height: 1.55;
-		color: var(--ink-65);
+		color: var(--ink-70);
 		max-width: 46ch;
 	}
 
@@ -356,13 +334,13 @@
 
 	.row__arrow {
 		justify-self: end;
-		color: var(--ink-45);
-		transition: color 0.25s ease, transform 0.25s ease;
+		color: var(--ink-35);
+		transition: color var(--dur) var(--ease);
 	}
 
-	.row:hover .row__arrow {
-		color: var(--fg);
-		transform: translateX(4px);
+	.row:hover .row__arrow,
+	.row:hover .row__name {
+		color: var(--ink);
 	}
 
 	.maisons__cta {
@@ -378,11 +356,6 @@
 	}
 
 	@media (max-width: 768px) {
-		.wrap {
-			padding-left: 24px;
-			padding-right: 24px;
-		}
-
 		.hero__meta {
 			flex-direction: column;
 			gap: 6px;

@@ -92,7 +92,7 @@
 		if (error) return flash(error.message);
 		newPassword = '';
 		await logActivity('set account password');
-		flash('Password set — you can now sign in with email + password');
+		flash('Password set. You can now sign in with email and password');
 	}
 
 	async function signOut() {
@@ -297,7 +297,7 @@
 </script>
 
 <svelte:head>
-	<title>Admin — VNTA</title>
+	<title>Admin · VNTA</title>
 	<meta name="robots" content="noindex, nofollow" />
 </svelte:head>
 
@@ -541,7 +541,7 @@
 					<h2>Recent activity</h2>
 					<ul class="activity">
 						{#each activity as ev}
-							<li><span class="muted small">{fmt(ev.created_at)}</span> — {ev.action}{ev.detail ? `: ${ev.detail}` : ''}</li>
+							<li><span class="muted small">{fmt(ev.created_at)}</span> · {ev.action}{ev.detail ? `: ${ev.detail}` : ''}</li>
 						{/each}
 						{#if activity.length === 0}<li class="muted">No activity yet.</li>{/if}
 					</ul>
@@ -615,9 +615,9 @@
 	select,
 	textarea {
 		border: 1px solid var(--line);
-		background: rgba(255, 255, 255, 0.04);
+		background: var(--line-soft);
 		color: var(--ink-92);
-		border-radius: 12px;
+		border-radius: var(--radius);
 		padding: 10px 12px;
 		font: inherit;
 		outline: none;
@@ -625,7 +625,7 @@
 	input:focus,
 	select:focus,
 	textarea:focus {
-		border-color: rgba(255, 255, 255, 0.3);
+		border-color: var(--ink-35);
 	}
 	textarea {
 		resize: vertical;
@@ -638,9 +638,9 @@
 	/* Buttons */
 	.primary {
 		background: var(--fg);
-		color: #0a0a0a;
+		color: var(--paper);
 		border: 1px solid var(--fg);
-		border-radius: 999px;
+		border-radius: var(--radius);
 		padding: 11px 18px;
 		font-weight: 600;
 		cursor: pointer;
@@ -648,17 +648,17 @@
 	}
 	.primary:hover {
 		transform: translateY(-1px);
-		background: rgba(255, 255, 255, 0.9);
+		background: var(--ink);
 	}
 	.primary.small {
 		padding: 8px 14px;
 		font-size: 0.88rem;
 	}
 	.ghost {
-		background: rgba(255, 255, 255, 0.04);
+		background: var(--line-soft);
 		color: var(--ink-92);
 		border: 1px solid var(--line);
-		border-radius: 999px;
+		border-radius: var(--radius);
 		padding: 8px 14px;
 		font-weight: 600;
 		font-size: 0.88rem;
@@ -669,8 +669,8 @@
 		transition: background 0.2s ease, border-color 0.2s ease;
 	}
 	.ghost:hover {
-		background: rgba(255, 255, 255, 0.08);
-		border-color: rgba(255, 255, 255, 0.28);
+		background: var(--line-soft);
+		border-color: var(--line);
 	}
 	.ghost:disabled {
 		opacity: 0.5;
@@ -712,7 +712,7 @@
 		background: transparent;
 		border: 1px solid transparent;
 		color: var(--ink-55);
-		border-radius: 999px;
+		border-radius: var(--radius);
 		padding: 8px 14px;
 		font-weight: 600;
 		font-size: 0.9rem;
@@ -725,14 +725,14 @@
 		color: var(--ink-92);
 	}
 	.tab.on {
-		color: #0a0a0a;
+		color: var(--paper);
 		background: var(--fg);
 	}
 	.count {
 		font-size: 0.74rem;
 		padding: 1px 7px;
-		border-radius: 999px;
-		background: rgba(255, 255, 255, 0.14);
+		border-radius: var(--radius);
+		background: var(--line-soft);
 		color: inherit;
 	}
 	.tab.on .count {
@@ -746,17 +746,17 @@
 		margin-bottom: 18px;
 	}
 	.pill {
-		background: rgba(255, 255, 255, 0.03);
+		background: var(--line-soft);
 		border: 1px solid var(--line);
 		color: var(--ink-55);
-		border-radius: 999px;
+		border-radius: var(--radius);
 		padding: 6px 12px;
 		font-size: 0.82rem;
 		cursor: pointer;
 		text-transform: capitalize;
 	}
 	.pill.on {
-		color: #0a0a0a;
+		color: var(--paper);
 		background: var(--fg);
 		border-color: var(--fg);
 	}
@@ -828,7 +828,7 @@
 		letter-spacing: 0.08em;
 		text-transform: uppercase;
 		padding: 4px 9px;
-		border-radius: 999px;
+		border-radius: var(--radius);
 		border: 1px solid var(--line);
 		color: var(--ink-80);
 	}
@@ -935,10 +935,9 @@
 		bottom: 18px;
 		z-index: 100;
 		padding: 12px 16px;
-		border-radius: 12px;
+		border-radius: var(--radius);
 		border: 1px solid var(--line);
 		background: rgba(0, 0, 0, 0.85);
-		backdrop-filter: blur(12px);
 		color: var(--ink-92);
 		font-size: 0.92rem;
 	}

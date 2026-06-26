@@ -115,7 +115,7 @@
 		margin: 0;
 		font-size: 1.0625rem;
 		line-height: 1.7;
-		color: rgba(255, 255, 255, 0.78);
+		color: var(--ink-85);
 		max-width: 820px;
 	}
 
@@ -132,7 +132,7 @@
 
 	.section p {
 		margin: 0;
-		color: rgba(255, 255, 255, 0.75);
+		color: var(--ink-85);
 		line-height: 1.65;
 		max-width: 900px;
 	}
@@ -142,19 +142,19 @@
 	}
 
 	.inline-link {
-		color: rgba(255, 255, 255, 0.85);
+		color: var(--ink);
 		text-decoration: none;
-		border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+		border-bottom: 1px solid var(--line);
 		transition: border-color 0.2s ease, color 0.2s ease;
 	}
 
 	.inline-link:hover {
-		color: rgba(255, 255, 255, 0.98);
-		border-bottom-color: rgba(255, 255, 255, 0.55);
+		color: var(--ink);
+		border-bottom-color: var(--ink-50);
 	}
 
 	.muted {
-		color: rgba(255, 255, 255, 0.55);
+		color: var(--ink-50);
 	}
 
 	@media (max-width: 768px) {

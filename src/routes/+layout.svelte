@@ -1,6 +1,7 @@
 <script lang="ts">
-	// Balanced direction: Marcellus (flared Optima-alike) carries the display
-	// voice from the Felixto guide; Manrope returns for body so text reads warm.
+	// Warm-editorial direction (Anthropic/Kering/BlackRock). Marcellus (Optima
+	// substitute, 400 only) carries display; Manrope carries body.
+	import '$lib/styles/tokens.css';
 	import '@fontsource/marcellus/400.css';
 	import '@fontsource/marcellus-sc/400.css';
 	import '@fontsource/manrope/400.css';
@@ -14,6 +15,7 @@
 	import { fade } from 'svelte/transition';
 	import { trackPageView } from '$lib/analytics';
 	import CookieBanner from '$lib/components/CookieBanner.svelte';
+	import Wordmark from '$lib/components/ui/Wordmark.svelte';
 
 	let { children } = $props();
 
@@ -25,7 +27,7 @@
 	// --- Maintenance lock ------------------------------------------------------
 	// Flip to false to take the public site live again. /admin stays reachable
 	// so operators can keep triaging applications + inquiries during the lock.
-	const MAINTENANCE = true;
+	const MAINTENANCE = false;
 	const maintenance = $derived(
 		MAINTENANCE && !$page.url.pathname.startsWith(`${base}/admin`)
 	);
@@ -34,92 +36,11 @@
 	// Svelte 5 runes (SvelteKit 2)
 	let mobileOpen = $state(false);
 
-	// --- Language (EN / GA) ----------------------------------------------------
-	// Honest note: modern standard spelling is **Gaeilge** (no fada). "Gaéilge" is an older/less common variant.
-	type Lang = 'en' | 'ga';
-	let lang = $state<Lang>('en');
-	let langOpen = $state(false);
-
-	const i18n = {
-		en: {
-			comingSoon: 'Coming Soon',
-			theStudio: 'The Studio',
-			explore: 'Explore',
-			packages: 'Packages',
-			lineage: 'Lineage',
-			houses: 'Houses',
-			theCompany: 'The Company',
-			approach: 'Approach',
-			horizon: 'Horizon',
-			contact: 'Contact',
-			emailUs: 'Email Us',
-			selectedWork: 'Selected client work available on request.',
-			careers: 'Careers',
-			legal: 'Legal',
-			privacy: 'Privacy',
-			terms: 'Terms',
-			langEnglish: 'English',
-			langIrish: 'Gaeilge'
-		},
-		ga: {
-			comingSoon: 'Go luath',
-			theStudio: 'An Stiúideo',
-			explore: 'Taiscéal',
-			packages: 'Pacáistí',
-			lineage: 'Oidhreacht',
-			houses: 'Tithe',
-			theCompany: 'An Chuideachta',
-			approach: 'Cur Chuige',
-			horizon: 'Léaslíne',
-			contact: 'Teagmháil',
-			emailUs: 'Seol Ríomhphost',
-			selectedWork: 'Obair roghnaithe do chliaint ar fáil ar iarratas.',
-			careers: 'Gairmeacha',
-			legal: 'Dlí',
-			privacy: 'Príobháideachas',
-			terms: 'Téarmaí',
-			langEnglish: 'Béarla',
-			langIrish: 'Gaeilge'
-		}
-	} as const;
-
-	const t = (k: keyof (typeof i18n)['en']) => i18n[lang][k];
-
-	function setLang(next: Lang) {
-		lang = next;
-		langOpen = false;
-	}
-
-	function toggleLangMenu() {
-		langOpen = !langOpen;
-	}
-
-	function closeLangMenu() {
-		langOpen = false;
-	}
-
-	// Persist + set document lang (client-only)
-	$effect(() => {
-		if (typeof window === 'undefined') return;
-
-		const stored = window.localStorage.getItem('vnta_lang');
-		if (stored === 'en' || stored === 'ga') lang = stored;
-
-		document.documentElement.lang = lang;
-	});
-
-	$effect(() => {
-		if (typeof window === 'undefined') return;
-		window.localStorage.setItem('vnta_lang', lang);
-		document.documentElement.lang = lang;
-	});
-	// ---------------------------------------------------------------------------
-
 	// Minimal header tabs (soft launch): keep core only
 	const nav = [
-		{ key: 'theStudio' as const, href: `${base}/about` },
-		{ key: 'explore' as const, href: `${base}/explore` },
-		{ key: 'packages' as const, href: `${base}/pricing` }
+		{ label: 'The Studio', href: `${base}/about` },
+		{ label: 'Engagement', href: `${base}/explore` },
+		{ label: 'Houses', href: `${base}/houses` }
 	];
 
 	const socials = [
@@ -129,18 +50,27 @@
 
 	// Footer routes (internal)
 	const footerNav = {
-		houses: { key: 'houses' as const, href: `${base}/houses` },
-		companyPrimary: [
-			{ key: 'approach' as const, href: `${base}/approach` },
-			{ key: 'horizon' as const, href: `${base}/horizon` }
+		navigate: [
+			{ label: 'The Studio', href: `${base}/about` },
+			{ label: 'Engagement', href: `${base}/explore` },
+			{ label: 'Houses', href: `${base}/houses` },
+			{ label: 'Approach', href: `${base}/approach` },
+			{ label: 'Horizon', href: `${base}/horizon` },
+			{ label: 'Careers', href: `${base}/careers` }
 		],
-		legalInline: [
-			{ key: 'careers' as const, href: `${base}/careers` },
-			{ key: 'legal' as const, href: `${base}/legal` },
-			{ key: 'privacy' as const, href: `${base}/privacy` },
-			{ key: 'terms' as const, href: `${base}/terms` }
+		legal: [
+			{ label: 'Legal', href: `${base}/legal` },
+			{ label: 'Privacy', href: `${base}/privacy` },
+			{ label: 'Terms', href: `${base}/terms` }
 		]
 	};
+
+	// The maisons, stewarded under VNTA. Windows per Horizon.
+	const footerMaisons = [
+		{ name: 'Vendr', status: 'March 2026', href: `${base}/houses` },
+		{ name: 'Eirvox', status: 'Summer 2026', href: `${base}/houses` },
+		{ name: 'Maison Seul', status: '2027', href: `${base}/houses` }
+	];
 
 	const foundedYear = 2025;
 	const year = new Date().getFullYear();
@@ -178,9 +108,9 @@
 	<main class="maint" in:fade={{ duration: 240 }}>
 		<header class="maint__bar">
 			<span class="brand maint__lockup">
-				<img class="brand__word" src="{base}/wordmark.svg" alt="VNTA" width="100" height="23" />
+				<Wordmark height={22} />
 			</span>
-			<span class="eyebrow">Est. MMXXV · Dublin</span>
+			<span class="eyebrow">Est. 2025 · Dublin</span>
 		</header>
 
 		<section class="maint__core">
@@ -212,7 +142,7 @@
 			<header class="site-header" aria-label="VNTA header">
 				<div class="site-header__inner">
 					<a class="brand" href="{base}/" aria-label="VNTA home" onclick={closeMobile}>
-						<img class="brand__word" src="{base}/wordmark.svg" alt="VNTA" width="118" height="28" />
+						<Wordmark height={26} />
 					</a>
 
 					<nav class="nav" aria-label="Primary navigation">
@@ -223,69 +153,15 @@
 								href={item.href}
 								aria-current={isActive(item.href) ? 'page' : undefined}
 							>
-								{t(item.key)}
+								{item.label}
 							</a>
 						{/each}
 
-						<span class="status" aria-label="Status: Coming soon">{t('comingSoon')}</span>
-
-						<!-- Language dropdown (Amazon-style) -->
-						<div class="lang-wrap">
-							<button
-								type="button"
-								class="lang-trigger"
-								onclick={toggleLangMenu}
-								aria-label="Change language"
-								aria-expanded={langOpen}
-							>
-								<!-- Globe icon -->
-								<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true">
-									<path
-										fill="currentColor"
-										d="M12 2a10 10 0 1 0 .001 20.001A10 10 0 0 0 12 2Zm7.93 9h-3.11a15.8 15.8 0 0 0-1.3-5.02A8.02 8.02 0 0 1 19.93 11ZM12 4c.9 0 2.32 2.03 3.1 7H8.9C9.68 6.03 11.1 4 12 4ZM4.07 13h3.11c.18 1.8.64 3.54 1.3 5.02A8.02 8.02 0 0 1 4.07 13Zm3.11-2H4.07a8.02 8.02 0 0 1 4.41-5.02A15.8 15.8 0 0 0 7.18 11ZM12 20c-.9 0-2.32-2.03-3.1-7h6.2c-.78 4.97-2.2 7-3.1 7Zm3.52-1.98c.66-1.48 1.12-3.22 1.3-5.02h3.11a8.02 8.02 0 0 1-4.41 5.02Z"
-									/>
-								</svg>
-
-								<span class="lang-code">{lang === 'en' ? 'EN' : 'GA'}</span>
-							</button>
-
-							{#if langOpen}
-								<div class="lang-menu" role="menu" aria-label="Language menu">
-									<button
-										type="button"
-										class="lang-item"
-										role="menuitemradio"
-										aria-checked={lang === 'en'}
-										onclick={() => setLang('en')}
-									>
-										<span class="lang-item__label">{t('langEnglish')}</span>
-										<span class="lang-item__meta">EN</span>
-									</button>
-
-									<button
-										type="button"
-										class="lang-item"
-										role="menuitemradio"
-										aria-checked={lang === 'ga'}
-										onclick={() => setLang('ga')}
-									>
-										<span class="lang-item__label">{t('langIrish')}</span>
-										<span class="lang-item__meta">GA</span>
-									</button>
-								</div>
-
-								<button
-									type="button"
-									class="lang-backdrop"
-									aria-label="Close language menu"
-									onclick={closeLangMenu}
-								></button>
-							{/if}
-						</div>
+						<span class="status" aria-label="Status: Coming soon">Coming Soon</span>
 					</nav>
 
 					<div class="mobile-controls">
-						<span class="status status--mobile" aria-label="Status: Coming soon">{t('comingSoon')}</span>
+						<span class="status status--mobile" aria-label="Status: Coming soon">Coming Soon</span>
 
 						<button
 							type="button"
@@ -314,31 +190,10 @@
 										href={item.href}
 										onclick={closeMobile}
 									>
-										{t(item.key)}
+										{item.label}
 									</a>
 								{/each}
 							</nav>
-
-							<div class="mobile__meta" aria-label="Language">
-								<div class="mobile__lang">
-									<button
-										type="button"
-										class="mobile__lang-item"
-										aria-pressed={lang === 'en'}
-										onclick={() => setLang('en')}
-									>
-										English <span class="mobile__lang-code">EN</span>
-									</button>
-									<button
-										type="button"
-										class="mobile__lang-item"
-										aria-pressed={lang === 'ga'}
-										onclick={() => setLang('ga')}
-									>
-										Gaeilge <span class="mobile__lang-code">GA</span>
-									</button>
-								</div>
-							</div>
 						</div>
 
 						<button type="button" class="mobile__backdrop" aria-label="Close menu" onclick={closeMobile}></button>
@@ -352,35 +207,52 @@
 
 			<footer class="site-footer" aria-label="VNTA footer">
 				<div class="site-footer__inner">
-					<p class="footer-slogan">Áilleacht na Díomhaointe.</p>
-
-					<div class="footer-grid">
-						<div class="footer-col" aria-label="Lineage">
-							<p class="footer-title">{t('lineage')}</p>
-
-							<a class="footer-link" href={footerNav.houses.href}>
-								<span>{t(footerNav.houses.key)}</span>
+					<!-- Masthead -->
+					<div class="footer-top">
+						<div class="footer-brand">
+							<a class="footer-mark" href="{base}/" aria-label="VNTA home" onclick={closeMobile}>
+								<Wordmark height={30} />
 							</a>
+							<p class="footer-motto" lang="ga">Áilleacht na Díomhaointe.</p>
 						</div>
 
-						<div class="footer-col" aria-label="The Company">
-							<p class="footer-title">{t('theCompany')}</p>
+						<a class="footer-inquire" href="mailto:studio@vnta.xyz">
+							<span class="eyebrow">Inquiries</span>
+							<span class="footer-inquire__email">studio@vnta.xyz</span>
+						</a>
+					</div>
 
+					<hr class="footer-rule" />
+
+					<!-- Columns -->
+					<div class="footer-grid">
+						<div class="footer-col" aria-label="Navigate">
+							<p class="footer-title">Navigate</p>
 							<div class="footer-links">
-								{#each footerNav.companyPrimary as l}
-									<a class="footer-link footer-link--plain" href={l.href}>{t(l.key)}</a>
+								{#each footerNav.navigate as l}
+									<a class="footer-link" href={l.href}>{l.label}</a>
+								{/each}
+							</div>
+						</div>
+
+						<div class="footer-col" aria-label="Houses">
+							<p class="footer-title">Houses</p>
+							<div class="footer-links">
+								{#each footerMaisons as m}
+									<a class="footer-house" href={m.href}>
+										<span class="footer-house__name">{m.name}</span>
+										<span class="footer-house__status">{m.status}</span>
+									</a>
 								{/each}
 							</div>
 						</div>
 
 						<div class="footer-col" aria-label="Contact">
-							<p class="footer-title">{t('contact')}</p>
-
-							<a class="footer-link footer-link--plain" href="mailto:studio@vnta.xyz" aria-label="Email VNTA">
-								{t('emailUs')}
-							</a>
-
-							<p class="footer-muted">{t('selectedWork')}</p>
+							<p class="footer-title">Contact</p>
+							<div class="footer-links">
+								<a class="footer-link" href="mailto:studio@vnta.xyz" aria-label="Email VNTA">studio@vnta.xyz</a>
+								<span class="footer-meta">Dublin / Worldwide</span>
+							</div>
 
 							<div class="footer-socials" aria-label="Social links">
 								{#each socials as s}
@@ -407,12 +279,12 @@
 					</div>
 
 					<div class="footer-bottom">
-						<p class="footer-copy">© {yearLabel} Vantanéant International Ltd.</p>
+						<p class="footer-copy">© {yearLabel} Vantanéant International Ltd. Registered in Ireland.</p>
 
 						<nav class="footer-legal" aria-label="Legal links">
-							{#each footerNav.legalInline as l, i}
-								<a class="footer-legal-link" href={l.href}>{t(l.key)}</a>
-								{#if i < footerNav.legalInline.length - 1}
+							{#each footerNav.legal as l, i}
+								<a class="footer-legal-link" href={l.href}>{l.label}</a>
+								{#if i < footerNav.legal.length - 1}
 									<span class="footer-legal-dot" aria-hidden="true">·</span>
 								{/if}
 							{/each}
@@ -428,779 +300,139 @@
 <CookieBanner />
 
 <style>
-	/* --- Maintenance lock — VNTA's own restrained, editorial holding page --- */
+	/* --- Maintenance holding page — warm editorial --- */
 	.maint {
 		min-height: 100vh;
 		min-height: 100dvh;
-		background: var(--bg);
-		color: var(--fg);
+		background: var(--paper);
+		color: var(--ink);
 		display: flex;
 		flex-direction: column;
 		gap: clamp(36px, 8vh, 72px);
 		padding: clamp(22px, 4vw, 44px) clamp(24px, 7vw, 96px);
 	}
+	.maint__bar { display:flex; align-items:center; justify-content:space-between; gap:18px; flex-wrap:wrap; }
+	.maint__bar--bottom { color: var(--ink-50); }
+	.maint__core { flex:1; display:flex; flex-direction:column; justify-content:center; max-width:34ch; }
+	.maint__eyebrow { margin-bottom: clamp(20px,4vh,30px); color: var(--ink-50); }
+	.maint__title { margin:0; font-family:var(--font-display); font-weight:400; font-size:clamp(2.4rem,6.2vw,4rem); line-height:1.04; letter-spacing:var(--track-tight); color:var(--ink); }
+	.maint__lede { margin: clamp(18px,3vh,26px) 0 0; max-width:44ch; font-size:1.04rem; line-height:1.65; color:var(--ink-70); }
+	.maint__gaelic { margin:14px 0 0; font-family:var(--font-display); font-size:1.1rem; color:var(--ink-35); }
+	.maint__rule { margin: clamp(30px,5vh,44px) 0 22px; max-width:320px; }
+	.maint__contact { display:inline-flex; align-items:baseline; gap:12px; }
+	.maint__email { font-size:0.96rem; color:var(--ink-85); border-bottom:1px solid var(--line); padding-bottom:2px; transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease); }
+	.maint__contact:hover .maint__email { color:var(--ink); border-bottom-color: var(--ink); }
+	@media (max-width:600px){ .maint{padding:26px 22px 30px; gap:36px;} }
 
-	.maint__bar {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 18px;
-		flex-wrap: wrap;
-	}
-
-	.maint__bar--bottom {
-		opacity: 0.85;
-	}
-
-	.maint__lockup .brand__word {
-		height: 22px;
-		width: auto;
-	}
-
-	.maint__core {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		max-width: 34ch;
-	}
-
-	.maint__eyebrow {
-		margin-bottom: clamp(20px, 4vh, 30px);
-		color: var(--ink-55);
-	}
-
-	.maint__title {
-		margin: 0;
-		font-family: var(--font-display);
-		font-weight: 400;
-		font-size: clamp(2.4rem, 6.2vw, 4rem);
-		line-height: 1.04;
-		letter-spacing: -0.015em;
-		color: var(--fg);
-	}
-
-	.maint__lede {
-		margin: clamp(18px, 3vh, 26px) 0 0;
-		max-width: 44ch;
-		font-size: 1.04rem;
-		line-height: 1.65;
-		color: var(--ink-65);
-	}
-
-	.maint__gaelic {
-		margin: 14px 0 0;
-		font-family: var(--font-display);
-		font-size: 1.1rem;
-		color: var(--ink-45);
-	}
-
-	.maint__rule {
-		margin: clamp(30px, 5vh, 44px) 0 22px;
-		max-width: 320px;
-	}
-
-	.maint__contact {
-		display: inline-flex;
-		align-items: baseline;
-		gap: 12px;
-		transition: color 0.2s ease;
-	}
-
-	.maint__email {
-		font-size: 0.96rem;
-		color: var(--ink-80);
-		border-bottom: 1px solid var(--line);
-		padding-bottom: 2px;
-		transition: border-color 0.2s ease, color 0.2s ease;
-	}
-
-	.maint__contact:hover .maint__email {
-		color: var(--fg);
-		border-bottom-color: rgba(255, 255, 255, 0.4);
-	}
-
-	@media (max-width: 600px) {
-		.maint {
-			padding: 26px 22px 30px;
-			gap: 36px;
-		}
-
-		.maint__bar .eyebrow {
-			font-size: 0.62rem;
-		}
-	}
-
-	/* --- Design tokens (single source) ------------------------------------- */
-	:root {
-		/* Palette — monochrome, but with soft greys/surfaces kept for warmth. */
-		--bg: #000000;
-		--fg: #ffffff;
-		--ink-92: rgba(255, 255, 255, 0.92);
-		--ink-80: rgba(255, 255, 255, 0.8);
-		--ink-65: rgba(255, 255, 255, 0.65);
-		--ink-55: rgba(255, 255, 255, 0.55);
-		--ink-45: rgba(255, 255, 255, 0.45);
-		--line: rgba(255, 255, 255, 0.12);
-		--line-soft: rgba(255, 255, 255, 0.08);
-		/* Soft surface fills — the old softness, kept deliberately. */
-		--surface: rgba(255, 255, 255, 0.035);
-		--surface-2: rgba(255, 255, 255, 0.05);
-		/* Gentle depth (used sparingly — the middle ground, not heavy glass). */
-		--shadow-soft: 0 4px 24px rgba(0, 0, 0, 0.22);
-		--shadow-card: 0 14px 40px rgba(0, 0, 0, 0.2);
-		/* Corners — softened back to a warm middle (not square, not the old 18px). */
-		--radius: 12px;
-		--radius-sm: 10px;
-		--radius-pill: 999px;
-		--maxw: 1180px;
-
-		/* Typeface — Marcellus display (the flared brand voice) + Manrope body. */
-		--font-display: 'Marcellus', 'Optima', 'Times New Roman', serif;
-		--font-sc: 'Marcellus SC', 'Marcellus', serif;
-		--font-body: 'Manrope', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-
-		/* Display scale (64 / 48 / 36 / 24), fluid for cosy mobile. */
-		--t-h1: clamp(2.6rem, 6vw, 3.6rem);
-		--t-h2: clamp(2.1rem, 4.6vw, 2.85rem);
-		--t-h3: clamp(1.55rem, 3.2vw, 2.1rem);
-		--t-h4: clamp(1.2rem, 2.2vw, 1.45rem);
-		/* Labels — tracked-out small caps. */
-		--t-label: 0.72rem;
-		--track-label: 0.18em;
-	}
-
+	/* --- Global base --- */
 	:global(body) {
-		margin: 0;
-		min-height: 100vh;
-		background: var(--bg);
-		color: var(--fg);
+		margin:0; min-height:100vh;
+		background: var(--paper);
+		color: var(--ink);
 		font-family: var(--font-body);
+		font-size: var(--t-body);
+		line-height: 1.6;
 		text-rendering: optimizeLegibility;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
-		/* Marcellus ships a single weight; never let the browser fake a bold.
-		   Mulish keeps its real 300–700 for body/UI. */
-		font-synthesis: none;
-	}
-
-	:global(a) {
-		color: inherit;
-		text-decoration: none;
-	}
-
-	/* Headings — Marcellus throughout, restrained weight, the §4.3 scale. */
-	:global(h1, h2, h3, h4, h5, h6) {
-		font-family: var(--font-display);
-		font-weight: 400;
-		letter-spacing: -0.01em;
-		line-height: 1.08;
-	}
-
-	/* Tracked-out small-caps label — the connective tissue of the system. */
-	:global(.eyebrow) {
-		font-family: var(--font-sc);
-		font-size: var(--t-label);
-		letter-spacing: var(--track-label);
-		text-transform: uppercase;
-		color: var(--ink-45);
-		margin: 0;
-	}
-
-	/* Hairline rule — §1.4 restraint, structure over decoration. */
-	:global(.rule) {
-		height: 1px;
-		background: var(--line);
-		border: 0;
-		margin: 0;
-	}
-
-	:global(*:focus-visible) {
-		outline: 2px solid rgba(255, 255, 255, 0.5);
-		outline-offset: 3px;
-		border-radius: 4px;
-	}
-
-	:global(.page-container) {
-		max-width: var(--maxw);
-		margin: 0 auto;
-		padding: 64px 48px 96px;
-	}
-
-	:global(.content-width) {
-		max-width: 880px;
-	}
-
-	/* Primary call-to-action — solid, premium, restrained. */
-	:global(.btn-primary) {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		gap: 8px;
-		padding: 13px 26px;
-		border-radius: var(--radius-pill);
-		background: var(--fg);
-		color: #0a0a0a;
-		border: 1px solid var(--fg);
-		font-family: var(--font-body);
-		font-weight: 600;
-		font-size: 0.9rem;
-		letter-spacing: 0.02em;
-		cursor: pointer;
-		transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
-	}
-
-	:global(.btn-primary:hover) {
-		transform: translateY(-1px);
-		background: rgba(255, 255, 255, 0.92);
-		box-shadow: var(--shadow-soft);
-	}
-
-	:global(.btn-primary:active) {
-		transform: translateY(0);
-	}
-
-	/* Ghost variant — hairline pill, warms on hover. */
-	:global(.btn-ghost) {
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		gap: 8px;
-		padding: 13px 26px;
-		border-radius: var(--radius-pill);
-		background: var(--surface);
-		color: var(--fg);
-		border: 1px solid var(--line);
-		font-family: var(--font-body);
-		font-weight: 600;
-		font-size: 0.9rem;
-		letter-spacing: 0.02em;
-		cursor: pointer;
-		transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
-	}
-
-	:global(.btn-ghost:hover) {
-		transform: translateY(-1px);
-		background: var(--surface-2);
-		border-color: rgba(255, 255, 255, 0.28);
-	}
-
-	:global(.logo) {
-		display: block;
-	}
-
-	:global(.logo img) {
-		display: block;
-		height: 30px;
-		width: auto;
-	}
-
-	.app-shell {
-		min-height: 100vh;
-	}
-
-	.page {
-		min-height: 100vh;
-		display: flex;
-		flex-direction: column;
-	}
-
-	.site-main {
-		flex: 1 0 auto;
-	}
-
-	/* Force pointer events on header (your requested debug fix) */
-	.site-header {
-		pointer-events: auto;
-	}
-
-	.site-header * {
-		pointer-events: auto;
-	}
-
-	.site-header {
-		position: sticky;
-		top: 0;
-		z-index: 50;
-		background: rgba(0, 0, 0, 0.78);
-		backdrop-filter: blur(10px);
-		border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-	}
-
-	.site-header__inner {
-		max-width: var(--maxw);
-		margin: 0 auto;
-		padding: 12px 48px;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 18px;
-	}
-
-	.brand {
-		display: inline-flex;
-		align-items: center;
-	}
-
-	.brand__word {
-		display: block;
-		height: 28px;
-		width: auto;
-	}
-
-	.nav {
-		display: flex;
-		align-items: center;
-		gap: 26px;
-	}
-
-	.nav-link {
-		font-size: 0.78rem;
-		letter-spacing: 0.16em;
-		text-transform: uppercase;
-		font-weight: 600;
-		color: rgba(255, 255, 255, 0.55);
-		padding: 8px 0;
-		position: relative;
-		transition: color 0.2s ease;
-	}
-
-	.nav-link:hover {
-		color: rgba(255, 255, 255, 0.92);
-	}
-
-	.nav-link::after {
-		content: '';
-		position: absolute;
-		left: 0;
-		bottom: 4px;
-		width: 100%;
-		height: 1px;
-		background: rgba(255, 255, 255, 0.35);
-		transform: scaleX(0);
-		transform-origin: left;
-		transition: transform 0.2s ease;
-	}
-
-	.nav-link:hover::after {
-		transform: scaleX(1);
-	}
-
-	.nav-link.is-active {
-		color: rgba(255, 255, 255, 0.95);
-	}
-
-	.nav-link.is-active::after {
-		transform: scaleX(1);
-		background: rgba(255, 255, 255, 0.55);
-	}
-
-	.status {
-		font-size: 0.78rem;
-		letter-spacing: 0.15em;
-		text-transform: uppercase;
-		color: rgba(255, 255, 255, 0.5);
-		font-weight: 600;
-		padding: 8px 14px;
-		border-radius: 999px;
-		border: 1px solid rgba(255, 255, 255, 0.15);
-		background: rgba(255, 255, 255, 0.03);
-		white-space: nowrap;
-	}
-
-	/* Language dropdown */
-	.lang-wrap {
-		position: relative;
-		display: inline-flex;
-		align-items: center;
-		z-index: 70;
-	}
-
-	.lang-trigger {
-		border: 0;
-		background: transparent;
-		color: rgba(255, 255, 255, 0.55);
-		cursor: pointer;
-		padding: 10px 8px;
-		border-radius: 12px;
-		display: inline-flex;
-		align-items: center;
-		gap: 8px;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		font-weight: 700;
-		font-size: 0.74rem;
-		line-height: 1;
-		transition: color 0.2s ease, background 0.2s ease, transform 0.2s ease;
-	}
-
-	.lang-trigger:hover {
-		color: rgba(255, 255, 255, 0.9);
-		background: rgba(255, 255, 255, 0.04);
-		transform: translateY(-1px);
-	}
-
-	.lang-code {
-		color: rgba(255, 255, 255, 0.75);
-	}
-
-	.lang-menu {
-		position: absolute;
-		right: 0;
-		top: calc(100% + 10px);
-		min-width: 210px;
-		border-radius: 16px;
-		border: 1px solid rgba(255, 255, 255, 0.12);
-		background: rgba(0, 0, 0, 0.92);
-		backdrop-filter: blur(10px);
-		box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
-		overflow: hidden;
-		z-index: 80;
-	}
-
-	.lang-item {
-		width: 100%;
-		border: 0;
-		background: transparent;
-		color: rgba(255, 255, 255, 0.82);
-		padding: 14px 14px;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 12px;
-		cursor: pointer;
-		transition: background 0.15s ease, color 0.15s ease;
-	}
-
-	.lang-item:hover {
-		background: rgba(255, 255, 255, 0.06);
-		color: rgba(255, 255, 255, 0.95);
-	}
-
-	.lang-item[aria-checked='true'] {
-		background: rgba(255, 255, 255, 0.06);
-		color: rgba(255, 255, 255, 0.98);
-	}
-
-	.lang-item__label {
-		font-weight: 650;
-		letter-spacing: 0.02em;
-	}
-
-	.lang-item__meta {
-		font-size: 0.75rem;
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-		color: rgba(255, 255, 255, 0.5);
-	}
-
-	.lang-backdrop {
-		position: fixed;
-		inset: 0;
-		background: transparent;
-		border: 0;
-		z-index: 75;
-		cursor: default;
-	}
-
-	.mobile-controls {
-		display: none;
-		align-items: center;
-		gap: 10px;
-	}
-
-	.status--mobile {
-		padding: 7px 12px;
-		font-size: 0.74rem;
-		letter-spacing: 0.14em;
-	}
-
-	.menu-btn {
-		border: 1px solid rgba(255, 255, 255, 0.14);
-		background: rgba(255, 255, 255, 0.03);
-		color: rgba(255, 255, 255, 0.9);
-		border-radius: 14px;
-		width: 44px;
-		height: 44px;
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		cursor: pointer;
-		transition: all 0.2s ease;
-	}
-
-	.menu-btn:hover {
-		border-color: rgba(255, 255, 255, 0.28);
-		background: rgba(255, 255, 255, 0.05);
-		transform: translateY(-1px);
-	}
-
-	.menu-bars,
-	.menu-x {
-		font-size: 22px;
-		line-height: 1;
-	}
-
-	.mobile {
-		position: relative;
-	}
-
-	.mobile__panel {
-		position: absolute;
-		right: 18px;
-		top: 8px;
-		width: min(340px, calc(100vw - 36px));
-		border-radius: 18px;
-		border: 1px solid rgba(255, 255, 255, 0.12);
-		background: rgba(0, 0, 0, 0.92);
-		backdrop-filter: blur(10px);
-		box-shadow: 0 24px 80px rgba(0, 0, 0, 0.55);
-		z-index: 60;
-		overflow: hidden;
-	}
-
-	.mobile__nav {
-		display: flex;
-		flex-direction: column;
-		padding: 10px;
-	}
-
-	.mobile__link {
-		padding: 14px 14px;
-		border-radius: 12px;
-		font-weight: 600;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		font-size: 0.82rem;
-		color: rgba(255, 255, 255, 0.78);
-		transition: background 0.15s ease, color 0.15s ease;
-	}
-
-	.mobile__link:hover {
-		background: rgba(255, 255, 255, 0.06);
-		color: rgba(255, 255, 255, 0.95);
-	}
-
-	.mobile__link.is-active {
-		background: rgba(255, 255, 255, 0.06);
-		color: rgba(255, 255, 255, 0.98);
-	}
-
-	.mobile__meta {
-		padding: 10px 12px 12px;
-		border-top: 1px solid rgba(255, 255, 255, 0.08);
-	}
-
-	.mobile__lang {
-		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 10px;
-	}
-
-	.mobile__lang-item {
-		border: 1px solid rgba(255, 255, 255, 0.12);
-		background: rgba(255, 255, 255, 0.03);
-		color: rgba(255, 255, 255, 0.82);
-		border-radius: 14px;
-		padding: 12px 12px;
-		display: inline-flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 10px;
-		cursor: pointer;
-		transition: all 0.2s ease;
-		font-weight: 650;
-	}
-
-	.mobile__lang-item[aria-pressed='true'] {
-		border-color: rgba(255, 255, 255, 0.28);
-		background: rgba(255, 255, 255, 0.06);
-		color: rgba(255, 255, 255, 0.96);
-	}
-
-	.mobile__lang-code {
-		letter-spacing: 0.14em;
-		text-transform: uppercase;
-		color: rgba(255, 255, 255, 0.55);
-		font-size: 0.78rem;
-	}
-
-	.mobile__backdrop {
-		position: fixed;
-		inset: 0;
-		background: transparent;
-		border: 0;
-		z-index: 55;
-		cursor: default;
-	}
-
-	.site-footer {
-		margin-top: 56px;
-		padding-top: 22px;
-		border-top: 1px solid rgba(255, 255, 255, 0.08);
-	}
-
-	.site-footer__inner {
-		max-width: var(--maxw);
-		margin: 0 auto;
-		padding: 0 48px 44px;
-	}
-
-	.footer-slogan {
-		margin: 0 0 18px;
-		font-family: var(--font-display);
-		font-size: 1.05rem;
-		letter-spacing: -0.01em;
-		color: rgba(255, 255, 255, 0.9);
-	}
-
-	.footer-grid {
-		display: grid;
-		grid-template-columns: 1fr 1.2fr 0.9fr;
-		gap: 24px;
-		align-items: start;
-	}
-
-	.footer-col {
-		min-width: 0;
-	}
-
-	.footer-title {
-		margin: 0 0 12px;
-		font-size: 0.72rem;
-		letter-spacing: 0.18em;
-		text-transform: uppercase;
-		color: rgba(255, 255, 255, 0.45);
-		font-weight: 700;
-	}
-
-	.footer-links {
-		display: flex;
-		flex-direction: column;
-		gap: 10px;
-	}
-
-	.footer-link {
-		display: inline-flex;
-		align-items: baseline;
-		justify-content: space-between;
-		gap: 12px;
-		color: rgba(255, 255, 255, 0.82);
-		transition: color 0.2s ease, transform 0.2s ease;
-	}
-
-	.footer-link:hover {
-		color: rgba(255, 255, 255, 0.98);
-		transform: translateY(-1px);
-	}
-
-	.footer-link--plain {
-		justify-content: flex-start;
-	}
-
-	.footer-muted {
-		margin: 10px 0 0;
-		color: rgba(255, 255, 255, 0.45);
-		font-size: 0.9rem;
-		line-height: 1.6;
-		max-width: 42ch;
-	}
-
-	.footer-socials {
-		margin-top: 14px;
-		display: flex;
-		gap: 12px;
-	}
-
-	.social {
-		width: 40px;
-		height: 40px;
-		border-radius: 999px;
-		border: 1px solid rgba(255, 255, 255, 0.14);
-		background: rgba(255, 255, 255, 0.03);
-		display: inline-flex;
-		align-items: center;
-		justify-content: center;
-		color: rgba(255, 255, 255, 0.8);
-		transition: all 0.2s ease;
-	}
-
-	.social:hover {
-		transform: translateY(-1px);
-		border-color: rgba(255, 255, 255, 0.28);
-		background: rgba(255, 255, 255, 0.05);
-		color: rgba(255, 255, 255, 0.95);
-	}
-
-	.footer-bottom {
-		margin-top: 18px;
-		padding-top: 14px;
-		border-top: 1px solid rgba(255, 255, 255, 0.06);
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 14px;
-		flex-wrap: wrap;
-	}
-
-	.footer-copy {
-		margin: 0;
-		color: rgba(255, 255, 255, 0.5);
-		font-size: 0.78rem;
-		letter-spacing: 0.02em;
-	}
-
-	.footer-legal {
-		display: flex;
-		align-items: center;
-		gap: 10px;
-	}
-
-	.footer-legal-link {
-		font-size: 0.78rem;
-		color: rgba(255, 255, 255, 0.55);
-		letter-spacing: 0.02em;
-		transition: color 0.2s ease;
-	}
-
-	.footer-legal-link:hover {
-		color: rgba(255, 255, 255, 0.7);
-	}
-
-	.footer-legal-dot {
-		color: rgba(255, 255, 255, 0.22);
-	}
-
-	@media (max-width: 900px) {
-		.footer-grid {
-			grid-template-columns: 1fr;
-			gap: 18px;
-		}
-	}
-
-	@media (max-width: 768px) {
-		:global(.page-container) {
-			padding: 48px 24px 80px;
-		}
-
-		.brand__word {
-			height: 23px;
-		}
-
-		.site-header__inner {
-			padding: 10px 24px;
-		}
-
-		.nav {
-			display: none;
-		}
-
-		.mobile-controls {
-			display: inline-flex;
-		}
-
-		.site-footer__inner {
-			padding: 0 24px 34px;
-		}
+		font-synthesis: none; /* Marcellus ships 400 only — never faux-bold */
+	}
+	:global(a){ color:inherit; text-decoration:none; }
+	:global(h1,h2,h3,h4,h5,h6){ font-family:var(--font-display); font-weight:400; letter-spacing:var(--track-tight); line-height:1.08; }
+	:global(.eyebrow){ font-family:var(--font-sc); font-size:var(--t-label); letter-spacing:var(--track-label); text-transform:uppercase; color:var(--ink-50); margin:0; }
+	:global(.rule){ height:1px; background:var(--line); border:0; margin:0; }
+	:global(*:focus-visible){ outline:2px solid var(--ink); outline-offset:3px; border-radius:var(--radius); }
+	:global(.page-container){ max-width:var(--maxw); margin:0 auto; padding: clamp(48px,7vw,96px) clamp(24px,5vw,48px) clamp(72px,9vw,128px); }
+	:global(.content-width){ max-width: 880px; }
+
+	/* Buttons — square, flat, no lift/shadow/pill */
+	:global(.btn-primary){ display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:13px 24px; border-radius:var(--radius); background:var(--ink); color:var(--paper); border:1px solid var(--ink); font-family:var(--font-body); font-weight:600; font-size:0.9rem; letter-spacing:0.01em; cursor:pointer; transition: background var(--dur) var(--ease); }
+	:global(.btn-primary:hover){ background:var(--ink-85); }
+	:global(.btn-ghost){ display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:13px 24px; border-radius:var(--radius); background:transparent; color:var(--ink); border:1px solid var(--line); font-family:var(--font-body); font-weight:600; font-size:0.9rem; letter-spacing:0.01em; cursor:pointer; transition: border-color var(--dur) var(--ease); }
+	:global(.btn-ghost:hover){ border-color:var(--ink); }
+	:global(.logo){ display:block; }
+	:global(.logo img){ display:block; height:30px; width:auto; }
+
+	.app-shell{ min-height:100vh; }
+	.page{ min-height:100vh; display:flex; flex-direction:column; }
+	.site-main{ flex:1 0 auto; }
+
+	/* --- Header — flat paper, hairline base, no glass --- */
+	.site-header{ position:sticky; top:0; z-index:50; background:var(--paper); border-bottom:1px solid var(--line); }
+	.site-header__inner{ max-width:var(--maxw); margin:0 auto; padding:14px clamp(24px,5vw,48px); display:flex; align-items:center; justify-content:space-between; gap:18px; }
+	.brand{ display:inline-flex; align-items:center; }
+	.nav{ display:flex; align-items:center; gap:28px; }
+	.nav-link{ font-size:0.74rem; letter-spacing:0.14em; text-transform:uppercase; font-weight:600; color:var(--ink-50); padding:6px 0; position:relative; transition:color var(--dur) var(--ease); }
+	.nav-link:hover{ color:var(--ink); }
+	.nav-link::after{ content:''; position:absolute; left:0; bottom:0; width:100%; height:1px; background:var(--ink); transform:scaleX(0); transform-origin:left; transition:transform var(--dur) var(--ease); }
+	.nav-link:hover::after, .nav-link.is-active::after{ transform:scaleX(1); }
+	.nav-link.is-active{ color:var(--ink); }
+	.status{ font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-50); font-weight:600; padding:6px 12px; border-radius:var(--radius); border:1px solid var(--line); white-space:nowrap; }
+
+	/* Language */
+
+	.mobile-controls{ display:none; align-items:center; gap:10px; }
+	.status--mobile{ padding:6px 10px; font-size:0.68rem; }
+	.menu-btn{ border:1px solid var(--line); background:transparent; color:var(--ink); border-radius:var(--radius); width:42px; height:42px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; transition:border-color var(--dur) var(--ease); }
+	.menu-btn:hover{ border-color:var(--ink); }
+	.menu-bars,.menu-x{ font-size:22px; line-height:1; }
+
+	.mobile{ position:relative; }
+	.mobile__panel{ position:absolute; right:clamp(16px,4vw,24px); top:8px; width:min(340px, calc(100vw - 32px)); border-radius:var(--radius); border:1px solid var(--line); background:var(--paper); z-index:60; overflow:hidden; }
+	.mobile__nav{ display:flex; flex-direction:column; padding:8px; }
+	.mobile__link{ padding:13px 14px; border-radius:var(--radius); font-weight:600; letter-spacing:0.08em; text-transform:uppercase; font-size:0.8rem; color:var(--ink-70); transition:background var(--dur) var(--ease), color var(--dur) var(--ease); }
+	.mobile__link:hover, .mobile__link.is-active{ background:var(--paper-2); color:var(--ink); }
+	.mobile__backdrop{ position:fixed; inset:0; background:transparent; border:0; z-index:55; cursor:default; }
+
+	/* --- Footer — deliberate inverted ink band, institutional masthead --- */
+	.site-footer{ margin-top:var(--section-y); background:var(--ink-bg); color:var(--ink-fg); }
+	.site-footer__inner{ max-width:var(--maxw); margin:0 auto; padding: clamp(56px,7vw,96px) clamp(24px,5vw,48px) clamp(32px,4vw,44px); }
+
+	/* Masthead */
+	.footer-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:clamp(24px,5vw,64px); flex-wrap:wrap; }
+	.footer-brand{ display:flex; flex-direction:column; gap:18px; }
+	.footer-mark{ color:var(--ink-fg); display:inline-flex; }
+	.footer-motto{ margin:0; font-family:var(--font-display); font-size:var(--t-h4); letter-spacing:var(--track-tight); color: rgba(255,255,255,0.78); }
+	.footer-inquire{ display:flex; flex-direction:column; gap:8px; align-items:flex-start; }
+	.footer-inquire .eyebrow{ color: rgba(255,255,255,0.5); }
+	.footer-inquire__email{ font-family:var(--font-display); font-size:clamp(1.5rem,3vw,2rem); letter-spacing:var(--track-tight); color:var(--ink-fg); border-bottom:1px solid rgba(255,255,255,0.22); padding-bottom:3px; transition:border-color var(--dur) var(--ease); }
+	.footer-inquire:hover .footer-inquire__email{ border-bottom-color:var(--ink-fg); }
+
+	.footer-rule{ height:1px; border:0; margin:clamp(40px,5vw,64px) 0 clamp(36px,4vw,48px); background: rgba(255,255,255,0.16); }
+
+	/* Columns */
+	.footer-grid{ display:grid; grid-template-columns:1.2fr 1fr 1fr; gap:clamp(28px,4vw,56px); align-items:start; }
+	.footer-col{ min-width:0; }
+	.footer-title{ margin:0 0 18px; font-family:var(--font-sc); font-size:var(--t-label); letter-spacing:var(--track-label); text-transform:uppercase; color: rgba(255,255,255,0.45); }
+	.footer-links{ display:flex; flex-direction:column; gap:12px; }
+	.footer-link{ color: rgba(255,255,255,0.82); transition:color var(--dur) var(--ease); width:fit-content; }
+	.footer-link:hover{ color:var(--ink-fg); }
+	.footer-meta{ color: rgba(255,255,255,0.45); font-size:0.92rem; }
+
+	/* Houses list with status */
+	.footer-house{ display:flex; align-items:baseline; justify-content:space-between; gap:16px; max-width:240px; color: rgba(255,255,255,0.82); transition:color var(--dur) var(--ease); }
+	.footer-house:hover{ color:var(--ink-fg); }
+	.footer-house__name{ font-family:var(--font-display); font-size:1.05rem; }
+	.footer-house__status{ font-family:var(--font-sc); font-size:0.66rem; letter-spacing:0.12em; text-transform:uppercase; color: rgba(255,255,255,0.4); white-space:nowrap; }
+
+	.footer-socials{ margin-top:20px; display:flex; gap:10px; }
+	.social{ width:38px; height:38px; border-radius:var(--radius); border:1px solid rgba(255,255,255,0.18); display:inline-flex; align-items:center; justify-content:center; color: rgba(255,255,255,0.8); transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease); }
+	.social:hover{ border-color:var(--ink-fg); color:var(--ink-fg); }
+
+	.footer-bottom{ margin-top: clamp(48px,6vw,72px); padding-top:20px; border-top:1px solid rgba(255,255,255,0.14); display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap; }
+	.footer-copy{ margin:0; color: rgba(255,255,255,0.5); font-size:0.78rem; letter-spacing:0.02em; }
+	.footer-legal{ display:flex; align-items:center; gap:10px; }
+	.footer-legal-link{ font-size:0.78rem; color: rgba(255,255,255,0.55); letter-spacing:0.02em; transition:color var(--dur) var(--ease); }
+	.footer-legal-link:hover{ color:var(--ink-fg); }
+	.footer-legal-dot{ color: rgba(255,255,255,0.25); }
+
+	@media (max-width:760px){
+		.footer-grid{ grid-template-columns:1fr 1fr; gap:32px 24px; }
+		.footer-top{ flex-direction:column; gap:32px; }
+	}
+	@media (max-width:460px){ .footer-grid{ grid-template-columns:1fr; } }
+	@media (max-width:768px){
+		.nav{ display:none; }
+		.mobile-controls{ display:inline-flex; }
 	}
 </style>

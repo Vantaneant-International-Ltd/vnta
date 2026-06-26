@@ -104,7 +104,7 @@
 		margin: 0;
 		font-size: 1.0625rem;
 		line-height: 1.7;
-		color: rgba(255, 255, 255, 0.78);
+		color: var(--ink-85);
 		max-width: 780px;
 	}
 
@@ -112,7 +112,7 @@
 		margin: 0 0 72px;
 		padding: 28px 32px;
 		border-radius: var(--radius);
-		border: 1px solid rgba(255, 255, 255, 0.12);
+		border: 1px solid var(--line-soft);
 		background: var(--surface);
 	}
 
@@ -121,7 +121,7 @@
 		font-family: var(--font-display);
 		font-size: 1.75rem;
 		line-height: 1.35;
-		color: rgba(255, 255, 255, 0.92);
+		color: var(--ink);
 		letter-spacing: -0.01em;
 	}
 
@@ -143,26 +143,26 @@
 
 	.section-head p {
 		margin: 0;
-		color: rgba(255, 255, 255, 0.65);
+		color: var(--ink-70);
 		line-height: 1.6;
 	}
 
 	.panel {
-		border: 1px solid rgba(255, 255, 255, 0.1);
+		border: 1px solid var(--line-soft);
 		border-radius: var(--radius);
 		padding: 22px 22px;
 		background: var(--surface);
 	}
 
 	.panel--muted {
-		background: rgba(255, 255, 255, 0.015);
-		border-color: rgba(255, 255, 255, 0.08);
+		background: var(--line-soft);
+		border-color: var(--line-soft);
 	}
 
 	.list {
 		margin: 0;
 		padding-left: 1.1rem;
-		color: rgba(255, 255, 255, 0.78);
+		color: var(--ink-85);
 		line-height: 1.7;
 	}
 
@@ -172,19 +172,19 @@
 
 	.body {
 		margin: 0;
-		color: rgba(255, 255, 255, 0.78);
+		color: var(--ink-85);
 		line-height: 1.7;
 	}
 
 	.inline-link {
-		color: rgba(255, 255, 255, 0.92);
+		color: var(--ink);
 		text-decoration: underline;
-		text-decoration-color: rgba(255, 255, 255, 0.3);
+		text-decoration-color: var(--ink-35);
 		text-underline-offset: 3px;
 	}
 
 	.inline-link:hover {
-		text-decoration-color: rgba(255, 255, 255, 0.6);
+		text-decoration-color: var(--ink-70);
 	}
 
 	@media (max-width: 768px) {

@@ -202,14 +202,14 @@
 
 	.subtitle {
 		font-size: 1.1rem;
-		color: rgba(255, 255, 255, 0.65);
+		color: var(--ink-70);
 		margin: 0 0 2.5rem;
 	}
 
 	.lede {
 		font-size: 1.05rem;
 		line-height: 1.7;
-		color: rgba(255, 255, 255, 0.8);
+		color: var(--ink-85);
 		max-width: 820px;
 	}
 
@@ -227,7 +227,7 @@
 
 	.section p {
 		margin: 0 0 12px;
-		color: rgba(255, 255, 255, 0.75);
+		color: var(--ink-85);
 		line-height: 1.7;
 		max-width: 900px;
 	}
@@ -237,12 +237,12 @@
 	}
 
 	.inline-link {
-		color: rgba(255, 255, 255, 0.85);
+		color: var(--ink);
 		text-decoration: none;
-		border-bottom: 1px solid rgba(255, 255, 255, 0.28);
+		border-bottom: 1px solid var(--line);
 	}
 
 	.inline-link:hover {
-		border-bottom-color: rgba(255, 255, 255, 0.55);
+		border-bottom-color: var(--ink-50);
 	}
 </style>

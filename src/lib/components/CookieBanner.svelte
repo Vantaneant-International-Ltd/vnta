@@ -49,7 +49,7 @@
 </script>
 
 {#if visible}
-	<aside class="cb" role="region" aria-label="Cookie consent">
+	<aside class="cb" data-theme="ink" role="region" aria-label="Cookie consent">
 		<p class="cb__copy">
 			<span class="eyebrow cb__label">Cookies</span>
 			VNTA uses essential cookies to run the site, plus anonymous analytics to
@@ -75,8 +75,8 @@
 		justify-content: space-between;
 		gap: clamp(16px, 4vw, 48px);
 		flex-wrap: wrap;
-		background: rgba(0, 0, 0, 0.86);
-		backdrop-filter: blur(10px);
+		background: var(--ink-bg);
+		color: var(--ink-fg);
 		border-top: 1px solid var(--line);
 		padding: clamp(16px, 2.4vw, 22px) clamp(20px, 6vw, 80px);
 		padding-bottom: calc(clamp(16px, 2.4vw, 22px) + env(safe-area-inset-bottom, 0px));
@@ -105,7 +105,7 @@
 
 	.cb__link:hover {
 		color: var(--fg);
-		border-bottom-color: rgba(255, 255, 255, 0.4);
+		border-bottom-color: var(--ink-35);
 	}
 
 	.cb__actions {
