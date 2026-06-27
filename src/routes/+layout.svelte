@@ -94,7 +94,7 @@
 	{/if}
 	<link rel="icon" type="image/svg+xml" href="{base}/symbol.svg" />
 	<link rel="apple-touch-icon" href="{base}/symbol.svg" />
-	<meta name="theme-color" content="#ffffff" />
+	<meta name="theme-color" content="#050505" />
 
 	<!-- Canonical + social defaults (per-page og:title/description override these). -->
 	<link rel="canonical" href={`https://vnta.xyz${$page.url.pathname}`} />
@@ -156,13 +156,9 @@
 								{item.label}
 							</a>
 						{/each}
-
-						<span class="status" aria-label="Status: Coming soon">Coming Soon</span>
 					</nav>
 
 					<div class="mobile-controls">
-						<span class="status status--mobile" aria-label="Status: Coming soon">Coming Soon</span>
-
 						<button
 							type="button"
 							class="menu-btn"
@@ -367,12 +363,8 @@
 	.nav-link::after{ content:''; position:absolute; left:0; bottom:0; width:100%; height:1px; background:var(--ink); transform:scaleX(0); transform-origin:left; transition:transform var(--dur) var(--ease); }
 	.nav-link:hover::after, .nav-link.is-active::after{ transform:scaleX(1); }
 	.nav-link.is-active{ color:var(--ink); }
-	.status{ font-size:0.7rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--ink-50); font-weight:600; padding:6px 12px; border-radius:var(--radius); border:1px solid var(--line); white-space:nowrap; }
-
-	/* Language */
 
 	.mobile-controls{ display:none; align-items:center; gap:10px; }
-	.status--mobile{ padding:6px 10px; font-size:0.68rem; }
 	.menu-btn{ border:1px solid var(--line); background:transparent; color:var(--ink); border-radius:var(--radius); width:42px; height:42px; display:inline-flex; align-items:center; justify-content:center; cursor:pointer; transition:border-color var(--dur) var(--ease); }
 	.menu-btn:hover{ border-color:var(--ink); }
 	.menu-bars,.menu-x{ font-size:22px; line-height:1; }
