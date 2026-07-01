@@ -16,6 +16,7 @@
 	import { trackPageView } from '$lib/analytics';
 	import CookieBanner from '$lib/components/CookieBanner.svelte';
 	import Wordmark from '$lib/components/ui/Wordmark.svelte';
+	import AtmosphereBackground from '$lib/components/ui/AtmosphereBackground.svelte';
 
 	let { children } = $props();
 
@@ -31,6 +32,18 @@
 	const maintenance = $derived(
 		MAINTENANCE && !$page.url.pathname.startsWith(`${base}/admin`)
 	);
+	// ---------------------------------------------------------------------------
+
+	// --- Atmosphere background ------------------------------------------------
+	// Decorative premium background, wired once here so every PUBLIC marketing page
+	// inherits it. Excluded from /portal (its own institutional register) and
+	// /admin (a functional app). Landing gets the fuller 'hero' bloom; content-heavy
+	// pages get the reduced 'dense' preset.
+	const atmoPath = $derived($page.url.pathname.replace(base, '') || '/');
+	const showAtmo = $derived(
+		!atmoPath.startsWith('/portal') && !atmoPath.startsWith('/admin')
+	);
+	const atmoIntensity = $derived<'hero' | 'dense'>(atmoPath === '/' ? 'hero' : 'dense');
 	// ---------------------------------------------------------------------------
 
 	// Svelte 5 runes (SvelteKit 2)
@@ -137,6 +150,9 @@
 	</main>
 {:else}
 <div class="app-shell" data-sveltekit-preload-data="hover">
+	{#if showAtmo}
+		<AtmosphereBackground intensity={atmoIntensity} />
+	{/if}
 	{#key $page.url.pathname}
 		<div class="page" in:fade={{ duration: 140 }}>
 			<header class="site-header" aria-label="VNTA header">

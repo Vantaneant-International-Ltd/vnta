@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { base } from '$app/paths';
-	import AtmosphereBackground from '$lib/components/ui/AtmosphereBackground.svelte';
 
 	// §1.4 Brand Values — VNTA Brand Guidelines v1.0.
 	const values = [
@@ -33,8 +32,6 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 </svelte:head>
 
-<AtmosphereBackground />
-
 <main class="home">
 	<!-- HERO -->
 	<section class="hero">
@@ -44,7 +41,7 @@
 				<span class="eyebrow">Est. 2025 · Dublin</span>
 			</div>
 
-			<h1 class="hero__title">Brand leadership <span class="hero__title-em">in residence.</span></h1>
+			<h1 class="hero__title">Brand leadership <span class="hero__title-em">in&nbsp;residence.</span></h1>
 
 			<p class="lede">
 				A modern holding company building and guiding premium maisons through strategy,
@@ -157,15 +154,19 @@
 	}
 
 	.hero__title {
-		margin: 0 0 clamp(24px, 3.5vw, 40px);
+		/* Rhythm is token-driven and consistent through the hero block (fix 2). */
+		margin: 0 0 var(--s-6);
 		/* Own token: swap --font-hero to a Didone in tokens.css to change only this. */
 		font-family: var(--font-hero);
 		font-weight: 400;
 		font-size: clamp(2.9rem, 7vw, 4.8rem);
-		line-height: 1.01;
+		line-height: 1.05;
 		letter-spacing: var(--track-tight);
 		color: var(--ink);
-		max-width: 16ch;
+		max-width: 18ch;
+		/* Balanced line breaks: "Brand leadership" / "in residence." with no
+		   stranded "in" (paired with the nbsp in the markup). Fix 1. */
+		text-wrap: balance;
 	}
 
 	/* Reference headline is uniform high-contrast (no dimmed tail). */
@@ -182,9 +183,10 @@
 		font-weight: 400;
 	}
 
-	/* KEY POINT — hairline-bordered panel, small uppercase label + body line. */
+	/* KEY POINT — hairline-bordered panel, small uppercase label + body line.
+	   Anchored to the block with a consistent spacing token, not floating (fix 2). */
 	.keypoint {
-		margin: clamp(28px, 4vw, 44px) 0 0;
+		margin: var(--s-8) 0 0;
 		max-width: 560px;
 		border: 1px solid var(--line);
 		border-radius: var(--radius);
@@ -206,11 +208,11 @@
 	}
 
 	.hero__cta {
-		margin-top: clamp(28px, 4vw, 40px);
+		margin-top: var(--s-8);
 	}
 
 	.gaelic {
-		margin: clamp(32px, 5vw, 56px) 0 0;
+		margin: var(--s-16) 0 0;
 		font-family: var(--font-display);
 		font-size: 1.1rem;
 		letter-spacing: 0.01em;
@@ -357,6 +359,21 @@
 
 	.maisons__cta {
 		margin-top: clamp(32px, 4vw, 48px);
+	}
+
+	/* Wide desktop: compose the hero as a tall, vertically-centred column on the
+	   left so the empty right half reads as intentional negative space for the
+	   bloom to occupy, not an unfinished layout (fix 3). */
+	@media (min-width: 900px) {
+		.hero {
+			min-height: 72vh;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+		}
+		.hero .wrap {
+			width: 100%;
+		}
 	}
 
 	/* --- Responsive: keep mobile cosy ------------------------------------ */
