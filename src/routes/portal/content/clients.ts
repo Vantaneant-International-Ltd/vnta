@@ -15,9 +15,11 @@
 
 /** Lowercased authenticated email -> client id. */
 export const CLIENT_BY_EMAIL: Record<string, string> = {
-	// TODO: confirm Andrew's real Cloudflare Access email before go-live.
-	// If this does not match his Access identity he will be denied (see resolve.ts).
-	'andrew@buildt.ie': 'andrew'
+	// Andrew (BUILDT). Must match the email invited in the Cloudflare Access policy.
+	'buildt.ireland@gmail.com': 'andrew',
+	// Renato, mapped to Andrew's record for previewing through Access. Remove or
+	// repoint when a real second client exists.
+	'renato@vnta.xyz': 'andrew'
 };
 
 /**
