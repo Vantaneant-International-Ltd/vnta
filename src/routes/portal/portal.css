@@ -1,0 +1,410 @@
+/* =============================================================================
+   VNTA Client Portal — module styles
+   -----------------------------------------------------------------------------
+   Tokens only (src/lib/styles/tokens.css). Dark premium-black ground, inherited
+   from the shared root layout. Cold, restrained, institutional: hairlines and
+   space, no cards/shadows/accent colour. Classes are prefixed `p-` and kept in
+   one file so the isolated module lifts cleanly.
+   ========================================================================== */
+
+.portal {
+	overflow-x: hidden;
+}
+
+/* --- Masthead --------------------------------------------------------------- */
+.p-mast {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: var(--s-6);
+	flex-wrap: wrap;
+}
+.p-mast__eyebrows {
+	display: flex;
+	gap: var(--s-3);
+	flex-wrap: wrap;
+	margin-bottom: var(--s-4);
+}
+.p-mast__title {
+	font-family: var(--font-display);
+	font-size: var(--t-h1);
+	font-weight: 400;
+	letter-spacing: var(--track-tight);
+	line-height: 1.02;
+	margin: 0;
+}
+.p-mast__id {
+	margin-top: var(--s-4);
+	font-family: var(--font-mono);
+	font-size: 0.72rem;
+	letter-spacing: 0.06em;
+	color: var(--ink-50);
+}
+.p-mast__lede {
+	margin: var(--s-6) 0 0;
+	max-width: 56ch;
+	font-size: var(--t-lede);
+	line-height: 1.55;
+	color: var(--ink-85);
+}
+.p-mast__signout {
+	font-family: var(--font-mono);
+	font-size: 0.66rem;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: var(--ink-50);
+	border: 1px solid var(--line);
+	border-radius: var(--radius);
+	padding: 9px 13px;
+	white-space: nowrap;
+	transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.p-mast__signout:hover {
+	border-color: var(--ink);
+	color: var(--ink);
+}
+
+/* Monochrome health indicator (no decorative colour). */
+.p-health {
+	display: inline-flex;
+	align-items: center;
+	gap: 9px;
+	margin-top: var(--s-8);
+	font-family: var(--font-mono);
+	font-size: 0.7rem;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--ink-85);
+	border: 1px solid var(--line);
+	border-radius: var(--radius);
+	padding: 9px 14px;
+}
+.p-health__dot {
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: var(--ink-50);
+	flex: none;
+}
+
+/* --- Section scaffold ------------------------------------------------------- */
+.p-section {
+	margin-top: var(--section-y);
+}
+.p-shead {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: var(--s-2) var(--s-4);
+	flex-wrap: wrap;
+	border-bottom: 1px solid var(--line);
+	padding-bottom: var(--s-3);
+}
+.p-shead__name {
+	font-family: var(--font-display);
+	font-size: var(--t-h3);
+	font-weight: 400;
+	letter-spacing: var(--track-tight);
+	margin: 0;
+}
+.p-shead__meta {
+	font-family: var(--font-mono);
+	font-size: 0.64rem;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--ink-50);
+	text-align: right;
+}
+.p-note {
+	margin: var(--s-6) 0 0;
+	max-width: var(--measure);
+	color: var(--ink-70);
+	line-height: 1.7;
+	font-size: 0.98rem;
+}
+
+/* --- Summary ---------------------------------------------------------------- */
+.p-summary {
+	margin-top: var(--s-8);
+}
+.p-summary__headline {
+	margin: 0;
+	font-family: var(--font-display);
+	font-size: var(--t-h4);
+	letter-spacing: var(--track-tight);
+	line-height: 1.25;
+	color: var(--ink);
+	max-width: 40ch;
+}
+
+/* --- Delivery log (timeline) ------------------------------------------------ */
+.p-timeline {
+	margin-top: var(--s-8);
+	list-style: none;
+	padding: 0;
+}
+.p-entry {
+	display: grid;
+	grid-template-columns: 108px 116px 1fr;
+	gap: var(--s-6);
+	padding: var(--s-6) 0 var(--s-6) var(--s-6);
+	border-left: 1px solid var(--line);
+	border-bottom: 1px solid var(--line-soft);
+	position: relative;
+}
+.p-entry:last-child {
+	border-bottom: 0;
+}
+/* Timeline node sitting on the rail. */
+.p-entry::before {
+	content: '';
+	position: absolute;
+	left: -4px;
+	top: calc(var(--s-6) + 8px);
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: var(--ink-35);
+}
+.p-entry__date {
+	font-family: var(--font-mono);
+	font-size: 0.72rem;
+	letter-spacing: 0.02em;
+	color: var(--ink-70);
+	padding-top: 2px;
+}
+.p-entry__cat {
+	font-family: var(--font-mono);
+	font-size: 0.6rem;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--ink-50);
+	padding-top: 3px;
+}
+.p-entry__body {
+	min-width: 0;
+}
+.p-entry__title {
+	font-size: 0.98rem;
+	font-weight: 600;
+	color: var(--ink);
+}
+.p-entry__detail {
+	margin-top: 4px;
+	font-size: 0.94rem;
+	color: var(--ink-70);
+	line-height: 1.6;
+}
+
+/* --- Register (generic dated rows: audits) ---------------------------------- */
+.p-rows {
+	margin-top: var(--s-8);
+	list-style: none;
+	padding: 0;
+}
+.p-row {
+	display: grid;
+	grid-template-columns: 120px 140px 1fr auto;
+	gap: var(--s-6);
+	align-items: baseline;
+	padding: var(--s-4) 0;
+	border-bottom: 1px solid var(--line-soft);
+}
+.p-row:last-child {
+	border-bottom: 0;
+}
+.p-row__date {
+	font-family: var(--font-mono);
+	font-size: 0.72rem;
+	color: var(--ink-70);
+}
+.p-row__type {
+	font-family: var(--font-mono);
+	font-size: 0.6rem;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--ink-50);
+}
+.p-row__result {
+	font-size: 0.94rem;
+	color: var(--ink-85);
+}
+.p-row__link {
+	font-family: var(--font-mono);
+	font-size: 0.62rem;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--ink-50);
+	border-bottom: 1px solid transparent;
+	transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.p-row__link:hover {
+	color: var(--ink);
+	border-bottom-color: var(--line);
+}
+
+/* --- Stat grid (security, performance) -------------------------------------- */
+.p-grid {
+	margin-top: var(--s-8);
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	border: 1px solid var(--line);
+}
+.p-cell {
+	padding: var(--s-6);
+	border-right: 1px solid var(--line);
+	border-bottom: 1px solid var(--line);
+}
+/* Trim outer edges so only interior hairlines show. */
+.p-cell:nth-child(3n) {
+	border-right: 0;
+}
+.p-cell__k {
+	font-family: var(--font-mono);
+	font-size: 0.6rem;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--ink-50);
+}
+.p-cell__v {
+	margin-top: var(--s-3);
+	font-family: var(--font-display);
+	font-size: 1.6rem;
+	letter-spacing: var(--track-tight);
+	color: var(--ink);
+}
+.p-cell__v--sm {
+	font-family: var(--font-body);
+	font-size: 1rem;
+	font-weight: 600;
+	margin-top: var(--s-4);
+}
+
+/* --- Files ------------------------------------------------------------------ */
+.p-files {
+	margin-top: var(--s-8);
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: var(--s-3);
+}
+.p-file {
+	display: flex;
+	align-items: center;
+	gap: var(--s-4);
+	border: 1px solid var(--line);
+	border-radius: var(--radius);
+	padding: 15px 16px;
+	transition: border-color var(--dur) var(--ease);
+}
+.p-file:hover {
+	border-color: var(--ink-35);
+}
+.p-file__body {
+	flex: 1;
+	min-width: 0;
+}
+.p-file__name {
+	font-size: 0.94rem;
+	font-weight: 600;
+	color: var(--ink);
+}
+.p-file__kind {
+	margin-top: 2px;
+	font-family: var(--font-mono);
+	font-size: 0.58rem;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--ink-50);
+}
+.p-file__open {
+	font-family: var(--font-mono);
+	font-size: 0.6rem;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: var(--ink-50);
+	white-space: nowrap;
+}
+
+/* --- Next up ---------------------------------------------------------------- */
+.p-next {
+	margin-top: var(--s-8);
+	list-style: none;
+	padding: 0;
+}
+.p-next__row {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: var(--s-6);
+	padding: var(--s-4) 0;
+	border-bottom: 1px solid var(--line-soft);
+}
+.p-next__row:last-child {
+	border-bottom: 0;
+}
+.p-next__title {
+	font-size: 0.98rem;
+	color: var(--ink-85);
+}
+.p-next__eta {
+	font-family: var(--font-mono);
+	font-size: 0.62rem;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var(--ink-50);
+	white-space: nowrap;
+}
+
+/* --- States (loading, denied) ---------------------------------------------- */
+.p-state {
+	min-height: 40vh;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: var(--s-4);
+}
+.p-state__title {
+	font-family: var(--font-display);
+	font-size: var(--t-h3);
+	font-weight: 400;
+	letter-spacing: var(--track-tight);
+	margin: 0;
+}
+.p-state__note {
+	max-width: 48ch;
+	color: var(--ink-70);
+	line-height: 1.7;
+}
+
+/* --- Responsive ------------------------------------------------------------- */
+@media (max-width: 680px) {
+	.p-grid {
+		grid-template-columns: 1fr;
+	}
+	.p-cell {
+		border-right: 0;
+	}
+	.p-files {
+		grid-template-columns: 1fr;
+	}
+	.p-entry {
+		grid-template-columns: 1fr;
+		gap: 4px 0;
+	}
+	.p-entry__cat {
+		padding-top: 0;
+	}
+	.p-row {
+		grid-template-columns: 1fr auto;
+		gap: 4px var(--s-4);
+	}
+	.p-row__result {
+		grid-column: 1 / -1;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.portal * {
+		transition: none !important;
+	}
+}

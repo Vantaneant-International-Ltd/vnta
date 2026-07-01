@@ -1,0 +1,72 @@
+{
+	"client": {
+		"name": "Andrew (TODO: confirm full name)",
+		"plan": "TODO: plan (e.g. Managed)",
+		"since": "TODO: YYYY-MM",
+		"periodLabel": "TODO: reporting period (e.g. August 2026)"
+	},
+	"summary": {
+		"headline": "TODO: one line on where the site stands this period.",
+		"note": "TODO: two or three plain sentences on what shipped and what is underway. No marketing adjectives.",
+		"siteHealth": "TODO: status (e.g. Operational)"
+	},
+	"delivery": [
+		{
+			"date": "TODO date",
+			"category": "TODO: Feature / Optimisation / Launch",
+			"title": "TODO: what was delivered",
+			"detail": "TODO: one plain sentence of detail. Replace this entire array with the real delivery log."
+		},
+		{
+			"date": "TODO date",
+			"category": "TODO category",
+			"title": "TODO: second delivery entry",
+			"detail": "TODO: detail."
+		}
+	],
+	"security": {
+		"lastAuditDate": "TODO date",
+		"cadence": "TODO: cadence (e.g. Monthly)",
+		"findings": {
+			"critical": null,
+			"high": null,
+			"medium": null,
+			"low": null
+		},
+		"notes": [
+			"TODO: replace with the real audit notes. Do not state findings until an audit has run."
+		]
+	},
+	"audits": [
+		{
+			"date": "TODO date",
+			"type": "TODO: Security / Accessibility / Dependency",
+			"result": "TODO: result (e.g. Scheduled)"
+		}
+	],
+	"performance": [
+		{
+			"date": "TODO date",
+			"title": "TODO: performance check",
+			"metric": "TODO",
+			"detail": "TODO: what was measured and where. Replace with the real report figures."
+		}
+	],
+	"files": [
+		{
+			"name": "TODO: document name",
+			"kind": "TODO: PDF",
+			"href": "#TODO-file-url"
+		}
+	],
+	"nextUp": [
+		{
+			"title": "TODO: next queued item",
+			"eta": "TODO"
+		},
+		{
+			"title": "TODO: second queued item",
+			"eta": "TODO"
+		}
+	]
+}

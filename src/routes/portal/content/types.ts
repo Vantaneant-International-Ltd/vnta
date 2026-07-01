@@ -1,0 +1,96 @@
+// =============================================================================
+// VNTA Client Portal — shared content schema
+// -----------------------------------------------------------------------------
+// Single source of truth for the per-client data shape. Both the portal route
+// and the (future) email digest read files typed against this. Keep it framework
+// free so it lifts cleanly into a standalone app.
+//
+// Dates are stored as verbatim strings and rendered as-is (never parsed), so a
+// placeholder like "TODO date" shows literally instead of crashing a formatter.
+// =============================================================================
+
+export interface PortalClient {
+	/** Display name of the managed client. */
+	name: string;
+	/** Plan label, e.g. "Managed". */
+	plan: string;
+	/** Client since, e.g. "2026-07". */
+	since: string;
+	/** Reporting period shown in the masthead, e.g. "August 2026". */
+	periodLabel: string;
+}
+
+export interface PortalSummary {
+	headline: string;
+	note: string;
+	/** Short status label for this period, e.g. "Operational". Rendered monochrome. */
+	siteHealth: string;
+}
+
+/** One implementation, feature, or optimisation shipped, in chronological order. */
+export interface DeliveryEntry {
+	date: string;
+	/** Free label: "Feature", "Optimisation", "Launch", etc. */
+	category: string;
+	title: string;
+	detail: string;
+}
+
+/** Audit finding counts by severity. `null` means "not yet reported". */
+export interface SecurityFindings {
+	critical: number | null;
+	high: number | null;
+	medium: number | null;
+	low: number | null;
+}
+
+export interface SecurityBlock {
+	lastAuditDate: string;
+	/** e.g. "Monthly". */
+	cadence: string;
+	findings: SecurityFindings;
+	notes: string[];
+}
+
+/** A recurring audit in the register. */
+export interface AuditEntry {
+	date: string;
+	/** e.g. "Security", "Accessibility", "Dependency". */
+	type: string;
+	/** Outcome, e.g. "Passed", "Scheduled". */
+	result: string;
+	/** Optional link to the full report. */
+	href?: string;
+}
+
+export interface PerformanceEntry {
+	date: string;
+	title: string;
+	/** Optional headline figure, e.g. "98". */
+	metric?: string;
+	detail: string;
+}
+
+export interface FileEntry {
+	name: string;
+	/** e.g. "PDF". */
+	kind: string;
+	href: string;
+}
+
+export interface NextUpEntry {
+	title: string;
+	/** Rough window, e.g. "Aug", "End Sep". */
+	eta: string;
+}
+
+export interface PortalData {
+	client: PortalClient;
+	summary: PortalSummary;
+	delivery: DeliveryEntry[];
+	security: SecurityBlock;
+	audits: AuditEntry[];
+	performance: PerformanceEntry[];
+	files: FileEntry[];
+	nextUp: NextUpEntry[];
+}
