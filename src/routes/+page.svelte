@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { base } from '$app/paths';
+	import AtmosphereBackground from '$lib/components/ui/AtmosphereBackground.svelte';
 
 	// §1.4 Brand Values — VNTA Brand Guidelines v1.0.
 	const values = [
@@ -32,6 +33,8 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 </svelte:head>
 
+<AtmosphereBackground />
+
 <main class="home">
 	<!-- HERO -->
 	<section class="hero">
@@ -43,24 +46,24 @@
 
 			<h1 class="hero__title">Brand leadership <span class="hero__title-em">in residence.</span></h1>
 
-			<hr class="rule" />
+			<p class="lede">
+				A modern holding company building and guiding premium maisons through strategy,
+				design systems, and clear long-term direction.
+			</p>
 
-			<div class="hero__grid">
-				<p class="lede">
-					A modern holding company building and guiding premium maisons through strategy,
-					design systems, and clear long-term direction.
-				</p>
-
-				<div class="hero__facts">
-					<div class="fact">
-						<span class="eyebrow">Engagement</span>
-						<p>Twelve months · in residence</p>
-					</div>
-					<div class="fact">
-						<span class="eyebrow">Availability</span>
-						<p>One seat. Q3 2026.</p>
-					</div>
+			<div class="keypoint">
+				<div class="keypoint__row">
+					<span class="eyebrow">Engagement</span>
+					<p class="keypoint__body">Twelve months · in residence</p>
 				</div>
+				<div class="keypoint__row">
+					<span class="eyebrow">Availability</span>
+					<p class="keypoint__body">One seat. Q3 2026.</p>
+				</div>
+			</div>
+
+			<div class="hero__cta">
+				<a href="{base}/explore" class="btn-ghost">Engagement</a>
 			</div>
 
 			<p class="gaelic" lang="ga">Áilleacht na díomhaointe.</p>
@@ -154,47 +157,56 @@
 	}
 
 	.hero__title {
-		margin: 0 0 clamp(28px, 4vw, 48px);
-		font-family: var(--font-display);
+		margin: 0 0 clamp(24px, 3.5vw, 40px);
+		/* Own token: swap --font-hero to a Didone in tokens.css to change only this. */
+		font-family: var(--font-hero);
 		font-weight: 400;
-		font-size: clamp(2.7rem, 6.6vw, 4.4rem);
-		line-height: 1.02;
+		font-size: clamp(2.9rem, 7vw, 4.8rem);
+		line-height: 1.01;
 		letter-spacing: var(--track-tight);
 		color: var(--ink);
 		max-width: 16ch;
 	}
 
+	/* Reference headline is uniform high-contrast (no dimmed tail). */
 	.hero__title-em {
-		color: var(--ink-35);
-	}
-
-	.hero__grid {
-		display: grid;
-		grid-template-columns: 1.1fr 1fr;
-		gap: clamp(28px, 5vw, 72px);
-		align-items: start;
-		padding-top: clamp(28px, 4vw, 44px);
+		color: var(--ink);
 	}
 
 	.lede {
 		margin: 0;
 		font-size: var(--t-lede);
-		line-height: 1.5;
-		color: var(--ink);
-		max-width: 30ch;
+		line-height: 1.55;
+		color: var(--ink-70);
+		max-width: 52ch;
 		font-weight: 400;
 	}
 
-	.hero__facts {
+	/* KEY POINT — hairline-bordered panel, small uppercase label + body line. */
+	.keypoint {
+		margin: clamp(28px, 4vw, 44px) 0 0;
+		max-width: 560px;
+		border: 1px solid var(--line);
+		border-radius: var(--radius);
+		padding: clamp(20px, 3vw, 28px) clamp(20px, 3vw, 30px);
 		display: grid;
-		grid-template-columns: 1fr 1fr;
-		gap: 28px;
+		gap: 18px;
 	}
 
-	.fact p {
-		margin: 10px 0 0;
+	.keypoint__row {
+		display: grid;
+		gap: 8px;
+	}
+
+	.keypoint__body {
+		margin: 0;
 		font-size: 1.02rem;
-		color: var(--ink-70);
+		line-height: 1.5;
+		color: var(--ink-85);
+	}
+
+	.hero__cta {
+		margin-top: clamp(28px, 4vw, 40px);
 	}
 
 	.gaelic {
@@ -361,12 +373,11 @@
 			gap: 6px;
 		}
 
-		.hero__grid {
-			grid-template-columns: 1fr;
-			gap: 32px;
+		.lede {
+			max-width: none;
 		}
 
-		.lede {
+		.keypoint {
 			max-width: none;
 		}
 

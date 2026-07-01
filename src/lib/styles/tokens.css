@@ -53,6 +53,11 @@
 	/* Mono for labels, dates, and register figures. Neutral system stack (matches
 	   the ad-hoc stack pages already used inline; promoted to a token here). */
 	--font-mono:    ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
+	/* Hero display face — its OWN token so the landing headline can swap to a
+	   Didone (e.g. Playfair Display) in one line without touching Marcellus
+	   site-wide. To switch: set this to 'Playfair Display', serif and add the
+	   @fontsource import in the landing (repo already loads fonts via @fontsource). */
+	--font-hero:    var(--font-display);
 
 	/* Book scale 64/48/36/24, fluid but cosy on mobile. */
 	--t-h1:   clamp(2.6rem, 5.6vw, 4rem);
@@ -82,6 +87,18 @@
 	--dur:  180ms;
 
 	/* NO --shadow-*, NO blur. Removed on purpose. Depth = hairlines + space. */
+
+	/* --- Atmosphere — decorative hero background (AtmosphereBackground.svelte).
+	   All tunable in this one place. Bloom colour is RGB triplet so opacity is
+	   controlled separately. Keep it faint: this is photographic mood, not
+	   wallpaper. Text over it must stay WCAG AA (>= 4.5:1). ------------------ */
+	--atmo-bloom-color:      223, 232, 242; /* cool near-white (#dfe8f2), NOT warm */
+	--atmo-bloom-opacity:    0.07;          /* start 6 to 8% */
+	--atmo-bloom-x:          65%;           /* off-centre, right */
+	--atmo-bloom-y:          30%;           /* upper */
+	--atmo-sheen-opacity:    0.03;          /* second, directional light axis */
+	--atmo-grain-opacity:    0.04;          /* film noise, 3 to 5% */
+	--atmo-vignette-strength: 0.55;         /* edge darkening for depth */
 }
 
 /* --- Backward-compat aliases (old pure-black token names) -----------------
