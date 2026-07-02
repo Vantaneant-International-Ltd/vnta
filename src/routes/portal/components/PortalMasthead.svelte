@@ -1,7 +1,7 @@
 <script lang="ts">
-	import type { PortalClient, PortalSummary } from '../content/types';
+	import type { PortalClient } from '../content/types';
 
-	let { client, summary }: { client: PortalClient; summary: PortalSummary } = $props();
+	let { client }: { client: PortalClient } = $props();
 </script>
 
 <header class="p-mast">
@@ -13,9 +13,5 @@
 	<p class="p-mast__id">{client.plan} · Client since {client.since}</p>
 	<p class="p-mast__lede">
 		The record of what VNTA ships, audits, and monitors on your site, updated as work lands.
-	</p>
-	<p class="p-health">
-		<span class="p-health__dot" aria-hidden="true"></span>
-		<span>{summary.siteHealth}</span>
 	</p>
 </header>

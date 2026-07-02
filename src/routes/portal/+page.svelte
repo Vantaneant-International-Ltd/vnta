@@ -63,14 +63,14 @@
 					</p>
 				</div>
 			{:else}
-				<PortalMasthead client={state.data.client} summary={state.data.summary} />
+				<PortalMasthead client={state.data.client} />
+				{#if state.data.monitoring}
+					<Monitoring monitoring={state.data.monitoring} health={state.data.summary.siteHealth} />
+				{/if}
 				<SummaryBlock summary={state.data.summary} />
 				<DeliveryLog delivery={state.data.delivery} />
 				<SecurityAudits security={state.data.security} audits={state.data.audits} />
 				<Performance performance={state.data.performance} />
-				{#if state.data.monitoring}
-					<Monitoring monitoring={state.data.monitoring} health={state.data.summary.siteHealth} />
-				{/if}
 				<FilesList files={state.data.files} />
 				<NextUp nextUp={state.data.nextUp} />
 			{/if}
