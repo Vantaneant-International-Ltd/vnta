@@ -13,9 +13,8 @@
 </svelte:head>
 
 <script lang="ts">
-	import { onMount, tick } from 'svelte';
-	import { supabase } from '$lib/supabase';
-	import { renderTurnstile, resetTurnstile, submitVnta, turnstileConfigured } from '$lib/turnstile';
+	// Applications submit via the client's email (mailto). No database or captcha:
+	// the form composes a prefilled draft to studio@vnta.xyz with the CV attached.
 
 	type Role = {
 		id: string;
@@ -38,39 +37,11 @@
 	// Offline fallback. The live list is loaded from Supabase on mount.
 	const FALLBACK_ROLES: Role[] = [];
 
-	let roles: Role[] = FALLBACK_ROLES;
-
-	onMount(async () => {
-		const { data, error } = await supabase
-			.from('vnta_job_postings')
-			.select('*')
-			.eq('is_published', true)
-			.order('sort_order')
-			.order('created_at');
-		if (!error && data && data.length) {
-			roles = data.map((r) => ({
-				id: r.slug,
-				title: r.title,
-				meta: r.meta ?? '',
-				status: r.status as Role['status'],
-				applySubject: r.apply_subject ?? `${r.title} · Application`,
-				applyLead: r.apply_lead ?? '',
-				form: {
-					requiresCv: r.requires_cv,
-					requiresPortfolio: r.requires_portfolio,
-					ackPay: r.ack_pay
-				},
-				sections: Array.isArray(r.sections) ? r.sections : []
-			}));
-		}
-	});
+	// Openings are the committed list (no database).
+	const roles: Role[] = FALLBACK_ROLES;
 
 	let activeRole: Role | null = null;
 	let applyOpen = false;
-	// Cloudflare Turnstile: token verified server-side by vnta-submit before insert.
-	let tsToken = '';
-	let tsId: string | null = null;
-	let tsEl: HTMLElement;
 	let shareToast = '';
 
 	// Apply UX state (static-safe)
@@ -115,19 +86,9 @@
 		applyOpen = true;
 		shareToast = '';
 		resetFormState();
-		tsToken = '';
 
 		// lock scroll
 		document.documentElement.style.overflow = 'hidden';
-
-		await tick();
-		if (turnstileConfigured() && tsEl) {
-			tsId = await renderTurnstile(
-				tsEl,
-				(t) => (tsToken = t),
-				() => (tsToken = '')
-			);
-		}
 	}
 
 	function closeApply() {
@@ -244,88 +205,6 @@
 		}
 	}
 
-	async function submitApplication() {
-		if (!activeRole) return;
-
-		const hp = document.querySelector<HTMLInputElement>('input[name="company_website"]');
-		if (hp?.value?.trim()) {
-			submitState = 'error';
-			submitError = 'Submission blocked.';
-			return;
-		}
-
-		if (!f_name || !f_email || !f_location || !f_pitch) {
-			submitState = 'error';
-			submitError = 'Please complete the required fields.';
-			return;
-		}
-
-		if (activeRole.id === 'vendr-cinematic-artist' && (!f_vendr_lane || !f_vendr_examples)) {
-			submitState = 'error';
-			submitError = 'Please complete the Vendr questions.';
-			return;
-		}
-
-		if (turnstileConfigured() && !tsToken) {
-			submitState = 'error';
-			submitError = 'Please complete the verification.';
-			return;
-		}
-
-		submitState = 'loading';
-		submitError = '';
-
-		try {
-			// 1) Upload the CV to private Supabase Storage (PDF, ≤5MB enforced by the bucket).
-			let cvPath = '';
-			let cvFilename = '';
-			if (f_cv_files && f_cv_files.length > 0) {
-				const file = f_cv_files[0];
-				cvFilename = file.name;
-				const safe = file.name.replace(/[^a-zA-Z0-9._-]/g, '_').slice(-80);
-				const path = `${activeRole.id}/${Date.now()}-${safe}`;
-				const { error: upErr } = await supabase.storage
-					.from('vnta-cvs')
-					.upload(path, file, { contentType: 'application/pdf', upsert: false });
-				if (upErr) throw upErr;
-				cvPath = path;
-			}
-
-			// 2) Record the application via the verified edge function. Turnstile is
-			// checked server-side there; anon INSERT on vnta_applications is revoked.
-			const res = await submitVnta(
-				'application',
-				{
-					posting_slug: activeRole.id,
-					role_title: activeRole.title,
-					name: f_name,
-					email: f_email,
-					location: f_location,
-					links: f_links,
-					lane: f_lane,
-					vendr_lane: f_vendr_lane,
-					vendr_examples: f_vendr_examples,
-					pitch: f_pitch,
-					cv_path: cvPath,
-					cv_filename: cvFilename,
-					ack_contractor: f_ack_contractor,
-					ack_pay: f_ack_pay
-				},
-				tsToken
-			);
-			if (!res.ok) throw new Error(res.error || 'Could not submit.');
-
-			submitState = 'success';
-			submitError = '';
-			setTimeout(() => closeApply(), 1500);
-		} catch (err) {
-			submitState = 'error';
-			submitError =
-				err instanceof Error ? err.message : 'Could not submit. Please try the email option below.';
-			resetTurnstile(tsId);
-			tsToken = '';
-		}
-	}
 
 	async function copyFallback(role: Role | null) {
 		if (!role) return;
@@ -463,7 +342,7 @@
 				class="form"
 				onsubmit={(e) => {
 					e.preventDefault();
-					submitApplication();
+					openMailDraft();
 				}}
 			>
 					<!-- role payload (for future backend; harmless on static) -->
@@ -587,8 +466,6 @@
 							Fill out the form and submit. Then reply to the confirmation email with your CV{activeRole.form.requiresPortfolio ? ' and portfolio' : ''} attached.
 						</p>
 					</div>
-
-					<div class="ts" bind:this={tsEl}></div>
 
 					<div class="form-actions">
 						<button class="btn" type="button" onclick={closeApply}>Cancel</button>

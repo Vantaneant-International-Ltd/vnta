@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { tick } from 'svelte';
-	import { renderTurnstile, resetTurnstile, submitVnta, turnstileConfigured } from '$lib/turnstile';
+	// Inquiry submits via the operator's email (mailto). No database or captcha.
 
 	const pillars = [
 		{ n: '01', title: 'Cadence', body: 'Weekly alignment, monthly deliverables, quarterly recalibration. A rhythm that makes progress predictable.' },
@@ -40,9 +39,6 @@
 
 	/* ========= Inquiry modal ========= */
 	let inquiryOpen = false;
-	let tsToken = '';
-	let tsId: string | null = null;
-	let tsEl: HTMLElement;
 
 	let inquiry = {
 		name: '',
@@ -99,56 +95,9 @@
 		inquiryOpen = true;
 		inquiryState = 'idle';
 		inquiryError = '';
-		tsToken = '';
 		lockScroll();
-		await tick();
-		if (turnstileConfigured() && tsEl) {
-			tsId = await renderTurnstile(
-				tsEl,
-				(t) => (tsToken = t),
-				() => (tsToken = '')
-			);
-		}
 	}
 
-	async function submitInquiry() {
-		if (!inquiry.name && !inquiry.email && !inquiry.notes) {
-			inquiryState = 'error';
-			inquiryError = 'Add your name, email, or a note first.';
-			return;
-		}
-		if (turnstileConfigured() && !tsToken) {
-			inquiryState = 'error';
-			inquiryError = 'Please complete the verification.';
-			return;
-		}
-		inquiryState = 'sending';
-		inquiryError = '';
-		const res = await submitVnta(
-			'inquiry',
-			{
-				kind: 'engagement',
-				name: inquiry.name,
-				email: inquiry.email,
-				company: inquiry.company,
-				engagement: inquiry.engagement,
-				timeline: inquiry.timeline,
-				budget: inquiry.budget,
-				notes: inquiry.notes,
-				source: '/engagement'
-			},
-			tsToken
-		);
-		if (!res.ok) {
-			inquiryState = 'error';
-			inquiryError = res.error || 'Could not submit.';
-			resetTurnstile(tsId);
-			tsToken = '';
-			return;
-		}
-		inquiryState = 'sent';
-		setTimeout(() => closeInquiry(), 1400);
-	}
 
 	function closeInquiry() {
 		inquiryOpen = false;
@@ -412,18 +361,15 @@
 					</label>
 				</div>
 
-				<div class="vm__ts" bind:this={tsEl}></div>
-
 				<div class="vm__actions">
 					<button
 						class="btn-primary"
 						type="button"
-						onclick={submitInquiry}
+						onclick={openInquiryEmail}
 						disabled={inquiryState === 'sending' || inquiryState === 'sent'}
 					>
 						{inquiryState === 'sending' ? 'Sending…' : inquiryState === 'sent' ? 'Sent ✓' : 'Send inquiry'}
 					</button>
-					<button class="btn-ghost" type="button" onclick={openInquiryEmail}>Email instead</button>
 					<button class="vm__link" type="button" onclick={closeInquiry}>Cancel</button>
 
 					{#if inquiryState === 'error'}
