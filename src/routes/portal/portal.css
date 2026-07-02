@@ -345,6 +345,47 @@
 	margin-top: var(--s-4);
 }
 
+/* --- Performance (Lighthouse score grid) ----------------------------------- */
+.p-perf {
+	margin-top: var(--s-8);
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+	gap: 1px;
+	background: var(--line);
+	border: 1px solid var(--line);
+}
+.p-perf__cell {
+	background: var(--paper);
+	padding: var(--s-6);
+}
+.p-perf__k {
+	font-family: var(--font-mono);
+	font-size: 0.6rem;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--ink-50);
+}
+.p-perf__v {
+	margin-top: var(--s-3);
+	font-family: var(--font-display);
+	font-size: 2rem;
+	letter-spacing: var(--track-tight);
+	color: var(--ink);
+	line-height: 1;
+}
+.p-perf__u {
+	font-family: var(--font-mono);
+	font-size: 0.62rem;
+	letter-spacing: 0.06em;
+	color: var(--ink-35);
+	margin-left: 3px;
+}
+@media (max-width: 680px) {
+	.p-perf {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
 /* --- Files ------------------------------------------------------------------ */
 .p-files {
 	margin-top: var(--s-8);

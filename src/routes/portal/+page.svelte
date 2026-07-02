@@ -63,7 +63,7 @@
 			if (mon) {
 				if (mon.siteHealth) data.summary.siteHealth = mon.siteHealth;
 				if (mon.monitors?.length) data.monitoring = { monitors: mon.monitors };
-				if (mon.performance?.length) data.performance = mon.performance;
+				if (mon.performance) data.performance = mon.performance;
 			}
 			if (wl?.signups) data.waitlist = { total: wl.total, signups: wl.signups };
 			view = { phase: 'ready', data: { ...data } };
@@ -121,7 +121,9 @@
 				<SummaryBlock summary={view.data.summary} />
 				<DeliveryLog delivery={view.data.delivery} />
 				<SecurityAudits security={view.data.security} audits={view.data.audits} />
-				<Performance performance={view.data.performance} />
+				{#if view.data.performance}
+					<Performance performance={view.data.performance} />
+				{/if}
 				<FilesList files={view.data.files} />
 				<NextUp nextUp={view.data.nextUp} />
 			{/if}

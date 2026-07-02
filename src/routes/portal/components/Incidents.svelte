@@ -18,8 +18,14 @@
 						<span class="p-inc__title">{i.title}</span>
 						<span class="p-inc__status">{i.status}</span>
 					</div>
-					<div class="p-inc__meta">{i.date} · {i.impact}</div>
-					<p class="p-inc__detail">{i.detail}</p>
+					<div class="p-inc__meta">
+						{#if i.start && i.resolved}
+							Open {i.start} to {i.resolved}{#if i.duration} · down {i.duration}{/if}
+						{:else}
+							{i.date}
+						{/if}
+					</div>
+					<p class="p-inc__detail">{i.impact} {i.detail}</p>
 				</li>
 			{/each}
 		</ul>

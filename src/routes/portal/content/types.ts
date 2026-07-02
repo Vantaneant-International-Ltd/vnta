@@ -63,12 +63,15 @@ export interface AuditEntry {
 	href?: string;
 }
 
-export interface PerformanceEntry {
+/** A Lighthouse run, scores 0 to 100. null until measured. */
+export interface PerformanceReport {
 	date: string;
-	title: string;
-	/** Optional headline figure, e.g. "98". */
-	metric?: string;
-	detail: string;
+	/** e.g. "Mobile". */
+	profile: string;
+	performance: number | null;
+	accessibility: number | null;
+	bestPractices: number | null;
+	seo: number | null;
 }
 
 export interface FileEntry {
@@ -121,6 +124,12 @@ export interface IncidentEntry {
 	/** "Resolved", "Monitoring", "Investigating". */
 	status: string;
 	detail: string;
+	/** When it began, e.g. "2 Jul 2026, 17:00". */
+	start?: string;
+	/** When it was resolved. */
+	resolved?: string;
+	/** How long it lasted, e.g. "about 55 minutes". */
+	duration?: string;
 }
 
 export interface PortalData {

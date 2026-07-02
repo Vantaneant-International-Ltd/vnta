@@ -11,7 +11,7 @@ const DAYS = 90;
 
 export async function onRequest(context) {
 	const { env } = context;
-	const out = { siteHealth: null, monitors: [], performance: [] };
+	const out = { siteHealth: null, monitors: [], performance: null };
 
 	const key = env.UPTIMEROBOT_API_KEY;
 	if (key) {
@@ -54,14 +54,14 @@ export async function onRequest(context) {
 		const cats = pd && pd.lighthouseResult && pd.lighthouseResult.categories;
 		if (cats && cats.performance) {
 			const pct = (k) => (cats[k] ? Math.round(cats[k].score * 100) : null);
-			out.performance = [
-				{
-					date: today(),
-					title: 'Lighthouse, mobile',
-					metric: String(pct('performance')),
-					detail: `Accessibility ${pct('accessibility')}, best practices ${pct('best-practices')}, SEO ${pct('seo')}. Live via PageSpeed Insights.`
-				}
-			];
+			out.performance = {
+				date: today(),
+				profile: 'Mobile',
+				performance: pct('performance'),
+				accessibility: pct('accessibility'),
+				bestPractices: pct('best-practices'),
+				seo: pct('seo')
+			};
 		}
 	} catch (e) {
 		// keep committed performance

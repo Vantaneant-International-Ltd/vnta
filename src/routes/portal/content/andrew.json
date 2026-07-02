@@ -88,9 +88,12 @@
 		{
 			"date": "2 Jul 2026",
 			"title": "Pre-launch gate briefly open",
-			"impact": "buildt.ie was publicly reachable for a short window. The admin stayed protected.",
+			"impact": "buildt.ie was publicly reachable instead of the holding page. The admin stayed protected.",
 			"status": "Resolved",
-			"detail": "A deploy reset the production configuration and dropped the coming-soon flag. Restored in the same session. The waitlist and all data were unaffected."
+			"start": "2 Jul 2026, 17:00",
+			"resolved": "2 Jul 2026, 17:55",
+			"duration": "about 55 minutes",
+			"detail": "A deploy reset the production configuration and dropped the coming-soon flag. Restored the same session. The waitlist and all data were unaffected."
 		}
 	],
 	"security": {
@@ -113,13 +116,14 @@
 			"result": "Scheduled"
 		}
 	],
-	"performance": [
-		{
-			"date": "July 2026",
-			"title": "Baseline performance check",
-			"detail": "Captured in the first monitoring cycle, before the managed plan begins. Figures reported here once measured."
-		}
-	],
+	"performance": {
+		"date": "July 2026",
+		"profile": "Mobile",
+		"performance": null,
+		"accessibility": null,
+		"bestPractices": null,
+		"seo": null
+	},
 	"files": [
 		{
 			"name": "Invoice VNTA-2026-001",
