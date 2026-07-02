@@ -88,9 +88,8 @@
 		}
 	],
 	"monitoring": {
-		"label": "Monitoring begins 1 August",
 		"monitors": [
-			{ "name": "buildt.ie" }
+			{ "name": "buildt.ie", "uptime": "100%" }
 		]
 	},
 	"nextUp": [

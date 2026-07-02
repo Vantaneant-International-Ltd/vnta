@@ -1,15 +1,18 @@
 <script lang="ts">
-	import type { PortalMonitoring } from '../content/types';
+	import type { PortalMonitoring, UptimeMonitor } from '../content/types';
 
 	let { monitoring, health }: { monitoring: PortalMonitoring; health: string } = $props();
 
 	const DAYS = 90;
-	// Pad/trim to a fixed 90-day strip; empty = pre-launch (all "no data").
-	function strip(days?: number[]): number[] {
-		const src = days ?? [];
-		const out = src.slice(-DAYS);
-		while (out.length < DAYS) out.unshift(0);
-		return out;
+	// Fixed 90-day strip. Real per-day history when present; otherwise all-operational
+	// if we have an uptime figure (no incidents recorded), else pre-launch "no data".
+	function strip(m: UptimeMonitor): number[] {
+		if (m.days?.length) {
+			const out = m.days.slice(-DAYS);
+			while (out.length < DAYS) out.unshift(0);
+			return out;
+		}
+		return Array(DAYS).fill(m.uptime ? 1 : 0);
 	}
 </script>
 
@@ -33,7 +36,7 @@
 					<span class="p-monitor__pct">{m.uptime ?? 'Awaiting first cycle'}</span>
 				</div>
 				<div class="p-strip" role="img" aria-label={`Ninety day uptime for ${m.name}`}>
-					{#each strip(m.days) as d}
+					{#each strip(m) as d}
 						<span class="p-bar" data-s={d}></span>
 					{/each}
 				</div>
