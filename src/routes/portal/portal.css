@@ -506,6 +506,65 @@
 	color: var(--ink-35);
 }
 
+/* --- Waitlist (live D1 signups) -------------------------------------------- */
+.p-wait {
+	list-style: none;
+	padding: 0;
+	margin: var(--s-8) 0 0;
+}
+.p-wait__row {
+	display: grid;
+	grid-template-columns: 1.6fr 1fr 0.9fr auto;
+	gap: var(--s-4);
+	align-items: baseline;
+	padding: 13px 0;
+	border-bottom: 1px solid var(--line-soft);
+}
+.p-wait__row:first-child {
+	border-top: 1px solid var(--line);
+}
+.p-wait__email {
+	font-size: 0.92rem;
+	color: var(--ink);
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	border-bottom: 1px solid transparent;
+	transition: border-color var(--dur) var(--ease);
+}
+.p-wait__email:hover {
+	border-bottom-color: var(--line);
+}
+.p-wait__phone {
+	font-family: var(--font-mono);
+	font-size: 0.74rem;
+	color: var(--ink-70);
+}
+.p-wait__src {
+	font-family: var(--font-mono);
+	font-size: 0.58rem;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var(--ink-35);
+}
+.p-wait__date {
+	font-family: var(--font-mono);
+	font-size: 0.68rem;
+	color: var(--ink-50);
+	white-space: nowrap;
+	text-align: right;
+}
+@media (max-width: 680px) {
+	.p-wait__row {
+		grid-template-columns: 1fr auto;
+		gap: 4px var(--s-4);
+	}
+	.p-wait__phone,
+	.p-wait__src {
+		display: none;
+	}
+}
+
 /* --- Next up ---------------------------------------------------------------- */
 .p-next {
 	margin-top: var(--s-8);

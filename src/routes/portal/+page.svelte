@@ -13,6 +13,7 @@
 	import SecurityAudits from './components/SecurityAudits.svelte';
 	import Performance from './components/Performance.svelte';
 	import Monitoring from './components/Monitoring.svelte';
+	import Waitlist from './components/Waitlist.svelte';
 	import FilesList from './components/FilesList.svelte';
 	import NextUp from './components/NextUp.svelte';
 
@@ -48,17 +49,24 @@
 		if (view.phase !== 'ready' || syncing) return;
 		syncing = true;
 		try {
-			const r = await fetch('/portal/monitoring', { cache: 'no-store' });
-			if (r.ok) {
-				const live = await r.json();
-				if (view.phase !== 'ready') return;
-				const data = view.data;
-				if (live.siteHealth) data.summary.siteHealth = live.siteHealth;
-				if (live.monitors?.length) data.monitoring = { monitors: live.monitors };
-				if (live.performance?.length) data.performance = live.performance;
-				view = { phase: 'ready', data: { ...data } };
-				syncedAt = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+			const [mon, wl] = await Promise.all([
+				fetch('/portal/monitoring', { cache: 'no-store' })
+					.then((r) => (r.ok ? r.json() : null))
+					.catch(() => null),
+				fetch('/portal/waitlist', { cache: 'no-store' })
+					.then((r) => (r.ok ? r.json() : null))
+					.catch(() => null)
+			]);
+			if (view.phase !== 'ready') return;
+			const data = view.data;
+			if (mon) {
+				if (mon.siteHealth) data.summary.siteHealth = mon.siteHealth;
+				if (mon.monitors?.length) data.monitoring = { monitors: mon.monitors };
+				if (mon.performance?.length) data.performance = mon.performance;
 			}
+			if (wl?.signups) data.waitlist = { total: wl.total, signups: wl.signups };
+			view = { phase: 'ready', data: { ...data } };
+			syncedAt = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 		} catch (e) {
 			// keep the committed snapshot on any failure
 		} finally {
@@ -102,6 +110,9 @@
 						{syncing}
 						{syncedAt}
 					/>
+				{/if}
+				{#if view.data.waitlist}
+					<Waitlist waitlist={view.data.waitlist} />
 				{/if}
 				<SummaryBlock summary={view.data.summary} />
 				<DeliveryLog delivery={view.data.delivery} />

@@ -99,6 +99,19 @@ export interface PortalMonitoring {
 	monitors: UptimeMonitor[];
 }
 
+/** One launch-list signup, read live from the client's D1 waitlist. */
+export interface WaitlistSignup {
+	email: string;
+	phone?: string | null;
+	source?: string | null;
+	created_at: string;
+}
+
+export interface PortalWaitlist {
+	total: number;
+	signups: WaitlistSignup[];
+}
+
 export interface PortalData {
 	client: PortalClient;
 	summary: PortalSummary;
@@ -110,4 +123,6 @@ export interface PortalData {
 	nextUp: NextUpEntry[];
 	/** Optional status-page style uptime block (fed live by UptimeRobot). */
 	monitoring?: PortalMonitoring;
+	/** Optional live launch-list signups (fed live from D1). */
+	waitlist?: PortalWaitlist;
 }
