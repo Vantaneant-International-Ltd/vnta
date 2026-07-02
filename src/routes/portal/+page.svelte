@@ -21,7 +21,9 @@
 		| { phase: 'denied' }
 		| { phase: 'ready'; data: PortalData };
 
-	let state = $state<State>({ phase: 'loading' });
+	let view: State = $state({ phase: 'loading' });
+	let syncing = $state(false);
+	let syncedAt: string | null = $state(null);
 
 	onMount(async () => {
 		// Access is enforced at the edge; here we only pick the one file this
@@ -29,12 +31,40 @@
 		const email = await getAuthenticatedEmail();
 		const clientId = resolveClientId(email);
 		if (!clientId) {
-			state = { phase: 'denied' };
+			view = { phase: 'denied' };
 			return;
 		}
 		const data = await loadClientData(clientId);
-		state = data ? { phase: 'ready', data } : { phase: 'denied' };
+		if (!data) {
+			view = { phase: 'denied' };
+			return;
+		}
+		view = { phase: 'ready', data };
+		syncLive();
 	});
+
+	// Overlay the committed snapshot with live data from the edge Function.
+	async function syncLive() {
+		if (view.phase !== 'ready' || syncing) return;
+		syncing = true;
+		try {
+			const r = await fetch('/portal/monitoring', { cache: 'no-store' });
+			if (r.ok) {
+				const live = await r.json();
+				if (view.phase !== 'ready') return;
+				const data = view.data;
+				if (live.siteHealth) data.summary.siteHealth = live.siteHealth;
+				if (live.monitors?.length) data.monitoring = { monitors: live.monitors };
+				if (live.performance?.length) data.performance = live.performance;
+				view = { phase: 'ready', data: { ...data } };
+				syncedAt = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+			}
+		} catch (e) {
+			// keep the committed snapshot on any failure
+		} finally {
+			syncing = false;
+		}
+	}
 </script>
 
 <svelte:head>
@@ -45,15 +75,15 @@
 
 <div class="portal-shell">
 	<div class="portal-col">
-		<PortalTopbar client={state.phase === 'ready' ? state.data.client : undefined} />
+		<PortalTopbar client={view.phase === 'ready' ? view.data.client : undefined} />
 
 		<main class="portal-body">
-			{#if state.phase === 'loading'}
+			{#if view.phase === 'loading'}
 				<div class="p-state" aria-live="polite">
 					<p class="eyebrow">Client Portal</p>
 					<p class="p-state__note">Loading your record.</p>
 				</div>
-			{:else if state.phase === 'denied'}
+			{:else if view.phase === 'denied'}
 				<div class="p-state">
 					<p class="eyebrow">Client Portal</p>
 					<h1 class="p-state__title">No portal for this account.</h1>
@@ -63,16 +93,22 @@
 					</p>
 				</div>
 			{:else}
-				<PortalMasthead client={state.data.client} />
-				{#if state.data.monitoring}
-					<Monitoring monitoring={state.data.monitoring} health={state.data.summary.siteHealth} />
+				<PortalMasthead client={view.data.client} />
+				{#if view.data.monitoring}
+					<Monitoring
+						monitoring={view.data.monitoring}
+						health={view.data.summary.siteHealth}
+						onsync={syncLive}
+						{syncing}
+						{syncedAt}
+					/>
 				{/if}
-				<SummaryBlock summary={state.data.summary} />
-				<DeliveryLog delivery={state.data.delivery} />
-				<SecurityAudits security={state.data.security} audits={state.data.audits} />
-				<Performance performance={state.data.performance} />
-				<FilesList files={state.data.files} />
-				<NextUp nextUp={state.data.nextUp} />
+				<SummaryBlock summary={view.data.summary} />
+				<DeliveryLog delivery={view.data.delivery} />
+				<SecurityAudits security={view.data.security} audits={view.data.audits} />
+				<Performance performance={view.data.performance} />
+				<FilesList files={view.data.files} />
+				<NextUp nextUp={view.data.nextUp} />
 			{/if}
 		</main>
 

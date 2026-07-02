@@ -391,6 +391,33 @@
 }
 
 /* --- Uptime (status-page style, monochrome) -------------------------------- */
+.p-shead__meta {
+	display: inline-flex;
+	align-items: center;
+	gap: 12px;
+}
+.p-sync {
+	font-family: var(--font-mono);
+	font-size: 0.6rem;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--ink-50);
+	background: transparent;
+	border: 1px solid var(--ink-20);
+	border-radius: var(--radius);
+	padding: 5px 11px;
+	cursor: pointer;
+	transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.p-sync:hover:not(:disabled) {
+	border-color: var(--ink);
+	color: var(--ink);
+}
+.p-sync:disabled {
+	opacity: 0.5;
+	cursor: default;
+}
+
 .p-status {
 	display: flex;
 	align-items: center;

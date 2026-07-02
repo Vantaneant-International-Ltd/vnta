@@ -1,7 +1,19 @@
 <script lang="ts">
 	import type { PortalMonitoring, UptimeMonitor } from '../content/types';
 
-	let { monitoring, health }: { monitoring: PortalMonitoring; health: string } = $props();
+	let {
+		monitoring,
+		health,
+		onsync,
+		syncing = false,
+		syncedAt = null
+	}: {
+		monitoring: PortalMonitoring;
+		health: string;
+		onsync?: () => void;
+		syncing?: boolean;
+		syncedAt?: string | null;
+	} = $props();
 
 	const DAYS = 90;
 	// Fixed 90-day strip. Real per-day history when present; otherwise all-operational
@@ -19,7 +31,14 @@
 <section class="p-section" aria-labelledby="p-uptime-h">
 	<div class="p-shead">
 		<h2 class="p-shead__name" id="p-uptime-h">Uptime</h2>
-		<span class="p-shead__meta">Last 90 days</span>
+		<span class="p-shead__meta">
+			<span>{syncedAt ? `Synced ${syncedAt}` : 'Last 90 days'}</span>
+			{#if onsync}
+				<button type="button" class="p-sync" onclick={onsync} disabled={syncing}>
+					{syncing ? 'Syncing' : 'Sync'}
+				</button>
+			{/if}
+		</span>
 	</div>
 
 	<div class="p-status">
