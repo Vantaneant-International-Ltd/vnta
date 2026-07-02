@@ -19,7 +19,7 @@ export const CLIENT_BY_EMAIL: Record<string, string> = {
 	'buildt.ireland@gmail.com': 'andrew',
 	// Renato + Kevin (VNTA operators), mapped to Andrew's record to view the portal.
 	'renato@vnta.xyz': 'andrew',
-	'singpurwalakevin@gmail.com': 'andrew'
+	'kevin@vnta.xyz': 'andrew'
 };
 
 /**
