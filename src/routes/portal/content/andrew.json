@@ -6,27 +6,51 @@
 		"periodLabel": "July 2026"
 	},
 	"summary": {
-		"headline": "TODO: one line on where the site stands this period.",
-		"note": "TODO: two or three plain sentences on what shipped and what is underway. No marketing adjectives.",
-		"siteHealth": "TODO: status (e.g. Operational)"
+		"headline": "Site live on buildt.ie, first managed cycle underway.",
+		"note": "BUILDT launched at the end of June on Cloudflare. The one-time build is complete and paid in full. The managed plan begins billing on 1 August; a baseline security audit is scheduled for the week before. Full record below.",
+		"siteHealth": "Operational"
 	},
 	"delivery": [
 		{
-			"date": "TODO date",
-			"category": "TODO: Feature / Optimisation / Launch",
-			"title": "TODO: what was delivered",
-			"detail": "TODO: one plain sentence of detail. Replace this entire array with the real delivery log."
+			"date": "30 Jun 2026",
+			"category": "Launch",
+			"title": "Deployed to Cloudflare Pages",
+			"detail": "Site went live on buildt.ie, built on Cloudflare Pages with an automated GitHub Actions deploy."
 		},
 		{
-			"date": "TODO date",
-			"category": "TODO category",
-			"title": "TODO: second delivery entry",
-			"detail": "TODO: detail."
+			"date": "30 Jun 2026",
+			"category": "Feature",
+			"title": "Admin panel and launch list",
+			"detail": "Password-gated admin panel, plus a launch-list signup that persists to a Cloudflare D1 waitlist."
+		},
+		{
+			"date": "30 Jun 2026",
+			"category": "Feature",
+			"title": "Monitoring and access gate",
+			"detail": "Sentry error monitoring, a health probe, and access gating so the full site could be previewed before launch."
+		},
+		{
+			"date": "27 Jun 2026",
+			"category": "Feature",
+			"title": "PC configurator",
+			"detail": "Configurator rebuilt around a Value default with live price deltas and twelve case and lighting renders."
+		},
+		{
+			"date": "27 Jun 2026",
+			"category": "Feature",
+			"title": "Homepage and build flow",
+			"detail": "Section structure locked and the build-your-own entry point shipped."
+		},
+		{
+			"date": "20 Jun 2026",
+			"category": "Implementation",
+			"title": "Project kickoff",
+			"detail": "Custom Svelte build scaffolded and the brand emblem and identity set."
 		}
 	],
 	"security": {
-		"lastAuditDate": "TODO date",
-		"cadence": "TODO: cadence (e.g. Monthly)",
+		"lastAuditDate": "Scheduled, week of 27 July 2026",
+		"cadence": "Monthly",
 		"findings": {
 			"critical": null,
 			"high": null,
@@ -34,39 +58,47 @@
 			"low": null
 		},
 		"notes": [
-			"TODO: replace with the real audit notes. Do not state findings until an audit has run."
+			"Baseline security audit is scheduled for the week before the managed plan begins on 1 August. Findings will be reported here once it has run."
 		]
 	},
 	"audits": [
 		{
-			"date": "TODO date",
-			"type": "TODO: Security / Accessibility / Dependency",
-			"result": "TODO: result (e.g. Scheduled)"
+			"date": "Week of 27 Jul 2026",
+			"type": "Security, baseline",
+			"result": "Scheduled"
 		}
 	],
 	"performance": [
 		{
-			"date": "TODO date",
-			"title": "TODO: performance check",
-			"metric": "TODO",
-			"detail": "TODO: what was measured and where. Replace with the real report figures."
+			"date": "July 2026",
+			"title": "Baseline performance check",
+			"detail": "Captured in the first monitoring cycle, before the managed plan begins. Figures reported here once measured."
 		}
 	],
 	"files": [
 		{
-			"name": "TODO: document name",
-			"kind": "TODO: PDF",
-			"href": "#TODO-file-url"
+			"name": "Invoice VNTA-2026-001",
+			"kind": "PDF",
+			"href": "/portal/files/invoice-VNTA-2026-001.pdf"
+		},
+		{
+			"name": "Managed service agreement, signed",
+			"kind": "PDF",
+			"href": "/portal/files/agreement-VNTA-A-2026-001.pdf"
 		}
 	],
 	"nextUp": [
 		{
-			"title": "TODO: next queued item",
-			"eta": "TODO"
+			"title": "Mobile layout pass: resolve horizontal scroll",
+			"eta": "July"
 		},
 		{
-			"title": "TODO: second queued item",
-			"eta": "TODO"
+			"title": "Baseline security audit",
+			"eta": "Late July"
+		},
+		{
+			"title": "Managed plan billing begins",
+			"eta": "1 August"
 		}
 	]
 }
