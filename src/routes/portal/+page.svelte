@@ -12,6 +12,7 @@
 	import DeliveryLog from './components/DeliveryLog.svelte';
 	import SecurityAudits from './components/SecurityAudits.svelte';
 	import Performance from './components/Performance.svelte';
+	import Monitoring from './components/Monitoring.svelte';
 	import FilesList from './components/FilesList.svelte';
 	import NextUp from './components/NextUp.svelte';
 
@@ -67,6 +68,9 @@
 				<DeliveryLog delivery={state.data.delivery} />
 				<SecurityAudits security={state.data.security} audits={state.data.audits} />
 				<Performance performance={state.data.performance} />
+				{#if state.data.monitoring}
+					<Monitoring monitoring={state.data.monitoring} health={state.data.summary.siteHealth} />
+				{/if}
 				<FilesList files={state.data.files} />
 				<NextUp nextUp={state.data.nextUp} />
 			{/if}

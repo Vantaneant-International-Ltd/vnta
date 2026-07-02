@@ -87,6 +87,12 @@
 			"href": "/portal/files/agreement-VNTA-A-2026-001.pdf"
 		}
 	],
+	"monitoring": {
+		"label": "Monitoring begins 1 August",
+		"monitors": [
+			{ "name": "buildt.ie" }
+		]
+	},
 	"nextUp": [
 		{
 			"title": "Mobile layout pass: resolve horizontal scroll",

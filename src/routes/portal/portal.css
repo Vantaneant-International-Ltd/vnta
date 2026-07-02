@@ -413,6 +413,95 @@
 	white-space: nowrap;
 }
 
+/* --- Uptime (status-page style, monochrome) -------------------------------- */
+.p-status {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	margin-top: var(--s-8);
+	border: 1px solid var(--line);
+	border-radius: var(--radius);
+	padding: 15px 18px;
+}
+.p-status__dot {
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: var(--ink-50);
+	flex: none;
+}
+.p-status__label {
+	font-size: 1rem;
+	font-weight: 600;
+	color: var(--ink);
+}
+.p-status__note {
+	margin-left: auto;
+	font-family: var(--font-mono);
+	font-size: 0.6rem;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--ink-50);
+	text-align: right;
+}
+.p-monitors {
+	list-style: none;
+	padding: 0;
+	margin: var(--s-6) 0 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--s-8);
+}
+.p-monitor__head {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: 12px;
+	margin-bottom: 9px;
+}
+.p-monitor__name {
+	font-size: 0.95rem;
+	font-weight: 600;
+	color: var(--ink);
+}
+.p-monitor__pct {
+	font-family: var(--font-mono);
+	font-size: 0.66rem;
+	letter-spacing: 0.06em;
+	color: var(--ink-50);
+	white-space: nowrap;
+}
+/* 90 daily bars; ink = operational, ink-50 = incident, ink-20 = no data. */
+.p-strip {
+	display: flex;
+	gap: 1px;
+	height: 30px;
+	align-items: stretch;
+	overflow: hidden;
+}
+.p-bar {
+	flex: 1 1 0;
+	min-width: 0;
+	background: var(--ink-20);
+	border-radius: 1px;
+}
+.p-bar[data-s='1'] {
+	background: var(--ink);
+}
+.p-bar[data-s='2'] {
+	background: var(--ink-50);
+}
+.p-strip__ends {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 7px;
+	font-family: var(--font-mono);
+	font-size: 0.54rem;
+	letter-spacing: 0.12em;
+	text-transform: uppercase;
+	color: var(--ink-35);
+}
+
 /* --- Next up ---------------------------------------------------------------- */
 .p-next {
 	margin-top: var(--s-8);

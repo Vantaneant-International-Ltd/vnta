@@ -84,6 +84,21 @@ export interface NextUpEntry {
 	eta: string;
 }
 
+/** One monitored endpoint, status-page style. */
+export interface UptimeMonitor {
+	name: string;
+	/** e.g. "99.98%". Omit until monitoring has run. */
+	uptime?: string;
+	/** Up to 90 daily states, oldest first: 0 no data, 1 operational, 2 incident. */
+	days?: number[];
+}
+
+export interface PortalMonitoring {
+	/** Short caption, e.g. "Monitoring begins 1 August". */
+	label?: string;
+	monitors: UptimeMonitor[];
+}
+
 export interface PortalData {
 	client: PortalClient;
 	summary: PortalSummary;
@@ -93,4 +108,6 @@ export interface PortalData {
 	performance: PerformanceEntry[];
 	files: FileEntry[];
 	nextUp: NextUpEntry[];
+	/** Optional status-page style uptime block (fed live by UptimeRobot). */
+	monitoring?: PortalMonitoring;
 }
