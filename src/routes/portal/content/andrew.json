@@ -15,37 +15,73 @@
 			"date": "30 Jun 2026",
 			"category": "Launch",
 			"title": "Deployed to Cloudflare Pages",
-			"detail": "Site went live on buildt.ie, built on Cloudflare Pages with an automated GitHub Actions deploy."
+			"detail": "Site went live on buildt.ie, on Cloudflare Pages, with an automated deploy on every change."
 		},
 		{
 			"date": "30 Jun 2026",
 			"category": "Feature",
-			"title": "Admin panel and launch list",
-			"detail": "Password-gated admin panel, plus a launch-list signup that persists to a Cloudflare D1 waitlist."
+			"title": "Coming-soon page and launch list",
+			"detail": "Pre-launch holding page with an email launch-list signup, so interest is captured before opening."
 		},
 		{
 			"date": "30 Jun 2026",
 			"category": "Feature",
-			"title": "Monitoring and access gate",
-			"detail": "Sentry error monitoring, a health probe, and access gating so the full site could be previewed before launch."
+			"title": "Launch list stored in your database",
+			"detail": "Signups persist to a Cloudflare D1 waitlist table, the same list shown in this portal."
+		},
+		{
+			"date": "30 Jun 2026",
+			"category": "Feature",
+			"title": "Admin panel",
+			"detail": "Password-gated admin, including an editor for the configurator's expected-performance figures."
+		},
+		{
+			"date": "30 Jun 2026",
+			"category": "Feature",
+			"title": "Monitoring and pre-launch access",
+			"detail": "Error monitoring, a health probe, and a preview flag so the full site could be reviewed before going public."
+		},
+		{
+			"date": "29 Jun 2026",
+			"category": "Feature",
+			"title": "Workshop location map",
+			"detail": "A live map pinned to the workshop Eircode on Contact and the homepage, tinted to sit in the dark UI."
 		},
 		{
 			"date": "27 Jun 2026",
 			"category": "Feature",
 			"title": "PC configurator",
-			"detail": "Configurator rebuilt around a Value default with live price deltas and twelve case and lighting renders."
+			"detail": "Build flow around a Value default with live price deltas, RGB and Gen5 upgrade toggles, and a consult option."
+		},
+		{
+			"date": "27 Jun 2026",
+			"category": "Feature",
+			"title": "Configurator case previews",
+			"detail": "Twelve case and lighting renders, four cases across three lightings, so the look updates as you build."
 		},
 		{
 			"date": "27 Jun 2026",
 			"category": "Feature",
 			"title": "Homepage and build flow",
-			"detail": "Section structure locked and the build-your-own entry point shipped."
+			"detail": "Homepage with the build-your-own entry point, a recently-sold marquee, and gaming-first copy."
+		},
+		{
+			"date": "27 Jun 2026",
+			"category": "Feature",
+			"title": "Core pages built",
+			"detail": "Builds, Stock, Services, About, Contact, and FAQ pages, in your voice and content."
+		},
+		{
+			"date": "27 Jun 2026",
+			"category": "Design",
+			"title": "Brand identity applied",
+			"detail": "Your emblem and wordmark set site-wide, with a matching gradient favicon and card styling."
 		},
 		{
 			"date": "20 Jun 2026",
 			"category": "Implementation",
 			"title": "Project kickoff",
-			"detail": "Custom Svelte build scaffolded and the brand emblem and identity set."
+			"detail": "Custom Svelte build scaffolded and the site structure set."
 		}
 	],
 	"incidents": [

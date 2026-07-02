@@ -606,6 +606,24 @@
 	white-space: nowrap;
 	text-align: right;
 }
+.p-wait__more {
+	margin-top: var(--s-4);
+	font-family: var(--font-mono);
+	font-size: 0.6rem;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--ink-50);
+	background: transparent;
+	border: 1px solid var(--ink-20);
+	border-radius: var(--radius);
+	padding: 7px 13px;
+	cursor: pointer;
+	transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.p-wait__more:hover {
+	border-color: var(--ink);
+	color: var(--ink);
+}
 @media (max-width: 680px) {
 	.p-wait__row {
 		grid-template-columns: 1fr auto;
