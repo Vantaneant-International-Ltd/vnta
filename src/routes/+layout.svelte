@@ -44,6 +44,9 @@
 		!atmoPath.startsWith('/portal') && !atmoPath.startsWith('/admin')
 	);
 	const atmoIntensity = $derived<'hero' | 'dense'>(atmoPath === '/' ? 'hero' : 'dense');
+	// The portal is a self-contained module with its own lean chrome (slim top bar
+	// + short footer), so it does NOT inherit the marketing header/footer.
+	const bareChrome = $derived(atmoPath.startsWith('/portal'));
 	// ---------------------------------------------------------------------------
 
 	// Svelte 5 runes (SvelteKit 2)
@@ -155,7 +158,8 @@
 	{/if}
 	{#key $page.url.pathname}
 		<div class="page" in:fade={{ duration: 140 }}>
-			<header class="site-header" aria-label="VNTA header">
+			{#if !bareChrome}
+				<header class="site-header" aria-label="VNTA header">
 				<div class="site-header__inner">
 					<a class="brand" href="{base}/" aria-label="VNTA home" onclick={closeMobile}>
 						<Wordmark height={26} />
@@ -213,11 +217,14 @@
 				{/if}
 			</header>
 
-			<main class="site-main">
+			{/if}
+
+				<main class="site-main">
 				{@render children()}
 			</main>
 
-			<footer class="site-footer" aria-label="VNTA footer">
+			{#if !bareChrome}
+				<footer class="site-footer" aria-label="VNTA footer">
 				<div class="site-footer__inner">
 					<!-- Masthead -->
 					<div class="footer-top">
@@ -304,6 +311,7 @@
 					</div>
 				</div>
 			</footer>
+			{/if}
 		</div>
 	{/key}
 </div>

@@ -7,17 +7,121 @@
    one file so the isolated module lifts cleanly.
    ========================================================================== */
 
-.portal {
+/* --- Light institutional palette — scoped to the portal ONLY ---------------
+   Overrides the dark site tokens locally so p- classes render light without a
+   separate stylesheet. Values from the client-portal mockup. */
+.portal-shell {
+	--paper: #ffffff;
+	--paper-2: #f6f7f8;
+	--ink: #0b0c0e;
+	--ink-85: #3a3d42;
+	--ink-70: #4a4e54;
+	--ink-50: #6b6f76;
+	--ink-35: #9a9ea5;
+	--ink-20: #c3c6ca;
+	--line: #dcdee1;
+	--line-soft: #e7e8ea;
+	--section-y: clamp(30px, 5vw, 42px);
+	--portal-pad: clamp(22px, 5vw, 52px);
+
+	min-height: 100vh;
+	background: #eceded;
+	color: var(--ink);
+	font-family: var(--font-body);
 	overflow-x: hidden;
 }
 
-/* --- Masthead --------------------------------------------------------------- */
-.p-mast {
+/* White document column on the grey page. */
+.portal-col {
+	max-width: 960px;
+	margin: 0 auto;
+	min-height: 100vh;
+	background: var(--paper);
+	border-left: 1px solid var(--line);
+	border-right: 1px solid var(--line);
 	display: flex;
-	align-items: flex-start;
+	flex-direction: column;
+}
+.portal-body {
+	flex: 1 0 auto;
+	padding: 0 var(--portal-pad) clamp(48px, 7vw, 72px);
+}
+
+/* --- Top bar: wordmark + who + sign out ------------------------------------ */
+.p-top {
+	display: flex;
+	align-items: center;
 	justify-content: space-between;
-	gap: var(--s-6);
-	flex-wrap: wrap;
+	gap: 16px;
+	padding: 20px var(--portal-pad);
+	border-bottom: 1px solid var(--ink);
+}
+.p-top__word {
+	color: var(--ink);
+	display: inline-flex;
+}
+.p-top__right {
+	display: flex;
+	align-items: center;
+	gap: 16px;
+}
+.p-top__id {
+	text-align: right;
+	line-height: 1.3;
+}
+.p-top__n {
+	font-size: 13px;
+	font-weight: 600;
+	color: var(--ink);
+}
+.p-top__r {
+	font-family: var(--font-mono);
+	font-size: 10px;
+	letter-spacing: 1.4px;
+	text-transform: uppercase;
+	color: var(--ink-35);
+	margin-top: 2px;
+}
+.p-top__out {
+	font-family: var(--font-mono);
+	font-size: 10px;
+	letter-spacing: 1.6px;
+	text-transform: uppercase;
+	color: var(--ink-50);
+	border: 1px solid var(--ink-20);
+	border-radius: var(--radius);
+	padding: 8px 12px;
+	white-space: nowrap;
+	transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.p-top__out:hover {
+	border-color: var(--ink);
+	color: var(--ink);
+}
+
+/* --- Short footer ----------------------------------------------------------- */
+.p-foot {
+	padding: clamp(28px, 4vw, 34px) var(--portal-pad) clamp(36px, 5vw, 44px);
+	border-top: 1px solid var(--ink);
+	background: #fafafb;
+}
+.p-foot__word {
+	color: var(--ink);
+	display: inline-flex;
+}
+.p-foot__l {
+	font-family: var(--font-mono);
+	font-size: 10.5px;
+	letter-spacing: 0.4px;
+	color: var(--ink-50);
+	margin-top: 12px;
+	line-height: 1.9;
+}
+
+/* --- Masthead (hero) -------------------------------------------------------- */
+.p-mast {
+	padding: clamp(34px, 5vw, 46px) 0 clamp(28px, 4vw, 38px);
+	border-bottom: 1px solid var(--line);
 }
 .p-mast__eyebrows {
 	display: flex;
@@ -46,22 +150,6 @@
 	font-size: var(--t-lede);
 	line-height: 1.55;
 	color: var(--ink-85);
-}
-.p-mast__signout {
-	font-family: var(--font-mono);
-	font-size: 0.66rem;
-	letter-spacing: 0.16em;
-	text-transform: uppercase;
-	color: var(--ink-50);
-	border: 1px solid var(--line);
-	border-radius: var(--radius);
-	padding: 9px 13px;
-	white-space: nowrap;
-	transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
-}
-.p-mast__signout:hover {
-	border-color: var(--ink);
-	color: var(--ink);
 }
 
 /* Monochrome health indicator (no decorative colour). */
@@ -378,6 +466,10 @@
 
 /* --- Responsive ------------------------------------------------------------- */
 @media (max-width: 680px) {
+	/* Keep the sign-out; drop the identity text to save width (mockup behaviour). */
+	.p-top__id {
+		display: none;
+	}
 	.p-grid {
 		grid-template-columns: 1fr;
 	}
