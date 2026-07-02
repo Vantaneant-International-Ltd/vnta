@@ -1,9 +1,9 @@
 {
 	"client": {
-		"name": "Andrew (TODO: confirm full name)",
-		"plan": "TODO: plan (e.g. Managed)",
-		"since": "TODO: YYYY-MM",
-		"periodLabel": "TODO: reporting period (e.g. August 2026)"
+		"name": "Andrew Paul Cozma",
+		"plan": "Managed",
+		"since": "June 2026",
+		"periodLabel": "July 2026"
 	},
 	"summary": {
 		"headline": "TODO: one line on where the site stands this period.",
