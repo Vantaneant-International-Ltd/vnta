@@ -44,8 +44,11 @@ export async function onRequest(context) {
 	}
 
 	try {
+		const psiKey = env.GOOGLE_PSI_API_KEY;
 		const psi = await fetch(
-			'https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=https://buildt.ie&strategy=mobile'
+			'https://www.googleapis.com/pagespeedonline/v5/runPagespeed?url=https://buildt.ie&strategy=mobile' +
+				'&category=performance&category=accessibility&category=best-practices&category=seo' +
+				(psiKey ? `&key=${psiKey}` : '')
 		);
 		const pd = await psi.json();
 		const cats = pd && pd.lighthouseResult && pd.lighthouseResult.categories;
