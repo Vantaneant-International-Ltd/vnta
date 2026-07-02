@@ -17,9 +17,9 @@
 export const CLIENT_BY_EMAIL: Record<string, string> = {
 	// Andrew (BUILDT). Must match the email invited in the Cloudflare Access policy.
 	'buildt.ireland@gmail.com': 'andrew',
-	// Renato, mapped to Andrew's record for previewing through Access. Remove or
-	// repoint when a real second client exists.
-	'renato@vnta.xyz': 'andrew'
+	// Renato + Kevin (VNTA operators), mapped to Andrew's record to view the portal.
+	'renato@vnta.xyz': 'andrew',
+	'singpurwalakevin@gmail.com': 'andrew'
 };
 
 /**
