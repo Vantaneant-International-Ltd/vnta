@@ -48,6 +48,15 @@
 			"detail": "Custom Svelte build scaffolded and the brand emblem and identity set."
 		}
 	],
+	"incidents": [
+		{
+			"date": "2 Jul 2026",
+			"title": "Pre-launch gate briefly open",
+			"impact": "buildt.ie was publicly reachable for a short window. The admin stayed protected.",
+			"status": "Resolved",
+			"detail": "A deploy reset the production configuration and dropped the coming-soon flag. Restored in the same session. The waitlist and all data were unaffected."
+		}
+	],
 	"security": {
 		"lastAuditDate": "Scheduled, week of 27 July 2026",
 		"cadence": "Monthly",

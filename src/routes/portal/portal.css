@@ -506,6 +506,58 @@
 	color: var(--ink-35);
 }
 
+/* --- Incidents (status-page history) --------------------------------------- */
+.p-inc {
+	list-style: none;
+	padding: 0;
+	margin: var(--s-8) 0 0;
+}
+.p-inc__row {
+	padding: var(--s-6) 0;
+	border-bottom: 1px solid var(--line-soft);
+}
+.p-inc__row:first-child {
+	border-top: 1px solid var(--line);
+}
+.p-inc__row:last-child {
+	border-bottom: 0;
+}
+.p-inc__top {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: var(--s-4);
+}
+.p-inc__title {
+	font-size: 1rem;
+	font-weight: 600;
+	color: var(--ink);
+}
+.p-inc__status {
+	font-family: var(--font-mono);
+	font-size: 0.6rem;
+	letter-spacing: 0.14em;
+	text-transform: uppercase;
+	color: var(--ink-50);
+	border: 1px solid var(--ink-20);
+	border-radius: var(--radius);
+	padding: 4px 9px;
+	white-space: nowrap;
+}
+.p-inc__meta {
+	margin-top: 6px;
+	font-family: var(--font-mono);
+	font-size: 0.68rem;
+	color: var(--ink-50);
+}
+.p-inc__detail {
+	margin: 8px 0 0;
+	font-size: 0.94rem;
+	line-height: 1.6;
+	color: var(--ink-70);
+	max-width: var(--measure);
+}
+
 /* --- Waitlist (live D1 signups) -------------------------------------------- */
 .p-wait {
 	list-style: none;

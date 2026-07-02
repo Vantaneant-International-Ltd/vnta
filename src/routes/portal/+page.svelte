@@ -13,6 +13,7 @@
 	import SecurityAudits from './components/SecurityAudits.svelte';
 	import Performance from './components/Performance.svelte';
 	import Monitoring from './components/Monitoring.svelte';
+	import Incidents from './components/Incidents.svelte';
 	import Waitlist from './components/Waitlist.svelte';
 	import FilesList from './components/FilesList.svelte';
 	import NextUp from './components/NextUp.svelte';
@@ -110,6 +111,9 @@
 						{syncing}
 						{syncedAt}
 					/>
+				{/if}
+				{#if view.data.incidents?.length}
+					<Incidents incidents={view.data.incidents} />
 				{/if}
 				{#if view.data.waitlist}
 					<Waitlist waitlist={view.data.waitlist} />

@@ -112,10 +112,22 @@ export interface PortalWaitlist {
 	signups: WaitlistSignup[];
 }
 
+/** A recorded operational incident, shown to the client (status-page style). */
+export interface IncidentEntry {
+	date: string;
+	title: string;
+	/** One line on who/what was affected. */
+	impact: string;
+	/** "Resolved", "Monitoring", "Investigating". */
+	status: string;
+	detail: string;
+}
+
 export interface PortalData {
 	client: PortalClient;
 	summary: PortalSummary;
 	delivery: DeliveryEntry[];
+	incidents?: IncidentEntry[];
 	security: SecurityBlock;
 	audits: AuditEntry[];
 	performance: PerformanceEntry[];
