@@ -139,7 +139,7 @@ export interface PortalData {
 	incidents?: IncidentEntry[];
 	security: SecurityBlock;
 	audits: AuditEntry[];
-	performance: PerformanceEntry[];
+	performance?: PerformanceReport;
 	files: FileEntry[];
 	nextUp: NextUpEntry[];
 	/** Optional status-page style uptime block (fed live by UptimeRobot). */
