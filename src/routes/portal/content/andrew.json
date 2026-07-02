@@ -10,6 +10,10 @@
 		"note": "BUILDT launched at the end of June on Cloudflare. The one-time build is complete and paid in full. The managed plan begins billing on 1 August; a baseline security audit is scheduled for the week before. Full record below.",
 		"siteHealth": "Operational"
 	},
+	"billing": {
+		"date": "1 Aug",
+		"note": "baseline audit week prior"
+	},
 	"delivery": [
 		{
 			"date": "30 Jun 2026",

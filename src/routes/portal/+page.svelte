@@ -7,7 +7,7 @@
 
 	import PortalTopbar from './components/PortalTopbar.svelte';
 	import PortalFooter from './components/PortalFooter.svelte';
-	import PortalMasthead from './components/PortalMasthead.svelte';
+	import Kpis from './components/Kpis.svelte';
 	import SummaryBlock from './components/SummaryBlock.svelte';
 	import DeliveryLog from './components/DeliveryLog.svelte';
 	import SecurityAudits from './components/SecurityAudits.svelte';
@@ -102,11 +102,16 @@
 					</p>
 				</div>
 			{:else}
-				<PortalMasthead client={view.data.client} />
+				<SummaryBlock summary={view.data.summary} />
+				<Kpis
+					health={view.data.summary.siteHealth}
+					monitoring={view.data.monitoring}
+					waitlist={view.data.waitlist}
+					billing={view.data.billing}
+				/>
 				{#if view.data.monitoring}
 					<Monitoring
 						monitoring={view.data.monitoring}
-						health={view.data.summary.siteHealth}
 						onsync={syncLive}
 						{syncing}
 						{syncedAt}
@@ -118,7 +123,6 @@
 				{#if view.data.waitlist}
 					<Waitlist waitlist={view.data.waitlist} />
 				{/if}
-				<SummaryBlock summary={view.data.summary} />
 				<DeliveryLog delivery={view.data.delivery} />
 				<SecurityAudits security={view.data.security} audits={view.data.audits} />
 				{#if view.data.performance}

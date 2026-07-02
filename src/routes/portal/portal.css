@@ -21,6 +21,10 @@
 	--ink-20: #c3c6ca;
 	--line: #dcdee1;
 	--line-soft: #e7e8ea;
+	/* Functional status accents (dashboard only, not the marketing brand). */
+	--ok: #2f6f4f;
+	--warn: #9a6a12;
+	--bad: #a3392f;
 	--section-y: clamp(30px, 5vw, 42px);
 	--portal-pad: clamp(22px, 5vw, 52px);
 
@@ -66,21 +70,33 @@
 	gap: 16px;
 }
 .p-top__id {
-	text-align: right;
-	line-height: 1.3;
+	display: flex;
+	flex-direction: column;
+	align-items: flex-end;
+	gap: 5px;
+	line-height: 1.2;
 }
-.p-top__n {
-	font-size: 13px;
-	font-weight: 600;
-	color: var(--ink);
-}
-.p-top__r {
+.p-top__period {
 	font-family: var(--font-mono);
 	font-size: 10px;
 	letter-spacing: 1.4px;
 	text-transform: uppercase;
 	color: var(--ink-35);
-	margin-top: 2px;
+}
+.p-top__n {
+	font-size: 14px;
+	font-weight: 600;
+	color: var(--ink);
+}
+.p-top__plan {
+	font-family: var(--font-mono);
+	font-size: 9.5px;
+	letter-spacing: 1.6px;
+	text-transform: uppercase;
+	color: var(--ok);
+	border: 1px solid rgba(47, 111, 79, 0.4);
+	border-radius: var(--radius);
+	padding: 3px 9px;
 }
 .p-top__out {
 	font-family: var(--font-mono);
@@ -116,6 +132,48 @@
 	color: var(--ink-50);
 	margin-top: 12px;
 	line-height: 1.9;
+}
+
+/* --- KPI cards (top summary row) ------------------------------------------- */
+.p-kpis {
+	margin-top: var(--section-y);
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: var(--s-4);
+}
+.p-kpi {
+	border: 1px solid var(--line);
+	border-radius: var(--radius);
+	background: var(--paper-2);
+	padding: var(--s-6) var(--s-6) var(--s-8);
+}
+.p-kpi__k {
+	font-family: var(--font-mono);
+	font-size: 0.6rem;
+	letter-spacing: 0.16em;
+	text-transform: uppercase;
+	color: var(--ink-50);
+}
+.p-kpi__v {
+	margin-top: var(--s-6);
+	font-family: var(--font-display);
+	font-size: 1.9rem;
+	letter-spacing: var(--track-tight);
+	line-height: 1;
+	color: var(--ink);
+}
+.p-kpi__v.ok {
+	color: var(--ok);
+}
+.p-kpi__sub {
+	margin-top: var(--s-3);
+	font-size: 0.86rem;
+	color: var(--ink-50);
+}
+@media (max-width: 680px) {
+	.p-kpis {
+		grid-template-columns: 1fr;
+	}
 }
 
 /* --- Masthead (hero) -------------------------------------------------------- */
@@ -372,6 +430,12 @@
 	letter-spacing: var(--track-tight);
 	color: var(--ink);
 	line-height: 1;
+}
+.p-perf__v.ok {
+	color: var(--ok);
+}
+.p-perf__v.warn {
+	color: var(--warn);
 }
 .p-perf__u {
 	font-family: var(--font-mono);

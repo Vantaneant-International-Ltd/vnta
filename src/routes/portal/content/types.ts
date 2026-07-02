@@ -132,9 +132,16 @@ export interface IncidentEntry {
 	duration?: string;
 }
 
+/** Key billing date shown in the top KPI cards. */
+export interface PortalBilling {
+	date: string;
+	note: string;
+}
+
 export interface PortalData {
 	client: PortalClient;
 	summary: PortalSummary;
+	billing?: PortalBilling;
 	delivery: DeliveryEntry[];
 	incidents?: IncidentEntry[];
 	security: SecurityBlock;

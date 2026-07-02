@@ -3,13 +3,11 @@
 
 	let {
 		monitoring,
-		health,
 		onsync,
 		syncing = false,
 		syncedAt = null
 	}: {
 		monitoring: PortalMonitoring;
-		health: string;
 		onsync?: () => void;
 		syncing?: boolean;
 		syncedAt?: string | null;
@@ -39,12 +37,6 @@
 				</button>
 			{/if}
 		</span>
-	</div>
-
-	<div class="p-status">
-		<span class="p-status__dot" aria-hidden="true"></span>
-		<span class="p-status__label">{health}</span>
-		{#if monitoring.label}<span class="p-status__note">{monitoring.label}</span>{/if}
 	</div>
 
 	<ul class="p-monitors">

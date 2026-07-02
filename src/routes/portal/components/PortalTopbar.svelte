@@ -18,8 +18,9 @@
 	<div class="p-top__right">
 		{#if client}
 			<div class="p-top__id">
+				<div class="p-top__period">Client Portal / {client.periodLabel}</div>
 				<div class="p-top__n">{client.name}</div>
-				<div class="p-top__r">{client.plan}</div>
+				<span class="p-top__plan">{client.plan}</span>
 			</div>
 		{/if}
 		<a class="p-top__out" href={signOutHref} data-sveltekit-reload>Sign out</a>

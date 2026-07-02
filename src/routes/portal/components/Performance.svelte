@@ -9,6 +9,14 @@
 		{ k: 'Best practices', v: performance.bestPractices },
 		{ k: 'SEO', v: performance.seo }
 	]);
+
+	// Lighthouse convention: 90+ good, under 60 poor.
+	function tone(v: number | null): string {
+		if (v == null) return '';
+		if (v >= 90) return 'ok';
+		if (v < 60) return 'warn';
+		return '';
+	}
 </script>
 
 <section class="p-section" aria-labelledby="p-perf-h">
@@ -21,7 +29,7 @@
 		{#each cells as c}
 			<div class="p-perf__cell">
 				<div class="p-perf__k">{c.k}</div>
-				<div class="p-perf__v">{c.v ?? '—'}<span class="p-perf__u">/100</span></div>
+				<div class="p-perf__v {tone(c.v)}">{c.v ?? '—'}<span class="p-perf__u">/100</span></div>
 			</div>
 		{/each}
 	</div>
