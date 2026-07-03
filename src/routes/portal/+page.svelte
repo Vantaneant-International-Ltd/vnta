@@ -7,6 +7,7 @@
 
 	import PortalTopbar from './components/PortalTopbar.svelte';
 	import PortalFooter from './components/PortalFooter.svelte';
+	import PortalMasthead from './components/PortalMasthead.svelte';
 	import Kpis from './components/Kpis.svelte';
 	import SummaryBlock from './components/SummaryBlock.svelte';
 	import DeliveryLog from './components/DeliveryLog.svelte';
@@ -84,7 +85,7 @@
 
 <div class="portal-shell">
 	<div class="portal-col">
-		<PortalTopbar client={view.phase === 'ready' ? view.data.client : undefined} />
+		<PortalTopbar />
 
 		<main class="portal-body">
 			{#if view.phase === 'loading'}
@@ -102,13 +103,14 @@
 					</p>
 				</div>
 			{:else}
-				<SummaryBlock summary={view.data.summary} />
+				<PortalMasthead client={view.data.client} />
 				<Kpis
 					health={view.data.summary.siteHealth}
 					monitoring={view.data.monitoring}
 					waitlist={view.data.waitlist}
 					billing={view.data.billing}
 				/>
+				<SummaryBlock summary={view.data.summary} />
 				{#if view.data.monitoring}
 					<Monitoring
 						monitoring={view.data.monitoring}
