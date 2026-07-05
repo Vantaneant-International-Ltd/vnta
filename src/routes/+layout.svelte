@@ -71,7 +71,6 @@
 			{ label: 'Engagement', href: `${base}/explore` },
 			{ label: 'Houses', href: `${base}/houses` },
 			{ label: 'Approach', href: `${base}/approach` },
-			{ label: 'Horizon', href: `${base}/horizon` },
 			{ label: 'Careers', href: `${base}/careers` }
 		],
 		legal: [
@@ -83,9 +82,9 @@
 
 	// The maisons, stewarded under VNTA. Windows per Horizon.
 	const footerMaisons = [
-		{ name: 'Vendr', status: 'March 2026', href: `${base}/houses` },
-		{ name: 'Eirvox', status: 'Summer 2026', href: `${base}/houses` },
-		{ name: 'Maison Seul', status: '2027', href: `${base}/houses` }
+		{ name: 'Vendr', href: `${base}/houses` },
+		{ name: 'Eirvox', href: `${base}/houses` },
+		{ name: 'Maison Seul', href: `${base}/houses` }
 	];
 
 	const foundedYear = 2025;
@@ -260,7 +259,6 @@
 								{#each footerMaisons as m}
 									<a class="footer-house" href={m.href}>
 										<span class="footer-house__name">{m.name}</span>
-										<span class="footer-house__status">{m.status}</span>
 									</a>
 								{/each}
 							</div>

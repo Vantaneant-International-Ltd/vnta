@@ -54,19 +54,6 @@
 	const timelineOptions = ['ASAP', '1 to 2 months', '3 to 6 months', '6 to 12 months', 'Not sure'];
 	const budgetOptions = ['< €5k', '€5k to €10k', '€10k to €20k', '€20k+', 'Not sure'];
 
-	function portal(node: HTMLElement, target = 'body') {
-		if (typeof document === 'undefined') return;
-		const targetEl = document.querySelector(target);
-		if (!targetEl) return;
-		const parent = node.parentNode;
-		targetEl.appendChild(node);
-		return {
-			destroy() {
-				if (parent) parent.appendChild(node);
-			}
-		};
-	}
-
 	let prevBodyOverflow = '';
 	let prevBodyPaddingRight = '';
 
@@ -225,7 +212,7 @@
 		</p>
 
 		<ul class="ledger">
-			<li>A diagnosis of brand, narrative, and market position</li>
+			<li>A Diagnosis of brand, narrative, and market position</li>
 			<li>A scoped plan with deliverables, timeline, and ownership</li>
 			<li>A clear recommendation: residency, a tailored sprint, or nothing</li>
 		</ul>
@@ -296,7 +283,7 @@
 <!-- INQUIRY MODAL (light, legible) -->
 {#if inquiryOpen}
 	<!-- svelte-ignore a11y_no_static_element_interactions a11y_click_events_have_key_events -->
-	<div use:portal class="vm-backdrop" onclick={closeInquiry}>
+	<div class="vm-backdrop" onclick={closeInquiry}>
 		<div
 			class="vm"
 			role="dialog"

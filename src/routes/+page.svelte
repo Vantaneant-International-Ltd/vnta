@@ -9,24 +9,24 @@
 		{ n: '04', name: 'Timelessness', body: 'We avoid trends. Systems are built to last years, not seasons.' }
 	];
 
-	// Maisons — stewarded under one system. Window dates per Horizon.
+	// Maisons — stewarded under one system. No dates: the work announces itself when it exists.
 	const maisons = [
-		{ n: '01', name: 'Vendr', body: 'A commerce-led venture. Operational clarity. Modern distribution. Brand-first thinking.', when: 'March 2026' },
-		{ n: '02', name: 'Eirvox', body: 'Communications and signal. Voice, narrative, and modern transmission. Built to scale quietly.', when: 'Summer 2026' },
-		{ n: '03', name: 'Maison Seul', body: 'Restraint, form, and cultural permanence. Designed for longevity, not velocity.', when: '2027' }
+		{ n: '01', name: 'Vendr', body: 'A commerce-led venture. Operational clarity. Modern distribution. Brand-first thinking.' },
+		{ n: '02', name: 'Eirvox', body: 'Communications and signal. Voice, narrative, and modern transmission. Built to scale quietly.' },
+		{ n: '03', name: 'Maison Seul', body: 'Restraint, form, and cultural permanence. Designed for longevity, not velocity.' }
 	];
 </script>
 
 <svelte:head>
-	<title>VNTA · A Modern Holding Company</title>
+	<title>VNTA · Brand Leadership in Residence</title>
 	<meta
 		name="description"
-		content="Vantanéant International. A modern holding company building and guiding premium maisons through strategy, design systems, and clear long-term direction."
+		content="Brand leadership in residence. We take a single brand from intent to operating system across a twelve-month engagement. Begin with a two-week Diagnosis, 750 euro fixed."
 	/>
-	<meta property="og:title" content="VNTA · A Modern Holding Company" />
+	<meta property="og:title" content="VNTA · Brand Leadership in Residence" />
 	<meta
 		property="og:description"
-		content="Building and guiding premium maisons through strategy, design systems, and clear long-term direction. Authority through restraint, not noise."
+		content="We take residence inside one brand at a time: strategy, identity, and direction, led rather than advised. Begin with a two-week Diagnosis."
 	/>
 	<meta property="og:type" content="website" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -44,8 +44,8 @@
 			<h1 class="hero__title">Brand leadership <span class="hero__title-em">in&nbsp;residence.</span></h1>
 
 			<p class="lede">
-				A modern holding company building and guiding premium maisons through strategy,
-				design systems, and clear long-term direction.
+				We take residence inside one brand at a time: strategy, identity, and direction, led
+				rather than advised.
 			</p>
 
 			<div class="keypoint">
@@ -55,19 +55,65 @@
 				</div>
 				<div class="keypoint__row">
 					<span class="eyebrow">Availability</span>
-					<p class="keypoint__body">One seat. Q3 2026.</p>
+					<p class="keypoint__body">One seat. Q2 2027.</p>
 				</div>
 			</div>
 
 			<div class="hero__cta">
-				<a href="{base}/explore" class="btn-ghost">Engagement</a>
+				<a href="{base}/explore" class="btn-ghost">Request a Diagnosis</a>
 			</div>
 
 			<p class="gaelic" lang="ga">Áilleacht na díomhaointe.</p>
 		</div>
 	</section>
 
-	<!-- AIM & VISION · 1.3 -->
+	<!-- PROBLEM -->
+		<section class="band">
+			<div class="wrap statement">
+				<span class="eyebrow statement__label">The problem</span>
+				<p class="statement__body">
+					Most brands are run by committee. Every decision relitigated, every asset slightly
+					off, <span class="muted">nobody holding the line.</span>
+				</p>
+			</div>
+		</section>
+
+		<!-- INSIDE THE RESIDENCY (features echo of /explore) -->
+		<section class="band">
+			<div class="wrap">
+				<div class="band__head">
+					<span class="eyebrow">Inside the residency</span>
+					<span class="eyebrow">Cadence · Leadership · Outcome</span>
+				</div>
+
+				<hr class="rule" />
+
+				<div class="values">
+					<article class="value">
+						<span class="value__n">Cadence</span>
+						<p class="value__body">
+							Weekly alignment and monthly deliverables. A rhythm that makes progress
+							predictable.
+						</p>
+					</article>
+					<article class="value">
+						<span class="value__n">Leadership</span>
+						<p class="value__body">
+							We make the calls and move the work forward, with your team or ours. Not
+							advisory.
+						</p>
+					</article>
+					<article class="value">
+						<span class="value__n">Outcome</span>
+						<p class="value__body">
+							By month twelve, a brand operating system and a team that runs it without us.
+						</p>
+					</article>
+				</div>
+			</div>
+		</section>
+
+		<!-- AIM & VISION · 1.3 -->
 	<section class="band">
 		<div class="wrap statement">
 			<span class="eyebrow statement__label">Aim &amp; Vision · 1.3</span>
@@ -110,6 +156,8 @@
 				<h2 class="maisons__title">Quietly stewarded under one disciplined system.</h2>
 			</div>
 
+				<p class="maisons__lede">VNTA holds one standard across everything it touches, its own houses and the brands it takes into residence.</p>
+
 			<hr class="rule" />
 
 			<ul class="register">
@@ -119,7 +167,6 @@
 							<span class="row__n">{m.n}</span>
 							<span class="row__name">{m.name}</span>
 							<span class="row__body">{m.body}</span>
-							<span class="row__when eyebrow">{m.when}</span>
 							<span class="row__arrow" aria-hidden="true">&rarr;</span>
 						</a>
 					</li>
@@ -127,7 +174,10 @@
 			</ul>
 
 			<div class="maisons__cta">
-				<a href="{base}/horizon" class="btn-ghost">View the Horizon</a>
+				<p class="cta__line">
+						Begin with a Diagnosis. Two weeks, €750 fixed, a clear read on what comes next.
+					</p>
+					<a href="{base}/explore" class="btn-primary">Request a Diagnosis</a>
 			</div>
 		</div>
 	</section>
@@ -307,6 +357,14 @@
 		max-width: 18ch;
 	}
 
+	.maisons__lede {
+		margin: clamp(18px, 3vw, 26px) 0 0;
+		max-width: 60ch;
+		font-size: var(--t-lede);
+		line-height: 1.55;
+		color: var(--ink-70);
+	}
+
 	.register {
 		list-style: none;
 		margin: 0;
@@ -358,7 +416,22 @@
 	}
 
 	.maisons__cta {
-		margin-top: clamp(32px, 4vw, 48px);
+		margin-top: var(--section-y);
+		padding-top: clamp(32px, 4vw, 48px);
+		border-top: 1px solid var(--line-soft);
+		display: flex;
+		align-items: end;
+		justify-content: space-between;
+		gap: 24px;
+		flex-wrap: wrap;
+	}
+
+	.cta__line {
+		margin: 0;
+		font-size: var(--t-lede);
+		line-height: 1.5;
+		color: var(--ink);
+		max-width: 46ch;
 	}
 
 	/* Wide desktop: compose the hero as a tall, vertically-centred column on the
