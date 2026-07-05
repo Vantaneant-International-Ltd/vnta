@@ -88,7 +88,7 @@
 				<span class="eyebrow">Where to start</span>
 				<p class="contact__line">If a residency is right, it begins with a Diagnosis. Two weeks, €750 fixed.</p>
 			</div>
-			<a class="btn-ghost" href="/explore">Request a Diagnosis</a>
+			<a class="btn-ghost" href="/explore#diagnosis">Request a Diagnosis</a>
 		</div>
 	</section>
 </main>

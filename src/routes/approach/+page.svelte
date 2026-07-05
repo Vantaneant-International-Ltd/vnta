@@ -132,7 +132,7 @@
 				Begin with a Diagnosis. Two weeks, €750 fixed, a clear read on what comes next.
 			</p>
 		</div>
-		<a class="btn-ghost" href="/explore">Request a Diagnosis</a>
+		<a class="btn-ghost" href="/explore#diagnosis">Request a Diagnosis</a>
 	</section>
 </main>
 

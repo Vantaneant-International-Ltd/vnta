@@ -193,7 +193,7 @@
 	</section>
 
 	<!-- THE DIAGNOSIS — single paid front door -->
-	<section class="diagnosis" aria-label="Begin with a Diagnosis">
+	<section id="diagnosis" class="diagnosis" aria-label="Begin with a Diagnosis">
 		<div class="diagnosis__head">
 			<div>
 				<span class="eyebrow">Where to start</span>

@@ -60,7 +60,7 @@
 			</div>
 
 			<div class="hero__cta">
-				<a href="{base}/explore" class="btn-ghost">Request a Diagnosis</a>
+				<a href="{base}/explore#diagnosis" class="btn-ghost">Request a Diagnosis</a>
 			</div>
 
 			<p class="gaelic" lang="ga">Áilleacht na díomhaointe.</p>
@@ -177,7 +177,7 @@
 				<p class="cta__line">
 						Begin with a Diagnosis. Two weeks, €750 fixed, a clear read on what comes next.
 					</p>
-					<a href="{base}/explore" class="btn-primary">Request a Diagnosis</a>
+					<a href="{base}/explore#diagnosis" class="btn-primary">Request a Diagnosis</a>
 			</div>
 		</div>
 	</section>
