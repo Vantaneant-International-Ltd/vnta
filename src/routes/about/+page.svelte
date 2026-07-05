@@ -85,10 +85,10 @@
 	<section class="contact" aria-label="Contact">
 		<div class="contact__row">
 			<div>
-				<span class="eyebrow">Contact</span>
-				<p class="contact__line">If you are building something serious, start a conversation.</p>
+				<span class="eyebrow">Where to start</span>
+				<p class="contact__line">If a residency is right, it begins with a Diagnosis. Two weeks, €750 fixed.</p>
 			</div>
-			<a class="btn-primary" href="mailto:studio@vnta.xyz">studio@vnta.xyz</a>
+			<a class="btn-ghost" href="/explore">Request a Diagnosis</a>
 		</div>
 	</section>
 </main>

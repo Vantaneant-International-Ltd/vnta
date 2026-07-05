@@ -251,7 +251,7 @@
 
 			{#if roles.length === 0}
 				<div class="empty">
-					<p class="empty-line">No open roles at present.</p>
+					<p class="empty-line">No open positions at present.</p>
 					<p class="empty-note">
 						Hiring here is quiet and occasional. If your work is a genuine fit, write to
 						<a class="empty-link" href="mailto:studio@vnta.xyz?subject=Speculative%20introduction">studio@vnta.xyz</a>.

@@ -123,6 +123,17 @@
 			Positioning conducted both before and after VNTA's incorporation in 2025.
 		</p>
 	</section>
+
+	<!-- CTA -->
+	<section class="cta">
+		<div>
+			<span class="eyebrow">Where to start</span>
+			<p class="cta__line">
+				Begin with a Diagnosis. Two weeks, €750 fixed, a clear read on what comes next.
+			</p>
+		</div>
+		<a class="btn-ghost" href="/explore">Request a Diagnosis</a>
+	</section>
 </main>
 
 <style>
@@ -248,6 +259,23 @@
 		font-size: 0.92rem;
 		line-height: 1.7;
 		color: var(--ink-50);
+	}
+
+	.cta {
+		display: flex;
+		align-items: end;
+		justify-content: space-between;
+		gap: 24px;
+		flex-wrap: wrap;
+		padding-top: clamp(36px, 5vw, 56px);
+		border-top: 1px solid var(--line-soft);
+	}
+	.cta__line {
+		margin: 0;
+		font-size: var(--t-lede);
+		line-height: 1.5;
+		color: var(--ink);
+		max-width: 46ch;
 	}
 
 	@media (max-width: 768px) {
