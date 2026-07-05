@@ -2,7 +2,6 @@
 	const houses = [
 		{
 			name: 'Maison Seul',
-			status: 'Coming 2027',
 			domain: 'maisonseul.ie',
 			href: '',
 			live: false,
@@ -11,7 +10,6 @@
 		},
 		{
 			name: 'Eirvox',
-			status: 'Launching Summer 2026',
 			domain: 'eirvox.ie',
 			href: 'https://eirvox.ie',
 			live: true,
@@ -20,7 +18,6 @@
 		},
 		{
 			name: 'Vendr',
-			status: 'In Progress · March 2026',
 			domain: 'vendr.ie',
 			href: 'https://vendr.ie',
 			live: true,
@@ -69,7 +66,6 @@
 						<div class="row-top">
 							<div class="row-left">
 								<h2 class="row-name">{h.name}</h2>
-								<span class="row-status">{h.status}</span>
 							</div>
 
 							{#if h.live}
@@ -90,7 +86,7 @@
 			</div>
 
 			<p class="footnote">
-				Release windows are indicative and may shift. Marks reflect current filing status. Maison Seul® · Eirvox™ · Vendr™.
+				Marks reflect current filing status. Maison Seul® · Eirvox™ · Vendr™.
 			</p>
 		</section>
 	</div>
