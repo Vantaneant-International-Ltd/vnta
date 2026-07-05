@@ -156,6 +156,8 @@
 				<h2 class="maisons__title">Quietly stewarded under one disciplined system.</h2>
 			</div>
 
+				<p class="maisons__lede">VNTA holds one standard across everything it touches, its own houses and the brands it takes into residence.</p>
+
 			<hr class="rule" />
 
 			<ul class="register">
@@ -353,6 +355,14 @@
 		line-height: 1.18;
 		color: var(--ink);
 		max-width: 18ch;
+	}
+
+	.maisons__lede {
+		margin: clamp(18px, 3vw, 26px) 0 0;
+		max-width: 60ch;
+		font-size: var(--t-lede);
+		line-height: 1.55;
+		color: var(--ink-70);
 	}
 
 	.register {

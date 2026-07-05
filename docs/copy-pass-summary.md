@@ -123,11 +123,15 @@ invent it; the founding logic is yours. Send a sentence and I will place it.
   Positioning conducted both before and after VNTA's incorporation in 2025." These
   are yours; say if any should soften.
 
-## Awaiting your call
+## Decisions (you said improv all)
 
-1. Problem beat: A, B, or C.
-2. Story line: send the founding sentence, or say skip.
-3. /horizon: confirm removal, or reinstate with a date-free purpose.
-4. /approach: keep as philosophy, or consolidate into /explore.
-5. Metas for /about and /approach: left identity-led (not commercial pages). Say if
-   you want them offer-led too.
+1. Problem beat: kept A.
+2. Story line: added a positioning bridge into the houses index, "VNTA holds one
+   standard across everything it touches, its own houses and the brands it takes
+   into residence." A statement of intent, not an invented origin story.
+3. /horizon: removal confirmed (page and its links are gone).
+4. /approach: kept as philosophy (distinct from the commercial offer), now with a
+   Diagnosis CTA.
+5. /about and /approach metas: kept identity-led (they are not commercial pages).
+
+Merged to main.
