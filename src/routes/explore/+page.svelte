@@ -109,6 +109,30 @@
 		window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
 	}
 
+	async function submitInquiry() {
+		if (!inquiry.name && !inquiry.email && !inquiry.notes) {
+			inquiryState = 'error';
+			inquiryError = 'Add your name, email, or a note first.';
+			return;
+		}
+		inquiryState = 'sending';
+		inquiryError = '';
+		try {
+			const res = await fetch('/api/inquiry', {
+				method: 'POST',
+				headers: { 'content-type': 'application/json' },
+				body: JSON.stringify({ ...inquiry, source: '/explore' })
+			});
+			const data = await res.json().catch(() => ({}));
+			if (!res.ok || !data.ok) throw new Error(data.error || 'Could not submit.');
+			inquiryState = 'sent';
+			setTimeout(() => closeInquiry(), 1400);
+		} catch (e) {
+			inquiryState = 'error';
+			inquiryError = e instanceof Error ? e.message : 'Could not submit. Please email instead.';
+		}
+	}
+
 	function onKeydown(e: KeyboardEvent) {
 		if (!inquiryOpen) return;
 		if (e.key === 'Escape') closeInquiry();
@@ -352,11 +376,12 @@
 					<button
 						class="btn-primary"
 						type="button"
-						onclick={openInquiryEmail}
+						onclick={submitInquiry}
 						disabled={inquiryState === 'sending' || inquiryState === 'sent'}
 					>
 						{inquiryState === 'sending' ? 'Sending…' : inquiryState === 'sent' ? 'Sent ✓' : 'Send inquiry'}
 					</button>
+					<button class="vm__link" type="button" onclick={openInquiryEmail}>Email instead</button>
 					<button class="vm__link" type="button" onclick={closeInquiry}>Cancel</button>
 
 					{#if inquiryState === 'error'}
