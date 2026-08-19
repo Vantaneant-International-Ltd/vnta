@@ -13,12 +13,13 @@
    ========================================================================== */
 
 :root {
-	/* --- Canvas — white paper, near-black ink -------------------------- */
-	/* GROUND: paper. The site is a single white page; white is the loudest
-	   thing a parent holding company can do. Pure neutral, no warm/cool tint,
-	   per the Felixto guideline (VNTA is cold, neutral, structural). */
-	--paper:        #ffffff; /* the page */
-	--paper-2:      #f4f4f4; /* recessed panel / field */
+	/* --- Canvas — soft white paper, near-black ink --------------------- */
+	/* GROUND: a soft white page with white panels lifted above it. Two tones,
+	   no third. Pure neutral, no warm/cool tint: the reference is the cold
+	   institutional register, NOT the warm ivory used by the houses, per the
+	   Felixto guideline (VNTA is cold, neutral, structural). */
+	--paper:        #f6f6f6; /* the page: soft white, not stark */
+	--paper-2:      #ffffff; /* lifted card / panel above the page */
 	--ink:          #0a0a0a; /* near-black — not stark #000 */
 
 	/* Pure-neutral grey ramp (dark-on-light). No warm or cool tint. */
@@ -55,6 +56,9 @@
 	   site-wide. To switch: set this to 'Playfair Display', serif and add the
 	   @fontsource import in the landing (repo already loads fonts via @fontsource). */
 	--font-hero:    var(--font-display);
+	/* Statement-scale serif. The display face, per the guideline: the brand
+	   is Marcellus at a single 400 weight, not a Didone. */
+	--font-serif:   var(--font-display);
 
 	/* Book scale 64/48/36/24, fluid but cosy on mobile. */
 	--t-h1:   clamp(2.6rem, 5.6vw, 4rem);

@@ -1,0 +1,236 @@
+/* =============================================================================
+   VNTA — shared page chrome and components
+   -----------------------------------------------------------------------------
+   Built to the Felixto brand guidelines v1.0:
+   - Palette (§3.1) is white and black only, with percentage shades. No hue.
+   - Typeface (§4.1) is Optima; Marcellus is the substitute the repo ships.
+   - Type scale (§4.3) is 64 / 48 / 36 / 24, which the --t-h* tokens carry.
+   - Common mistakes (§4.4): do not centre, no shadows. Everything is
+     left-aligned to the grid and depth comes from hairlines alone.
+   - Logo (§2.5) never below 50px; (§2.6) aligned to the grid, placed with
+     intention and consistency.
+   ========================================================================== */
+
+.wrap {
+	max-width: 1440px;
+	margin: 0 auto;
+	padding: 0 clamp(20px, 3.6vw, 52px);
+}
+
+/* Hairlines are the only dividers on the site. */
+.masthead,
+.hero,
+.statement,
+.band {
+	border-bottom: 1px solid var(--line);
+}
+
+/* --- Masthead ------------------------------------------------------------ */
+.masthead {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--s-6);
+	padding: 24px 0;
+}
+.masthead__mark {
+	display: inline-flex;
+	color: var(--ink);
+}
+.masthead__nav {
+	display: flex;
+	gap: clamp(20px, 2.8vw, 52px);
+}
+.masthead__nav a {
+	font-size: 0.81rem;
+	color: var(--ink-70);
+	border-bottom: 1px solid transparent;
+	padding-bottom: 2px;
+	transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+.masthead__nav a:hover,
+.masthead__nav a[aria-current='page'] {
+	color: var(--ink);
+	border-bottom-color: var(--ink-35);
+}
+
+/* --- Bands: a label in the left gutter, content running across ----------- */
+.band {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: clamp(16px, 2.2vw, 32px);
+	align-items: start;
+	padding: clamp(30px, 3.4vw, 54px) 0;
+}
+.band__head {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: var(--s-4);
+}
+.band__label {
+	padding-top: 3px;
+}
+.band__aside {
+	font-size: 0.79rem;
+	color: var(--ink-50);
+	white-space: nowrap;
+	border-bottom: 1px solid transparent;
+	padding-bottom: 2px;
+	transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+}
+a.band__aside:hover {
+	color: var(--ink);
+	border-bottom-color: var(--ink-35);
+}
+
+.band__items {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: clamp(20px, 2.6vw, 44px);
+}
+
+/* --- Item: number, name, line, arrow ------------------------------------- */
+.item {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	grid-template-areas:
+		'n name'
+		'. body'
+		'. arrow';
+	column-gap: 0.8em;
+	row-gap: 0.35em;
+	align-content: start;
+	border-top: 1px solid var(--line);
+	padding-top: 14px;
+}
+.item__n {
+	grid-area: n;
+	font-family: var(--font-mono);
+	font-size: 0.68rem;
+	color: var(--ink-35);
+	padding-top: 0.5em;
+}
+.item__name {
+	grid-area: name;
+	margin: 0;
+	font-family: var(--font-display);
+	font-weight: 400;
+	font-size: clamp(1.2rem, 1.7vw, 1.5rem);
+	line-height: 1.1;
+	letter-spacing: var(--track-tight);
+	color: var(--ink);
+}
+.item__body {
+	grid-area: body;
+	margin: 0;
+	font-size: 0.79rem;
+	line-height: 1.55;
+	color: var(--ink-50);
+	max-width: 30ch;
+	text-wrap: pretty;
+}
+.arrow {
+	display: inline-block;
+}
+.item .arrow {
+	grid-area: arrow;
+	margin-top: 14px;
+	color: var(--ink-35);
+	transition: color var(--dur) var(--ease), transform var(--dur) var(--ease);
+}
+.item:hover .arrow {
+	color: var(--ink);
+	transform: translateX(3px);
+}
+
+/* --- Prose --------------------------------------------------------------- */
+.prose {
+	max-width: 34rem;
+}
+.prose p {
+	margin: 0 0 1.2em;
+	font-size: 1.0625rem;
+	line-height: 1.6;
+	color: var(--ink-85);
+	text-wrap: pretty;
+}
+.prose p:last-child {
+	margin-bottom: 0;
+}
+/* Links inside prose read as part of the sentence and only admit to being
+   links on hover. */
+.prose a {
+	color: inherit;
+	border-bottom: 1px solid transparent;
+	transition: border-color var(--dur) var(--ease);
+}
+.prose a:hover {
+	border-bottom-color: var(--ink-35);
+}
+
+.sign__name {
+	font-family: var(--font-sign);
+	font-size: 2.4rem;
+	line-height: 1.5;
+	letter-spacing: 0.005em;
+	color: var(--ink);
+}
+
+/* --- Foot ---------------------------------------------------------------- */
+.foot {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: var(--s-3) clamp(22px, 3.2vw, 56px);
+	padding: 22px 0 26px;
+	font-size: 0.75rem;
+	color: var(--ink-50);
+}
+.foot__mark {
+	display: inline-flex;
+	color: var(--ink-50);
+}
+.foot__links {
+	display: flex;
+	gap: clamp(14px, 2vw, 30px);
+}
+.foot__links a {
+	transition: color var(--dur) var(--ease);
+}
+.foot__links a:hover {
+	color: var(--ink);
+}
+.foot__copy {
+	margin-left: auto;
+	color: var(--ink-35);
+}
+
+/* --- Wide: the spread ---------------------------------------------------- */
+@media (min-width: 900px) {
+	.band {
+		grid-template-columns: 150px minmax(0, 1fr);
+	}
+	.band__items {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+	.band__items--two {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (max-width: 560px) {
+	.masthead {
+		flex-direction: column;
+		align-items: flex-start;
+		gap: var(--s-3);
+	}
+	.masthead__nav {
+		gap: var(--s-6);
+		flex-wrap: wrap;
+	}
+	.foot__copy {
+		margin-left: 0;
+		width: 100%;
+	}
+}

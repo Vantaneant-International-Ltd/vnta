@@ -1,25 +1,14 @@
 <script lang="ts">
-	// The whole site. One white page, one column, one letter: no nav, no
-	// sections, no footer, no design furniture. If an element survives removal,
-	// remove it.
+	// The home spread: the mark at scale, the statement, the companies. Chrome
+	// comes from the layout. Proportions follow the reference layout; the type
+	// and palette follow the guideline.
 	import { base } from '$app/paths';
 	import Wordmark from '$lib/components/ui/Wordmark.svelte';
 
-	// Two registers under the signature: what we own, and who we work for.
-	// Lowercase and grey, so they sit beneath the letter rather than compete.
-	const registers = [
-		{
-			label: 'Houses',
-			entries: [
-				{ name: 'vendr', href: 'https://vendr.ie' },
-				{ name: 'eirvox', href: 'https://eirvox.ie' },
-				{ name: 'maison seul', href: 'https://maisonseul.com' }
-			]
-		},
-		{
-			label: 'Clients',
-			entries: [{ name: 'buildt.ie', href: 'https://buildt.ie' }]
-		}
+	const companies = [
+		{ n: '01', name: 'Vendr', href: 'https://vendr.ie', body: 'Commerce led. Operational clarity and modern distribution.' },
+		{ n: '02', name: 'Eirvox', href: 'https://eirvox.ie', body: 'Communications and signal. Voice, narrative, transmission.' },
+		{ n: '03', name: 'Maison Seul', href: 'https://maisonseul.com', body: 'Restraint and form. Built for longevity, not velocity.' }
 	];
 </script>
 
@@ -27,9 +16,9 @@
 	<title>VNTA</title>
 	<meta
 		name="description"
-		content="Vantanéant International is a holding company. We take residence inside one brand at a time and stay twelve months. It begins with a Diagnosis. Two weeks, €750 fixed."
+		content="Vantanéant International is a holding company building and guiding premium brands through strategy, design systems, and long-term direction."
 	/>
-	<meta property="og:title" content="Vantanéant International" />
+	<meta property="og:title" content="VNTA" />
 	<meta
 		property="og:description"
 		content="A holding company. One brand at a time, twelve months in residence."
@@ -38,188 +27,110 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 </svelte:head>
 
-<main class="page">
-	<!-- White: the letter. -->
-	<div class="sheet">
-		<div class="column">
-			<header class="head">
-				<h1 class="mark"><Wordmark height={26} label="Vantanéant International" /></h1>
-				<!-- The only nav on the site. A mailto rather than an anchor: the
-				     letter fits one screen on desktop, so scrolling to the Diagnosis
-				     paragraph would be a link that visibly does nothing. -->
-				<a class="nav" href="mailto:studio@vnta.xyz?subject=Diagnosis">Diagnosis</a>
-			</header>
-
-			<div class="letter">
-				<p>
-					Vantanéant International is a holding company. We take residence inside one brand
-					at a time and stay twelve months. We set direction, build the system underneath
-					it, then hand over the keys.
-				</p>
-
-				<p>
-					We are deliberately small. That is not a stage we are passing through, it is the
-					design. One engagement at a time is the only arrangement in which the work stays
-					ours.
-				</p>
-
-				<p>
-					If you are considering a residency, it begins with a Diagnosis. Two weeks, €750
-					fixed. A clear read on brand, narrative, and position, and a scoped plan, whether
-					or not we go further. Write to
-					<a href="mailto:studio@vnta.xyz?subject=Diagnosis">studio@vnta.xyz</a>.
-				</p>
-
-				<p>
-					There is nothing else on this page because there is nothing else to say until the
-					work says it.
-				</p>
-
-				<p class="sign">
-					<span class="sign__name">Renato G.</span><br />
-					Founder, Vantanéant International
-				</p>
-
-				<div class="registers">
-					{#each registers as register}
-						<div class="register">
-							<p class="register__label">{register.label}</p>
-							<ul class="register__list">
-								{#each register.entries as entry}
-									<li><a href={entry.href}>{entry.name}</a></li>
-								{/each}
-							</ul>
-						</div>
-					{/each}
-				</div>
-			</div>
+<main>
+	<!-- HERO -->
+	<section class="hero" aria-label="Vantanéant International">
+		<h1 class="hero__mark"><Wordmark height={0} label="VNTA" /></h1>
+		<div class="hero__side">
+			<p class="eyebrow">Holding company</p>
+			<p class="hero__claim">One brand<br />at a time.</p>
 		</div>
-	</div>
+	</section>
 
+	<!-- STATEMENT -->
+	<section class="statement" aria-label="What we do">
+		<p class="statement__lead">
+			Vantanéant International is a holding company building and guiding premium brands through
+			strategy, design systems, and clear long-term direction.
+		</p>
+		<p class="statement__muted">
+			We take residence inside one brand at a time, set direction, build the system underneath
+			it, then hand over the keys.
+		</p>
+		<a class="statement__link" href="{base}/about">
+			Our approach <span class="arrow" aria-hidden="true">&rarr;</span>
+		</a>
+	</section>
+
+	<!-- COMPANIES -->
+	<section class="band" id="companies" aria-label="Our companies">
+		<div class="band__head">
+			<p class="band__label eyebrow">Our companies</p>
+		</div>
+		<div class="band__items">
+			{#each companies as item}
+				<a class="item" href={item.href}>
+					<span class="item__n">{item.n}</span>
+					<h2 class="item__name">{item.name}</h2>
+					<p class="item__body">{item.body}</p>
+					<span class="arrow" aria-hidden="true">&rarr;</span>
+				</a>
+			{/each}
+		</div>
+	</section>
 </main>
 
 <style>
-	/* One white page. The letter column is the entire layout system. */
-	.page {
-		min-height: 100svh;
-		display: flex;
-		flex-direction: column;
-		background: var(--paper);
+	/* --- Hero: the drawn mark at scale, the claim set against it ----------- */
+	.hero {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: clamp(16px, 2.6vw, 46px);
+		align-items: end;
+		padding: clamp(28px, 3.8vw, 58px) 0 clamp(24px, 3vw, 46px);
 	}
 
-	/* Two registers under the signature. Marcellus ships a single 400 weight
-	   and font-synthesis is off, so a bold label has to come from Manrope,
-	   which actually has the weight. */
-	.registers {
-		display: flex;
-		flex-wrap: wrap;
-		gap: clamp(32px, 6vw, 64px);
-		margin-top: clamp(26px, 3.5vh, 34px);
-	}
+	/* The mark is drawn, not typed: it scales to its column so it stays the real
+	   wordmark rather than a typeface impersonating it (§2.2). */
+	.hero__mark { margin: 0; line-height: 0; color: var(--ink); }
+	.hero__mark :global(svg) { width: 100%; height: auto !important; }
 
-	.register__label {
-		margin: 0 0 0.5em;
-		font-family: var(--font-body);
-		font-size: var(--t-label);
-		font-weight: 700;
-		letter-spacing: var(--track-label);
-		text-transform: uppercase;
-		color: var(--ink-70);
-	}
-
-	.register__list {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		display: flex;
-		flex-direction: column;
-		gap: 0.35em;
-		font-size: 0.95rem;
-		line-height: 1.5;
-	}
-
-	.register__list a {
-		color: var(--ink-50);
-		border-bottom: 1px solid transparent;
-		transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
-	}
-	.register__list a:hover { color: var(--ink); border-bottom-color: var(--ink-35); }
-
-	/* --- White: the sheet ------------------------------------------------- */
-	.sheet {
-		flex: 1;
-		display: flex;
-		align-items: center;
-		padding: clamp(48px, 8vh, 88px) clamp(24px, 6vw, 40px);
-	}
-
-	.column {
-		width: 100%;
-		max-width: 34rem; /* about 52 characters, a letter measure */
-		margin: 0 auto;
-	}
-
-	.head {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: var(--s-6);
-		margin-bottom: clamp(24px, 3.5vh, 34px);
-	}
-
-	.mark {
-		margin: 0;
+	.hero__side { padding-bottom: clamp(2px, 0.6vw, 8px); }
+	.hero__claim {
+		margin: clamp(10px, 1.2vw, 16px) 0 0;
+		font-family: var(--font-display);
+		font-weight: 400;
+		font-size: clamp(1.6rem, 2.8vw, 2.5rem);
+		line-height: 1.12;
+		letter-spacing: var(--track-tight);
 		color: var(--ink);
-		line-height: 0; /* the SVG is the heading, no extra leading */
 	}
 
-	/* Quiet as the byline: no border, background or underline until hover. */
-	.nav {
-		font-size: 0.85rem;
-		line-height: 1;
-		color: var(--ink-50);
-		border-bottom: 1px solid transparent;
-		padding-bottom: 2px;
-		transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+	/* --- Statement -------------------------------------------------------- */
+	.statement {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: clamp(14px, 2.2vw, 36px);
+		align-items: start;
+		padding: clamp(32px, 3.8vw, 60px) 0;
 	}
-	.nav:hover { color: var(--ink); border-bottom-color: var(--ink-35); }
-
-	.letter p {
-		font-family: var(--font-body);
-		font-size: 1.0625rem;
-		line-height: 1.6;
-		color: var(--ink-85);
-		margin: 0 0 1.2em;
+	.statement__lead,
+	.statement__muted {
+		margin: 0;
+		font-family: var(--font-display);
+		font-size: clamp(1.02rem, 1.25vw, 1.15rem);
+		line-height: 1.46;
+		max-width: 30ch;
 		text-wrap: pretty;
 	}
+	.statement__lead { color: var(--ink); }
+	.statement__muted { color: var(--ink-50); }
 
-	/* The address is not decorated: it reads as part of the sentence, and only
-	   admits to being a link on hover. */
-	.letter p a {
-		color: inherit;
+	.statement__link {
+		justify-self: start;
+		align-self: end;
+		font-size: 0.81rem;
+		color: var(--ink-70);
 		border-bottom: 1px solid transparent;
-		transition: border-color var(--dur) var(--ease);
+		padding-bottom: 3px;
+		white-space: nowrap;
+		transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
 	}
-	.letter p a:hover { border-bottom-color: var(--ink-35); }
+	.statement__link:hover { color: var(--ink); border-bottom-color: var(--ink-35); }
 
-	.letter p.sign {
-		margin-top: clamp(30px, 4vh, 38px);
-		margin-bottom: 0;
-		color: var(--ink-50);
-		font-size: 0.95rem;
-		line-height: 1.5;
-	}
-	/* A signature, not a heading: the script face, set larger than the body so
-	   it reads as a pen mark at the foot of a letter. */
-	.sign__name {
-		font-family: var(--font-sign);
-		font-size: 2.4rem;
-		letter-spacing: 0.005em;
-		color: var(--ink);
-		line-height: 1.5;
-	}
-
-	@media (max-width: 560px) {
-		.sheet { align-items: flex-start; }
+	@media (min-width: 900px) {
+		/* The mark holds the left 58% of the page, as in the reference. */
+		.hero { grid-template-columns: 58% minmax(0, 1fr); }
+		.statement { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; }
 	}
 </style>

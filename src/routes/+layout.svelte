@@ -1,9 +1,8 @@
 <script lang="ts">
-	// The site is a single white page. The layout carries global type and colour
-	// and nothing else — no nav, no masthead footer, no decorative background.
-	// The landing composes its own header and foot; the remaining routes (legal,
-	// privacy, terms, error) get the slim chrome below. /portal keeps its own.
+	// Chrome for every public page: the masthead and the foot. Pages supply only
+	// their bands. /portal keeps its own lean chrome and opts out.
 	import '$lib/styles/tokens.css';
+	import '$lib/styles/site.css';
 	import '@fontsource/marcellus/400.css';
 	import '@fontsource/marcellus-sc/400.css';
 	import '@fontsource/manrope/400.css';
@@ -27,21 +26,27 @@
 	});
 
 	const path = $derived($page.url.pathname.replace(base, '') || '/');
-	// The landing is self-contained; the portal is a self-contained module with
-	// its own lean chrome. Everything else borrows the slim chrome.
-	const chrome = $derived(path !== '/' && !path.startsWith('/portal'));
+	const chrome = $derived(!path.startsWith('/portal'));
 
-	const foundedYear = 2025;
-	const year = new Date().getFullYear();
-	const yearLabel = year > foundedYear ? `${foundedYear}–${year}` : `${foundedYear}`;
+	// Five is the ceiling. Companies sits on the home page, so it is an anchor.
+	const nav = [
+		{ label: 'About', href: `${base}/about` },
+		{ label: 'Companies', href: `${base}/#companies` },
+		{ label: 'Journal', href: `${base}/journal` },
+		{ label: 'Contact', href: 'mailto:studio@vnta.xyz?subject=Enquiry' }
+	];
+
+	function current(href: string) {
+		if (href.startsWith('mailto:') || href.includes('#')) return undefined;
+		return href.replace(base, '') === path ? 'page' : undefined;
+	}
 </script>
 
 <svelte:head>
 	<link rel="icon" type="image/svg+xml" href="{base}/symbol.svg" />
 	<link rel="apple-touch-icon" href="{base}/symbol.svg" />
-	<meta name="theme-color" content="#ffffff" />
+	<meta name="theme-color" content="#f6f6f6" />
 
-	<!-- Canonical + social defaults (per-page og:title/description override these). -->
 	<link rel="canonical" href={`https://vnta.xyz${$page.url.pathname}`} />
 	<meta property="og:site_name" content="VNTA" />
 	<meta property="og:image" content="https://vnta.xyz/og.png" />
@@ -49,31 +54,41 @@
 	<meta name="twitter:image" content="https://vnta.xyz/og.png" />
 </svelte:head>
 
-<div class="shell" data-sveltekit-preload-data="hover">
-	{#if chrome}
-		<header class="chrome-head">
-			<a class="chrome-brand" href="{base}/" aria-label="VNTA home">
-				<Wordmark height={20} />
-			</a>
-		</header>
-	{/if}
+{#if chrome}
+	<div class="shell" data-sveltekit-preload-data="hover">
+		<div class="wrap">
+			<header class="masthead">
+				<a class="masthead__mark" href="{base}/" aria-label="VNTA home">
+					<Wordmark height={20} />
+				</a>
+				<nav class="masthead__nav" aria-label="Primary">
+					{#each nav as item}
+						<a href={item.href} aria-current={current(item.href)}>{item.label}</a>
+					{/each}
+				</nav>
+			</header>
 
-	<div class="shell__main">
-		{@render children()}
+			{@render children()}
+
+			<footer class="foot">
+				<span class="foot__mark"><Wordmark height={13} /></span>
+				<span>Dublin &middot; Worldwide</span>
+				<nav class="foot__links" aria-label="Legal">
+					<a href="{base}/legal">Legal</a>
+					<a href="{base}/privacy">Privacy</a>
+					<a href="{base}/terms">Terms</a>
+				</nav>
+				<span class="foot__copy">&copy; 2025 Vantanéant International Ltd</span>
+			</footer>
+		</div>
 	</div>
-
-	{#if chrome}
-		<footer class="chrome-foot">
-			<span class="eyebrow">© {yearLabel} Vantanéant International Ltd</span>
-			<a class="chrome-foot__mail" href="mailto:studio@vnta.xyz">studio@vnta.xyz</a>
-		</footer>
-	{/if}
-</div>
+{:else}
+	{@render children()}
+{/if}
 
 <CookieBanner />
 
 <style>
-	/* --- Global base --- */
 	:global(body) {
 		margin: 0;
 		min-height: 100vh;
@@ -87,49 +102,40 @@
 		-moz-osx-font-smoothing: grayscale;
 		font-synthesis: none; /* Marcellus ships 400 only — never faux-bold */
 	}
-	:global(a){ color:inherit; text-decoration:none; }
-	:global(h1,h2,h3,h4,h5,h6){ font-family:var(--font-display); font-weight:400; letter-spacing:var(--track-tight); line-height:1.08; }
-	:global(.eyebrow){ font-family:var(--font-sc); font-size:var(--t-label); letter-spacing:var(--track-label); text-transform:uppercase; color:var(--ink-50); margin:0; }
-	:global(.rule){ height:1px; background:var(--line); border:0; margin:0; }
-	:global(*:focus-visible){ outline:2px solid var(--ink); outline-offset:3px; border-radius:var(--radius); }
-	:global(.page-container){ max-width:800px; margin:0 auto; padding: clamp(40px,6vw,72px) clamp(24px,6vw,40px) clamp(56px,7vw,88px); }
-	:global(.content-width){ max-width: 680px; }
-
-	/* Buttons — square, flat, no lift/shadow/pill */
-	:global(.btn-primary){ display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:13px 24px; border-radius:var(--radius); background:var(--ink); color:var(--paper); border:1px solid var(--ink); font-family:var(--font-body); font-weight:600; font-size:0.9rem; letter-spacing:0.01em; cursor:pointer; transition: background var(--dur) var(--ease); }
-	:global(.btn-primary:hover){ background:var(--ink-85); }
-	:global(.btn-ghost){ display:inline-flex; align-items:center; justify-content:center; gap:8px; padding:13px 24px; border-radius:var(--radius); background:transparent; color:var(--ink); border:1px solid var(--line); font-family:var(--font-body); font-weight:600; font-size:0.9rem; letter-spacing:0.01em; cursor:pointer; transition: border-color var(--dur) var(--ease); }
-	:global(.btn-ghost:hover){ border-color:var(--ink); }
-
-	/* --- Slim chrome (legal / privacy / terms / error only) --- */
-	.shell { min-height: 100vh; display: flex; flex-direction: column; }
-	.shell__main { flex: 1 0 auto; }
-
-	.chrome-head {
-		max-width: 800px;
-		margin: 0 auto;
-		width: 100%;
-		padding: clamp(28px, 5vw, 44px) clamp(24px, 6vw, 40px) 0;
-		box-sizing: border-box;
+	:global(a) { color: inherit; text-decoration: none; }
+	:global(h1, h2, h3, h4, h5, h6) {
+		font-family: var(--font-display);
+		font-weight: 400;
+		letter-spacing: var(--track-tight);
+		line-height: 1.08;
 	}
-	.chrome-brand { display: inline-flex; color: var(--ink); }
+	:global(.eyebrow) {
+		font-family: var(--font-sc);
+		font-size: var(--t-label);
+		letter-spacing: var(--track-label);
+		text-transform: uppercase;
+		color: var(--ink-50);
+		margin: 0;
+	}
+	:global(.rule) { height: 1px; background: var(--line); border: 0; margin: 0; }
+	:global(*:focus-visible) {
+		outline: 2px solid var(--ink);
+		outline-offset: 3px;
+		border-radius: var(--radius);
+	}
+	/* Legal pages still use these two. */
+	:global(.page-container) { max-width: 800px; margin: 0 auto; padding: clamp(32px, 5vw, 56px) 0; }
+	:global(.content-width) { max-width: 680px; }
+	:global(.btn-primary) {
+		display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+		padding: 13px 24px; border-radius: var(--radius);
+		background: var(--ink); color: var(--paper); border: 1px solid var(--ink);
+		font-family: var(--font-body); font-weight: 600; font-size: 0.9rem;
+		cursor: pointer; transition: background var(--dur) var(--ease);
+	}
+	:global(.btn-primary:hover) { background: var(--ink-85); }
 
-	.chrome-foot {
-		max-width: 800px;
-		margin: 0 auto;
-		width: 100%;
-		box-sizing: border-box;
-		padding: 0 clamp(24px, 6vw, 40px) clamp(40px, 6vw, 56px);
-		display: flex;
-		align-items: baseline;
-		justify-content: space-between;
-		gap: var(--s-4);
-		flex-wrap: wrap;
-	}
-	.chrome-foot__mail {
-		font-size: 0.92rem;
-		color: var(--ink-70);
-		transition: color var(--dur) var(--ease);
-	}
-	.chrome-foot__mail:hover { color: var(--ink); }
+	.shell { min-height: 100svh; display: flex; flex-direction: column; }
+	.shell > .wrap { flex: 1; display: flex; flex-direction: column; }
+	.shell :global(main) { flex: 1 0 auto; }
 </style>
