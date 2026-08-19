@@ -128,7 +128,14 @@
 	.statement__muted { color: var(--ink-50); }
 
 	@media (min-width: 900px) {
+		/* The title is display type and will not fit the 150px label gutter, so
+		   it takes a row of its own; the columns still align to the content
+		   track the other bands use. */
 		.statement { grid-template-columns: 150px minmax(0, 1fr); }
-		.statement__cols { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+		.statement__title { grid-column: 1 / -1; }
+		.statement__cols {
+			grid-column: 2;
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
 	}
 </style>

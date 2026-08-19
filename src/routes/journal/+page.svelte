@@ -98,6 +98,8 @@
 	}
 
 	@media (min-width: 900px) {
-		.statement { grid-template-columns: 150px minmax(0, 1fr); }
+		/* auto, not a fixed gutter: the display title sizes its own track and
+		   can never overflow into the line beside it. */
+		.statement { grid-template-columns: auto minmax(0, 1fr); }
 	}
 </style>
