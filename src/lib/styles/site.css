@@ -60,6 +60,7 @@
    than as floating text. Top padding is deliberately smaller than bottom. */
 .band {
 	padding: clamp(22px, 1.9vw, 30px) 0 clamp(30px, 3.4vw, 54px);
+	scroll-margin-top: 24px;
 }
 .band__head {
 	display: flex;

@@ -28,11 +28,13 @@
 	const path = $derived($page.url.pathname.replace(base, '') || '/');
 	const chrome = $derived(!path.startsWith('/portal'));
 
-	// Five is the ceiling. Companies sits on the home page, so it is an anchor.
+	// Five is the ceiling. Companies and Diagnosis are anchors into the pages
+	// that carry them; Contact is a mail draft.
 	const nav = [
 		{ label: 'About', href: `${base}/about` },
 		{ label: 'Companies', href: `${base}/#companies` },
 		{ label: 'Journal', href: `${base}/journal` },
+		{ label: 'Diagnosis', href: `${base}/about#diagnosis` },
 		{ label: 'Contact', href: 'mailto:studio@vnta.xyz?subject=Enquiry' }
 	];
 

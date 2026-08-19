@@ -9,6 +9,13 @@
 		{ n: '04', name: 'Timelessness', body: 'Systems designed to stay relevant across years, not seasons.' }
 	];
 
+	// What a Diagnosis leaves you with, whether or not it goes further.
+	const diagnosis = [
+		{ n: '01', name: 'A read', body: 'Brand, narrative, and market position, stated plainly.' },
+		{ n: '02', name: 'A plan', body: 'Scoped to your situation, not sold from a menu.' },
+		{ n: '03', name: 'A decision', body: 'A clear basis for going further, or not.' }
+	];
+
 	const clients = [
 		{ n: '01', name: 'BUILDT', href: 'https://buildt.ie', body: 'Custom gaming and creator machines, repairs and diagnostics. Dublin.' }
 	];
@@ -55,12 +62,28 @@
 				We are deliberately small. That is not a stage we are passing through, it is the design.
 				One engagement at a time is the only arrangement in which the work stays ours.
 			</p>
-			<p>
-				It begins with a Diagnosis. Two weeks, €750 fixed. A clear read on brand, narrative, and
-				position, and a scoped plan, whether or not we go further. Write to
-				<a href="mailto:studio@vnta.xyz?subject=Diagnosis">studio@vnta.xyz</a>.
-			</p>
 		</div>
+	</section>
+
+	<!-- DIAGNOSIS -->
+	<section class="band" id="diagnosis" aria-label="The Diagnosis">
+		<div class="band__head">
+			<p class="band__label eyebrow">The Diagnosis</p>
+			<p class="band__aside">Two weeks &middot; €750 fixed</p>
+		</div>
+		<div class="band__items">
+			{#each diagnosis as item}
+				<article class="item">
+					<span class="item__n">{item.n}</span>
+					<h2 class="item__name">{item.name}</h2>
+					<p class="item__body">{item.body}</p>
+				</article>
+			{/each}
+		</div>
+		<p class="band__foot">
+			Every residency starts here, and it is the only price we publish. Write to
+			<a href="mailto:studio@vnta.xyz?subject=Diagnosis">studio@vnta.xyz</a>.
+		</p>
 	</section>
 
 	<!-- VALUES -->
@@ -98,6 +121,20 @@
 </main>
 
 <style>
+	.band__foot {
+		margin: clamp(24px, 2.6vw, 36px) 0 0;
+		font-size: 0.95rem;
+		line-height: 1.55;
+		color: var(--ink-50);
+		max-width: 46ch;
+	}
+	.band__foot a {
+		color: var(--ink);
+		border-bottom: 1px solid transparent;
+		transition: border-color var(--dur) var(--ease);
+	}
+	.band__foot a:hover { border-bottom-color: var(--ink-35); }
+
 	.statement {
 		display: grid;
 		grid-template-columns: 1fr;
