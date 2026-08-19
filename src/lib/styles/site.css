@@ -12,9 +12,9 @@
    ========================================================================== */
 
 .wrap {
-	max-width: 1440px;
+	max-width: 1920px;
 	margin: 0 auto;
-	padding: 0 clamp(20px, 3.6vw, 52px);
+	padding: 0 clamp(20px, 3.6vw, 64px);
 }
 
 /* Hairlines are the only dividers on the site. */
@@ -54,19 +54,19 @@
 	border-bottom-color: var(--ink-35);
 }
 
-/* --- Bands: a label in the left gutter, content running across ----------- */
+/* --- Bands: label row across the top, items full width beneath -----------
+   The label sits in a tight channel between the rule above it and the item
+   rules below, which is what makes the register read as a heading rather
+   than as floating text. Top padding is deliberately smaller than bottom. */
 .band {
-	display: grid;
-	grid-template-columns: 1fr;
-	gap: clamp(16px, 2.2vw, 32px);
-	align-items: start;
-	padding: clamp(30px, 3.4vw, 54px) 0;
+	padding: clamp(22px, 1.9vw, 30px) 0 clamp(30px, 3.4vw, 54px);
 }
 .band__head {
 	display: flex;
 	align-items: baseline;
 	justify-content: space-between;
 	gap: var(--s-4);
+	margin-bottom: clamp(16px, 1.6vw, 24px);
 }
 .band__label {
 	padding-top: 3px;
@@ -208,9 +208,6 @@ a.band__aside:hover {
 
 /* --- Wide: the spread ---------------------------------------------------- */
 @media (min-width: 900px) {
-	.band {
-		grid-template-columns: 150px minmax(0, 1fr);
-	}
 	.band__items {
 		grid-template-columns: repeat(3, minmax(0, 1fr));
 	}

@@ -39,14 +39,16 @@
 
 	<!-- STATEMENT -->
 	<section class="statement" aria-label="What we do">
-		<p class="statement__lead">
-			Vantanéant International is a holding company building and guiding premium brands through
-			strategy, design systems, and clear long-term direction.
-		</p>
-		<p class="statement__muted">
-			We take residence inside one brand at a time, set direction, build the system underneath
-			it, then hand over the keys.
-		</p>
+		<div class="statement__text">
+			<p class="statement__lead">
+				Vantanéant International is a holding company building and guiding premium brands
+				through strategy, design systems, and clear long-term direction.
+			</p>
+			<p class="statement__muted">
+				We take residence inside one brand at a time, set direction, build the system
+				underneath it, then hand over the keys.
+			</p>
+		</div>
 		<a class="statement__link" href="{base}/about">
 			Our approach <span class="arrow" aria-hidden="true">&rarr;</span>
 		</a>
@@ -104,6 +106,12 @@
 		align-items: start;
 		padding: clamp(32px, 3.8vw, 60px) 0;
 	}
+	/* The grey line sits under the black one, not beside it. */
+	.statement__text {
+		display: flex;
+		flex-direction: column;
+		gap: clamp(14px, 1.6vw, 22px);
+	}
 	.statement__lead,
 	.statement__muted {
 		margin: 0;
@@ -131,6 +139,10 @@
 	@media (min-width: 900px) {
 		/* The mark holds the left 58% of the page, as in the reference. */
 		.hero { grid-template-columns: 58% minmax(0, 1fr); }
-		.statement { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto; }
+		/* Text in the first third, the link in the last, and the middle left
+		   empty on purpose. */
+		.statement { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+		.statement__text { grid-column: 1; }
+		.statement__link { grid-column: 3; align-self: end; }
 	}
 </style>
