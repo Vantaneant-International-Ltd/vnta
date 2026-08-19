@@ -109,7 +109,9 @@ a.band__aside:hover {
 	grid-area: n;
 	font-family: var(--font-mono);
 	font-size: 0.68rem;
-	color: var(--ink-35);
+	/* ink-35 measures 2.57:1 on the paper, under the 4.5 minimum for text
+	   this size. ink-50 is 4.93:1 and still reads as quiet. */
+	color: var(--ink-50);
 	padding-top: 0.5em;
 }
 .item__name {
@@ -204,7 +206,7 @@ a.band__aside:hover {
 }
 .foot__copy {
 	margin-left: auto;
-	color: var(--ink-35);
+	color: var(--ink-50);
 }
 
 /* --- Wide: the spread ---------------------------------------------------- */

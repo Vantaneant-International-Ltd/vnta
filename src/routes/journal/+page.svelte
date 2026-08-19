@@ -81,7 +81,7 @@
 	.entry__n {
 		font-family: var(--font-mono);
 		font-size: 0.68rem;
-		color: var(--ink-35);
+		color: var(--ink-50);
 	}
 
 	.entry__title {
