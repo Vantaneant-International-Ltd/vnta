@@ -18,7 +18,7 @@
 
 	const clients = [
 		{ n: '01', name: 'BUILDT', href: 'https://buildt.ie', body: 'Custom gaming and creator machines, repairs and diagnostics. Dublin.' },
-		{ n: '02', name: 'EZGO Autoworks', href: 'https://ezgoautoworks.ie', body: 'Automotive. Ireland.' }
+		{ n: '02', name: 'EZGO Autoworks', href: 'https://ezgoautoworks.ie', body: 'A full service garage. Servicing, repairs, and diagnostics. Ireland.' }
 	];
 </script>
 
