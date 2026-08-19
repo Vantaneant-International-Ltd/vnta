@@ -1,56 +1,40 @@
-name: Deploy to GitHub Pages
+# The site is served by Cloudflare Pages (project "vnta") behind Cloudflare DNS.
+# It used to be deployed only by running `npm run deploy` from someone's laptop,
+# so pushes to main changed the repo and never changed the site. This runs the
+# same script in CI on every push to main.
+#
+# Requires one repo secret: CLOUDFLARE_API_TOKEN (Cloudflare > My Profile >
+# API Tokens > Create Token > "Edit Cloudflare Workers" template, or a custom
+# token with Account > Cloudflare Pages > Edit). The account id is already in
+# the deploy script in package.json.
+name: Deploy to Cloudflare Pages
 
 on:
   push:
     branches: [main]
-
-permissions:
-  contents: read
-  pages: write
-  id-token: write
+  workflow_dispatch:
 
 concurrency:
-  group: pages
+  group: pages-deploy
   cancel-in-progress: false
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      
+
       - uses: actions/setup-node@v4
         with:
-          # Node 22+ required: supabase-js needs native WebSocket (Node 21+),
-          # otherwise the build-time prerender of /careers + /pricing fails.
+          # Node 22+: supabase-js needs native WebSocket (Node 21+) during the
+          # build-time prerender of the portal.
           node-version: '22'
           cache: 'npm'
-      
-      - run: npm ci
-      - run: npm run build
-      
-      - uses: actions/upload-artifact@v4
-        with:
-          name: build
-          path: build/
 
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/download-artifact@v4
-        with:
-          name: build
-          path: .
-      
-      - uses: actions/configure-pages@v4
-      
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: '.'
-      
-      - uses: actions/deploy-pages@v4
-        id: deployment
+      - run: npm ci
+
+      # Builds, copies the Pages Functions into the output, and deploys with
+      # wrangler. Same command a maintainer would run locally.
+      - run: npm run deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
