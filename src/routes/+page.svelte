@@ -5,9 +5,12 @@
 	import { base } from '$app/paths';
 	import Wordmark from '$lib/components/ui/Wordmark.svelte';
 
-	// The houses stewarded under VNTA. Plain text until each has a site of its
-	// own; then the name becomes the link.
-	const houses = ['Vendr', 'Eirvox', 'Maison Seul'];
+	// The houses stewarded under VNTA, each linking out to its own site.
+	const houses = [
+		{ name: 'Vendr', href: 'https://vendr.ie' },
+		{ name: 'Eirvox', href: 'https://eirvox.ie' },
+		{ name: 'Maison Seul', href: 'https://maisonseul.com' }
+	];
 </script>
 
 <svelte:head>
@@ -67,17 +70,19 @@
 	<!-- Black: the register. Two tones, no third. -->
 	<footer class="band" data-theme="ink">
 		<div class="column band__inner">
-			<p class="band__line">
+			<nav class="band__row" aria-label="Houses">
 				<span class="band__label">Houses</span>
-				{#each houses as house, i}<span>{house}</span
-					>{#if i < houses.length - 1}<span class="sep">·</span>{/if}{/each}
-			</p>
-			<p class="band__line band__line--meta">
-				<a href="{base}/legal">Legal</a><span class="sep">·</span>
-				<a href="{base}/privacy">Privacy</a><span class="sep">·</span>
-				<a href="{base}/terms">Terms</a><span class="sep">·</span>
-				<span>Dublin, est. 2025</span>
-			</p>
+				{#each houses as house}
+					<a class="band__house" href={house.href}>{house.name}</a>
+				{/each}
+			</nav>
+
+			<nav class="band__row band__row--meta" aria-label="Legal">
+				<a href="{base}/legal">Legal</a>
+				<a href="{base}/privacy">Privacy</a>
+				<a href="{base}/terms">Terms</a>
+				<span class="band__place">Dublin, est. 2025</span>
+			</nav>
 		</div>
 	</footer>
 </main>
@@ -152,18 +157,16 @@
 		color: var(--ink-fg);
 		padding: clamp(26px, 4vh, 38px) clamp(24px, 6vw, 40px);
 	}
-	.band__inner { display: flex; flex-direction: column; gap: 0.7em; }
+	.band__inner { display: flex; flex-direction: column; gap: 0.85em; }
 
-	.band__line {
+	/* Space separates the entries. No dots, no pipes, no rules. */
+	.band__row {
 		display: flex;
 		align-items: baseline;
 		flex-wrap: wrap;
-		gap: 0.5em;
-		margin: 0;
+		gap: 0.4em 1.4em;
 		font-size: 0.85rem;
-		color: var(--ink-85);
 	}
-	.band__line--meta { font-size: 0.8rem; color: var(--ink-50); }
 
 	.band__label {
 		font-family: var(--font-sc);
@@ -171,13 +174,19 @@
 		letter-spacing: var(--track-label);
 		text-transform: uppercase;
 		color: var(--ink-35);
-		margin-right: 0.4em;
 	}
 
-	.sep { color: var(--ink-35); }
+	.band__house {
+		color: var(--ink-85);
+		border-bottom: 1px solid transparent;
+		transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
+	}
+	.band__house:hover { color: var(--ink-fg); border-bottom-color: var(--ink-35); }
 
-	.band__line--meta a { transition: color var(--dur) var(--ease); }
-	.band__line--meta a:hover { color: var(--ink-fg); }
+	.band__row--meta { font-size: 0.8rem; color: var(--ink-50); gap: 0.4em 1.1em; }
+	.band__row--meta a { color: var(--ink-50); transition: color var(--dur) var(--ease); }
+	.band__row--meta a:hover { color: var(--ink-fg); }
+	.band__place { color: var(--ink-35); }
 
 	@media (max-width: 560px) {
 		.sheet { align-items: flex-start; }
