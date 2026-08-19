@@ -102,6 +102,28 @@
 		</div>
 	</section>
 
+	<!-- NOTE -->
+	<section class="band" aria-label="A note from the founder">
+		<div class="band__head">
+			<p class="band__label eyebrow">A note</p>
+		</div>
+		<div class="prose">
+			<p>
+				Most companies say more than they have done. We would rather the reverse, so there is
+				not much here.
+			</p>
+			<p>
+				One engagement at a time is the only arrangement in which the work stays ours, and the
+				only one in which a founder gets the whole of our attention rather than a share of it.
+				If the system only works while we are standing in it, we have built the wrong thing.
+			</p>
+			<p class="note__sign">
+				<span class="sign__name">Renato G.</span><br />
+				Founder, Vantanéant International Ltd
+			</p>
+		</div>
+	</section>
+
 	<!-- CLIENTS -->
 	<section class="band" id="clients" aria-label="Clients">
 		<div class="band__head">
@@ -121,6 +143,13 @@
 </main>
 
 <style>
+	.note__sign {
+		margin: clamp(28px, 3.2vw, 40px) 0 0 !important;
+		font-size: 0.95rem;
+		line-height: 1.5;
+		color: var(--ink-50);
+	}
+
 	.band__foot {
 		margin: clamp(24px, 2.6vw, 36px) 0 0;
 		font-size: 0.95rem;

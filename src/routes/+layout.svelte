@@ -33,9 +33,8 @@
 	const nav = [
 		{ label: 'About', href: `${base}/about` },
 		{ label: 'Companies', href: `${base}/#companies` },
-		{ label: 'Journal', href: `${base}/journal` },
 		{ label: 'Diagnosis', href: `${base}/about#diagnosis` },
-		{ label: 'Contact', href: 'mailto:studio@vnta.xyz?subject=Enquiry' }
+		{ label: 'Contact', href: `${base}/contact` }
 	];
 
 	function current(href: string) {
