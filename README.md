@@ -1,8 +1,9 @@
 # VNTA
 
-**Vantanéant International** — corporate website built with SvelteKit.
+**Vantanéant International** — the corporate site, built with SvelteKit.
 
-A restrained, premium web presence for a quiet, disciplined holding company. Structure, clarity, and long-term intent over noise.
+One page. A signed letter on white, the three houses and the small print on
+black, and a single offer. Everything that survived removal is on it.
 
 ---
 
@@ -12,8 +13,9 @@ A restrained, premium web presence for a quiet, disciplined holding company. Str
 - **Bundler:** Vite
 - **Output:** Static (via `@sveltejs/adapter-static`)
 - **Language:** TypeScript
-- **Styling:** Bespoke CSS — no Tailwind, no UI kits
-- **Fonts:** Playfair Display, Manrope (via `@fontsource`)
+- **Styling:** Bespoke CSS on tokens — no Tailwind, no UI kits
+- **Fonts:** Marcellus (display), Manrope (body), Mrs Saint Delafield (the
+  signature, and nothing else) — all via `@fontsource`
 
 ---
 
@@ -24,56 +26,43 @@ A restrained, premium web presence for a quiet, disciplined holding company. Str
 ```sh
 npm install --ignore-engines
 npm run dev
-Scripts
-Command	Description
-npm run dev	Start local dev server
-npm run build	Production build
-npm run preview	Preview production build locally
-npm run check	Svelte type-check
-Project Structure
-src/routes/
-├── +layout.svelte      # Global layout and fonts
-├── +page.svelte        # Homepage
-├── about/
-├── approach/
-├── careers/
-├── explore/
-├── horizon/
-├── houses/
-├── legal/
-├── pricing/
-├── privacy/
-├── terms/
-├── admin/             # Supabase-backed operator console (client-only)
-└── +error.svelte      # Styled 404 / error page
-src/lib/
-└── supabase.ts        # Browser Supabase client (publishable key; RLS-protected)
-static/
-├── symbol.svg         # Favicon / app icon (burst mark)
-├── wordmark.svg       # Header logo (vector VNTA wordmark)
-├── sitemap.xml
-├── robots.txt
-└── ...                 # Brand assets (logos, SVGs)
-Design Principles
-Black and white palette only
-Typography-led layout — no decorative elements
-Every spacing decision is deliberate
-No utility frameworks — CSS is written, not generated
-VNTA exists at the intersection of structure and creation.
-We build the invisible systems that allow brands to endure.
+```
 
-Brand
+| Command | Description |
+| --- | --- |
+| `npm run dev` | Start local dev server |
+| `npm run build` | Production build |
+| `npm run preview` | Preview production build locally |
+| `npm run check` | Svelte type-check |
+
+## Project Structure
+
+```
+src/routes/
+├── +layout.svelte      # Fonts, global type/colour, slim chrome for sub-pages
+├── +page.svelte        # The site
+├── legal/ privacy/ terms/
+├── portal/             # Client portal — its own chrome, unlinked from the page
+└── +error.svelte       # 404 / error
+src/lib/
+├── styles/tokens.css   # Single source of truth: colour, type, space, shape
+└── components/ui/Wordmark.svelte
+static/
+├── symbol.svg          # Favicon
+├── wordmark.svg
+├── sitemap.xml
+└── robots.txt
+```
+
+## Design Principles
+
+- Two tones only: white paper, black band. No third colour.
+- If an element survives removal, remove it.
+- Typography-led. No decoration, no shadows, no glass, no gradients.
+- Copy carries plain punctuation — no em or en dashes.
+- Every spacing decision sits on the 4px grid, on a token.
+
 Design language follows the VNTA Brand Guidelines (Felixto Brandworks, v1.0).
 Proprietary assets are not included in this repository.
 
-## Admin
-
-`/admin` is a client-only console (auth + live data) backed by Supabase. VNTA
-shares the vendr Supabase project; all VNTA objects are namespaced `vnta_*` with
-their own RLS and `vnta_admins` / `vnta_is_admin()`. It manages job postings,
-applications (CVs in the private `vnta-cvs` Storage bucket), and inquiries.
-Public Supabase config lives in `vite.config.ts` (publishable key — safe to
-expose; RLS protects the data).
-
 Contact: studio@vnta.xyz
-

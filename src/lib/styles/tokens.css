@@ -13,35 +13,30 @@
    ========================================================================== */
 
 :root {
-	/* --- Canvas — warm paper, warm ink (NOT pure #fff / #000) ----------- */
-	/* GROUND: premium black — a rich NEUTRAL near-black (not stark #000, not a
-	   bright #fff-on-#000 vibration). Stays guideline-monochrome: pure neutral,
-	   no warm/cool tint; "premium" comes from calmed off-white text, softer
-	   hairlines, and space — not hue. White two-tone alternative: paper #fff ·
-	   paper-2 #f4f4f4 · ink #0a0a0a · 85 #1a1a1a · 70 #404040 · 50 #6b6b6b ·
-	   35 #9b9b9b · 20 #c7c7c7 · line/soft black .14/.08 · ink-bg #141414. */
-	--paper:        #050505; /* near-absolute black floor — bottomless, authoritative */
-	--paper-2:      #141414; /* lifted panel / field (reads clearly above floor) */
-	--ink:          #f4f4f4; /* present, confident off-white (not whispered) */
+	/* --- Canvas — white paper, near-black ink -------------------------- */
+	/* GROUND: paper. The site is a single white page; white is the loudest
+	   thing a parent holding company can do. Pure neutral, no warm/cool tint,
+	   per the Felixto guideline (VNTA is cold, neutral, structural). */
+	--paper:        #ffffff; /* the page */
+	--paper-2:      #f4f4f4; /* recessed panel / field */
+	--ink:          #0a0a0a; /* near-black — not stark #000 */
 
-	/* Pure-neutral grey ramp (light-on-dark) — no warm or cool tint.
-	   Firmer than the soft build: secondary text holds its ground. */
-	--ink-85:       #d2d2d2;
-	--ink-70:       #a6a6a6;
-	--ink-50:       #7a7a7a;
-	--ink-35:       #565656;
-	--ink-20:       #303030;
+	/* Pure-neutral grey ramp (dark-on-light). No warm or cool tint. */
+	--ink-85:       #1a1a1a;
+	--ink-70:       #404040;
+	--ink-50:       #6b6b6b;
+	--ink-35:       #9b9b9b;
+	--ink-20:       #c7c7c7;
 
-	/* Hairlines — crisper at low alpha (definition, not glow). */
-	--line:         rgba(255, 255, 255, 0.14);
-	--line-soft:    rgba(255, 255, 255, 0.07);
+	/* Hairlines — black at low alpha. Definition, not decoration. */
+	--line:         rgba(0, 0, 0, 0.14);
+	--line-soft:    rgba(0, 0, 0, 0.08);
 
 	/* No accent. The system is monochrome; any "accent" is just ink. */
-	--accent:       #f4f4f4;
+	--accent:       #0a0a0a;
 
-	/* Inverted band (footer, cookie) — lifted near-black so it reads as its
-	   own "faded" layer above the floor. */
-	--ink-bg:       #161616;
+	/* Inverted band (cookie bar) — lifted near-black. */
+	--ink-bg:       #0a0a0a;
 	--ink-fg:       #f4f4f4;
 
 	/* --- Type ----------------------------------------------------------- */
@@ -52,6 +47,8 @@
 	--font-body:    'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
 	/* Mono for labels, dates, and register figures. Neutral system stack (matches
 	   the ad-hoc stack pages already used inline; promoted to a token here). */
+	/* Signature face — used for ONE thing: the signed name. Never for UI. */
+	--font-sign:    'Mrs Saint Delafield', 'Snell Roundhand', cursive;
 	--font-mono:    ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
 	/* Hero display face — its OWN token so the landing headline can swap to a
 	   Didone (e.g. Playfair Display) in one line without touching Marcellus
@@ -88,17 +85,6 @@
 
 	/* NO --shadow-*, NO blur. Removed on purpose. Depth = hairlines + space. */
 
-	/* --- Atmosphere — decorative hero background (AtmosphereBackground.svelte).
-	   All tunable in this one place. Bloom colour is RGB triplet so opacity is
-	   controlled separately. Keep it faint: this is photographic mood, not
-	   wallpaper. Text over it must stay WCAG AA (>= 4.5:1). ------------------ */
-	--atmo-bloom-color:      223, 232, 242; /* cool near-white (#dfe8f2), NOT warm */
-	--atmo-bloom-opacity:    0.07;          /* start 6 to 8% */
-	--atmo-bloom-x:          65%;           /* off-centre, right */
-	--atmo-bloom-y:          30%;           /* upper */
-	--atmo-sheen-opacity:    0.03;          /* second, directional light axis */
-	--atmo-grain-opacity:    0.04;          /* film noise, 3 to 5% */
-	--atmo-vignette-strength: 0.55;         /* edge darkening for depth */
 }
 
 /* --- Backward-compat aliases (old pure-black token names) -----------------
@@ -123,7 +109,7 @@
 /* Deliberate inverted region (footer band, hero moment). */
 [data-theme='ink'] {
 	--paper:     var(--ink-bg);
-	--paper-2:   #141414;
+	--paper-2:   #161616;
 	--ink:       var(--ink-fg);
 	--ink-85:    rgba(255, 255, 255, 0.85);
 	--ink-70:    rgba(255, 255, 255, 0.70);

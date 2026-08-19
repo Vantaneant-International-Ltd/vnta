@@ -1,513 +1,185 @@
 <script lang="ts">
+	// The whole site. One white page, one column, one letter — the abc.xyz
+	// register: no nav, no sections, no design furniture. If an element survives
+	// removal, remove it.
 	import { base } from '$app/paths';
+	import Wordmark from '$lib/components/ui/Wordmark.svelte';
 
-	// §1.4 Brand Values — VNTA Brand Guidelines v1.0.
-	const values = [
-		{ n: '01', name: 'Restraint', body: 'Strong brands are built by reduction. Clarity over excess. Fewer decisions, made well.' },
-		{ n: '02', name: 'Silence', body: 'Confidence without noise. Form and consistency in place of explanation.' },
-		{ n: '03', name: 'Precision', body: 'Every decision is deliberate. Structured. Aligned to the long term.' },
-		{ n: '04', name: 'Timelessness', body: 'We avoid trends. Systems are built to last years, not seasons.' }
-	];
-
-	// Maisons — stewarded under one system. No dates: the work announces itself when it exists.
-	const maisons = [
-		{ n: '01', name: 'Vendr', body: 'A commerce-led venture. Operational clarity. Modern distribution. Brand-first thinking.' },
-		{ n: '02', name: 'Eirvox', body: 'Communications and signal. Voice, narrative, and modern transmission. Built to scale quietly.' },
-		{ n: '03', name: 'Maison Seul', body: 'Restraint, form, and cultural permanence. Designed for longevity, not velocity.' }
-	];
+	// The houses stewarded under VNTA. Plain text until each has a site of its
+	// own; then the name becomes the link.
+	const houses = ['Vendr', 'Eirvox', 'Maison Seul'];
 </script>
 
 <svelte:head>
-	<title>VNTA · Brand Leadership in Residence</title>
+	<title>Vantanéant International</title>
 	<meta
 		name="description"
-		content="Brand leadership in residence. We take a single brand from intent to operating system across a twelve-month engagement. Begin with a two-week Diagnosis, 750 euro fixed."
+		content="Vantanéant International is a holding company. We take residence inside one brand at a time and stay twelve months. It begins with a Diagnosis. Two weeks, €750 fixed."
 	/>
-	<meta property="og:title" content="VNTA · Brand Leadership in Residence" />
+	<meta property="og:title" content="Vantanéant International" />
 	<meta
 		property="og:description"
-		content="We take residence inside one brand at a time: strategy, identity, and direction, led rather than advised. Begin with a two-week Diagnosis."
+		content="A holding company. One brand at a time, twelve months in residence."
 	/>
 	<meta property="og:type" content="website" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 </svelte:head>
 
-<main class="home">
-	<!-- HERO -->
-	<section class="hero">
-		<div class="wrap">
-			<div class="hero__meta">
-				<span class="eyebrow">Vantanéant International Ltd</span>
-				<span class="eyebrow">Est. 2025 · Dublin</span>
-			</div>
+<main class="page">
+	<!-- White: the letter. -->
+	<div class="sheet">
+		<div class="column">
+			<h1 class="mark"><Wordmark height={26} label="Vantanéant International" /></h1>
 
-			<h1 class="hero__title">Brand leadership <span class="hero__title-em">in&nbsp;residence.</span></h1>
+			<div class="letter">
+				<p>
+					Vantanéant International is a holding company. We take residence inside one brand
+					at a time and stay twelve months. We set direction, build the system underneath
+					it, then hand over the keys.
+				</p>
 
-			<p class="lede">
-				We take residence inside one brand at a time: strategy, identity, and direction, led
-				rather than advised.
-			</p>
+				<p>
+					We are deliberately small. That is not a stage we are passing through, it is the
+					design. One engagement at a time is the only arrangement in which the work stays
+					ours.
+				</p>
 
-			<div class="keypoint">
-				<div class="keypoint__row">
-					<span class="eyebrow">Engagement</span>
-					<p class="keypoint__body">Twelve months · in residence</p>
-				</div>
-				<div class="keypoint__row">
-					<span class="eyebrow">Availability</span>
-					<p class="keypoint__body">One seat. Q2 2027.</p>
-				</div>
-			</div>
+				<p>
+					If you are considering a residency, it begins with a Diagnosis. Two weeks, €750
+					fixed. A clear read on brand, narrative, and position, and a scoped plan, whether
+					or not we go further. Write to
+					<a href="mailto:studio@vnta.xyz?subject=Diagnosis">studio@vnta.xyz</a>.
+				</p>
 
-			<div class="hero__cta">
-				<a href="{base}/explore#diagnosis" class="btn-ghost">Request a Diagnosis</a>
-			</div>
+				<p>
+					There is nothing else on this page because there is nothing else to say until the
+					work says it.
+				</p>
 
-			<p class="gaelic" lang="ga">Áilleacht na díomhaointe.</p>
-		</div>
-	</section>
-
-	<!-- PROBLEM -->
-		<section class="band">
-			<div class="wrap statement">
-				<span class="eyebrow statement__label">The problem</span>
-				<p class="statement__body">
-					Most brands are run by committee. Every decision relitigated, every asset slightly
-					off, <span class="muted">nobody holding the line.</span>
+				<p class="sign">
+					<span class="sign__name">Renato G.</span><br />
+					Founder, Vantanéant International Ltd
 				</p>
 			</div>
-		</section>
+		</div>
+	</div>
 
-		<!-- INSIDE THE RESIDENCY (features echo of /explore) -->
-		<section class="band">
-			<div class="wrap">
-				<div class="band__head">
-					<span class="eyebrow">Inside the residency</span>
-					<span class="eyebrow">Cadence · Leadership · Outcome</span>
-				</div>
-
-				<hr class="rule" />
-
-				<div class="values">
-					<article class="value">
-						<span class="value__n">Cadence</span>
-						<p class="value__body">
-							Weekly alignment and monthly deliverables. A rhythm that makes progress
-							predictable.
-						</p>
-					</article>
-					<article class="value">
-						<span class="value__n">Leadership</span>
-						<p class="value__body">
-							We make the calls and move the work forward, with your team or ours. Not
-							advisory.
-						</p>
-					</article>
-					<article class="value">
-						<span class="value__n">Outcome</span>
-						<p class="value__body">
-							By month twelve, a brand operating system and a team that runs it without us.
-						</p>
-					</article>
-				</div>
-			</div>
-		</section>
-
-		<!-- AIM & VISION · 1.3 -->
-	<section class="band">
-		<div class="wrap statement">
-			<span class="eyebrow statement__label">Aim &amp; Vision · 1.3</span>
-			<p class="statement__body">
-				A single house for design, fashion, and strategy. One system. One standard.
-				<span class="muted">
-					Authority through restraint, not noise.
-				</span>
+	<!-- Black: the register. Two tones, no third. -->
+	<footer class="band" data-theme="ink">
+		<div class="column band__inner">
+			<p class="band__line">
+				<span class="band__label">Houses</span>
+				{#each houses as house, i}<span>{house}</span
+					>{#if i < houses.length - 1}<span class="sep">·</span>{/if}{/each}
+			</p>
+			<p class="band__line band__line--meta">
+				<a href="{base}/legal">Legal</a><span class="sep">·</span>
+				<a href="{base}/privacy">Privacy</a><span class="sep">·</span>
+				<a href="{base}/terms">Terms</a><span class="sep">·</span>
+				<span>Dublin, est. 2025</span>
 			</p>
 		</div>
-	</section>
-
-	<!-- BRAND VALUES · 1.4 -->
-	<section class="band">
-		<div class="wrap">
-			<div class="band__head">
-				<span class="eyebrow">Brand Values</span>
-				<span class="eyebrow">01 / 04</span>
-			</div>
-
-			<hr class="rule" />
-
-			<div class="values">
-				{#each values as v}
-					<article class="value">
-						<span class="value__n">{v.n}</span>
-						<h3 class="value__name">{v.name}</h3>
-						<p class="value__body">{v.body}</p>
-					</article>
-				{/each}
-			</div>
-		</div>
-	</section>
-
-	<!-- MAISONS · INDEX -->
-	<section class="band">
-		<div class="wrap">
-			<div class="maisons__head">
-				<span class="eyebrow">Maisons · Index</span>
-				<h2 class="maisons__title">Quietly stewarded under one disciplined system.</h2>
-			</div>
-
-				<p class="maisons__lede">VNTA holds one standard across everything it touches, its own houses and the brands it takes into residence.</p>
-
-			<hr class="rule" />
-
-			<ul class="register">
-				{#each maisons as m}
-					<li>
-						<a class="row" href="{base}/houses">
-							<span class="row__n">{m.n}</span>
-							<span class="row__name">{m.name}</span>
-							<span class="row__body">{m.body}</span>
-							<span class="row__arrow" aria-hidden="true">&rarr;</span>
-						</a>
-					</li>
-				{/each}
-			</ul>
-
-			<div class="maisons__cta">
-				<p class="cta__line">
-						Begin with a Diagnosis. Two weeks, €750 fixed, a clear read on what comes next.
-					</p>
-					<a href="{base}/explore#diagnosis" class="btn-primary">Request a Diagnosis</a>
-			</div>
-		</div>
-	</section>
+	</footer>
 </main>
 
 <style>
-	.wrap {
-		max-width: var(--maxw);
-		margin: 0 auto;
-		padding-left: clamp(24px, 5vw, 48px);
-		padding-right: clamp(24px, 5vw, 48px);
-	}
-
-	/* --- Hero ------------------------------------------------------------- */
-	.hero {
-		padding: clamp(48px, 7vw, 96px) 0 clamp(48px, 6vw, 80px);
-	}
-
-	.hero__meta {
+	/* Two tones, no third: white sheet, black band. The letter column is the
+	   entire layout system. */
+	.page {
+		min-height: 100svh;
 		display: flex;
-		justify-content: space-between;
-		gap: 18px;
-		margin-bottom: clamp(28px, 5vw, 56px);
+		flex-direction: column;
+		background: var(--paper);
 	}
 
-	.hero__title {
-		/* Rhythm is token-driven and consistent through the hero block (fix 2). */
-		margin: 0 0 var(--s-6);
-		/* Own token: swap --font-hero to a Didone in tokens.css to change only this. */
-		font-family: var(--font-hero);
-		font-weight: 400;
-		font-size: clamp(2.9rem, 7vw, 4.8rem);
-		line-height: 1.05;
-		letter-spacing: var(--track-tight);
+	/* --- White: the sheet ------------------------------------------------- */
+	.sheet {
+		flex: 1;
+		display: flex;
+		align-items: center;
+		padding: clamp(48px, 8vh, 88px) clamp(24px, 6vw, 40px);
+	}
+
+	.column {
+		width: 100%;
+		max-width: 34rem; /* about 52 characters, a letter measure */
+		margin: 0 auto;
+	}
+
+	.mark {
+		margin: 0 0 clamp(24px, 3.5vh, 34px);
 		color: var(--ink);
-		max-width: 18ch;
-		/* Balanced line breaks: "Brand leadership" / "in residence." with no
-		   stranded "in" (paired with the nbsp in the markup). Fix 1. */
-		text-wrap: balance;
+		line-height: 0; /* the SVG is the heading, no extra leading */
 	}
 
-	/* Reference headline is uniform high-contrast (no dimmed tail). */
-	.hero__title-em {
+	.letter p {
+		font-family: var(--font-body);
+		font-size: 1.0625rem;
+		line-height: 1.6;
+		color: var(--ink-85);
+		margin: 0 0 1.2em;
+		text-wrap: pretty;
+	}
+
+	/* Inline links carry an underline, the only ornament on the sheet. */
+	.letter a {
 		color: var(--ink);
+		border-bottom: 1px solid var(--ink-35);
+		transition: border-color var(--dur) var(--ease);
 	}
+	.letter a:hover { border-bottom-color: var(--ink); }
 
-	.lede {
-		margin: 0;
-		font-size: var(--t-lede);
-		line-height: 1.55;
-		color: var(--ink-70);
-		max-width: 52ch;
-		font-weight: 400;
-	}
-
-	/* KEY POINT — hairline-bordered panel, small uppercase label + body line.
-	   Anchored to the block with a consistent spacing token, not floating (fix 2). */
-	.keypoint {
-		margin: var(--s-8) 0 0;
-		max-width: 560px;
-		border: 1px solid var(--line);
-		border-radius: var(--radius);
-		padding: clamp(20px, 3vw, 28px) clamp(20px, 3vw, 30px);
-		display: grid;
-		gap: 18px;
-	}
-
-	.keypoint__row {
-		display: grid;
-		gap: 8px;
-	}
-
-	.keypoint__body {
-		margin: 0;
-		font-size: 1.02rem;
+	.letter p.sign {
+		margin-top: clamp(30px, 4vh, 38px);
+		margin-bottom: 0;
+		color: var(--ink-50);
+		font-size: 0.95rem;
 		line-height: 1.5;
+	}
+	/* A signature, not a heading: the script face, set larger than the body so
+	   it reads as a pen mark at the foot of a letter. */
+	.sign__name {
+		font-family: var(--font-sign);
+		font-size: 2.4rem;
+		letter-spacing: 0.005em;
+		color: var(--ink);
+		line-height: 1.5;
+	}
+
+	/* --- Black: the band -------------------------------------------------- */
+	.band {
+		background: var(--ink-bg);
+		color: var(--ink-fg);
+		padding: clamp(26px, 4vh, 38px) clamp(24px, 6vw, 40px);
+	}
+	.band__inner { display: flex; flex-direction: column; gap: 0.7em; }
+
+	.band__line {
+		display: flex;
+		align-items: baseline;
+		flex-wrap: wrap;
+		gap: 0.5em;
+		margin: 0;
+		font-size: 0.85rem;
 		color: var(--ink-85);
 	}
+	.band__line--meta { font-size: 0.8rem; color: var(--ink-50); }
 
-	.hero__cta {
-		margin-top: var(--s-8);
-	}
-
-	.gaelic {
-		margin: var(--s-16) 0 0;
-		font-family: var(--font-display);
-		font-size: 1.1rem;
-		letter-spacing: 0.01em;
-		color: var(--ink-50);
-	}
-
-	/* --- Bands ------------------------------------------------------------ */
-	.band {
-		padding: var(--section-y) 0;
-		border-top: 1px solid var(--line-soft);
-	}
-
-	/* Aim & Vision statement */
-	.statement {
-		display: grid;
-		grid-template-columns: minmax(120px, 0.5fr) 1.5fr;
-		gap: clamp(24px, 5vw, 64px);
-		align-items: start;
-	}
-
-	.statement__label {
-		padding-top: 0.6em;
-	}
-
-	.statement__body {
-		margin: 0;
-		font-family: var(--font-display);
-		font-size: var(--t-h3);
-		line-height: 1.32;
-		color: var(--ink);
-		max-width: 24ch;
-	}
-
-	.statement__body .muted {
-		color: var(--ink-35);
-	}
-
-	/* Brand values — open columns divided by a top hairline, no cards */
-	.band__head {
-		display: flex;
-		justify-content: space-between;
-		gap: 18px;
-		margin-bottom: 22px;
-	}
-
-	.values {
-		display: grid;
-		grid-template-columns: repeat(4, 1fr);
-		gap: clamp(20px, 2.5vw, 36px);
-		padding-top: clamp(32px, 4vw, 56px);
-	}
-
-	.value {
-		padding-top: 20px;
-		border-top: 1px solid var(--line);
-	}
-
-	.value__n {
+	.band__label {
 		font-family: var(--font-sc);
 		font-size: var(--t-label);
 		letter-spacing: var(--track-label);
-		color: var(--ink-50);
-	}
-
-	.value__name {
-		margin: 16px 0 12px;
-		font-size: var(--t-h4);
-		color: var(--ink);
-	}
-
-	.value__body {
-		margin: 0;
-		font-size: 0.96rem;
-		line-height: 1.6;
-		color: var(--ink-70);
-	}
-
-	/* Maisons register — editorial rows, hairline-divided */
-	.maisons__head {
-		display: grid;
-		grid-template-columns: minmax(120px, 0.5fr) 1.5fr;
-		gap: clamp(24px, 5vw, 64px);
-		align-items: baseline;
-		margin-bottom: 22px;
-	}
-
-	.maisons__title {
-		margin: 0;
-		font-size: var(--t-h3);
-		line-height: 1.18;
-		color: var(--ink);
-		max-width: 18ch;
-	}
-
-	.maisons__lede {
-		margin: clamp(18px, 3vw, 26px) 0 0;
-		max-width: 60ch;
-		font-size: var(--t-lede);
-		line-height: 1.55;
-		color: var(--ink-70);
-	}
-
-	.register {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-	}
-
-	.row {
-		display: grid;
-		grid-template-columns: 48px minmax(120px, 0.8fr) 2fr auto 28px;
-		gap: clamp(18px, 3vw, 40px);
-		align-items: center;
-		padding: clamp(24px, 3vw, 32px) 0;
-		border-bottom: 1px solid var(--line-soft);
-	}
-
-	.row__n {
-		font-family: var(--font-sc);
-		font-size: var(--t-label);
-		letter-spacing: var(--track-label);
-		color: var(--ink-50);
-	}
-
-	.row__name {
-		font-family: var(--font-display);
-		font-size: 1.6rem;
-		color: var(--ink);
-	}
-
-	.row__body {
-		font-size: 0.95rem;
-		line-height: 1.55;
-		color: var(--ink-70);
-		max-width: 46ch;
-	}
-
-	.row__when {
-		white-space: nowrap;
-	}
-
-	.row__arrow {
-		justify-self: end;
+		text-transform: uppercase;
 		color: var(--ink-35);
-		transition: color var(--dur) var(--ease);
+		margin-right: 0.4em;
 	}
 
-	.row:hover .row__arrow,
-	.row:hover .row__name {
-		color: var(--ink);
-	}
+	.sep { color: var(--ink-35); }
 
-	.maisons__cta {
-		margin-top: var(--section-y);
-		padding-top: clamp(32px, 4vw, 48px);
-		border-top: 1px solid var(--line-soft);
-		display: flex;
-		align-items: end;
-		justify-content: space-between;
-		gap: 24px;
-		flex-wrap: wrap;
-	}
+	.band__line--meta a { transition: color var(--dur) var(--ease); }
+	.band__line--meta a:hover { color: var(--ink-fg); }
 
-	.cta__line {
-		margin: 0;
-		font-size: var(--t-lede);
-		line-height: 1.5;
-		color: var(--ink);
-		max-width: 46ch;
-	}
-
-	/* Wide desktop: compose the hero as a tall, vertically-centred column on the
-	   left so the empty right half reads as intentional negative space for the
-	   bloom to occupy, not an unfinished layout (fix 3). */
-	@media (min-width: 900px) {
-		.hero {
-			min-height: 72vh;
-			display: flex;
-			flex-direction: column;
-			justify-content: center;
-		}
-		.hero .wrap {
-			width: 100%;
-		}
-	}
-
-	/* --- Responsive: keep mobile cosy ------------------------------------ */
-	@media (max-width: 900px) {
-		.values {
-			grid-template-columns: 1fr 1fr;
-			gap: 28px;
-		}
-	}
-
-	@media (max-width: 768px) {
-		.hero__meta {
-			flex-direction: column;
-			gap: 6px;
-		}
-
-		.lede {
-			max-width: none;
-		}
-
-		.keypoint {
-			max-width: none;
-		}
-
-		.statement,
-		.maisons__head {
-			grid-template-columns: 1fr;
-			gap: 18px;
-		}
-
-		.values {
-			grid-template-columns: 1fr;
-			gap: 28px;
-		}
-
-		.row {
-			grid-template-columns: 36px 1fr;
-			grid-template-areas:
-				'n name'
-				'. body'
-				'. when';
-			gap: 6px 16px;
-			align-items: baseline;
-		}
-
-		.row__n {
-			grid-area: n;
-		}
-		.row__name {
-			grid-area: name;
-		}
-		.row__body {
-			grid-area: body;
-			margin-top: 6px;
-		}
-		.row__when {
-			grid-area: when;
-			margin-top: 10px;
-		}
-		.row__arrow {
-			display: none;
-		}
+	@media (max-width: 560px) {
+		.sheet { align-items: flex-start; }
 	}
 </style>
