@@ -1,20 +1,21 @@
 <script lang="ts">
-	// The whole site. One white page, one column, one letter — the abc.xyz
-	// register: no nav, no sections, no design furniture. If an element survives
-	// removal, remove it.
+	// The whole site. One white page, one column, one letter: no nav, no
+	// sections, no footer, no design furniture. If an element survives removal,
+	// remove it.
 	import { base } from '$app/paths';
 	import Wordmark from '$lib/components/ui/Wordmark.svelte';
 
-	// The houses stewarded under VNTA, each linking out to its own site.
+	// The houses stewarded under VNTA, each linking out to its own site. Set
+	// lowercase: one quiet line under the signature, not a footer.
 	const houses = [
-		{ name: 'Vendr', href: 'https://vendr.ie' },
-		{ name: 'Eirvox', href: 'https://eirvox.ie' },
-		{ name: 'Maison Seul', href: 'https://maisonseul.com' }
+		{ name: 'vendr', href: 'https://vendr.ie' },
+		{ name: 'eirvox', href: 'https://eirvox.ie' },
+		{ name: 'maison seul', href: 'https://maisonseul.com' }
 	];
 </script>
 
 <svelte:head>
-	<title>Vantanéant International</title>
+	<title>VNTA</title>
 	<meta
 		name="description"
 		content="Vantanéant International is a holding company. We take residence inside one brand at a time and stay twelve months. It begins with a Diagnosis. Two weeks, €750 fixed."
@@ -32,7 +33,13 @@
 	<!-- White: the letter. -->
 	<div class="sheet">
 		<div class="column">
-			<h1 class="mark"><Wordmark height={26} label="Vantanéant International" /></h1>
+			<header class="head">
+				<h1 class="mark"><Wordmark height={26} label="Vantanéant International" /></h1>
+				<!-- The only nav on the site. A mailto rather than an anchor: the
+				     letter fits one screen on desktop, so scrolling to the Diagnosis
+				     paragraph would be a link that visibly does nothing. -->
+				<a class="nav" href="mailto:studio@vnta.xyz?subject=Diagnosis">Diagnosis</a>
+			</header>
 
 			<div class="letter">
 				<p>
@@ -61,41 +68,45 @@
 
 				<p class="sign">
 					<span class="sign__name">Renato G.</span><br />
-					Founder, Vantanéant International Ltd
+					Founder, Vantanéant International
+				</p>
+
+				<p class="houses">
+					{#each houses as house, i}<a href={house.href}>{house.name}</a>{#if i < houses.length - 1}<span
+							class="houses__sep">&nbsp;&mdash;&nbsp;</span
+						>{/if}{/each}
 				</p>
 			</div>
 		</div>
 	</div>
 
-	<!-- Black: the register. Two tones, no third. -->
-	<footer class="band" data-theme="ink">
-		<div class="column band__inner">
-			<nav class="band__row" aria-label="Houses">
-				<span class="band__label">Houses</span>
-				{#each houses as house}
-					<a class="band__house" href={house.href}>{house.name}</a>
-				{/each}
-			</nav>
-
-			<nav class="band__row band__row--meta" aria-label="Legal">
-				<a href="{base}/legal">Legal</a>
-				<a href="{base}/privacy">Privacy</a>
-				<a href="{base}/terms">Terms</a>
-				<span class="band__place">Dublin, est. 2025</span>
-			</nav>
-		</div>
-	</footer>
 </main>
 
 <style>
-	/* Two tones, no third: white sheet, black band. The letter column is the
-	   entire layout system. */
+	/* One white page. The letter column is the entire layout system. */
 	.page {
 		min-height: 100svh;
 		display: flex;
 		flex-direction: column;
 		background: var(--paper);
 	}
+
+	/* One quiet line of houses, set in the byline grey directly beneath it.
+	   No label, no bullets, no footer. */
+	.letter p.houses {
+		margin-top: 0.55em;
+		margin-bottom: 0;
+		font-size: 0.95rem;
+		line-height: 1.5;
+		color: var(--ink-50);
+	}
+	.houses__sep { color: var(--ink-35); }
+	.letter p.houses a {
+		color: var(--ink-50);
+		border-bottom: 1px solid transparent;
+		transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+	}
+	.letter p.houses a:hover { color: var(--ink); border-bottom-color: var(--ink-35); }
 
 	/* --- White: the sheet ------------------------------------------------- */
 	.sheet {
@@ -111,11 +122,30 @@
 		margin: 0 auto;
 	}
 
+	.head {
+		display: flex;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--s-6);
+		margin-bottom: clamp(24px, 3.5vh, 34px);
+	}
+
 	.mark {
-		margin: 0 0 clamp(24px, 3.5vh, 34px);
+		margin: 0;
 		color: var(--ink);
 		line-height: 0; /* the SVG is the heading, no extra leading */
 	}
+
+	/* Quiet as the byline: no border, background or underline until hover. */
+	.nav {
+		font-size: 0.85rem;
+		line-height: 1;
+		color: var(--ink-50);
+		border-bottom: 1px solid transparent;
+		padding-bottom: 2px;
+		transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+	}
+	.nav:hover { color: var(--ink); border-bottom-color: var(--ink-35); }
 
 	.letter p {
 		font-family: var(--font-body);
@@ -126,13 +156,14 @@
 		text-wrap: pretty;
 	}
 
-	/* Inline links carry an underline, the only ornament on the sheet. */
-	.letter a {
-		color: var(--ink);
-		border-bottom: 1px solid var(--ink-35);
+	/* The address is not decorated: it reads as part of the sentence, and only
+	   admits to being a link on hover. */
+	.letter p a {
+		color: inherit;
+		border-bottom: 1px solid transparent;
 		transition: border-color var(--dur) var(--ease);
 	}
-	.letter a:hover { border-bottom-color: var(--ink); }
+	.letter p a:hover { border-bottom-color: var(--ink-35); }
 
 	.letter p.sign {
 		margin-top: clamp(30px, 4vh, 38px);
@@ -150,43 +181,6 @@
 		color: var(--ink);
 		line-height: 1.5;
 	}
-
-	/* --- Black: the band -------------------------------------------------- */
-	.band {
-		background: var(--ink-bg);
-		color: var(--ink-fg);
-		padding: clamp(26px, 4vh, 38px) clamp(24px, 6vw, 40px);
-	}
-	.band__inner { display: flex; flex-direction: column; gap: 0.85em; }
-
-	/* Space separates the entries. No dots, no pipes, no rules. */
-	.band__row {
-		display: flex;
-		align-items: baseline;
-		flex-wrap: wrap;
-		gap: 0.4em 1.4em;
-		font-size: 0.85rem;
-	}
-
-	.band__label {
-		font-family: var(--font-sc);
-		font-size: var(--t-label);
-		letter-spacing: var(--track-label);
-		text-transform: uppercase;
-		color: var(--ink-35);
-	}
-
-	.band__house {
-		color: var(--ink-85);
-		border-bottom: 1px solid transparent;
-		transition: border-color var(--dur) var(--ease), color var(--dur) var(--ease);
-	}
-	.band__house:hover { color: var(--ink-fg); border-bottom-color: var(--ink-35); }
-
-	.band__row--meta { font-size: 0.8rem; color: var(--ink-50); gap: 0.4em 1.1em; }
-	.band__row--meta a { color: var(--ink-50); transition: color var(--dur) var(--ease); }
-	.band__row--meta a:hover { color: var(--ink-fg); }
-	.band__place { color: var(--ink-35); }
 
 	@media (max-width: 560px) {
 		.sheet { align-items: flex-start; }
