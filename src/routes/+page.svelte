@@ -5,12 +5,21 @@
 	import { base } from '$app/paths';
 	import Wordmark from '$lib/components/ui/Wordmark.svelte';
 
-	// The houses stewarded under VNTA, each linking out to its own site. Set
-	// lowercase: one quiet line under the signature, not a footer.
-	const houses = [
-		{ name: 'vendr', href: 'https://vendr.ie' },
-		{ name: 'eirvox', href: 'https://eirvox.ie' },
-		{ name: 'maison seul', href: 'https://maisonseul.com' }
+	// Two registers under the signature: what we own, and who we work for.
+	// Lowercase and grey, so they sit beneath the letter rather than compete.
+	const registers = [
+		{
+			label: 'Houses',
+			entries: [
+				{ name: 'vendr', href: 'https://vendr.ie' },
+				{ name: 'eirvox', href: 'https://eirvox.ie' },
+				{ name: 'maison seul', href: 'https://maisonseul.com' }
+			]
+		},
+		{
+			label: 'Clients',
+			entries: [{ name: 'buildt.ie', href: 'https://buildt.ie' }]
+		}
 	];
 </script>
 
@@ -71,11 +80,18 @@
 					Founder, Vantanéant International
 				</p>
 
-				<p class="houses">
-					{#each houses as house, i}<a href={house.href}>{house.name}</a>{#if i < houses.length - 1}<span
-							class="houses__sep">&nbsp;&mdash;&nbsp;</span
-						>{/if}{/each}
-				</p>
+				<div class="registers">
+					{#each registers as register}
+						<div class="register">
+							<p class="register__label">{register.label}</p>
+							<ul class="register__list">
+								{#each register.entries as entry}
+									<li><a href={entry.href}>{entry.name}</a></li>
+								{/each}
+							</ul>
+						</div>
+					{/each}
+				</div>
 			</div>
 		</div>
 	</div>
@@ -91,22 +107,43 @@
 		background: var(--paper);
 	}
 
-	/* One quiet line of houses, set in the byline grey directly beneath it.
-	   No label, no bullets, no footer. */
-	.letter p.houses {
-		margin-top: 0.55em;
-		margin-bottom: 0;
+	/* Two registers under the signature. Marcellus ships a single 400 weight
+	   and font-synthesis is off, so a bold label has to come from Manrope,
+	   which actually has the weight. */
+	.registers {
+		display: flex;
+		flex-wrap: wrap;
+		gap: clamp(32px, 6vw, 64px);
+		margin-top: clamp(26px, 3.5vh, 34px);
+	}
+
+	.register__label {
+		margin: 0 0 0.5em;
+		font-family: var(--font-body);
+		font-size: var(--t-label);
+		font-weight: 700;
+		letter-spacing: var(--track-label);
+		text-transform: uppercase;
+		color: var(--ink-70);
+	}
+
+	.register__list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		flex-direction: column;
+		gap: 0.35em;
 		font-size: 0.95rem;
 		line-height: 1.5;
-		color: var(--ink-50);
 	}
-	.houses__sep { color: var(--ink-35); }
-	.letter p.houses a {
+
+	.register__list a {
 		color: var(--ink-50);
 		border-bottom: 1px solid transparent;
 		transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
 	}
-	.letter p.houses a:hover { color: var(--ink); border-bottom-color: var(--ink-35); }
+	.register__list a:hover { color: var(--ink); border-bottom-color: var(--ink-35); }
 
 	/* --- White: the sheet ------------------------------------------------- */
 	.sheet {
