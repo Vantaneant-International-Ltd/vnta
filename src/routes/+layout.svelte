@@ -79,7 +79,7 @@
 					<a href="{base}/privacy">Privacy</a>
 					<a href="{base}/terms">Terms</a>
 				</nav>
-				<span class="foot__copy">&copy; 2025 Vantanéant International Ltd</span>
+				<span class="foot__copy">Est. MMXXV &middot; Vantanéant International Ltd</span>
 			</footer>
 		</div>
 	</div>

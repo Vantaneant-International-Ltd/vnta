@@ -52,7 +52,7 @@
 	<!-- APPROACH -->
 	<section class="band" aria-label="How we work">
 		<div class="band__head">
-			<p class="band__label eyebrow">How we work</p>
+			<p class="band__label eyebrow"><span class="band__folio">I</span>How we work</p>
 		</div>
 		<div class="prose">
 			<p>
@@ -69,7 +69,7 @@
 	<!-- DIAGNOSIS -->
 	<section class="band" id="diagnosis" aria-label="The Diagnosis">
 		<div class="band__head">
-			<p class="band__label eyebrow">The Diagnosis</p>
+			<p class="band__label eyebrow"><span class="band__folio">II</span>The Diagnosis</p>
 			<p class="band__aside">Two weeks &middot; €750 fixed</p>
 		</div>
 		<div class="band__items">
@@ -90,7 +90,7 @@
 	<!-- VALUES -->
 	<section class="band" id="values" aria-label="Brand values">
 		<div class="band__head">
-			<p class="band__label eyebrow">Values</p>
+			<p class="band__label eyebrow"><span class="band__folio">III</span>Values</p>
 		</div>
 		<div class="band__items band__items--two">
 			{#each values as item}
@@ -106,7 +106,7 @@
 	<!-- NOTE -->
 	<section class="band" aria-label="A note from the founder">
 		<div class="band__head">
-			<p class="band__label eyebrow">A note</p>
+			<p class="band__label eyebrow"><span class="band__folio">IV</span>A note</p>
 		</div>
 		<div class="prose">
 			<p>
@@ -128,7 +128,7 @@
 	<!-- CLIENTS -->
 	<section class="band" id="clients" aria-label="Clients">
 		<div class="band__head">
-			<p class="band__label eyebrow">Clients</p>
+			<p class="band__label eyebrow"><span class="band__folio">V</span>Clients</p>
 		</div>
 		<div class="band__items">
 			{#each clients as item}

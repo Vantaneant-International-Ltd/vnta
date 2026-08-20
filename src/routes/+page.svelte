@@ -5,6 +5,12 @@
 	import { base } from '$app/paths';
 	import Wordmark from '$lib/components/ui/Wordmark.svelte';
 
+	// Who we work for, shown under the companies we own.
+	const clients = [
+		{ n: '01', name: 'BUILDT', href: 'https://buildt.ie', body: 'Custom gaming and creator machines, repairs and diagnostics. Dublin.' },
+		{ n: '02', name: 'EZGO Autoworks', href: 'https://ezgoautoworks.ie', body: 'A full service garage. Servicing, repairs, and diagnostics. Ireland.' }
+	];
+
 	const companies = [
 		{ n: '01', name: 'Vendr', href: 'https://vendr.ie', body: 'Commerce led. Operational clarity and modern distribution.' },
 		{ n: '02', name: 'Eirvox', href: 'https://eirvox.ie', body: 'Communications and signal. Voice, narrative, transmission.' },
@@ -57,10 +63,27 @@
 	<!-- COMPANIES -->
 	<section class="band" id="companies" aria-label="Our companies">
 		<div class="band__head">
-			<p class="band__label eyebrow">Our companies</p>
+			<p class="band__label eyebrow"><span class="band__folio">I</span>Our companies</p>
 		</div>
 		<div class="band__items">
 			{#each companies as item}
+				<a class="item" href={item.href}>
+					<span class="item__n">{item.n}</span>
+					<h2 class="item__name">{item.name}</h2>
+					<p class="item__body">{item.body}</p>
+					<span class="arrow" aria-hidden="true">&rarr;</span>
+				</a>
+			{/each}
+		</div>
+	</section>
+
+	<!-- CLIENTS -->
+	<section class="band" id="clients" aria-label="Clients">
+		<div class="band__head">
+			<p class="band__label eyebrow"><span class="band__folio">II</span>Clients</p>
+		</div>
+		<div class="band__items">
+			{#each clients as item}
 				<a class="item" href={item.href}>
 					<span class="item__n">{item.n}</span>
 					<h2 class="item__name">{item.name}</h2>

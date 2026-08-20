@@ -73,6 +73,15 @@
 }
 .band__label {
 	padding-top: 3px;
+	display: flex;
+	align-items: baseline;
+	gap: 0.9em;
+}
+/* Folio: the band's numeral, the way a magazine numbers its sections. */
+.band__folio {
+	font-family: var(--font-sc);
+	color: var(--ink-50);
+	letter-spacing: 0.1em;
 }
 .band__aside {
 	font-size: 0.79rem;
@@ -121,9 +130,10 @@ a.band__aside:hover {
 	margin: 0;
 	font-family: var(--font-display);
 	font-weight: 400;
-	font-size: clamp(1.2rem, 1.7vw, 1.5rem);
-	line-height: 1.1;
-	letter-spacing: var(--track-tight);
+	font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+	line-height: 1.15;
+	text-transform: uppercase;
+	letter-spacing: 0.1em;
 	color: var(--ink);
 }
 .item__body {

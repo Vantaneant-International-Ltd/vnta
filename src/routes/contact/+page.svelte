@@ -58,7 +58,7 @@
 
 	<section class="band" aria-label="Write to us">
 		<div class="band__head">
-			<p class="band__label eyebrow">Write to us</p>
+			<p class="band__label eyebrow"><span class="band__folio">I</span>Write to us</p>
 			<p class="band__aside">studio@vnta.xyz</p>
 		</div>
 
