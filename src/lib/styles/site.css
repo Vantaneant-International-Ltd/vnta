@@ -42,7 +42,9 @@
 	gap: clamp(20px, 2.8vw, 52px);
 }
 .masthead__nav a {
-	font-size: 0.81rem;
+	font-size: 0.72rem;
+	text-transform: uppercase;
+	letter-spacing: 0.18em;
 	color: var(--ink-70);
 	border-bottom: 1px solid transparent;
 	padding-bottom: 2px;
@@ -196,7 +198,12 @@ a.band__aside:hover {
 }
 .foot__links {
 	display: flex;
-	gap: clamp(14px, 2vw, 30px);
+	gap: clamp(16px, 2.2vw, 34px);
+}
+.foot__links a {
+	font-size: 0.68rem;
+	text-transform: uppercase;
+	letter-spacing: 0.16em;
 }
 .foot__links a {
 	transition: color var(--dur) var(--ease);

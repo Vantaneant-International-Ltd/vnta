@@ -70,7 +70,7 @@
 	--t-label: 0.72rem;
 
 	--track-tight: -0.015em;  /* display */
-	--track-label: 0.16em;    /* small-caps labels */
+	--track-label: 0.22em;    /* small-caps labels, set open in the house register */
 
 	/* --- Space — 4px grid, generous. Whitespace is the primary tool. ---- */
 	--s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px;
