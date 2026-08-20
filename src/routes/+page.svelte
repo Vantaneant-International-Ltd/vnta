@@ -4,11 +4,21 @@
 	// and palette follow the guideline.
 	import { base } from '$app/paths';
 	import Wordmark from '$lib/components/ui/Wordmark.svelte';
+	import Plate from '$lib/components/ui/Plate.svelte';
 
 	// Who we work for, shown under the companies we own.
 	const clients = [
 		{ n: '01', name: 'BUILDT', href: 'https://buildt.ie', body: 'Custom gaming and creator machines, repairs and diagnostics. Dublin.' },
 		{ n: '02', name: 'EZGO Autoworks', href: 'https://ezgoautoworks.ie', body: 'A full service garage. Servicing, repairs, and diagnostics. Ireland.' }
+	];
+
+	// Plates. Add `src: '/plates/<file>.jpg'` to turn one on; until then each
+	// renders as a reserved plate. Photographs are converted to monochrome in
+	// CSS, so a colour original still obeys the palette.
+	const plates = [
+		{ plate: 'Plate I', caption: 'BUILDT, Dublin', src: '' },
+		{ plate: 'Plate II', caption: 'EZGO Autoworks', src: '' },
+		{ plate: 'Plate III', caption: 'The bench', src: '' }
 	];
 
 	const companies = [
@@ -94,10 +104,23 @@
 		</div>
 	</section>
 
+	<!-- PLATES: the premises, once photographed -->
+	<section class="band" id="plates" aria-label="Plates">
+		<div class="band__head">
+			<p class="band__label eyebrow"><span class="band__folio">III</span>From the floor</p>
+			<p class="band__aside">Photographed on site</p>
+		</div>
+		<div class="plates">
+			{#each plates as p}
+				<Plate plate={p.plate} caption={p.caption} src={p.src} />
+			{/each}
+		</div>
+	</section>
+
 	<!-- DIAGNOSIS: how a brand joins the list above -->
 	<section class="band" id="diagnosis" aria-label="The Diagnosis">
 		<div class="band__head">
-			<p class="band__label eyebrow"><span class="band__folio">III</span>The Diagnosis</p>
+			<p class="band__label eyebrow"><span class="band__folio">IV</span>The Diagnosis</p>
 			<p class="band__aside">Two weeks &middot; €750 fixed</p>
 		</div>
 		<div class="offer">
@@ -176,6 +199,13 @@
 	}
 	.statement__link:hover { color: var(--ink); border-bottom-color: var(--ink-35); }
 
+	/* --- Plates: the same three-column measure as the registers ----------- */
+	.plates {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: clamp(20px, 2.6vw, 44px);
+	}
+
 	/* --- The offer: the same spread as the statement --------------------- */
 	.offer {
 		display: grid;
@@ -213,6 +243,7 @@
 		.statement__link { grid-column: 3; align-self: end; }
 		/* The offer keeps the statement's rhythm: text left, link in the last
 		   third, middle empty. */
+		.plates { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 		.offer { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 		.offer__body { grid-column: 1 / span 2; max-width: 46ch; }
 		.offer__link { grid-column: 3; }
