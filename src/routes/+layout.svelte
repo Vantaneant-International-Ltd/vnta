@@ -32,7 +32,7 @@
 	// that carry them; Contact is a mail draft.
 	const nav = [
 		{ label: 'About', href: `${base}/about` },
-		{ label: 'Companies', href: `${base}/#companies` },
+		{ label: 'Companies', href: `${base}/houses` },
 		{ label: 'Diagnosis', href: `${base}/about#diagnosis` },
 		{ label: 'Contact', href: `${base}/contact` }
 	];
@@ -74,7 +74,8 @@
 			<footer class="foot">
 				<span class="foot__mark"><Wordmark height={13} /></span>
 				<span>Dublin &middot; Worldwide</span>
-				<nav class="foot__links" aria-label="Legal">
+				<nav class="foot__links" aria-label="Secondary">
+					<a href="{base}/houses">Houses</a>
 					<a href="{base}/legal">Legal</a>
 					<a href="{base}/privacy">Privacy</a>
 					<a href="{base}/terms">Terms</a>

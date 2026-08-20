@@ -13,7 +13,7 @@
 
 	const companies = [
 		{ n: '01', name: 'Vendr', href: 'https://vendr.ie', body: 'Commerce led. Operational clarity and modern distribution.' },
-		{ n: '02', name: 'Eirvox', href: 'https://eirvox.ie', body: 'Communications and signal. Voice, narrative, transmission.' },
+		{ n: '02', name: 'Éirvox', href: 'https://eirvox.ie', body: 'Communications and signal. Voice, narrative, transmission.' },
 		{ n: '03', name: 'Maison Seul', href: 'https://maisonseul.com', body: 'Restraint and form. Built for longevity, not velocity.' }
 	];
 </script>
@@ -64,6 +64,7 @@
 	<section class="band" id="companies" aria-label="Our companies">
 		<div class="band__head">
 			<p class="band__label eyebrow"><span class="band__folio">I</span>Our companies</p>
+			<a class="band__aside" href="{base}/houses">All houses &rarr;</a>
 		</div>
 		<div class="band__items">
 			{#each companies as item}
