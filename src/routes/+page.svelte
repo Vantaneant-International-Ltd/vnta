@@ -93,6 +93,23 @@
 			{/each}
 		</div>
 	</section>
+
+	<!-- DIAGNOSIS: how a brand joins the list above -->
+	<section class="band" id="diagnosis" aria-label="The Diagnosis">
+		<div class="band__head">
+			<p class="band__label eyebrow"><span class="band__folio">III</span>The Diagnosis</p>
+			<p class="band__aside">Two weeks &middot; €750 fixed</p>
+		</div>
+		<div class="offer">
+			<p class="offer__body">
+				Every residency starts here, and it is the only price we publish. A clear read on brand,
+				narrative, and position, and a scoped plan, whether or not we go further.
+			</p>
+			<a class="offer__link" href="{base}/contact">
+				Begin a Diagnosis <span class="arrow" aria-hidden="true">&rarr;</span>
+			</a>
+		</div>
+	</section>
 </main>
 
 <style>
@@ -159,6 +176,33 @@
 	}
 	.statement__link:hover { color: var(--ink); border-bottom-color: var(--ink-35); }
 
+	/* --- The offer: the same spread as the statement --------------------- */
+	.offer {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: clamp(14px, 2.2vw, 36px);
+		align-items: end;
+	}
+	.offer__body {
+		margin: 0;
+		font-family: var(--font-display);
+		font-size: clamp(1.02rem, 1.25vw, 1.15rem);
+		line-height: 1.46;
+		color: var(--ink-50);
+		max-width: 42ch;
+		text-wrap: pretty;
+	}
+	.offer__link {
+		justify-self: start;
+		font-size: 0.81rem;
+		color: var(--ink-70);
+		border-bottom: 1px solid transparent;
+		padding-bottom: 3px;
+		white-space: nowrap;
+		transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+	}
+	.offer__link:hover { color: var(--ink); border-bottom-color: var(--ink-35); }
+
 	@media (min-width: 900px) {
 		/* The mark holds the left 58% of the page, as in the reference. */
 		.hero { grid-template-columns: 58% minmax(0, 1fr); }
@@ -167,5 +211,10 @@
 		.statement { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 		.statement__text { grid-column: 1; }
 		.statement__link { grid-column: 3; align-self: end; }
+		/* The offer keeps the statement's rhythm: text left, link in the last
+		   third, middle empty. */
+		.offer { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+		.offer__body { grid-column: 1 / span 2; max-width: 46ch; }
+		.offer__link { grid-column: 3; }
 	}
 </style>
