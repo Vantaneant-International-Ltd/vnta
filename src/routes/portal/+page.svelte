@@ -69,11 +69,14 @@
 		if (view.phase !== 'ready' || syncing) return;
 		syncing = true;
 		try {
-			const [mon, wl] = await Promise.all([
+			const [mon, wl, del] = await Promise.all([
 				fetch('/portal/monitoring', { cache: 'no-store' })
 					.then((r) => (r.ok ? r.json() : null))
 					.catch(() => null),
 				fetch('/portal/waitlist', { cache: 'no-store' })
+					.then((r) => (r.ok ? r.json() : null))
+					.catch(() => null),
+				fetch('/portal/delivery', { cache: 'no-store' })
 					.then((r) => (r.ok ? r.json() : null))
 					.catch(() => null)
 			]);
@@ -83,13 +86,19 @@
 				if (mon.siteHealth) data.summary.siteHealth = mon.siteHealth;
 				if (mon.monitors?.length) data.monitoring = { monitors: mon.monitors };
 				if (mon.performance) data.performance = mon.performance;
+				// Real downtime the monitor caught, ahead of whatever's already on
+				// file (config-only incidents a monitor can't see, recorded by hand).
+				if (mon.incidents?.length) data.incidents = [...mon.incidents, ...(data.incidents ?? [])];
 			}
 			if (wl?.signups) data.waitlist = { total: wl.total, signups: wl.signups };
+			// Live entries are newer than anything in the committed history, so
+			// they lead the newest-first timeline.
+			if (del?.delivery?.length) data.delivery = [...del.delivery, ...data.delivery];
 			view = { phase: 'ready', data: { ...data } };
 			syncedAt = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 			// A fetch can resolve with `.ok` true yet still carry nothing useful
 			// (e.g. the API key is missing) — only call that a real success.
-			syncOk = Boolean(mon?.ok?.uptime || mon?.ok?.performance || wl?.ok);
+			syncOk = Boolean(mon?.ok?.uptime || mon?.ok?.performance || wl?.ok || del?.ok);
 		} catch (e) {
 			syncOk = false;
 		} finally {

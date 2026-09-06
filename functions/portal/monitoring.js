@@ -11,7 +11,13 @@ const DAYS = 90;
 
 export async function onRequest(context) {
 	const { env } = context;
-	const out = { siteHealth: null, monitors: [], performance: null, ok: { uptime: false, performance: false } };
+	const out = {
+		siteHealth: null,
+		monitors: [],
+		performance: null,
+		incidents: [],
+		ok: { uptime: false, performance: false }
+	};
 
 	const key = env.UPTIMEROBOT_API_KEY;
 	if (key) {
@@ -37,6 +43,7 @@ export async function onRequest(context) {
 						days: buildDays(m)
 					}
 				];
+				out.incidents = buildIncidents(m.logs || []);
 				out.ok.uptime = true;
 			}
 		} catch (e) {
@@ -95,7 +102,48 @@ function buildDays(m) {
 }
 
 function today() {
+	return formatDate(new Date());
+}
+
+function formatDate(d) {
 	const mo = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
-	const d = new Date();
 	return `${d.getUTCDate()} ${mo[d.getUTCMonth()]} ${d.getUTCFullYear()}`;
+}
+
+function formatDateTime(unixSeconds) {
+	const d = new Date(unixSeconds * 1000);
+	const hh = String(d.getUTCHours()).padStart(2, '0');
+	const mm = String(d.getUTCMinutes()).padStart(2, '0');
+	return `${formatDate(d)}, ${hh}:${mm}`;
+}
+
+function humanizeDuration(seconds) {
+	if (seconds < 3600) return `about ${Math.max(1, Math.round(seconds / 60))} minutes`;
+	return `about ${(seconds / 3600).toFixed(1)} hours`;
+}
+
+// Real downtime the monitor observed, most recent first. A config mistake
+// that leaves the site reachable but wrong (like a dropped coming-soon gate)
+// won't show here — the monitor only sees down/up, so that class of incident
+// still needs a human to record it in the committed snapshot.
+function buildIncidents(logs) {
+	return logs
+		.filter((l) => l.type === 1 && l.duration > 0)
+		.sort((a, b) => b.datetime - a.datetime)
+		.slice(0, 10)
+		.map((l) => {
+			const resolved = l.datetime + l.duration;
+			return {
+				date: formatDate(new Date(l.datetime * 1000)),
+				title: 'Downtime detected',
+				impact: 'buildt.ie was unreachable to visitors.',
+				status: 'Resolved',
+				detail: l.reason?.detail
+					? `Reported cause: ${l.reason.detail}.`
+					: 'The monitor did not record a specific cause.',
+				start: formatDateTime(l.datetime),
+				resolved: formatDateTime(resolved),
+				duration: humanizeDuration(l.duration)
+			};
+		});
 }

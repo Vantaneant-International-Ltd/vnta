@@ -71,6 +71,35 @@ Edit that client's file in `content/` (e.g. `content/andrew.json`). Follow
 Dates are rendered verbatim (never parsed), so use whatever reads well
 (`04 Aug 2026`). No en dashes anywhere in copy.
 
+## Live data
+
+Three Cloudflare Pages Functions overlay the committed JSON with live data on
+every page load (see `+page.svelte`'s `syncLive()`):
+
+- `functions/portal/monitoring.js` — uptime and incidents from UptimeRobot
+  (`UPTIMEROBOT_API_KEY`), performance from PageSpeed Insights
+  (`GOOGLE_PSI_API_KEY`, optional).
+- `functions/portal/waitlist.js` — launch-list signups from the client's D1
+  binding (`WAITLIST`).
+- `functions/portal/delivery.js` — the delivery log's newest entries, read
+  straight from `client-buildt`'s own merge history (`GITHUB_TOKEN`, needs
+  read access to that private repo). A merge with a real, hand-written
+  subject becomes an entry; routine "Merge branch 'x' into y" merges are
+  filtered out.
+
+Any of these degrade to the committed JSON on failure (missing secret, API
+error) rather than showing an error, but the Uptime section does surface a
+"sync failed" state when the overlay didn't come back healthy, so failures
+aren't silently invisible.
+
+**What's still hand-maintained, and why:** `security`, `audits`, `nextUp`, and
+the early delivery history (before the live feed's coverage starts) are only
+as current as the last edit to `content/andrew.json`. Automating `nextUp`
+from a source in `client-buildt` was tried and dropped — the one candidate
+file (`build.md`, a working-notes doc) had gone stale describing a payment
+migration that was never shipped, so pulling it live would trade one kind of
+staleness for a more convincing-looking one.
+
 ## Adding a client
 
 1. Add `content/<id>.json` (copy `andrew.json`, follow `types.ts`).
