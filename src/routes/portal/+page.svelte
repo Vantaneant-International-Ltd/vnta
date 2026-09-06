@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { onMount } from 'svelte';
+	import { onMount, onDestroy } from 'svelte';
 	import './portal.css';
 
 	import { getAuthenticatedEmail, resolveClientId, loadClientData } from './resolve';
@@ -27,6 +27,17 @@
 	let view: State = $state({ phase: 'loading' });
 	let syncing = $state(false);
 	let syncedAt: string | null = $state(null);
+	let syncOk: boolean | null = $state(null);
+
+	// Re-sync on a timer so a tab left open doesn't go stale, and again whenever
+	// the tab regains focus (a laptop reopened the next morning shouldn't show
+	// yesterday's numbers until someone remembers to hit "Sync").
+	const RESYNC_MS = 3 * 60 * 1000;
+	let resyncTimer: ReturnType<typeof setInterval> | undefined;
+
+	function onVisible() {
+		if (document.visibilityState === 'visible') syncLive();
+	}
 
 	onMount(async () => {
 		// Access is enforced at the edge; here we only pick the one file this
@@ -44,6 +55,13 @@
 		}
 		view = { phase: 'ready', data };
 		syncLive();
+		resyncTimer = setInterval(syncLive, RESYNC_MS);
+		document.addEventListener('visibilitychange', onVisible);
+	});
+
+	onDestroy(() => {
+		if (resyncTimer) clearInterval(resyncTimer);
+		if (typeof document !== 'undefined') document.removeEventListener('visibilitychange', onVisible);
 	});
 
 	// Overlay the committed snapshot with live data from the edge Function.
@@ -69,8 +87,11 @@
 			if (wl?.signups) data.waitlist = { total: wl.total, signups: wl.signups };
 			view = { phase: 'ready', data: { ...data } };
 			syncedAt = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+			// A fetch can resolve with `.ok` true yet still carry nothing useful
+			// (e.g. the API key is missing) — only call that a real success.
+			syncOk = Boolean(mon?.ok?.uptime || mon?.ok?.performance || wl?.ok);
 		} catch (e) {
-			// keep the committed snapshot on any failure
+			syncOk = false;
 		} finally {
 			syncing = false;
 		}
@@ -117,6 +138,7 @@
 						onsync={syncLive}
 						{syncing}
 						{syncedAt}
+						{syncOk}
 					/>
 				{/if}
 				{#if view.data.incidents?.length}

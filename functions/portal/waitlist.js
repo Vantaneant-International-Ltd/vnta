@@ -5,7 +5,7 @@
 
 export async function onRequest(context) {
 	const { env } = context;
-	const out = { total: 0, signups: [] };
+	const out = { total: 0, signups: [], ok: false };
 
 	if (env.WAITLIST) {
 		try {
@@ -19,6 +19,7 @@ export async function onRequest(context) {
 				created_at: r.created_at
 			}));
 			out.total = out.signups.length;
+			out.ok = true;
 		} catch (e) {
 			// leave empty; portal renders "no signups"
 		}
