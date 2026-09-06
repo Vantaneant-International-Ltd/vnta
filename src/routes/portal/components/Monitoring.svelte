@@ -5,12 +5,14 @@
 		monitoring,
 		onsync,
 		syncing = false,
-		syncedAt = null
+		syncedAt = null,
+		syncOk = null
 	}: {
 		monitoring: PortalMonitoring;
 		onsync?: () => void;
 		syncing?: boolean;
 		syncedAt?: string | null;
+		syncOk?: boolean | null;
 	} = $props();
 
 	const DAYS = 90;
@@ -30,7 +32,15 @@
 	<div class="p-shead">
 		<h2 class="p-shead__name" id="p-uptime-h">Uptime</h2>
 		<span class="p-shead__meta">
-			<span>{syncedAt ? `Synced ${syncedAt}` : 'Last 90 days'}</span>
+			{#if syncing}
+				<span>Syncing…</span>
+			{:else if syncedAt && syncOk}
+				<span class="p-sync-ok">● Live · synced {syncedAt}</span>
+			{:else if syncedAt && !syncOk}
+				<span class="p-sync-warn">⚠ Sync failed at {syncedAt} · showing last saved data</span>
+			{:else}
+				<span>Last 90 days</span>
+			{/if}
 			{#if onsync}
 				<button type="button" class="p-sync" onclick={onsync} disabled={syncing}>
 					{syncing ? 'Syncing' : 'Sync'}

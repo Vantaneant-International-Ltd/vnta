@@ -11,7 +11,7 @@ const DAYS = 90;
 
 export async function onRequest(context) {
 	const { env } = context;
-	const out = { siteHealth: null, monitors: [], performance: null };
+	const out = { siteHealth: null, monitors: [], performance: null, ok: { uptime: false, performance: false } };
 
 	const key = env.UPTIMEROBOT_API_KEY;
 	if (key) {
@@ -37,6 +37,7 @@ export async function onRequest(context) {
 						days: buildDays(m)
 					}
 				];
+				out.ok.uptime = true;
 			}
 		} catch (e) {
 			// leave monitors empty; portal falls back to its committed snapshot
@@ -62,6 +63,7 @@ export async function onRequest(context) {
 				bestPractices: pct('best-practices'),
 				seo: pct('seo')
 			};
+			out.ok.performance = true;
 		}
 	} catch (e) {
 		// keep committed performance
