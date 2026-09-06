@@ -7,12 +7,12 @@
 	},
 	"summary": {
 		"headline": "Site live on buildt.ie, first managed cycle underway.",
-		"note": "BUILDT launched at the end of June on Cloudflare. The one-time build is complete and paid in full. The managed plan begins billing on 1 August; a baseline security audit is scheduled for the week before. Full record below.",
+		"note": "BUILDT launched at the end of June on Cloudflare. The one-time build is complete and paid in full. The managed plan begins billing on 7 September (moved back from the original date); a baseline security audit is scheduled beforehand. Full record below.",
 		"siteHealth": "Operational"
 	},
 	"billing": {
-		"date": "1 Aug",
-		"note": "baseline audit week prior"
+		"date": "7 Sep",
+		"note": "moved back from 1 Aug"
 	},
 	"delivery": [
 		{
@@ -110,7 +110,7 @@
 			"low": null
 		},
 		"notes": [
-			"Baseline security audit is scheduled for the week before the managed plan begins on 1 August. Findings will be reported here once it has run."
+			"Baseline security audit is scheduled ahead of the managed plan, which now begins billing on 7 September. Findings will be reported here once it has run."
 		]
 	},
 	"audits": [
@@ -156,7 +156,7 @@
 		},
 		{
 			"title": "Managed plan billing begins",
-			"eta": "1 August"
+			"eta": "7 September"
 		}
 	]
 }
