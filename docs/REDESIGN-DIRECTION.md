@@ -3,6 +3,10 @@
 > **Note, October 2026.** This is the reasoning behind the palette, type and
 > shape, and it still stands. The page list in sections 6 to 8 is history: the
 > site is now one customer-facing page plus contact, described in the README.
+>
+> One correction to section 8: do not drop `vercel.json` yet. A Vercel project
+> is still connected to this repository, and that file is what stops it from
+> building every push. Disconnect the Vercel project first, then remove it.
 
 _June 2026. A full rebuild of the site onto a tokenised, brand-faithful system.
 `src/lib/styles/tokens.css` and `src/lib/components/ui/*` are the implementation._

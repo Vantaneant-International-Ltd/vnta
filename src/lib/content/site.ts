@@ -202,7 +202,8 @@ export const questions = [
 export const houses = [
 	{ name: 'Vendr', href: 'https://vendr.ie' },
 	{ name: 'Éirvox', href: 'https://eirvox.ie' },
-	{ name: 'Maison Seul', href: 'https://maisonseul.com' }
+	{ name: 'Maison Seul', href: 'https://maisonseul.com' },
+	{ name: 'Carbon Wheels', href: 'https://carbonwheels.ie' }
 ];
 
 /** Formats a euro amount the way the page prints it: €1,900. */
