@@ -27,7 +27,7 @@ export type Work = {
 	status: 'Live' | 'In build';
 	href?: string;
 	domain?: string;
-	image: string; // stem under /work, with a -720 variant beside it
+	image: string; // stem under /work: laptop, -tablet and -phone screenshots
 	alt: string;
 	summary: string;
 	built: string[];
@@ -40,7 +40,7 @@ export const work: Work[] = [
 		place: 'Sallins, Co. Kildare',
 		status: 'In build',
 		image: 'lm-motors',
-		alt: 'The L.M. Motors home page: a search box for make, model and budget, beside the car on the forecourt now.',
+		alt: 'The L.M. Motors home page on a laptop, a tablet and a phone: Used cars, exactly as described, with a search by make, model and budget.',
 		summary:
 			'Customers search the stock, shortlist cars, then ring or message about the one they want.',
 		built: [
@@ -57,7 +57,7 @@ export const work: Work[] = [
 		href: 'https://ezgoautoworks.ie',
 		domain: 'ezgoautoworks.ie',
 		image: 'ezgo-auto-works',
-		alt: 'The EZGO Auto Works home page: the headline Fixed. Sprayed. Detailed. beside a photo of a mechanic under a car.',
+		alt: 'The EZGO Auto Works home page on a laptop, a tablet and a phone: Fixed. Sprayed. Detailed. beside a photo of a mechanic under a car.',
 		summary:
 			'Mechanics, bodywork and detailing under one roof. The site shows the prices and gets people to ring or WhatsApp.',
 		built: [
@@ -74,7 +74,7 @@ export const work: Work[] = [
 		href: 'https://buildt.ie',
 		domain: 'buildt.ie',
 		image: 'buildt',
-		alt: 'The BUILDT build your own PC page: a case preview beside a parts list with a running total.',
+		alt: 'The BUILDT home page on a laptop, a tablet and a phone: BUILDT by hand. Proven on the bench.',
 		summary: 'Customers build their own PC on the site, watch the price change, and order.',
 		built: [
 			'A build your own PC tool with live prices',

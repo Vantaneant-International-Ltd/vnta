@@ -9,6 +9,7 @@
 	// their customers will see them.
 	import { base } from '$app/paths';
 	import EnquiryForm from '$lib/components/EnquiryForm.svelte';
+	import Devices from '$lib/components/Devices.svelte';
 	import Wordmark from '$lib/components/ui/Wordmark.svelte';
 	import Symbol from '$lib/components/ui/Symbol.svelte';
 	import {
@@ -95,7 +96,7 @@
 							<img
 								src="{base}/work/{job.image}-phone.jpg"
 								srcset="{base}/work/{job.image}-phone-390.jpg 390w, {base}/work/{job.image}-phone.jpg 780w"
-								sizes="(min-width: 900px) 200px, 30vw"
+								sizes="(min-width: 900px) 180px, 30vw"
 								width="780"
 								height="1688"
 								alt="The {job.name} site on a phone."
@@ -133,35 +134,28 @@
 			<div class="jobs">
 				{#each work as job}
 					<article class="job card">
-						<div class="job__shot">
-							<img
-								src="{base}/work/{job.image}.jpg"
-								srcset="{base}/work/{job.image}-720.jpg 720w, {base}/work/{job.image}.jpg 1440w"
-								sizes="(min-width: 900px) 560px, 92vw"
-								width="1440"
-								height="900"
-								loading="lazy"
-								decoding="async"
-								alt={job.alt}
-							/>
-						</div>
+						<Devices image={job.image} alt={job.alt} />
 						<div class="job__text">
-							<p class="job__meta">
-								{job.trade}, {job.place}
-								<span class="tag" class:tag--quiet={job.status !== 'Live'}>{job.status}</span>
-							</p>
-							<h3 class="job__name">{job.name}</h3>
-							<p class="job__summary">{job.summary}</p>
-							<ul class="list">
-								{#each job.built as line}
-									<li>{line}</li>
-								{/each}
-							</ul>
-							{#if job.href}
-								<p class="job__foot">
-									<a class="link" href={job.href} rel="noopener">Visit {job.domain}</a>
+							<div>
+								<p class="job__meta">
+									{job.trade}, {job.place}
+									<span class="tag" class:tag--quiet={job.status !== 'Live'}>{job.status}</span>
 								</p>
-							{/if}
+								<h3 class="job__name">{job.name}</h3>
+								{#if job.href}
+									<p class="job__foot">
+										<a class="link" href={job.href} rel="noopener">Visit {job.domain}</a>
+									</p>
+								{/if}
+							</div>
+							<div>
+								<p class="job__summary">{job.summary}</p>
+								<ul class="list">
+									{#each job.built as line}
+										<li>{line}</li>
+									{/each}
+								</ul>
+							</div>
 						</div>
 					</article>
 				{/each}
@@ -389,26 +383,17 @@
 		display: grid;
 		gap: clamp(16px, 2vw, 24px);
 	}
+	/* Each job: the site on three screens, then the words under it. */
 	.job {
 		display: grid;
-		grid-template-columns: 1fr;
-		gap: clamp(20px, 3vw, 40px);
-		align-items: center;
-		padding: clamp(14px, 2vw, 24px);
-	}
-	.job__shot {
-		line-height: 0;
-		border-radius: calc(var(--r-card) - 8px);
-		overflow: hidden;
-		border: 1px solid var(--line-soft);
-	}
-	.job__shot img {
-		display: block;
-		width: 100%;
-		height: auto;
+		gap: clamp(24px, 3.4vw, 44px);
+		padding: clamp(20px, 4vw, 48px) clamp(16px, 4vw, 48px) clamp(22px, 3.4vw, 40px);
 	}
 	.job__text {
-		padding: 0 clamp(6px, 1vw, 12px) clamp(8px, 1vw, 12px);
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 16px clamp(24px, 4vw, 56px);
+		align-items: start;
 	}
 	.job__meta {
 		display: flex;
@@ -440,7 +425,7 @@
 		color: var(--ink);
 	}
 	.job__summary {
-		margin: 12px 0 0;
+		margin: 0;
 		font-size: var(--t-body);
 		line-height: 1.45;
 		color: var(--ink-80);
@@ -451,7 +436,7 @@
 		margin-top: 16px;
 	}
 	.job__foot {
-		margin: 18px 0 0;
+		margin: 12px 0 0;
 		font-size: var(--t-body);
 	}
 
@@ -725,8 +710,8 @@
 		.phones {
 			justify-self: end;
 		}
-		.job {
-			grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+		.job__text {
+			grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
 		}
 		.plans {
 			grid-template-columns: repeat(3, minmax(0, 1fr));
