@@ -2,18 +2,16 @@
 	// Contact: the same enquiry form as the foot of the home page, on its own
 	// address for anyone who was sent a link to it.
 	import { base } from '$app/paths';
+	import Seo from '$lib/components/Seo.svelte';
 	import EnquiryForm from '$lib/components/EnquiryForm.svelte';
 	import { replyWithin } from '$lib/content/site';
 </script>
 
-<svelte:head>
-	<title>Get a price | VNTA</title>
-	<meta
-		name="description"
-		content="Tell VNTA what your business does and get a fixed price for a new website within {replyWithin}."
-	/>
-	<meta property="og:title" content="Get a price | VNTA" />
-</svelte:head>
+<Seo
+	title="Get a price for a website | VNTA"
+	shareTitle="Get a price | VNTA"
+	description="Tell VNTA what your business does and get a fixed price for a new website within {replyWithin}. It costs nothing to ask."
+/>
 
 <main class="band" data-theme="tint">
 	<div class="wrap">

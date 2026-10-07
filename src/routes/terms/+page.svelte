@@ -1,21 +1,12 @@
 <script lang="ts">
+	import Seo from '$lib/components/Seo.svelte';
 	// No client-side logic required for terms
 </script>
 
-<svelte:head>
-	<title>Terms · VNTA</title>
-	<meta
-		name="description"
-		content="Engagement terms and commercial framework governing work with VNTA."
-	/>
-	<meta property="og:title" content="Terms · VNTA" />
-	<meta
-		property="og:description"
-		content="Engagement terms and commercial framework governing work with VNTA."
-	/>
-	<meta property="og:type" content="website" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-</svelte:head>
+<Seo
+	title="Terms | VNTA"
+	description="Engagement terms and commercial framework governing work with VNTA."
+/>
 
 <main class="page-container">
 	<div class="content content-width">

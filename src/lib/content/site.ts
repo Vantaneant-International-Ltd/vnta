@@ -12,7 +12,17 @@
 //   client's own site or in their repo.
 // =============================================================================
 
+export const siteUrl = 'https://vnta.xyz';
 export const studioEmail = 'studio@vnta.xyz';
+
+/**
+ * VNTA's own public profiles: Instagram, Facebook, LinkedIn, X and so on.
+ * Each one listed here is shown in the foot of every page and is handed to
+ * search engines and AI assistants as "this profile is the same VNTA", which
+ * is how they join the dots between the site and the profiles. Only add a
+ * profile that is real and ours, with its full address.
+ */
+export const social: { name: string; href: string }[] = [];
 
 /** How fast we answer an enquiry. Used in the hero, the steps and the form. */
 export const replyWithin = 'two working days';
@@ -275,6 +285,156 @@ export const houses: House[] = [
 		status: '2027',
 		image: 'maison-seul',
 		alt: 'The Maison Seul home page on a laptop, a tablet and a phone: the name on a dark page.'
+	}
+];
+
+// --- Landing pages -----------------------------------------------------------
+// One short page for each thing people actually type into Google or ask an AI:
+// "website for a garage", "car dealer website", "online shop", "web design
+// Dublin". Each one answers that search with a real example and a real price.
+// Same rules as the rest of the copy: nothing that is not true today.
+
+export type Landing = {
+	slug: string; // the page address, /<slug>
+	label: string; // the short link text in the foot
+	title: string; // the heading on the page
+	metaTitle: string; // the line Google shows, 60 characters or fewer
+	description: string; // the two lines under it, 160 characters or fewer
+	lede: string;
+	plans: string[]; // names from `plans`
+	gets: string[]; // what you get
+	examples: string[]; // names from `work` or `houses`
+	questions: { q: string; a: string }[];
+};
+
+export const landings: Landing[] = [
+	{
+		slug: 'websites-for-garages',
+		label: 'Websites for garages',
+		title: 'Websites for garages',
+		metaTitle: 'Websites for garages in Ireland, from €950 | VNTA',
+		description:
+			'VNTA builds websites for Irish garages and mechanics. Your services, your prices, and call and WhatsApp buttons on every page. From €950, then €39 a month.',
+		lede: 'A garage website has one job: get people to ring. We build it, put your prices on it, and look after it every month.',
+		plans: ['Website'],
+		gets: [
+			'Your services and your prices, easy to read on a phone',
+			'Call and WhatsApp buttons on every page',
+			'A page for each main service, written for local Google searches',
+			'Set up to be found on Google and by AI',
+			'Hosting, security, updates and small changes every month'
+		],
+		examples: ['EZGO Auto Works'],
+		questions: [
+			{
+				q: 'Can customers ring or message me from the site?',
+				a: 'Yes. Call and WhatsApp buttons sit on every page, so a customer can reach you in one tap.'
+			},
+			{
+				q: 'I do bodywork and detailing too. Can it show all of it?',
+				a: 'Yes. EZGO Auto Works does mechanics, bodywork and detailing under one roof, and the site we built shows all three.'
+			},
+			{
+				q: 'How much is a website for a garage?',
+				a: 'From €950 to build, then from €39 a month to host it and look after it. You get the exact price in writing before we start.'
+			}
+		]
+	},
+	{
+		slug: 'websites-for-car-dealers',
+		label: 'Websites for car dealers',
+		title: 'Websites for car dealers',
+		metaTitle: 'Websites for car dealers in Ireland, from €1,900 | VNTA',
+		description:
+			'VNTA builds websites for Irish car dealers. Your stock with search and filters, a page for every car, and you add and remove cars yourself. From €1,900.',
+		lede: 'People come to a dealer website to see the cars. So we put your stock first, with search, filters and a page for every car.',
+		plans: ['Website with stock'],
+		gets: [
+			'Your stock, with search and filters',
+			'A page for every car, easy to find on Google and easy to share',
+			'Add and remove cars yourself',
+			'Call and WhatsApp buttons on every page',
+			'Hosting, security, updates and small changes every month'
+		],
+		examples: ['L.M. Motors'],
+		questions: [
+			{
+				q: 'Can I add and remove cars myself?',
+				a: 'Yes. You add and remove cars yourself, so the site always matches the forecourt. No need to ring us for every change.'
+			},
+			{
+				q: 'Can it have sell your car and finance pages?',
+				a: 'Yes. The L.M. Motors site we are building has both.'
+			},
+			{
+				q: 'How much is a website for a car dealer?',
+				a: 'From €1,900 to build, then from €59 a month to host it and look after it. You get the exact price in writing before we start.'
+			}
+		]
+	},
+	{
+		slug: 'online-shops',
+		label: 'Online shops',
+		title: 'Online shops',
+		metaTitle: 'Online shops for Irish businesses, from €3,500 | VNTA',
+		description:
+			'VNTA builds online shops for Irish businesses. A cart, online payment, and you manage orders, stock and prices yourself. From €3,500, then €89 a month.',
+		lede: 'Sell and get paid online. We build the shop, and you manage your own orders, stock and prices.',
+		plans: ['Online shop'],
+		gets: [
+			'A cart and online payment',
+			'Your products, with search and filters',
+			'Manage orders, stock and prices yourself',
+			'Set up to be found on Google and by AI',
+			'Hosting, security, updates and small changes every month'
+		],
+		examples: ['BUILDT', 'Carbon Wheels'],
+		questions: [
+			{
+				q: 'Do you run a shop yourselves?',
+				a: 'Yes. Carbon Wheels is our own shop. It sells carbon steering wheels for BMW and opens on 1 November 2026.'
+			},
+			{
+				q: 'Can I change stock and prices myself?',
+				a: 'Yes. You manage orders, stock and prices yourself.'
+			},
+			{
+				q: 'How long does an online shop take?',
+				a: 'Five to eight weeks from the day we agree the price.'
+			}
+		]
+	},
+	{
+		slug: 'web-design-dublin',
+		label: 'Web design in Dublin',
+		title: 'Web design in Dublin',
+		metaTitle: 'Web design in Dublin, from €950 | VNTA',
+		description:
+			'VNTA is a small web design studio in Dublin. We build websites for local businesses and look after them every month. From €950, then €39 a month.',
+		lede: 'VNTA is a small studio in Dublin. We build websites for local businesses and look after them every month.',
+		plans: ['Website', 'Website with stock', 'Online shop'],
+		gets: [
+			'A website designed and built from scratch for your business',
+			'Easy to use on a phone',
+			'Set up to be found on Google and by AI',
+			'Hosting, security, updates and small changes every month',
+			'A fixed price in writing before we start'
+		],
+		examples: ['EZGO Auto Works', 'BUILDT'],
+		questions: [
+			{
+				q: 'How much does a website cost in Dublin?',
+				a: 'With us, a new website is from €950, then from €39 a month to host it and look after it. You get the exact price in writing before we start.'
+			},
+			{
+				q: 'Do you only work in Dublin?',
+				a: 'No. We are based in Dublin and work with businesses all over Ireland. L.M. Motors, for one, is in Sallins, Co. Kildare.'
+			},
+			{
+				q: 'Who looks after the site once it is live?',
+				a: 'We do. The monthly fee covers hosting, security, updates and small changes.'
+			}
+		]
 	}
 ];
 

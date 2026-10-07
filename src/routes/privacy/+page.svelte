@@ -1,14 +1,11 @@
-<svelte:head>
-	<title>Privacy · VNTA</title>
-	<meta
-		name="description"
-		content="Privacy policy for VNTA (Vantanéant International Ltd)."
-	/>
-	<meta property="og:title" content="Privacy · VNTA" />
-	<meta property="og:description" content="Privacy policy for VNTA." />
-	<meta property="og:type" content="website" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-</svelte:head>
+<script lang="ts">
+	import Seo from '$lib/components/Seo.svelte';
+</script>
+
+<Seo
+	title="Privacy | VNTA"
+	description="Privacy policy for VNTA (Vantanéant International Ltd)."
+/>
 
 <main class="page-container">
 	<div class="content content-width">

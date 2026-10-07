@@ -17,6 +17,7 @@
 	import { trackPageView } from '$lib/analytics';
 	import CookieBanner from '$lib/components/CookieBanner.svelte';
 	import Wordmark from '$lib/components/ui/Wordmark.svelte';
+	import { landings, social } from '$lib/content/site';
 
 	let { children } = $props();
 
@@ -38,15 +39,10 @@
 </script>
 
 <svelte:head>
+	<link rel="icon" href="{base}/favicon.ico" sizes="48x48" />
 	<link rel="icon" type="image/svg+xml" href="{base}/symbol.svg" />
-	<link rel="apple-touch-icon" href="{base}/symbol.svg" />
+	<link rel="apple-touch-icon" href="{base}/apple-touch-icon.png" />
 	<meta name="theme-color" content="#ffffff" />
-
-	<link rel="canonical" href={`https://vnta.xyz${$page.url.pathname}`} />
-	<meta property="og:site_name" content="VNTA" />
-	<meta property="og:image" content="https://vnta.xyz/og.png" />
-	<meta name="twitter:card" content="summary_large_image" />
-	<meta name="twitter:image" content="https://vnta.xyz/og.png" />
 </svelte:head>
 
 {#if chrome}
@@ -68,6 +64,20 @@
 		{@render children()}
 
 		<footer class="foot" data-theme="tint">
+			<div class="wrap foot__more">
+				<nav class="foot__links" aria-label="What we build">
+					{#each landings as l}
+						<a href="{base}/{l.slug}">{l.label}</a>
+					{/each}
+				</nav>
+				{#if social.length}
+					<nav class="foot__links" aria-label="VNTA elsewhere">
+						{#each social as s}
+							<a href={s.href} rel="me noopener">{s.name}</a>
+						{/each}
+					</nav>
+				{/if}
+			</div>
 			<div class="wrap">
 				<span>Dublin &middot; Worldwide</span>
 				<nav class="foot__links" aria-label="Secondary">

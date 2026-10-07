@@ -1,21 +1,12 @@
 <script lang="ts">
+	import Seo from '$lib/components/Seo.svelte';
 	import { base } from '$app/paths';
 </script>
 
-<svelte:head>
-	<title>Legal · VNTA</title>
-	<meta
-		name="description"
-		content="Legal information and notices relating to VNTA and this website."
-	/>
-	<meta property="og:title" content="Legal · VNTA" />
-	<meta
-		property="og:description"
-		content="Legal information and notices relating to VNTA and this website."
-	/>
-	<meta property="og:type" content="website" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
-</svelte:head>
+<Seo
+	title="Legal | VNTA"
+	description="Legal information and notices relating to VNTA and this website."
+/>
 
 <main class="page-container">
 	<div class="content content-width">

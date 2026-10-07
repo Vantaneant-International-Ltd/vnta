@@ -10,6 +10,8 @@
 	import { base } from '$app/paths';
 	import EnquiryForm from '$lib/components/EnquiryForm.svelte';
 	import Devices from '$lib/components/Devices.svelte';
+	import ProjectCard from '$lib/components/ProjectCard.svelte';
+	import Seo from '$lib/components/Seo.svelte';
 	import Wordmark from '$lib/components/ui/Wordmark.svelte';
 	import Symbol from '$lib/components/ui/Symbol.svelte';
 	import {
@@ -19,11 +21,13 @@
 		steps,
 		questions,
 		houses,
+		landings,
 		worldStyle,
 		studioEmail,
 		replyWithin,
 		euro
 	} from '$lib/content/site';
+	import { organisation, website, faq, portfolio } from '$lib/content/structured';
 
 	// The first house leads; the others follow in a row beneath it.
 	const [leadHouse, ...otherHouses] = houses;
@@ -33,49 +37,21 @@
 
 	const description = `VNTA builds websites for Irish garages, dealers, shops and trades, and looks after them every month. From ${euro(fromBuild)}, then ${euro(fromMonthly)} a month.`;
 
-	// Structured data: who we are and what a site costs, in the form Google reads.
-	const ld = JSON.stringify({
-		'@context': 'https://schema.org',
-		'@type': 'ProfessionalService',
-		name: 'VNTA',
-		legalName: 'Vantanéant International Ltd',
-		url: 'https://vnta.xyz/',
-		email: studioEmail,
-		image: 'https://vnta.xyz/og.png',
-		description,
-		areaServed: { '@type': 'Country', name: 'Ireland' },
-		address: { '@type': 'PostalAddress', addressLocality: 'Dublin', addressCountry: 'IE' },
-		makesOffer: plans.map((p) => ({
-			'@type': 'Offer',
-			name: `${p.name} website`,
-			description: p.for,
-			price: p.build,
-			priceCurrency: 'EUR'
-		}))
-	});
-
-	// The questions, in the same form, so search engines and AI assistants can
-	// quote the answer and not guess at it.
-	const faqLd = JSON.stringify({
-		'@context': 'https://schema.org',
-		'@type': 'FAQPage',
-		mainEntity: questions.map((item) => ({
-			'@type': 'Question',
-			name: item.q,
-			acceptedAnswer: { '@type': 'Answer', text: item.a }
-		}))
-	});
+	// Each plan links to the page that says more about it.
+	const more: Record<string, string> = {
+		Website: 'websites-for-garages',
+		'Website with stock': 'websites-for-car-dealers',
+		'Online shop': 'online-shops'
+	};
+	const moreFor = (plan: string) => landings.find((l) => l.slug === more[plan]);
 </script>
 
-<svelte:head>
-	<title>VNTA | Websites for Irish businesses, from {euro(fromBuild)}</title>
-	<meta name="description" content={description} />
-	<meta property="og:title" content="VNTA | Websites that bring in the work" />
-	<meta property="og:description" content={description} />
-	<meta property="og:type" content="website" />
-	{@html `<script type="application/ld+json">${ld}<\/script>`}
-	{@html `<script type="application/ld+json">${faqLd}<\/script>`}
-</svelte:head>
+<Seo
+	title="Websites for Irish businesses, from {euro(fromBuild)} | VNTA"
+	shareTitle="VNTA | Websites that bring in the work"
+	{description}
+	ld={[organisation(description), website(), faq(questions), portfolio()]}
+/>
 
 <main>
 	<!-- HERO: what we do, and three real sites on three phones -->
@@ -137,31 +113,19 @@
 
 			<div class="jobs">
 				{#each work as job}
-					<article class="job card world" style={worldStyle(job.world)}>
-						<Devices image={job.image} alt={job.alt} />
-						<div class="job__text">
-							<div>
-								<p class="job__meta">
-									{job.trade}, {job.place}
-									<span class="tag" class:tag--quiet={job.status !== 'Live'}>{job.status}</span>
-								</p>
-								<h3 class="job__name">{job.name}</h3>
-								{#if job.href}
-									<p class="job__foot">
-										<a class="link" href={job.href} rel="noopener">Visit {job.domain}</a>
-									</p>
-								{/if}
-							</div>
-							<div>
-								<p class="job__summary">{job.summary}</p>
-								<ul class="list">
-									{#each job.built as line}
-										<li>{line}</li>
-									{/each}
-								</ul>
-							</div>
-						</div>
-					</article>
+					<ProjectCard
+						world={job.world}
+						image={job.image}
+						alt={job.alt}
+						meta="{job.trade}, {job.place}"
+						status={job.status}
+						live={job.status === 'Live'}
+						name={job.name}
+						href={job.href}
+						domain={job.domain}
+						summary={job.summary}
+						built={job.built}
+					/>
 				{/each}
 			</div>
 
@@ -172,31 +136,18 @@
 				</p>
 			</div>
 
-			<article class="job card world" style={worldStyle(leadHouse.world)}>
-				<Devices image={leadHouse.image} alt={leadHouse.alt} />
-				<div class="job__text">
-					<div>
-						<p class="job__meta">
-							{leadHouse.kind}
-							<span class="tag tag--quiet">{leadHouse.status}</span>
-						</p>
-						<h3 class="job__name">{leadHouse.name}</h3>
-						<p class="job__foot">
-							<a class="link" href={leadHouse.href} rel="noopener">Visit {leadHouse.domain}</a>
-						</p>
-					</div>
-					<div>
-						<p class="job__summary">{leadHouse.line}</p>
-						{#if leadHouse.built}
-							<ul class="list">
-								{#each leadHouse.built as line}
-									<li>{line}</li>
-								{/each}
-							</ul>
-						{/if}
-					</div>
-				</div>
-			</article>
+			<ProjectCard
+				world={leadHouse.world}
+				image={leadHouse.image}
+				alt={leadHouse.alt}
+				meta={leadHouse.kind ?? ''}
+				status={leadHouse.status}
+				name={leadHouse.name}
+				href={leadHouse.href}
+				domain={leadHouse.domain}
+				summary={leadHouse.line}
+				built={leadHouse.built}
+			/>
 
 			<div class="houses">
 				{#each otherHouses as house}
@@ -245,6 +196,11 @@
 							{/each}
 						</ul>
 						<p class="plan__time">{plan.time}</p>
+						{#if moreFor(plan.name)}
+							<p class="plan__more">
+								<a class="link" href="{base}/{moreFor(plan.name)?.slug}">{moreFor(plan.name)?.label}</a>
+							</p>
+						{/if}
 					</article>
 				{/each}
 			</div>
@@ -432,95 +388,6 @@
 		color: var(--ink);
 	}
 
-	/* --- Work ------------------------------------------------------------- */
-	.jobs {
-		display: grid;
-		gap: clamp(16px, 2vw, 24px);
-	}
-	/* Each job: the site on three screens, then the words under it. */
-	.job {
-		display: grid;
-		gap: clamp(24px, 3.4vw, 44px);
-		padding: clamp(20px, 4vw, 48px) clamp(16px, 4vw, 48px) clamp(22px, 3.4vw, 40px);
-	}
-	.job__text {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 16px clamp(24px, 4vw, 56px);
-		align-items: start;
-	}
-	.job__meta {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: 8px 10px;
-		margin: 0;
-		font-size: var(--t-small);
-		color: var(--ink-60);
-	}
-	.tag {
-		display: inline-block;
-		padding: 3px 10px;
-		border-radius: var(--r-pill);
-		background: var(--ink);
-		color: var(--paper);
-		font-size: 0.72rem;
-		font-weight: 600;
-		line-height: 1.4;
-	}
-	.tag--quiet {
-		background: var(--ink-20);
-		color: var(--ink-80);
-	}
-	.job__name {
-		margin: 8px 0 0;
-		font-size: var(--t-h3);
-		line-height: 1.1;
-		color: var(--ink);
-	}
-	.job__summary {
-		margin: 0;
-		font-size: var(--t-body);
-		line-height: 1.45;
-		color: var(--ink-80);
-		max-width: 40ch;
-		text-wrap: pretty;
-	}
-	.job .list {
-		margin-top: 16px;
-	}
-	.job__foot {
-		margin: 12px 0 0;
-		font-size: var(--t-body);
-	}
-
-	/* A plain list of what you get, with a small round mark. */
-	.list {
-		list-style: none;
-		margin: 0;
-		padding: 0;
-		display: grid;
-		align-content: start;
-		gap: 8px;
-		font-size: var(--t-small);
-		line-height: 1.4;
-		color: var(--ink-80);
-	}
-	.list li {
-		position: relative;
-		padding-left: 18px;
-	}
-	.list li::before {
-		content: '';
-		position: absolute;
-		left: 2px;
-		top: 0.55em;
-		width: 5px;
-		height: 5px;
-		border-radius: 50%;
-		background: var(--w-accent, var(--ink-40));
-	}
-
 	/* --- Our own houses: one lead, the same as a job, then two beside each
 	   other. Every one shows its real, live site on the three screens. ------ */
 	.head--second {
@@ -573,76 +440,6 @@
 		text-underline-offset: 4px;
 	}
 
-	/* --- Prices ----------------------------------------------------------- */
-	.plans {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: clamp(12px, 1.6vw, 20px);
-	}
-	.plan {
-		display: flex;
-		flex-direction: column;
-		padding: clamp(22px, 2.6vw, 32px);
-	}
-	.plan__name {
-		margin: 0;
-		font-size: var(--t-h3);
-		line-height: 1.15;
-		color: var(--ink);
-	}
-	.plan__for {
-		margin: 6px 0 0;
-		font-size: var(--t-small);
-		line-height: 1.4;
-		color: var(--ink-60);
-		text-wrap: pretty;
-	}
-	.plan__price {
-		display: flex;
-		align-items: baseline;
-		gap: 8px;
-		margin: 22px 0 0;
-	}
-	.plan__from {
-		font-size: var(--t-small);
-		color: var(--ink-60);
-	}
-	.plan__build {
-		font-family: var(--font-display);
-		font-size: var(--t-h2);
-		line-height: 1;
-		color: var(--ink);
-	}
-	.plan__monthly {
-		margin: 8px 0 0;
-		font-size: var(--t-body);
-		font-weight: 600;
-		color: var(--ink);
-	}
-	.plan__list {
-		margin-top: 22px;
-		padding-top: 20px;
-		border-top: 1px solid var(--line-soft);
-	}
-	.plan__time {
-		margin: 20px 0 0;
-		font-size: var(--t-small);
-		color: var(--ink-60);
-	}
-
-	.notes {
-		margin-top: clamp(12px, 1.6vw, 20px);
-	}
-	.prices__cta {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: 12px 20px;
-		margin: clamp(24px, 3vw, 36px) 0 0;
-		font-size: var(--t-body);
-		color: var(--ink-60);
-	}
-
 	/* --- Steps: a real sequence, so it is numbered. ----------------------- */
 	.steps {
 		list-style: none;
@@ -678,70 +475,6 @@
 		line-height: 1.45;
 		color: var(--ink-60);
 		text-wrap: pretty;
-	}
-
-	/* --- Questions: one rounded list --------------------------------------- */
-	.qa__item {
-		border-top: 1px solid var(--line-soft);
-	}
-	.qa__item:first-child {
-		border-top: 0;
-	}
-	.qa__item summary {
-		display: flex;
-		justify-content: space-between;
-		align-items: center;
-		gap: 20px;
-		padding: 18px clamp(18px, 2.4vw, 28px);
-		font-family: var(--font-display);
-		font-size: var(--t-h4);
-		font-weight: 400;
-		line-height: 1.3;
-		color: var(--ink);
-		cursor: pointer;
-		list-style: none;
-	}
-	.qa__item summary::-webkit-details-marker {
-		display: none;
-	}
-	.qa__item summary::after {
-		content: '+';
-		flex: none;
-		font-size: 1.4rem;
-		font-weight: 400;
-		line-height: 1;
-		color: var(--ink-40);
-		transition: transform var(--dur) var(--ease);
-	}
-	.qa__item[open] summary::after {
-		transform: rotate(45deg);
-	}
-	.qa__item p {
-		margin: 0;
-		padding: 0 clamp(18px, 2.4vw, 28px) 20px;
-		font-size: var(--t-body);
-		line-height: 1.5;
-		color: var(--ink-60);
-		max-width: 62ch;
-		text-wrap: pretty;
-	}
-
-	/* --- Quote: a graphite card ------------------------------------------- */
-	.quote {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: clamp(24px, 4vw, 56px);
-		align-items: start;
-		background: var(--paper);
-		color: var(--ink);
-		padding: clamp(24px, 4.4vw, 56px);
-		border-radius: clamp(24px, 3vw, 32px);
-	}
-	.quote .head__title {
-		font-size: var(--t-h2);
-	}
-	.quote .head__text {
-		margin-top: 12px;
 	}
 
 	/* --- Us --------------------------------------------------------------- */
@@ -815,21 +548,6 @@
 		}
 		.phones {
 			justify-self: end;
-		}
-		.job__text {
-			grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-		}
-		.plans {
-			grid-template-columns: repeat(3, minmax(0, 1fr));
-		}
-		.plan__for {
-			min-height: 2.8em;
-		}
-		.plan__list {
-			flex: 1;
-		}
-		.quote {
-			grid-template-columns: minmax(0, 4fr) minmax(0, 6fr);
 		}
 		.us {
 			grid-template-columns: auto minmax(0, 1fr);

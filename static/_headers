@@ -1,0 +1,18 @@
+# Cloudflare Pages response headers.
+
+# Built files carry a fingerprint in their name, so they can be kept for a year.
+/_app/immutable/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Screenshots and icons change rarely. A week, then check again.
+/work/*
+  Cache-Control: public, max-age=604800
+/og.png
+  Cache-Control: public, max-age=86400
+
+# Not for search results.
+/portal/*
+  X-Robots-Tag: noindex
+/api/*
+  X-Robots-Tag: noindex
+

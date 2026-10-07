@@ -28,6 +28,26 @@ House rules for copy, also at the top of that file:
 - Plain punctuation. No em or en dashes.
 - No claim that is not true today.
 
+## Being found: search engines, AI assistants and share cards
+
+- **Every page's title, description, share card and address** come from one
+  component, `src/lib/components/Seo.svelte`. Use it on every public page.
+- **Structured data** (who VNTA is, prices, the work, the houses it owns) is in
+  `src/lib/content/structured.ts` and reads from `site.ts`.
+- **Landing pages** for what people search ("websites for garages", "web design
+  Dublin") are entries in `landings` in `site.ts`. Add an entry and the page,
+  the foot link, the sitemap line and the llms.txt line all appear.
+- **Profiles.** Put VNTA's real Instagram, Facebook, LinkedIn and X addresses
+  in `social` in `site.ts`. They show in the foot and tell Google and AI
+  assistants that those profiles are the same VNTA.
+- **`/robots.txt`** welcomes search engines and AI crawlers by name.
+  **`/sitemap.xml`** and **`/llms.txt`** are built from the content file.
+- **IndexNow.** `npm run deploy` ends by telling Bing and friends the site
+  changed (`scripts/indexnow.mjs`). The key file in `static/` proves it is us.
+- **Cloudflare can still block AI crawlers at the door**, whatever robots.txt
+  says. In the Cloudflare dashboard for vnta.xyz, under Security, the setting
+  that blocks AI bots must be off, or GPTBot and ClaudeBot get a 403.
+
 ## Add a house
 
 Add an entry to `houses` in `src/lib/content/site.ts`. The first house in the
