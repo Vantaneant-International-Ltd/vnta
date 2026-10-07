@@ -57,8 +57,8 @@
 			<a class="cb__link" href="{base}/privacy">Privacy</a>
 		</p>
 		<div class="cb__actions">
-			<button class="btn-ghost cb__btn" onclick={decline}>Decline</button>
-			<button class="btn-primary cb__btn" onclick={accept}>Accept</button>
+			<button class="btn btn--ghost cb__btn" onclick={decline}>Decline</button>
+			<button class="btn btn--solid cb__btn" onclick={accept}>Accept</button>
 		</div>
 	</aside>
 {/if}

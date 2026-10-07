@@ -1,5 +1,3 @@
-# Holding page: the old marketing routes point home until the new site ships.
-# 302, not 301, because these addresses come back.
-/about    /  302
-/houses   /  302
-/contact  /  302
+# The old marketing pages are folded into the home page.
+/about    /  301
+/houses   /  301

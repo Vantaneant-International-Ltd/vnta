@@ -1,15 +1,9 @@
 /* =============================================================================
-   VNTA — Design Tokens (warm-editorial direction, June 2026)
+   VNTA — Design Tokens (cold monochrome)
    -----------------------------------------------------------------------------
-   Reference register: Kering (house-of-houses, editorial) × BlackRock
-   (institutional authority) × Anthropic (warm, calm execution).
-
-   SUPERSEDES the pure-black monochrome tokens currently inlined in
-   +layout.svelte. This is the single source of truth for colour, type, space,
-   shape, and motion. Pages must consume these vars — never hardcode rgba().
-
-   Migration: phase 2 removes the inline :root from +layout.svelte and imports
-   this file globally. Until then it lives alongside; opt a page in by importing.
+   The single source of truth for colour, type, space, shape and motion.
+   Pages consume these vars and never hardcode a colour. The reasoning behind
+   the palette is in docs/REDESIGN-DIRECTION.md.
    ========================================================================== */
 
 :root {
@@ -48,8 +42,6 @@
 	--font-body:    'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
 	/* Mono for labels, dates, and register figures. Neutral system stack (matches
 	   the ad-hoc stack pages already used inline; promoted to a token here). */
-	/* Signature face — used for ONE thing: the signed name. Never for UI. */
-	--font-sign:    'Mrs Saint Delafield', 'Snell Roundhand', cursive;
 	--font-mono:    ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
 	/* Hero display face — its OWN token so the landing headline can swap to a
 	   Didone (e.g. Playfair Display) in one line without touching Marcellus

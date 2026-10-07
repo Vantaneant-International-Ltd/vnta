@@ -19,19 +19,24 @@
 
 /* Hairlines are the only dividers on the site. */
 .masthead,
-.hero,
-.statement,
+.sec,
 .band {
 	border-bottom: 1px solid var(--line);
 }
 
 /* --- Masthead ------------------------------------------------------------ */
+/* Stays with the reader: on a long page the price button is always one tap
+   away. Paper behind it, no blur and no shadow. */
 .masthead {
+	position: sticky;
+	top: 0;
+	z-index: 10;
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	gap: var(--s-6);
-	padding: 24px 0;
+	padding: 16px 0;
+	background: var(--paper);
 }
 .masthead__mark {
 	display: inline-flex;
@@ -39,9 +44,10 @@
 }
 .masthead__nav {
 	display: flex;
-	gap: clamp(20px, 2.8vw, 52px);
+	align-items: center;
+	gap: clamp(18px, 2.6vw, 44px);
 }
-.masthead__nav a {
+.masthead__nav a:not(.btn) {
 	font-size: 0.72rem;
 	text-transform: uppercase;
 	letter-spacing: 0.18em;
@@ -50,16 +56,101 @@
 	padding-bottom: 2px;
 	transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
 }
-/* An address is not a label: set it as written. */
-.masthead__nav a[href^='mailto:'] {
-	text-transform: none;
-	letter-spacing: 0;
-	font-size: 0.81rem;
-}
-.masthead__nav a:hover,
-.masthead__nav a[aria-current='page'] {
+.masthead__nav a:not(.btn):hover,
+.masthead__nav a:not(.btn)[aria-current='page'] {
 	color: var(--ink);
 	border-bottom-color: var(--ink-35);
+}
+
+/* --- Buttons --------------------------------------------------------------
+   Square, one weight, two kinds. Solid is the one action a page is asking
+   for; ghost is everything else. Inside an ink band the tokens invert, so
+   the same classes read white on black without a second set of rules. */
+.btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 44px;
+	padding: 0 22px;
+	box-sizing: border-box;
+	border: 1px solid var(--ink);
+	border-radius: var(--radius);
+	font-family: var(--font-body);
+	font-size: 0.9rem;
+	font-weight: 600;
+	line-height: 1;
+	white-space: nowrap;
+	cursor: pointer;
+	transition: background var(--dur) var(--ease), color var(--dur) var(--ease);
+}
+.btn--solid {
+	background: var(--ink);
+	color: var(--paper);
+}
+.btn--solid:hover {
+	background: var(--ink-85);
+}
+.btn--ghost {
+	background: transparent;
+	color: var(--ink);
+}
+.btn--ghost:hover {
+	background: var(--ink);
+	color: var(--paper);
+}
+.btn[disabled] {
+	opacity: 0.55;
+	cursor: default;
+}
+.btn--small {
+	min-height: 38px;
+	padding: 0 16px;
+	font-size: 0.82rem;
+}
+
+/* --- Sections -------------------------------------------------------------
+   A section is a heading and what follows it. The heading sits in the left
+   third on a wide screen and on top on a narrow one. */
+.sec {
+	padding: clamp(48px, 6.4vw, 104px) 0;
+	scroll-margin-top: 72px;
+}
+.sec__head {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 12px clamp(24px, 3vw, 48px);
+	align-items: end;
+	margin-bottom: clamp(28px, 3.6vw, 56px);
+}
+.sec__title {
+	margin: 0;
+	font-size: var(--t-h2);
+	color: var(--ink);
+}
+.sec__intro {
+	margin: 0;
+	font-size: 1.0625rem;
+	line-height: 1.55;
+	color: var(--ink-70);
+	max-width: 46ch;
+	text-wrap: pretty;
+}
+@media (min-width: 900px) {
+	.sec__head {
+		grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+	}
+}
+
+/* A link inside running text: underlined, because it is the only way to
+   tell it from the words around it. */
+.link {
+	color: var(--ink);
+	border-bottom: 1px solid var(--ink-35);
+	padding-bottom: 1px;
+	transition: border-color var(--dur) var(--ease);
+}
+.link:hover {
+	border-bottom-color: var(--ink);
 }
 
 /* --- Bands: label row across the top, items full width beneath -----------
@@ -190,14 +281,6 @@ a.band__aside:hover {
 	border-bottom-color: var(--ink-35);
 }
 
-.sign__name {
-	font-family: var(--font-sign);
-	font-size: 2.4rem;
-	line-height: 1.5;
-	letter-spacing: 0.005em;
-	color: var(--ink);
-}
-
 /* --- Foot ---------------------------------------------------------------- */
 .foot {
 	display: flex;
@@ -242,16 +325,15 @@ a.band__aside:hover {
 	}
 }
 
+/* Narrow screens: the page is one scroll, so the masthead keeps the mark and
+   the one button and lets the section links go. */
+@media (max-width: 860px) {
+	.masthead__nav a:not(.btn) {
+		display: none;
+	}
+}
+
 @media (max-width: 560px) {
-	.masthead {
-		flex-direction: column;
-		align-items: flex-start;
-		gap: var(--s-3);
-	}
-	.masthead__nav {
-		gap: var(--s-6);
-		flex-wrap: wrap;
-	}
 	.foot__copy {
 		margin-left: 0;
 		width: 100%;

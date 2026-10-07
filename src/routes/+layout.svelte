@@ -9,7 +9,6 @@
 	import '@fontsource/manrope/500.css';
 	import '@fontsource/manrope/600.css';
 	import '@fontsource/manrope/700.css';
-	import '@fontsource/mrs-saint-delafield/400.css'; // the signature only
 
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
@@ -28,9 +27,13 @@
 	const path = $derived($page.url.pathname.replace(base, '') || '/');
 	const chrome = $derived(!path.startsWith('/portal'));
 
-	// Holding page: the site is being rebuilt, so the masthead carries the mark
-	// and one way to reach us. The small print keeps its own pages.
-	const home = $derived(path === '/');
+	// The home page is one long scroll, so the masthead links are anchors into
+	// it. The last one is the action the whole page is asking for.
+	const nav = [
+		{ label: 'Work', href: `${base}/#work` },
+		{ label: 'Prices', href: `${base}/#prices` },
+		{ label: 'Questions', href: `${base}/#questions` }
+	];
 </script>
 
 <svelte:head>
@@ -48,16 +51,17 @@
 {#if chrome}
 	<div class="shell" data-sveltekit-preload-data="hover">
 		<div class="wrap">
-			{#if !home}
 			<header class="masthead">
 				<a class="masthead__mark" href="{base}/" aria-label="VNTA home">
 					<Wordmark height={20} />
 				</a>
 				<nav class="masthead__nav" aria-label="Primary">
-					<a href="mailto:studio@vnta.xyz">studio@vnta.xyz</a>
+					{#each nav as item}
+						<a href={item.href}>{item.label}</a>
+					{/each}
+					<a class="btn btn--solid btn--small" href="{base}/#quote">Get a price</a>
 				</nav>
 			</header>
-			{/if}
 
 			{@render children()}
 
@@ -65,6 +69,7 @@
 				<span class="foot__mark"><Wordmark height={13} /></span>
 				<span>Dublin &middot; Worldwide</span>
 				<nav class="foot__links" aria-label="Secondary">
+					<a href="{base}/contact">Contact</a>
 					<a href="{base}/legal">Legal</a>
 					<a href="{base}/privacy">Privacy</a>
 					<a href="{base}/terms">Terms</a>
@@ -117,15 +122,6 @@
 	/* Legal pages still use these two. */
 	:global(.page-container) { max-width: 800px; margin: 0 auto; padding: clamp(32px, 5vw, 56px) 0; }
 	:global(.content-width) { max-width: 680px; }
-	:global(.btn-primary) {
-		display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-		padding: 13px 24px; border-radius: var(--radius);
-		background: var(--ink); color: var(--paper); border: 1px solid var(--ink);
-		font-family: var(--font-body); font-weight: 600; font-size: 0.9rem;
-		cursor: pointer; transition: background var(--dur) var(--ease);
-	}
-	:global(.btn-primary:hover) { background: var(--ink-85); }
-
 	.shell { min-height: 100svh; display: flex; flex-direction: column; }
 	.shell > .wrap { flex: 1; display: flex; flex-direction: column; }
 	.shell :global(main) { flex: 1 0 auto; }

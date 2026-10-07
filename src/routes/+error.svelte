@@ -1,6 +1,5 @@
 <script lang="ts">
-	// Nothing lives here. The old marketing routes resolve to this page, so it
-	// says so in one line and points back to the only page there is.
+	// Nothing lives here. Say so in one line and point back to the home page.
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
 </script>
@@ -14,7 +13,7 @@
 	<p class="err__code">{$page.status}</p>
 	<p class="err__line">
 		{#if $page.status === 404}
-			Nothing here. There is one page, and <a href="{base}/">it is this way</a>.
+			Nothing here. <a href="{base}/">Back to the home page</a>.
 		{:else}
 			Something went wrong. <a href="{base}/">Back to the page</a>.
 		{/if}
