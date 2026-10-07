@@ -28,6 +28,13 @@ House rules for copy, also at the top of that file:
 - Plain punctuation. No em or en dashes.
 - No claim that is not true today.
 
+## Add a house
+
+Add an entry to `houses` in `src/lib/content/site.ts`. Give it an `image` only
+when there is a real phone screenshot in `static/work/` (`<name>-phone.jpg` at
+780 by 1688 and `<name>-phone-390.jpg`); without one the card shows the name on
+its own.
+
 ## Add a piece of work
 
 1. Add an entry to `work` in `src/lib/content/site.ts`.
@@ -107,13 +114,17 @@ static/
 Soft and plain, the way a well-made phone screen is. The values are in
 `src/lib/styles/tokens.css`.
 
-- **Colour:** greys only. An off-white (`#f5f5f7`), white, and a graphite
-  (`#1d1d1f`) in place of pure black. The brand guideline sets pure white and
-  pure black; on a screen that pairing glares, so both ends are softened. The
-  only colour on the site is the client work.
-- **Type:** Optima for headings (Apple devices carry it; others get Marcellus).
-  Everything you read or tap is in the device's own face on Apple and Manrope
-  elsewhere.
+- **Colour:** greys only, and the brand guideline's own. Its 80 percent black
+  (`#333333`) is the ink and the one dark surface; 60, 40 and 20 percent do
+  the rest; the page tint (`#f5f5f5`) is the one value not on its list. Pure
+  black against pure white glared on a screen, so neither is used full-bleed.
+- **Worlds:** each project's card borrows that project's own ground, text
+  colour and one accent, so every client and every house gets its own
+  spotlight. That is the only colour on the site, and it lives in
+  `content/site.ts` beside the project it belongs to.
+- **Type:** Optima for every title (Apple devices carry it; others get
+  Marcellus). Small reading text, buttons and fields are in the device's own
+  face on Apple and Manrope elsewhere.
 - **Shape:** rounded. Cards 24px, fields 12px, buttons fully round.
 - **Layout:** white and grey sections in turn, content in cards, lists set as
   one rounded group with hairlines, like a phone's settings.

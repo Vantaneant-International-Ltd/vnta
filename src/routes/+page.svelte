@@ -19,6 +19,7 @@
 		steps,
 		questions,
 		houses,
+		worldStyle,
 		studioEmail,
 		replyWithin,
 		euro
@@ -133,7 +134,7 @@
 
 			<div class="jobs">
 				{#each work as job}
-					<article class="job card">
+					<article class="job card world" style={worldStyle(job.world)}>
 						<Devices image={job.image} alt={job.alt} />
 						<div class="job__text">
 							<div>
@@ -158,6 +159,46 @@
 							</div>
 						</div>
 					</article>
+				{/each}
+			</div>
+
+			<div class="head head--second" id="houses">
+				<h2 class="head__title" id="houses-title">Our own houses</h2>
+				<p class="head__text">
+					We build and run our own companies too, the same way we build yours.
+				</p>
+			</div>
+
+			<div class="houses">
+				{#each houses as house}
+					<a class="house card world" style={worldStyle(house.world)} href={house.href} rel="noopener">
+						<div class="house__stage">
+							{#if house.image}
+								<div class="phone">
+									<img
+										src="{base}/work/{house.image}-phone.jpg"
+										srcset="{base}/work/{house.image}-phone-390.jpg 390w, {base}/work/{house.image}-phone.jpg 780w"
+										sizes="(min-width: 900px) 130px, 22vw"
+										width="780"
+										height="1688"
+										loading="lazy"
+										decoding="async"
+										alt="The {house.name} site on a phone."
+									/>
+								</div>
+							{:else}
+								<p class="house__plate" aria-hidden="true">{house.name}</p>
+							{/if}
+						</div>
+						<div class="house__text">
+							<h3 class="house__name">{house.name}</h3>
+							<p class="house__line">{house.line}</p>
+							<p class="house__foot">
+								{#if house.status}<span class="tag tag--quiet">{house.status}</span>{/if}
+								<span class="house__domain">{house.domain}</span>
+							</p>
+						</div>
+					</a>
 				{/each}
 			</div>
 		</div>
@@ -279,9 +320,8 @@
 				</h2>
 				<div class="us__text">
 					<p>
-						A small studio in Dublin. We also build and run our own companies,
-						{#each houses as house, i}<a class="link" href={house.href} rel="noopener">{house.name}</a>{i < houses.length - 2 ? ', ' : i === houses.length - 2 ? ' and ' : ''}{/each},
-						the same way we build yours.
+						A small studio in Dublin. We build websites for other people's businesses,
+						and for <a class="link" href="#houses">our own</a>.
 					</p>
 					<p class="us__mail">
 						<a class="link" href="mailto:{studioEmail}">{studioEmail}</a>
@@ -337,7 +377,7 @@
 		max-width: 560px;
 	}
 	.phone {
-		background: var(--black);
+		background: var(--device, var(--black));
 		padding: 3%;
 		border-radius: 15% / 6.9%;
 		line-height: 0;
@@ -464,7 +504,85 @@
 		width: 5px;
 		height: 5px;
 		border-radius: 50%;
-		background: var(--ink-40);
+		background: var(--w-accent, var(--ink-40));
+	}
+
+	/* --- Our own houses: four small worlds in a row. ---------------------- */
+	.head--second {
+		margin-top: clamp(56px, 7vw, 96px);
+		scroll-margin-top: 72px;
+	}
+	.houses {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		gap: clamp(10px, 1.6vw, 20px);
+	}
+	.house {
+		display: flex;
+		flex-direction: column;
+		overflow: hidden;
+	}
+	/* The stage: a phone standing on the card's floor, or, until there is a
+	   real screenshot, the house's name on its own. */
+	.house__stage {
+		display: flex;
+		align-items: flex-end;
+		justify-content: center;
+		aspect-ratio: 1 / 1.05;
+		padding: 12% 12% 0;
+		overflow: hidden;
+	}
+	.house__stage .phone {
+		width: 62%;
+		border-bottom-left-radius: 0;
+		border-bottom-right-radius: 0;
+		padding-bottom: 0;
+		transform: translateY(18%);
+	}
+	.house__stage .phone img {
+		border-bottom-left-radius: 0;
+		border-bottom-right-radius: 0;
+	}
+	.house__plate {
+		align-self: center;
+		margin: 0 0 6%;
+		font-family: var(--font-display);
+		font-size: clamp(1.5rem, 3.4vw, 2.4rem);
+		line-height: 1.05;
+		text-align: center;
+		color: var(--ink);
+		opacity: 0.9;
+	}
+	.house__text {
+		padding: clamp(14px, 1.8vw, 22px);
+		border-top: 1px solid var(--line-soft);
+	}
+	.house__name {
+		margin: 0;
+		font-size: var(--t-h4);
+		line-height: 1.2;
+		color: var(--ink);
+	}
+	.house__line {
+		margin: 6px 0 0;
+		font-size: var(--t-small);
+		line-height: 1.4;
+		color: var(--ink-60);
+		text-wrap: pretty;
+	}
+	.house__foot {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 6px 10px;
+		margin: 12px 0 0;
+		font-size: 0.82rem;
+		color: var(--ink-60);
+	}
+	.house:hover .house__domain {
+		text-decoration: underline;
+		text-decoration-color: var(--w-accent);
+		text-underline-offset: 4px;
 	}
 
 	/* --- Prices ----------------------------------------------------------- */
@@ -480,10 +598,8 @@
 	}
 	.plan__name {
 		margin: 0;
-		font-family: var(--font-ui);
-		font-size: var(--t-h4);
-		font-weight: 600;
-		line-height: 1.2;
+		font-size: var(--t-h3);
+		line-height: 1.15;
 		color: var(--ink);
 	}
 	.plan__for {
@@ -564,10 +680,8 @@
 	}
 	.step__name {
 		margin: 18px 0 0;
-		font-family: var(--font-ui);
-		font-size: var(--t-h4);
-		font-weight: 600;
-		line-height: 1.25;
+		font-size: var(--t-h3);
+		line-height: 1.15;
 		color: var(--ink);
 	}
 	.step__body {
@@ -591,9 +705,10 @@
 		align-items: center;
 		gap: 20px;
 		padding: 18px clamp(18px, 2.4vw, 28px);
-		font-size: var(--t-body);
-		font-weight: 600;
-		line-height: 1.35;
+		font-family: var(--font-display);
+		font-size: var(--t-h4);
+		font-weight: 400;
+		line-height: 1.3;
 		color: var(--ink);
 		cursor: pointer;
 		list-style: none;
@@ -715,6 +830,9 @@
 		}
 		.plans {
 			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+		.houses {
+			grid-template-columns: repeat(4, minmax(0, 1fr));
 		}
 		.plan__for {
 			min-height: 2.8em;

@@ -63,9 +63,10 @@
 	.scene {
 		position: relative;
 		aspect-ratio: 100 / 53;
-		--body: #1d1d1f; /* device bodies are graphite on every surface */
-		--metal: #c7c7cc;
-		--metal-dark: #a1a1a6;
+		/* A world can set these; otherwise the bodies are the site's soft black. */
+		--body: var(--device, #333333);
+		--m: var(--metal, #c7c7cc);
+		--m-dark: var(--metal-dark, #a1a1a6);
 	}
 	.scene img {
 		display: block;
@@ -94,7 +95,7 @@
 		width: 118%;
 		margin-left: -9%;
 		aspect-ratio: 100 / 2.3;
-		background: var(--metal);
+		background: var(--m);
 		border-radius: 0 0 1.6% 1.6% / 0 0 70% 70%;
 	}
 	.laptop__base::before {
@@ -104,7 +105,7 @@
 		left: 43%;
 		width: 14%;
 		height: 38%;
-		background: var(--metal-dark);
+		background: var(--m-dark);
 		border-radius: 0 0 6% 6% / 0 0 100% 100%;
 	}
 

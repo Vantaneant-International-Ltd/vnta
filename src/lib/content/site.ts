@@ -20,7 +20,24 @@ export const replyWithin = 'two working days';
 // --- The work ----------------------------------------------------------------
 // Newest first. `href` is left out for a site that is not live yet.
 
+/**
+ * A project's world: the few colours its card borrows from the project's own
+ * brand, so each one gets a spotlight in its own light. Kept small on purpose:
+ * a ground, the text on it, a quiet text, a line, and one accent. The ground,
+ * the text and the accent are that project's own; where a project's colours
+ * are not known yet, the card stays in VNTA's greys.
+ */
+export type World = {
+	bg: string; // the card
+	ink: string; // text on it
+	soft: string; // quiet text
+	line: string; // hairlines
+	accent: string; // list marks and link underlines, nothing more
+	dark: boolean; // a dark card needs lighter device bodies
+};
+
 export type Work = {
+	world: World;
 	name: string;
 	trade: string;
 	place: string;
@@ -35,6 +52,7 @@ export type Work = {
 
 export const work: Work[] = [
 	{
+		world: { bg: '#151921', ink: '#eef1f6', soft: '#9a9fa8', line: '#38404c', accent: '#62a1f6', dark: true },
 		name: 'L.M. Motors',
 		trade: 'Used car dealer',
 		place: 'Sallins, Co. Kildare',
@@ -50,6 +68,7 @@ export const work: Work[] = [
 		]
 	},
 	{
+		world: { bg: '#f3f4f2', ink: '#0b0c0d', soft: '#555b56', line: '#dcdfda', accent: '#8cc63f', dark: false },
 		name: 'EZGO Auto Works',
 		trade: 'Garage',
 		place: 'Finglas, Dublin 11',
@@ -67,6 +86,7 @@ export const work: Work[] = [
 		]
 	},
 	{
+		world: { bg: '#070810', ink: '#f3f1ee', soft: '#a8a39c', line: '#22232b', accent: '#b06a4e', dark: true },
 		name: 'BUILDT',
 		trade: 'Custom PC builder',
 		place: 'Dublin',
@@ -197,14 +217,62 @@ export const questions = [
 	}
 ];
 
-// --- Us ----------------------------------------------------------------------
+// --- Our own houses ----------------------------------------------------------
+// The companies VNTA builds and runs for itself. Each line is the house's own
+// published wording. `image` is the stem of a phone screenshot under /work
+// (<image>-phone.jpg and <image>-phone-390.jpg); leave it out until there is a
+// real screenshot and the card shows the name on its own.
 
-export const houses = [
-	{ name: 'Vendr', href: 'https://vendr.ie' },
-	{ name: 'Éirvox', href: 'https://eirvox.ie' },
-	{ name: 'Maison Seul', href: 'https://maisonseul.com' },
-	{ name: 'Carbon Wheels', href: 'https://carbonwheels.ie' }
+export type House = {
+	world: World;
+	name: string;
+	href: string;
+	domain: string;
+	line: string;
+	status?: string;
+	image?: string;
+};
+
+export const houses: House[] = [
+	{
+		world: { bg: '#141414', ink: '#ffffff', soft: '#a6a6a6', line: '#2e2e2e', accent: '#ffffff', dark: true },
+		name: 'Vendr',
+		href: 'https://vendr.ie',
+		domain: 'vendr.ie',
+		line: 'A modern vending platform.',
+		status: 'Coming soon',
+		image: 'vendr'
+	},
+	{
+		world: { bg: '#1f1f1f', ink: '#f7f7f6', soft: '#a9a9a6', line: '#353535', accent: '#e8742c', dark: true },
+		name: 'Éirvox',
+		href: 'https://eirvox.ie',
+		domain: 'eirvox.ie',
+		line: 'Verification led enthusiast commerce.'
+	},
+	{
+		world: { bg: '#121619', ink: '#f2f3f1', soft: '#a9aeb1', line: '#2a3034', accent: '#f2f3f1', dark: true },
+		name: 'Maison Seul',
+		href: 'https://maisonseul.com',
+		domain: 'maisonseul.com',
+		line: 'Singular objects.',
+		status: '2027',
+		image: 'maison-seul'
+	},
+	{
+		world: { bg: '#333333', ink: '#ffffff', soft: '#cccccc', line: '#4d4d4d', accent: '#ffffff', dark: true },
+		name: 'Carbon Wheels',
+		href: 'https://carbonwheels.ie',
+		domain: 'carbonwheels.ie',
+		line: 'Carbon steering wheels for BMW.',
+		status: 'Opens 1 November'
+	}
 ];
+
+/** A world as the inline custom properties its card reads. */
+export const worldStyle = (w: World) =>
+	`--w-bg:${w.bg};--w-ink:${w.ink};--w-soft:${w.soft};--w-line:${w.line};--w-accent:${w.accent};` +
+	`--device:${w.dark ? '#3a3a3c' : '#333333'};--metal:${w.dark ? '#8e8e93' : '#c7c7cc'};--metal-dark:${w.dark ? '#636366' : '#a1a1a6'}`;
 
 /** Formats a euro amount the way the page prints it: €1,900. */
 export const euro = (n: number) => `€${n.toLocaleString('en-IE')}`;

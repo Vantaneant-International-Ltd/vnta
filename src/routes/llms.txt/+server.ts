@@ -1,7 +1,7 @@
 // /llms.txt: a plain summary of who we are and what a site costs, for the AI
 // assistants people now ask instead of searching. Written from the same
 // content file as the page, so the two can never disagree on a price.
-import { work, plans, priceNotes, questions, studioEmail, replyWithin, euro } from '$lib/content/site';
+import { work, houses, plans, priceNotes, questions, studioEmail, replyWithin, euro } from '$lib/content/site';
 
 export const prerender = true;
 
@@ -27,6 +27,10 @@ export function GET() {
 				? `- [${w.name}](${w.href}): ${w.trade}, ${w.place}. ${w.summary}`
 				: `- ${w.name}: ${w.trade}, ${w.place}. ${w.status}. ${w.summary}`
 		),
+		'',
+		'## Our own houses',
+		'',
+		...houses.map((h) => `- [${h.name}](${h.href}): ${h.line}${h.status ? ` ${h.status}.` : ''}`),
 		'',
 		'## Questions',
 		'',
