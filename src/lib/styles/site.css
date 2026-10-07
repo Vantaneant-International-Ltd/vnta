@@ -50,6 +50,12 @@
 	padding-bottom: 2px;
 	transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
 }
+/* An address is not a label: set it as written. */
+.masthead__nav a[href^='mailto:'] {
+	text-transform: none;
+	letter-spacing: 0;
+	font-size: 0.81rem;
+}
 .masthead__nav a:hover,
 .masthead__nav a[aria-current='page'] {
 	color: var(--ink);

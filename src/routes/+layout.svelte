@@ -28,19 +28,9 @@
 	const path = $derived($page.url.pathname.replace(base, '') || '/');
 	const chrome = $derived(!path.startsWith('/portal'));
 
-	// Five is the ceiling. Companies and Diagnosis are anchors into the pages
-	// that carry them; Contact is a mail draft.
-	const nav = [
-		{ label: 'About', href: `${base}/about` },
-		{ label: 'Companies', href: `${base}/houses` },
-		{ label: 'Diagnosis', href: `${base}/about#diagnosis` },
-		{ label: 'Contact', href: `${base}/contact` }
-	];
-
-	function current(href: string) {
-		if (href.startsWith('mailto:') || href.includes('#')) return undefined;
-		return href.replace(base, '') === path ? 'page' : undefined;
-	}
+	// Holding page: the site is being rebuilt, so the masthead carries the mark
+	// and one way to reach us. The small print keeps its own pages.
+	const home = $derived(path === '/');
 </script>
 
 <svelte:head>
@@ -58,16 +48,16 @@
 {#if chrome}
 	<div class="shell" data-sveltekit-preload-data="hover">
 		<div class="wrap">
+			{#if !home}
 			<header class="masthead">
 				<a class="masthead__mark" href="{base}/" aria-label="VNTA home">
 					<Wordmark height={20} />
 				</a>
 				<nav class="masthead__nav" aria-label="Primary">
-					{#each nav as item}
-						<a href={item.href} aria-current={current(item.href)}>{item.label}</a>
-					{/each}
+					<a href="mailto:studio@vnta.xyz">studio@vnta.xyz</a>
 				</nav>
 			</header>
+			{/if}
 
 			{@render children()}
 
@@ -75,7 +65,6 @@
 				<span class="foot__mark"><Wordmark height={13} /></span>
 				<span>Dublin &middot; Worldwide</span>
 				<nav class="foot__links" aria-label="Secondary">
-					<a href="{base}/houses">Houses</a>
 					<a href="{base}/legal">Legal</a>
 					<a href="{base}/privacy">Privacy</a>
 					<a href="{base}/terms">Terms</a>
