@@ -4,8 +4,9 @@
 	// work, how do I start. Kept short on purpose: the reader is on a phone
 	// between jobs. All of the words and numbers live in $lib/content/site.ts.
 	//
-	// The look is the brand guideline's: black and white bands, a full rule
-	// and a title in capitals opening each one, and lists set as ruled rows.
+	// The look is soft on purpose: grey and white sections in turn, rounded
+	// cards, and the client sites shown on phones, because a phone is where
+	// their customers will see them.
 	import { base } from '$app/paths';
 	import EnquiryForm from '$lib/components/EnquiryForm.svelte';
 	import Wordmark from '$lib/components/ui/Wordmark.svelte';
@@ -72,8 +73,8 @@
 </svelte:head>
 
 <main>
-	<!-- HERO: black, the statement, and the three facts as ruled rows -->
-	<section class="band hero" data-theme="ink" aria-labelledby="hero-title">
+	<!-- HERO: what we do, and three real sites on three phones -->
+	<section class="band hero" data-theme="tint" aria-labelledby="hero-title">
 		<div class="wrap">
 			<div class="hero__top">
 				<div class="hero__say">
@@ -87,27 +88,41 @@
 						<a class="btn btn--ghost" href="#work">See the work</a>
 					</div>
 				</div>
-				<div class="hero__symbol"><Symbol size={0} /></div>
+
+				<div class="phones">
+					{#each [work[0], work[1], work[2]] as job, i}
+						<div class="phone phone--{i}">
+							<img
+								src="{base}/work/{job.image}-phone.jpg"
+								srcset="{base}/work/{job.image}-phone-390.jpg 390w, {base}/work/{job.image}-phone.jpg 780w"
+								sizes="(min-width: 900px) 200px, 30vw"
+								width="780"
+								height="1688"
+								alt="The {job.name} site on a phone."
+							/>
+						</div>
+					{/each}
+				</div>
 			</div>
 
-			<dl class="rows hero__facts">
-				<div class="row">
-					<dt class="row__term">A new website</dt>
-					<dd class="row__desc">from {euro(fromBuild)}</dd>
+			<dl class="facts">
+				<div class="fact card">
+					<dt>A new website</dt>
+					<dd>from {euro(fromBuild)}</dd>
 				</div>
-				<div class="row">
-					<dt class="row__term">Hosted and looked after</dt>
-					<dd class="row__desc">from {euro(fromMonthly)} a month</dd>
+				<div class="fact card">
+					<dt>Hosted and looked after</dt>
+					<dd>from {euro(fromMonthly)} a month</dd>
 				</div>
-				<div class="row">
-					<dt class="row__term">Your price, in writing</dt>
-					<dd class="row__desc">within {replyWithin}</dd>
+				<div class="fact card">
+					<dt>Your price, in writing</dt>
+					<dd>within {replyWithin}</dd>
 				</div>
 			</dl>
 		</div>
 	</section>
 
-	<!-- WORK: white, so the client sites carry the only colour on the page -->
+	<!-- WORK -->
 	<section class="band" id="work" aria-labelledby="work-title">
 		<div class="wrap">
 			<div class="head">
@@ -117,12 +132,12 @@
 
 			<div class="jobs">
 				{#each work as job}
-					<article class="job">
+					<article class="job card">
 						<div class="job__shot">
 							<img
 								src="{base}/work/{job.image}.jpg"
 								srcset="{base}/work/{job.image}-720.jpg 720w, {base}/work/{job.image}.jpg 1440w"
-								sizes="(min-width: 900px) 50vw, 100vw"
+								sizes="(min-width: 900px) 560px, 92vw"
 								width="1440"
 								height="900"
 								loading="lazy"
@@ -131,11 +146,11 @@
 							/>
 						</div>
 						<div class="job__text">
-							<h3 class="job__name">{job.name}</h3>
 							<p class="job__meta">
 								{job.trade}, {job.place}
 								<span class="tag" class:tag--quiet={job.status !== 'Live'}>{job.status}</span>
 							</p>
+							<h3 class="job__name">{job.name}</h3>
 							<p class="job__summary">{job.summary}</p>
 							<ul class="list">
 								{#each job.built as line}
@@ -154,8 +169,8 @@
 		</div>
 	</section>
 
-	<!-- PRICES: black, set as a price list -->
-	<section class="band" id="prices" data-theme="ink" aria-labelledby="prices-title">
+	<!-- PRICES -->
+	<section class="band" id="prices" data-theme="tint" aria-labelledby="prices-title">
 		<div class="wrap">
 			<div class="head">
 				<h2 class="head__title" id="prices-title">Prices</h2>
@@ -167,33 +182,29 @@
 
 			<div class="plans">
 				{#each plans as plan}
-					<article class="plan">
-						<div class="plan__what">
-							<h3 class="plan__name">{plan.name}</h3>
-							<p class="plan__for">{plan.for}</p>
-						</div>
+					<article class="plan card">
+						<h3 class="plan__name">{plan.name}</h3>
+						<p class="plan__for">{plan.for}</p>
+						<p class="plan__price">
+							<span class="plan__from">from</span>
+							<span class="plan__build">{euro(plan.build)}</span>
+						</p>
+						<p class="plan__monthly">then {euro(plan.monthly)} a month</p>
 						<ul class="list plan__list">
 							{#each plan.includes as line}
 								<li>{line}</li>
 							{/each}
 						</ul>
-						<div class="plan__cost">
-							<p class="plan__price">
-								<span class="plan__from">from</span>
-								<span class="plan__build">{euro(plan.build)}</span>
-							</p>
-							<p class="plan__monthly">then {euro(plan.monthly)} a month</p>
-							<p class="plan__time">{plan.time}</p>
-						</div>
+						<p class="plan__time">{plan.time}</p>
 					</article>
 				{/each}
 			</div>
 
-			<dl class="rows notes">
+			<dl class="group notes">
 				{#each priceNotes as note}
-					<div class="row">
-						<dt class="row__term">{note.name}</dt>
-						<dd class="row__desc">{note.body}</dd>
+					<div class="group__row">
+						<dt class="group__term">{note.name}</dt>
+						<dd class="group__desc">{note.body}</dd>
 					</div>
 				{/each}
 			</dl>
@@ -205,7 +216,7 @@
 		</div>
 	</section>
 
-	<!-- HOW IT WORKS: white -->
+	<!-- HOW IT WORKS -->
 	<section class="band" id="how" aria-labelledby="how-title">
 		<div class="wrap">
 			<div class="head">
@@ -216,27 +227,26 @@
 				</p>
 			</div>
 
-			<ol class="rows steps">
+			<ol class="steps">
 				{#each steps as step, i}
-					<li class="row step">
-						<h3 class="row__term">
-							<span class="step__n" aria-hidden="true">{i + 1}</span>{step.name}
-						</h3>
-						<p class="row__desc">{step.body}</p>
+					<li class="step card">
+						<span class="step__n" aria-hidden="true">{i + 1}</span>
+						<h3 class="step__name">{step.name}</h3>
+						<p class="step__body">{step.body}</p>
 					</li>
 				{/each}
 			</ol>
 		</div>
 	</section>
 
-	<!-- QUESTIONS: white, joined to the band above -->
-	<section class="band band--joined" id="questions" aria-labelledby="questions-title">
+	<!-- QUESTIONS -->
+	<section class="band" id="questions" data-theme="tint" aria-labelledby="questions-title">
 		<div class="wrap">
 			<div class="head">
 				<h2 class="head__title" id="questions-title">Questions</h2>
 			</div>
 
-			<div class="qa">
+			<div class="group qa">
 				{#each questions as item}
 					<details class="qa__item">
 						<summary>{item.q}</summary>
@@ -247,24 +257,26 @@
 		</div>
 	</section>
 
-	<!-- QUOTE: black -->
-	<section class="band" id="quote" data-theme="ink" aria-labelledby="quote-title">
+	<!-- QUOTE: the one dark thing on the page, and it is a card, not a wall -->
+	<section class="band" id="quote" aria-labelledby="quote-title">
 		<div class="wrap">
-			<div class="head">
-				<h2 class="head__title" id="quote-title">Get a price</h2>
-				<p class="head__text">
-					Tell us what you do. We reply within {replyWithin} with a fixed price. It costs
-					nothing to ask.
-				</p>
-			</div>
-			<div class="quote__form">
-				<EnquiryForm source="/" />
+			<div class="quote card" data-theme="ink">
+				<div class="quote__say">
+					<h2 class="head__title" id="quote-title">Get a price</h2>
+					<p class="head__text">
+						Tell us what you do. We reply within {replyWithin} with a fixed price. It
+						costs nothing to ask.
+					</p>
+				</div>
+				<div class="quote__form">
+					<EnquiryForm source="/" />
+				</div>
 			</div>
 		</div>
 	</section>
 
-	<!-- US: black, joined. The lockup, and two lines. -->
-	<section class="band band--joined" id="us" data-theme="ink" aria-labelledby="us-title">
+	<!-- US -->
+	<section class="band us-band" id="us" data-theme="tint" aria-labelledby="us-title">
 		<div class="wrap">
 			<div class="us">
 				<h2 class="us__lockup" id="us-title">
@@ -289,126 +301,161 @@
 <style>
 	/* --- Hero ------------------------------------------------------------- */
 	.hero > .wrap {
-		padding-top: clamp(48px, 7vw, 112px);
-		padding-bottom: clamp(40px, 5vw, 80px);
+		padding-top: clamp(40px, 6vw, 88px);
+		padding-bottom: clamp(40px, 5vw, 72px);
 	}
 	.hero__top {
 		display: grid;
 		grid-template-columns: 1fr;
-		gap: clamp(32px, 5vw, 80px);
+		gap: clamp(36px, 5vw, 64px);
 		align-items: center;
 	}
-	/* Heading 1 on the guideline's scale: 64px, at its natural spacing. */
 	.hero__title {
 		margin: 0;
 		font-size: var(--t-h1);
-		line-height: 1.08;
-		max-width: 14ch;
+		line-height: 1.05;
+		max-width: 15ch;
 		text-wrap: balance;
 		color: var(--ink);
 	}
 	.hero__lede {
-		margin: clamp(20px, 2.4vw, 32px) 0 0;
+		margin: clamp(16px, 2vw, 24px) 0 0;
 		font-size: var(--t-lede);
 		line-height: 1.4;
-		color: var(--ink-80);
-		max-width: 34ch;
+		color: var(--ink-60);
+		max-width: 32ch;
 		text-wrap: pretty;
 	}
 	.hero__cta {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 12px;
-		margin-top: clamp(24px, 2.8vw, 40px);
+		gap: 10px;
+		margin-top: clamp(22px, 2.6vw, 32px);
 	}
-	/* The symbol stands where the guideline puts its photographs: to the
-	   right, on black, with room around it. Hidden on a phone, where the
-	   words need the space. */
-	.hero__symbol {
-		display: none;
-		color: var(--ink);
+
+	/* Three phones, three real sites. The frame is drawn in CSS: a graphite
+	   body with rounded corners, the screenshot rounded inside it. */
+	.phones {
+		display: grid;
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		gap: clamp(8px, 2vw, 18px);
+		align-items: center;
+		max-width: 560px;
 	}
-	.hero__symbol :global(svg) {
+	.phone {
+		background: var(--black);
+		padding: 3%;
+		border-radius: 15% / 6.9%;
+		line-height: 0;
+	}
+	.phone img {
+		display: block;
 		width: 100%;
 		height: auto;
+		border-radius: 12.5% / 5.8%;
 	}
-	.hero__facts {
-		margin-top: clamp(40px, 6vw, 96px);
+	/* The middle one stands a little proud of the other two. */
+	.phone--0,
+	.phone--2 {
+		transform: translateY(6%);
 	}
-	.hero__facts .row__desc {
-		font-family: var(--font-display);
-		font-size: var(--t-h4);
+
+	.facts {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 10px;
+		margin: clamp(36px, 5vw, 64px) 0 0;
+	}
+	.fact {
+		display: flex;
+		flex-direction: column;
+		gap: 2px;
+		padding: 14px 20px;
+		border-radius: 16px;
+	}
+	.fact dt {
+		font-size: var(--t-small);
+		color: var(--ink-60);
+	}
+	.fact dd {
+		margin: 0;
+		font-size: var(--t-body);
+		font-weight: 600;
 		color: var(--ink);
 	}
 
 	/* --- Work ------------------------------------------------------------- */
 	.jobs {
 		display: grid;
-		gap: clamp(48px, 6vw, 96px);
+		gap: clamp(16px, 2vw, 24px);
 	}
 	.job {
 		display: grid;
 		grid-template-columns: 1fr;
-		gap: clamp(20px, 3vw, 48px);
-		align-items: start;
+		gap: clamp(20px, 3vw, 40px);
+		align-items: center;
+		padding: clamp(14px, 2vw, 24px);
 	}
-	/* Framed with a thin line, as the guideline frames its logos. */
 	.job__shot {
-		border: 1px solid var(--ink);
 		line-height: 0;
+		border-radius: calc(var(--r-card) - 8px);
+		overflow: hidden;
+		border: 1px solid var(--line-soft);
 	}
 	.job__shot img {
 		display: block;
 		width: 100%;
 		height: auto;
 	}
-	.job__name {
-		margin: 0;
-		font-size: var(--t-h3);
-		color: var(--ink);
+	.job__text {
+		padding: 0 clamp(6px, 1vw, 12px) clamp(8px, 1vw, 12px);
 	}
 	.job__meta {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
-		gap: 8px 12px;
-		margin: 10px 0 0;
+		gap: 8px 10px;
+		margin: 0;
 		font-size: var(--t-small);
 		color: var(--ink-60);
 	}
 	.tag {
 		display: inline-block;
-		padding: 3px 8px;
-		border: 1px solid var(--ink);
-		font-family: var(--font-body);
-		font-size: 0.7rem;
+		padding: 3px 10px;
+		border-radius: var(--r-pill);
+		background: var(--ink);
+		color: var(--paper);
+		font-size: 0.72rem;
 		font-weight: 600;
-		line-height: 1.2;
-		color: var(--ink);
+		line-height: 1.4;
 	}
 	.tag--quiet {
-		border-color: var(--ink-60);
-		color: var(--ink-60);
+		background: var(--ink-20);
+		color: var(--ink-80);
+	}
+	.job__name {
+		margin: 8px 0 0;
+		font-size: var(--t-h3);
+		line-height: 1.1;
+		color: var(--ink);
 	}
 	.job__summary {
-		margin: 18px 0 0;
+		margin: 12px 0 0;
 		font-size: var(--t-body);
 		line-height: 1.45;
-		color: var(--ink);
+		color: var(--ink-80);
 		max-width: 40ch;
 		text-wrap: pretty;
 	}
 	.job .list {
-		margin-top: 18px;
+		margin-top: 16px;
 	}
 	.job__foot {
-		margin: 22px 0 0;
+		margin: 18px 0 0;
 		font-size: var(--t-body);
 	}
 
-	/* A plain list of what you get. The mark is a small square: not a tick,
-	   because nothing is being celebrated, and not a rule, because a rule
-	   before a line of text reads as a dash. */
+	/* A plain list of what you get, with a small round mark. */
 	.list {
 		list-style: none;
 		margin: 0;
@@ -427,50 +474,49 @@
 	.list li::before {
 		content: '';
 		position: absolute;
-		left: 0;
-		top: 0.52em;
+		left: 2px;
+		top: 0.55em;
 		width: 5px;
 		height: 5px;
-		background: var(--ink);
+		border-radius: 50%;
+		background: var(--ink-40);
 	}
 
-	/* --- Prices: a price list. What it is, what is in it, what it costs. --- */
-	.plan {
+	/* --- Prices ----------------------------------------------------------- */
+	.plans {
 		display: grid;
 		grid-template-columns: 1fr;
-		gap: 18px clamp(24px, 3vw, 48px);
-		align-items: start;
-		padding: clamp(24px, 2.8vw, 40px) 0;
-		border-bottom: 1px solid var(--line);
+		gap: clamp(12px, 1.6vw, 20px);
 	}
-	.plan:first-child {
-		border-top: 1px solid var(--line);
+	.plan {
+		display: flex;
+		flex-direction: column;
+		padding: clamp(22px, 2.6vw, 32px);
 	}
 	.plan__name {
 		margin: 0;
-		font-size: var(--t-h3);
+		font-family: var(--font-ui);
+		font-size: var(--t-h4);
+		font-weight: 600;
+		line-height: 1.2;
 		color: var(--ink);
 	}
 	.plan__for {
-		margin: 10px 0 0;
-		font-size: var(--t-body);
+		margin: 6px 0 0;
+		font-size: var(--t-small);
 		line-height: 1.4;
-		color: var(--ink-80);
-		max-width: 28ch;
+		color: var(--ink-60);
 		text-wrap: pretty;
-	}
-	.plan__list {
-		padding-top: 6px;
 	}
 	.plan__price {
 		display: flex;
 		align-items: baseline;
-		gap: 10px;
-		margin: 0;
+		gap: 8px;
+		margin: 22px 0 0;
 	}
 	.plan__from {
-		font-size: var(--t-body);
-		color: var(--ink-80);
+		font-size: var(--t-small);
+		color: var(--ink-60);
 	}
 	.plan__build {
 		font-family: var(--font-display);
@@ -479,54 +525,90 @@
 		color: var(--ink);
 	}
 	.plan__monthly {
-		margin: 10px 0 0;
-		font-family: var(--font-display);
-		font-size: var(--t-h4);
-		line-height: 1.2;
+		margin: 8px 0 0;
+		font-size: var(--t-body);
+		font-weight: 600;
 		color: var(--ink);
 	}
+	.plan__list {
+		margin-top: 22px;
+		padding-top: 20px;
+		border-top: 1px solid var(--line-soft);
+	}
 	.plan__time {
-		margin: 10px 0 0;
+		margin: 20px 0 0;
 		font-size: var(--t-small);
 		color: var(--ink-60);
 	}
 
 	.notes {
-		margin-top: clamp(40px, 5vw, 80px);
+		margin-top: clamp(12px, 1.6vw, 20px);
 	}
 	.prices__cta {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
-		gap: 14px 24px;
-		margin: clamp(32px, 4vw, 56px) 0 0;
+		gap: 12px 20px;
+		margin: clamp(24px, 3vw, 36px) 0 0;
 		font-size: var(--t-body);
-		color: var(--ink-80);
-	}
-
-	/* --- Steps: a real sequence, so it is numbered. ----------------------- */
-	.step__n {
-		display: inline-block;
-		width: 1.6em;
 		color: var(--ink-60);
 	}
 
-	/* --- Questions -------------------------------------------------------- */
-	.qa {
-		border-top: 1px solid var(--line);
+	/* --- Steps: a real sequence, so it is numbered. ----------------------- */
+	.steps {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: clamp(12px, 1.6vw, 20px);
 	}
+	.step {
+		padding: clamp(22px, 2.6vw, 32px);
+	}
+	.step__n {
+		display: grid;
+		place-items: center;
+		width: 36px;
+		height: 36px;
+		border-radius: 50%;
+		background: var(--ink);
+		color: var(--paper);
+		font-size: 0.95rem;
+		font-weight: 600;
+	}
+	.step__name {
+		margin: 18px 0 0;
+		font-family: var(--font-ui);
+		font-size: var(--t-h4);
+		font-weight: 600;
+		line-height: 1.25;
+		color: var(--ink);
+	}
+	.step__body {
+		margin: 8px 0 0;
+		font-size: var(--t-body);
+		line-height: 1.45;
+		color: var(--ink-60);
+		text-wrap: pretty;
+	}
+
+	/* --- Questions: one rounded list --------------------------------------- */
 	.qa__item {
-		border-bottom: 1px solid var(--line);
+		border-top: 1px solid var(--line-soft);
+	}
+	.qa__item:first-child {
+		border-top: 0;
 	}
 	.qa__item summary {
 		display: flex;
 		justify-content: space-between;
-		align-items: baseline;
-		gap: 24px;
-		padding: clamp(18px, 2vw, 28px) 0;
-		font-family: var(--font-display);
-		font-size: var(--t-h4);
-		line-height: 1.25;
+		align-items: center;
+		gap: 20px;
+		padding: 18px clamp(18px, 2.4vw, 28px);
+		font-size: var(--t-body);
+		font-weight: 600;
+		line-height: 1.35;
 		color: var(--ink);
 		cursor: pointer;
 		list-style: none;
@@ -537,10 +619,10 @@
 	.qa__item summary::after {
 		content: '+';
 		flex: none;
-		font-family: var(--font-body);
-		font-size: 1.3rem;
+		font-size: 1.4rem;
 		font-weight: 400;
-		color: var(--ink-60);
+		line-height: 1;
+		color: var(--ink-40);
 		transition: transform var(--dur) var(--ease);
 	}
 	.qa__item[open] summary::after {
@@ -548,37 +630,55 @@
 	}
 	.qa__item p {
 		margin: 0;
-		padding: 0 0 clamp(20px, 2.2vw, 30px);
+		padding: 0 clamp(18px, 2.4vw, 28px) 20px;
 		font-size: var(--t-body);
 		line-height: 1.5;
-		color: var(--ink-80);
-		max-width: 56ch;
+		color: var(--ink-60);
+		max-width: 62ch;
 		text-wrap: pretty;
 	}
 
-	/* --- Us: the lockup (guideline 2.3), symbol over wordmark, and two
-	   lines beside it. --------------------------------------------------- */
+	/* --- Quote: a graphite card ------------------------------------------- */
+	.quote {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: clamp(24px, 4vw, 56px);
+		align-items: start;
+		background: var(--paper);
+		color: var(--ink);
+		padding: clamp(24px, 4.4vw, 56px);
+		border-radius: clamp(24px, 3vw, 32px);
+	}
+	.quote .head__title {
+		font-size: var(--t-h2);
+	}
+	.quote .head__text {
+		margin-top: 12px;
+	}
+
+	/* --- Us --------------------------------------------------------------- */
+	.us-band > .wrap {
+		padding-top: clamp(40px, 6vw, 72px);
+		padding-bottom: clamp(40px, 6vw, 72px);
+	}
 	.us {
 		display: grid;
 		grid-template-columns: 1fr;
-		gap: clamp(32px, 4vw, 64px);
-		align-items: end;
-		border-top: 1px solid var(--line);
-		padding-top: clamp(48px, 6vw, 96px);
+		gap: clamp(28px, 4vw, 56px);
+		align-items: center;
 	}
-	/* The lockup keeps its own arrangement, symbol centred over wordmark,
-	   and the block as a whole sits on the left of the grid. */
+	/* The lockup keeps its own arrangement, symbol centred over wordmark. */
 	.us__lockup {
 		display: inline-flex;
 		flex-direction: column;
 		align-items: center;
-		gap: clamp(18px, 2.2vw, 30px);
-		width: clamp(200px, 26vw, 360px);
+		gap: 16px;
+		width: clamp(140px, 16vw, 190px);
 		margin: 0;
 		color: var(--ink);
 	}
 	.us__lockup :global(.symbol) {
-		width: 38%;
+		width: 36%;
 		height: auto;
 	}
 	.us__lockup :global(.wordmark) {
@@ -588,43 +688,60 @@
 	.us__text p {
 		margin: 0;
 		font-size: var(--t-lede);
-		line-height: 1.4;
+		line-height: 1.45;
 		color: var(--ink-80);
-		max-width: 34ch;
+		max-width: 38ch;
 		text-wrap: pretty;
 	}
 	.us__text .us__mail {
-		margin-top: 18px;
+		margin-top: 14px;
 		font-size: var(--t-body);
 	}
 
 	/* --- Wide ------------------------------------------------------------- */
+	@media (min-width: 700px) {
+		.facts {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+			gap: clamp(12px, 1.6vw, 20px);
+		}
+		.fact {
+			gap: 6px;
+			padding: 22px 24px;
+			border-radius: var(--r-card);
+		}
+		.fact dd {
+			font-family: var(--font-display);
+			font-size: var(--t-h4);
+			font-weight: 400;
+		}
+		.steps {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+	}
 	@media (min-width: 900px) {
 		.hero__top {
-			grid-template-columns: minmax(0, 7fr) minmax(0, 3fr);
+			grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
 		}
-		.hero__symbol {
-			display: block;
-			max-width: 340px;
+		.phones {
 			justify-self: end;
-			width: 100%;
 		}
 		.job {
-			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+			grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
 		}
-		.plan {
-			grid-template-columns: minmax(0, 4fr) minmax(0, 4fr) minmax(0, 4fr);
+		.plans {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
 		}
-		.plan__cost {
-			justify-self: end;
-			text-align: left;
-			min-width: 15ch;
+		.plan__for {
+			min-height: 2.8em;
 		}
-		.quote__form {
-			margin-left: calc(50% + clamp(12px, 1.5vw, 24px));
+		.plan__list {
+			flex: 1;
+		}
+		.quote {
+			grid-template-columns: minmax(0, 4fr) minmax(0, 6fr);
 		}
 		.us {
-			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+			grid-template-columns: auto minmax(0, 1fr);
 		}
 	}
 </style>

@@ -1,63 +1,58 @@
 /* =============================================================================
-   VNTA — shared page chrome and components
+   VNTA — shared page chrome and components (soft)
    -----------------------------------------------------------------------------
-   Built to the VNTA Brand Guidelines v1.0 (Felixto Brandworks):
-   - Colour (3.1, 3.2): white and black, with their shades. Most surfaces are
-     black, as most of the guideline is.
-   - Typeface (4.1): Optima. Titles are set in capitals, statements in
-     sentence case, both at the regular weight.
-   - Type scaling (4.3): 64 / 48 / 36 / 24.
-   - Common mistakes (4.4): do not centre, do not squeeze, no shadows.
-     Everything is left-aligned to the grid, type sits at its natural
-     spacing, and depth comes from rules alone.
-   - Logo (2.4 to 2.6): never below 50px wide, clear space kept, aligned to
-     the grid.
+   Calm and plain, the way a well-made phone screen is: soft greys, rounded
+   cards, one face for reading, generous space. Still only greys, still
+   left-aligned, still no shadows. The brand shows in the wordmark, the
+   symbol and the display face.
    ========================================================================== */
 
 /* --- Bands ----------------------------------------------------------------
-   The page is a stack of full-width bands, each white or black, the way the
-   guideline is a stack of white and black pages. A band paints edge to edge;
-   the wrap inside it holds the page margin. */
+   The page is a stack of full-width sections, white or soft grey in turn.
+   The wrap inside holds the page margin and the content width. */
 .band {
 	background: var(--paper);
 	color: var(--ink);
 }
 .wrap {
-	max-width: 1680px;
+	max-width: var(--maxw);
 	margin: 0 auto;
 	padding-left: var(--gutter);
 	padding-right: var(--gutter);
 }
 .band > .wrap {
-	padding-top: clamp(56px, 7.2vw, 120px);
-	padding-bottom: clamp(56px, 7.2vw, 120px);
+	padding-top: var(--section-y);
+	padding-bottom: var(--section-y);
 }
 .band[id] {
-	scroll-margin-top: 64px;
-}
-/* Two bands of the same colour in a row: one rule between them, no gap. */
-.band--joined > .wrap {
-	padding-top: 0;
+	scroll-margin-top: 56px;
 }
 
 /* --- Masthead -------------------------------------------------------------
-   Black on every page, and it stays with the reader: on a long page the
-   price button is always one tap away. No blur, no shadow. */
+   Stays with the reader, slightly see-through, so the price button is always
+   one tap away. */
 .masthead {
 	position: sticky;
 	top: 0;
 	z-index: 10;
-	background: var(--paper);
+	background: rgba(255, 255, 255, 0.82);
+	-webkit-backdrop-filter: saturate(180%) blur(18px);
+	backdrop-filter: saturate(180%) blur(18px);
 	color: var(--ink);
 	border-bottom: 1px solid var(--line-soft);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+	.masthead {
+		background: var(--paper);
+	}
 }
 .masthead > .wrap {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	gap: var(--s-6);
-	padding-top: 14px;
-	padding-bottom: 14px;
+	padding-top: 10px;
+	padding-bottom: 10px;
 }
 .masthead__mark {
 	display: inline-flex;
@@ -66,36 +61,31 @@
 .masthead__nav {
 	display: flex;
 	align-items: center;
-	gap: clamp(18px, 2.6vw, 44px);
+	gap: clamp(18px, 2.6vw, 36px);
 }
 .masthead__nav a:not(.btn) {
-	font-family: var(--font-text);
-	font-size: 0.95rem;
+	font-size: 0.88rem;
 	color: var(--ink-80);
-	border-bottom: 1px solid transparent;
-	padding-bottom: 2px;
-	transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
+	transition: color var(--dur) var(--ease);
 }
 .masthead__nav a:not(.btn):hover {
 	color: var(--ink);
-	border-bottom-color: var(--ink-60);
 }
 
 /* --- Buttons --------------------------------------------------------------
-   Square, two kinds. Solid is the one action a page is asking for; ghost is
-   everything else. The tokens invert with the band, so the same classes
-   read white on black and black on white. */
+   Rounded, two kinds. Solid is the one action a page is asking for; soft is
+   everything else. */
 .btn {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	min-height: 46px;
+	min-height: 48px;
 	padding: 0 24px;
 	box-sizing: border-box;
-	border: 1px solid var(--ink);
-	border-radius: 0;
-	font-family: var(--font-body);
-	font-size: 0.9rem;
+	border: 0;
+	border-radius: var(--r-pill);
+	font-family: var(--font-ui);
+	font-size: 1rem;
 	font-weight: 600;
 	line-height: 1;
 	white-space: nowrap;
@@ -108,119 +98,110 @@
 }
 .btn--solid:hover {
 	background: var(--ink-80);
-	border-color: var(--ink-80);
 }
 .btn--ghost {
-	background: transparent;
+	background: var(--line-soft);
 	color: var(--ink);
 }
 .btn--ghost:hover {
-	background: var(--ink);
-	color: var(--paper);
+	background: var(--ink-20);
 }
 .btn[disabled] {
 	opacity: 0.55;
 	cursor: default;
 }
 .btn--small {
-	min-height: 38px;
+	min-height: 40px;
 	padding: 0 16px;
-	font-size: 0.82rem;
+	font-size: 0.88rem;
 }
 
-/* --- Section head ---------------------------------------------------------
-   The guideline opens a page the same way every time: a full rule, the
-   title in capitals on the left, a short paragraph on the right. */
+/* --- Section head: a title and one line under it. ------------------------- */
 .head {
 	display: grid;
-	grid-template-columns: 1fr;
-	gap: 14px clamp(24px, 3vw, 48px);
-	align-items: start;
-	border-top: 1px solid var(--rule);
-	padding-top: clamp(20px, 2.2vw, 32px);
-	margin-bottom: clamp(32px, 4.4vw, 72px);
+	gap: 12px;
+	margin-bottom: clamp(28px, 4vw, 48px);
 }
 .head__title {
 	margin: 0;
 	font-family: var(--font-display);
 	font-weight: 400;
-	font-size: var(--t-h3);
-	line-height: 1.1;
-	letter-spacing: 0;
-	text-transform: uppercase;
+	font-size: var(--t-h2);
+	line-height: 1.08;
 	color: var(--ink);
+	text-wrap: balance;
 }
 .head__text {
 	margin: 0;
-	font-size: var(--t-body);
-	line-height: 1.45;
-	color: var(--ink-80);
-	max-width: 40ch;
+	font-size: var(--t-lede);
+	line-height: 1.4;
+	color: var(--ink-60);
+	max-width: 36ch;
 	text-wrap: pretty;
 }
-@media (min-width: 900px) {
-	.head {
-		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-	}
+
+/* --- Card: a rounded surface, one step off the section behind it. --------- */
+.card {
+	background: var(--card);
+	border-radius: var(--r-card);
 }
 
-/* --- Rows -----------------------------------------------------------------
-   A term on the left, what it means on the right, a rule between each. The
-   guideline sets its values and its tone of voice this way; here it carries
-   the prices, the steps and the small print. */
-.rows {
+/* --- Group: a rounded list with hairlines between rows, the way a phone's
+   settings are set out. Carries the facts, the small print, the questions. - */
+.group {
 	margin: 0;
 	padding: 0;
 	list-style: none;
+	background: var(--card);
+	border-radius: var(--r-card);
+	overflow: hidden;
 }
-.row {
+.group__row {
 	display: grid;
 	grid-template-columns: 1fr;
-	gap: 6px clamp(24px, 3vw, 48px);
+	gap: 2px 24px;
 	align-items: baseline;
-	padding: clamp(18px, 2vw, 28px) 0;
-	border-bottom: 1px solid var(--line);
+	padding: 18px clamp(18px, 2.4vw, 28px);
+	border-top: 1px solid var(--line-soft);
 }
-.rows > .row:first-child {
-	border-top: 1px solid var(--line);
+.group > .group__row:first-child {
+	border-top: 0;
 }
-.row__term {
+.group__term {
 	margin: 0;
-	font-family: var(--font-display);
-	font-weight: 400;
-	font-size: var(--t-h4);
-	line-height: 1.2;
+	font-family: var(--font-ui);
+	font-size: var(--t-body);
+	font-weight: 600;
+	line-height: 1.35;
 	color: var(--ink);
 }
-.row__desc {
+.group__desc {
 	margin: 0;
 	font-size: var(--t-body);
 	line-height: 1.45;
-	color: var(--ink-80);
-	max-width: 52ch;
+	color: var(--ink-60);
 	text-wrap: pretty;
 }
-@media (min-width: 760px) {
-	.row {
+@media (min-width: 700px) {
+	.group__row {
 		grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
 	}
 }
 
-/* A link inside running text: underlined, because it is the only way to
-   tell it from the words around it. */
+/* A link inside running text. */
 .link {
 	color: var(--ink);
-	border-bottom: 1px solid var(--ink-60);
-	padding-bottom: 1px;
-	transition: border-color var(--dur) var(--ease);
+	text-decoration: underline;
+	text-decoration-color: var(--ink-40);
+	text-decoration-thickness: 1px;
+	text-underline-offset: 4px;
+	transition: text-decoration-color var(--dur) var(--ease);
 }
 .link:hover {
-	border-bottom-color: var(--ink);
+	text-decoration-color: var(--ink);
 }
 
-/* --- Small-print pages ----------------------------------------------------
-   Legal, privacy and terms keep their own layout; they only need the page
-   margin, which the old outer wrap used to give them. */
+/* --- Small-print pages: they keep their own layout and need the margin. --- */
 .page-container {
 	padding-left: var(--gutter) !important;
 	padding-right: var(--gutter) !important;
@@ -237,15 +218,15 @@
 	display: flex;
 	flex-wrap: wrap;
 	align-items: baseline;
-	gap: var(--s-3) clamp(22px, 3.2vw, 56px);
+	gap: var(--s-3) clamp(22px, 3.2vw, 48px);
 	padding-top: 22px;
-	padding-bottom: 26px;
-	font-size: 0.9rem;
+	padding-bottom: 28px;
+	font-size: 0.82rem;
 }
 .foot__links {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 8px clamp(16px, 2.2vw, 34px);
+	gap: 8px clamp(16px, 2.2vw, 28px);
 }
 .foot__links a {
 	transition: color var(--dur) var(--ease);
@@ -257,8 +238,6 @@
 	margin-left: auto;
 }
 
-/* Narrow screens: the page is one scroll, so the masthead keeps the mark and
-   the one button and lets the section links go. */
 @media (max-width: 860px) {
 	.masthead__nav a:not(.btn) {
 		display: none;

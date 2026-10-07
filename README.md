@@ -31,8 +31,10 @@ House rules for copy, also at the top of that file:
 ## Add a piece of work
 
 1. Add an entry to `work` in `src/lib/content/site.ts`.
-2. Put two screenshots in `static/work/`: `<name>.jpg` at 1440 by 900 and
-   `<name>-720.jpg` at 720 by 450.
+2. Put four screenshots in `static/work/`: `<name>.jpg` at 1440 by 900,
+   `<name>-720.jpg` at 720 by 450, and the phone view as `<name>-phone.jpg`
+   at 780 by 1688 and `<name>-phone-390.jpg` at 390 by 844. The first three
+   entries in `work` are the three phones on the hero.
 
 Leave `href` out for a site that is not live yet and set `status` to
 `'In build'`.
@@ -73,7 +75,7 @@ local dev the form shows its "that did not send" message; that is expected.
 
 ```
 src/routes/
-├── +layout.svelte      # Fonts, global type and colour, black masthead and foot
+├── +layout.svelte      # Fonts, global type and colour, masthead and foot
 ├── +page.svelte        # The home page: the whole pitch, in one scroll
 ├── contact/            # The enquiry form on its own address
 ├── llms.txt/           # Plain summary for AI assistants, built from site.ts
@@ -88,7 +90,7 @@ src/lib/
 │   └── ui/              # Wordmark.svelte and Symbol.svelte, the two halves of the logo
 └── styles/
     ├── tokens.css      # Single source of truth: colour, type, space, shape
-    └── site.css        # Bands, masthead, buttons, section heads, rows, foot
+    └── site.css        # Bands, masthead, buttons, section heads, cards, groups, foot
 functions/
 ├── api/inquiry.js      # Saves an enquiry to D1 and emails the studio
 └── portal/             # Live data for the client portal
@@ -102,23 +104,22 @@ static/
 
 ## Design principles
 
-The site is built to the VNTA Brand Guidelines v1.0 (Felixto Brandworks). The
-values are in `src/lib/styles/tokens.css`, each with the section of the
-guideline it comes from.
+Soft and plain, the way a well-made phone screen is. The values are in
+`src/lib/styles/tokens.css`.
 
-- **Colour (3.1, 3.2):** white `#ffffff`, black `#000000`, and four shades of
-  each. Nothing else. Most bands are black, as most of the guideline is. The
+- **Colour:** greys only. An off-white (`#f5f5f7`), white, and a graphite
+  (`#1d1d1f`) in place of pure black. The brand guideline sets pure white and
+  pure black; on a screen that pairing glares, so both ends are softened. The
   only colour on the site is the client work.
-- **Typeface (4.1):** Optima. Apple devices carry it; every other device gets
-  Marcellus, the closest open face. Titles are in capitals, statements in
-  sentence case, all at the regular weight.
-- **Type scaling (4.3):** 64 / 48 / 36 / 24.
-- **Common mistakes (4.4):** nothing centred, nothing squeezed, no shadows.
-- **Logo (2.1 to 2.6):** the wordmark in the masthead, the symbol on the hero,
-  and the full lockup once, at the foot of the home page.
-- **Layout:** each section opens the way a page of the guideline does, with a
-  full rule, the title on the left and a short paragraph on the right. Lists
-  are set as ruled rows, like the guideline's Brand Values page.
+- **Type:** Optima for headings (Apple devices carry it; others get Marcellus).
+  Everything you read or tap is in the device's own face on Apple and Manrope
+  elsewhere.
+- **Shape:** rounded. Cards 24px, fields 12px, buttons fully round.
+- **Layout:** white and grey sections in turn, content in cards, lists set as
+  one rounded group with hairlines, like a phone's settings.
+- **One dark thing per page:** the enquiry card.
+- **Still true from the guideline:** left-aligned, nothing squeezed, no
+  shadows, the wordmark and symbol untouched.
 
 Proprietary assets (the guideline itself and its photography) are not included
 in this repository.

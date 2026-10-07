@@ -1,7 +1,7 @@
 <script lang="ts">
-	// Chrome for every public page: the black masthead and the black foot.
-	// Pages supply their own bands between them. /portal keeps its own lean
-	// chrome and opts out.
+	// Chrome for every public page: the masthead and the foot. Pages supply
+	// their own bands between them. /portal keeps its own lean chrome and
+	// opts out.
 	import '$lib/styles/tokens.css';
 	import '$lib/styles/site.css';
 	import '@fontsource/marcellus/400.css';
@@ -40,7 +40,7 @@
 <svelte:head>
 	<link rel="icon" type="image/svg+xml" href="{base}/symbol.svg" />
 	<link rel="apple-touch-icon" href="{base}/symbol.svg" />
-	<meta name="theme-color" content="#000000" />
+	<meta name="theme-color" content="#ffffff" />
 
 	<link rel="canonical" href={`https://vnta.xyz${$page.url.pathname}`} />
 	<meta property="og:site_name" content="VNTA" />
@@ -51,10 +51,10 @@
 
 {#if chrome}
 	<div class="shell" data-sveltekit-preload-data="hover">
-		<header class="masthead" data-theme="ink">
+		<header class="masthead">
 			<div class="wrap">
 				<a class="masthead__mark" href="{base}/" aria-label="VNTA home">
-					<Wordmark height={18} />
+					<Wordmark height={16} />
 				</a>
 				<nav class="masthead__nav" aria-label="Primary">
 					{#each nav as item}
@@ -67,7 +67,7 @@
 
 		{@render children()}
 
-		<footer class="foot" data-theme="ink">
+		<footer class="foot" data-theme="tint">
 			<div class="wrap">
 				<span>Dublin &middot; Worldwide</span>
 				<nav class="foot__links" aria-label="Secondary">
@@ -124,13 +124,13 @@
 	:global(.page-container) { max-width: 800px; margin: 0 auto; padding: clamp(40px, 6vw, 72px) 0; }
 	:global(.content-width) { max-width: 680px; }
 
-	/* The public pages are written in the brand typeface. The portal keeps the
+	/* The public pages read in the device's own face. The portal keeps the
 	   sans it was built with. */
 	.shell {
 		min-height: 100svh;
 		display: flex;
 		flex-direction: column;
-		font-family: var(--font-text);
+		font-family: var(--font-ui);
 	}
 	.shell :global(main) { flex: 1 0 auto; }
 </style>

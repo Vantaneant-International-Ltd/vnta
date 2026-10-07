@@ -1,9 +1,14 @@
 /* =============================================================================
-   VNTA — Design Tokens (white and black)
+   VNTA — Design Tokens (soft)
    -----------------------------------------------------------------------------
    The single source of truth for colour, type, space, shape and motion.
-   Pages consume these vars and never hardcode a colour. Every value here
-   comes from the VNTA Brand Guidelines v1.0 (Felixto Brandworks).
+   Pages consume these vars and never hardcode a colour.
+
+   The brand guideline (Felixto Brandworks, v1.0) sets pure white and pure
+   black. On a screen that pairing glares, so the site keeps the guideline's
+   idea, one light tone and one dark tone and greys between, and softens both
+   ends: an off-white, a graphite, rounded corners, and a plain system face
+   for reading. The wordmark, the symbol and the display face are unchanged.
    ========================================================================== */
 
 /* Figures. Marcellus, the substitute for Optima, draws its zero as a small
@@ -21,86 +26,79 @@
 }
 
 :root {
-	/* --- Colour (guideline 3.1): white, black, and four shades of each. ---
-	   Nothing else. No tint, no accent. The shade names are the guideline's:
-	   80 is the strongest shade short of full ink, 20 the faintest. */
+	/* --- Colour: still only greys. No tint, no accent. ------------------- */
 	--white:        #ffffff;
-	--black:        #000000;
+	--black:        #1d1d1f; /* graphite: the darkest thing on the site */
 
-	--paper:        var(--white); /* the surface */
-	--paper-2:      var(--white);
-	--ink:          var(--black); /* what is written on it */
-	--ink-80:       #333333;
-	--ink-60:       #666666;
-	--ink-40:       #999999; /* not for text on white: 2.8 to 1 */
-	--ink-20:       #cccccc;
+	--paper:        #ffffff; /* a section */
+	--paper-2:      #f5f5f7; /* the section beside it, and cards on white */
+	--card:         var(--paper-2);
+	--ink:          #1d1d1f;
+	--ink-80:       #424245;
+	--ink-60:       #6e6e73; /* quiet text: 5 to 1 on white */
+	--ink-40:       #a1a1a6; /* not for text */
+	--ink-20:       #d2d2d7;
 
-	/* Rules. --rule is the full line that opens a section, as on the
-	   guideline's own pages; --line is the quiet one between rows. */
-	--rule:         var(--ink);
+	--rule:         var(--ink-20);
 	--line:         var(--ink-20);
-	--line-soft:    var(--ink-20);
+	--line-soft:    #e8e8ed;
+	--field:        #ffffff;
 
-	/* No accent. The system is monochrome; any "accent" is just ink. */
 	--accent:       var(--ink);
 
-	/* The black surface, for the cookie bar and any inverted band. */
-	--ink-bg:       var(--black);
-	--ink-fg:       var(--white);
+	/* The dark surface, for the cookie bar and the one dark card. */
+	--ink-bg:       #1d1d1f;
+	--ink-fg:       #f5f5f7;
 
-	/* --- Type (guideline 4.1 to 4.3) ------------------------------------ */
-	/* The typeface is Optima. Apple devices carry it; everywhere else gets
-	   Marcellus, the closest open face, which ships at one weight only. So
-	   display and running text are set at 400 and never faux-bolded. To use
-	   Marcellus on every device, put it first in the two stacks below. */
+	/* --- Type ----------------------------------------------------------- */
+	/* Display: Optima, the brand face. Apple devices carry it; everywhere
+	   else gets Marcellus, the closest open face, at its one weight. */
 	--font-display: 'Optima', 'Optima Nova', 'VNTA Figures', 'Marcellus', 'Candara', serif;
-	--font-text:    'Optima', 'Optima Nova', 'VNTA Figures', 'Marcellus', 'Candara', serif;
+	--font-text:    var(--font-ui);
 	--font-sc:      'Marcellus SC', 'Marcellus', serif;
-	/* A plain sans for the things Optima's substitute does badly: buttons,
-	   form fields and figures. The guideline sets its own small technical
-	   labels this way. The client portal uses it for running text. */
+	/* Reading and controls: the device's own face on Apple, Manrope
+	   elsewhere. Plain, familiar, easy on the eyes. */
+	--font-ui:      -apple-system, BlinkMacSystemFont, 'Manrope', 'Segoe UI', Roboto, sans-serif;
+	/* The client portal was built on Manrope and keeps it. */
 	--font-body:    'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
 	--font-mono:    ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
 	--font-hero:    var(--font-display);
 	--font-serif:   var(--font-display);
 
-	/* Type scaling (4.3): 64 / 48 / 36 / 24, eased down on a phone. */
-	--t-h1:   clamp(2.5rem, 5.6vw, 4rem);
-	--t-h2:   clamp(2rem, 4.2vw, 3rem);
-	--t-h3:   clamp(1.6rem, 3vw, 2.25rem);
-	--t-h4:   clamp(1.25rem, 1.8vw, 1.5rem);
-	--t-lede: clamp(1.2rem, 1.7vw, 1.5rem);
-	--t-body: 1.125rem;
-	--t-small: 0.95rem;
+	/* Type scaling (guideline 4.3): 64 / 48 / 36 / 24, eased down on a phone. */
+	--t-h1:   clamp(2.5rem, 5.4vw, 4rem);
+	--t-h2:   clamp(2rem, 4vw, 3rem);
+	--t-h3:   clamp(1.5rem, 2.6vw, 2rem);
+	--t-h4:   clamp(1.15rem, 1.6vw, 1.3rem);
+	--t-lede: clamp(1.15rem, 1.6vw, 1.35rem);
+	--t-body: 1.0625rem;
+	--t-small: 0.94rem;
 	--t-label: 0.72rem;
 
-	/* Common mistakes (4.4): do not squeeze. Display type is set at its
-	   natural spacing; only small capitals are opened up, as on the cover. */
 	--track-tight: 0;
 	--track-label: 0.22em;
 
-	/* --- Space — 4px grid, generous. Whitespace is the primary tool. ---- */
+	/* --- Space — 4px grid ------------------------------------------------ */
 	--s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px;
 	--s-6: 24px; --s-8: 32px; --s-12: 48px; --s-16: 64px;
 	--s-24: 96px; --s-32: 128px;
-	--section-y: clamp(56px, 8vw, 128px); /* vertical rhythm between bands */
-	--gutter: clamp(20px, 5vw, 80px);     /* the page margin, left and right */
-	--maxw: 1180px;
-	--measure: 64ch; /* readable text column */
+	--section-y: clamp(56px, 8vw, 112px);
+	--gutter: clamp(20px, 5vw, 48px);
+	--maxw: 1120px;
+	--measure: 64ch;
 
-	/* --- Shape — square. NO pills. -------------------------------------- */
-	--radius: 0;
+	/* --- Shape: rounded, in three sizes. -------------------------------- */
+	--r-card:  24px;  /* cards and pictures */
+	--r-field: 12px;  /* fields and small tiles */
+	--r-pill:  999px; /* buttons and tags */
+	--radius:  2px;   /* the client portal's own corner; left as it was */
 
-	/* --- Motion — opacity/position only, brief. NO hover lifts. -------- */
+	/* --- Motion — brief. ------------------------------------------------- */
 	--ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 	--dur:  180ms;
-
-	/* NO shadows (4.4), NO blur. Depth = rules + space. */
 }
 
-/* --- Aliases for pages written against the older shade names --------------
-   The small-print pages and the client portal still ask for these. They
-   resolve to the guideline's four shades. */
+/* --- Aliases for pages written against the older shade names -------------- */
 :root {
 	--ink-85:      var(--ink-80);
 	--ink-70:      var(--ink-80);
@@ -120,23 +118,28 @@
 	--radius-pill: var(--radius);
 }
 
-/* --- Black (guideline 3.2): the same system, inverted. ----------------------
-   Most of the guideline is set white on black, so most of the site is too.
-   The shades swap ends: 80 is still the strongest. */
+/* --- Tinted: a grey section, where the cards turn white. ------------------- */
+[data-theme='tint'] {
+	--paper: #f5f5f7;
+	--card:  #ffffff;
+}
+
+/* --- Dark: graphite, never pure black. A custom property is worked out where
+   it is declared, so everything that depends on the surface is restated. --- */
 [data-theme='ink'] {
-	--paper:     var(--black);
-	--paper-2:   var(--black);
-	--ink:       var(--white);
-	--ink-80:    #cccccc;
-	--ink-60:    #999999;
-	--ink-40:    #666666; /* not for text on black: 3.7 to 1 */
-	--ink-20:    #333333;
-	--rule:      var(--ink);
-	--line:      var(--ink-40);
-	--line-soft: var(--ink-20);
+	--paper:     #1d1d1f;
+	--paper-2:   #2c2c2e;
+	--card:      #2c2c2e;
+	--field:     #2c2c2e;
+	--ink:       #f5f5f7;
+	--ink-80:    #d1d1d6;
+	--ink-60:    #a1a1a6;
+	--ink-40:    #6e6e73;
+	--ink-20:    #48484a;
+	--rule:      var(--ink-20);
+	--line:      var(--ink-20);
+	--line-soft: #3a3a3c;
 	--accent:    var(--ink);
-	/* The older names again: a custom property is worked out where it is
-	   declared, so the aliases have to be restated for this surface. */
 	--ink-85:    var(--ink-80);
 	--ink-70:    var(--ink-80);
 	--ink-50:    var(--ink-60);

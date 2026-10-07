@@ -1,12 +1,12 @@
 # VNTA — Redesign Direction (cold monochrome)
 
 > **Note, October 2026. This document is history.** It records the June
-> rebuild, which read the guideline as "white paper, black type". The site was
-> rebuilt again in October directly from the guideline PDF, and three things
-> changed: the surfaces are pure white and pure black with the guideline's four
-> shades (not soft white and near-black), most bands are black (as most of the
-> guideline is), and Optima comes first in the type stacks with Marcellus as
-> the substitute. The current rules are in the README and in
+> rebuild. The site has since been rebuilt twice in October: first strictly
+> from the guideline PDF (pure black and white), then softened at Renato's
+> request, because pure black against pure white was hard on the eyes. The
+> current look keeps the guideline's wordmark, symbol and display face and
+> softens the rest: off-white and graphite, rounded cards, a system face for
+> reading. The current rules are in the README and in
 > `src/lib/styles/tokens.css`.
 >
 > One correction to section 8: do not drop `vercel.json` yet. A Vercel project

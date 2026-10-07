@@ -122,48 +122,49 @@
 	.form {
 		display: grid;
 		grid-template-columns: 1fr;
-		gap: clamp(18px, 2vw, 26px) clamp(20px, 2.4vw, 36px);
+		gap: 16px;
 	}
 	.field {
 		display: flex;
 		flex-direction: column;
-		gap: 8px;
+		gap: 6px;
 		min-width: 0;
 	}
 	.field label {
-		font-size: var(--t-body);
+		font-size: var(--t-small);
+		font-weight: 600;
 		color: var(--ink);
 	}
 	.opt {
-		font-size: var(--t-small);
+		font-weight: 400;
 		color: var(--ink-60);
-		margin-left: 0.4em;
+		margin-left: 0.3em;
 	}
+	/* Soft filled fields with rounded corners, like the ones on a phone. */
 	.field input,
 	.field textarea {
 		width: 100%;
 		box-sizing: border-box;
-		font-family: var(--font-body); /* what people type is set in the plain sans */
+		font-family: var(--font-ui);
 		font-size: 1.0625rem; /* 16px or more keeps iOS from zooming on focus */
 		line-height: 1.4;
 		color: var(--ink);
-		background: transparent;
-		border: 0;
-		border-bottom: 1px solid var(--ink-60);
-		border-radius: 0;
-		padding: 8px 0 10px;
+		background: var(--field);
+		border: 1px solid var(--line);
+		border-radius: var(--r-field);
+		padding: 13px 14px;
 		transition: border-color var(--dur) var(--ease);
 	}
 	.field textarea {
 		resize: vertical;
-		min-height: 5rem;
+		min-height: 5.5rem;
 		line-height: 1.5;
 	}
 	.field input:hover,
 	.field textarea:hover,
 	.field input:focus,
 	.field textarea:focus {
-		border-bottom-color: var(--ink);
+		border-color: var(--ink-60);
 	}
 
 	.hp {
@@ -178,8 +179,8 @@
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
-		gap: 14px 24px;
-		padding-top: 6px;
+		gap: 12px 20px;
+		padding-top: 4px;
 	}
 	.actions__alt {
 		font-size: var(--t-small);
@@ -187,11 +188,10 @@
 	}
 	.actions__alt a {
 		color: var(--ink);
-		border-bottom: 1px solid var(--ink-60);
-		padding-bottom: 1px;
-	}
-	.actions__alt a:hover {
-		border-bottom-color: var(--ink);
+		text-decoration: underline;
+		text-decoration-color: var(--ink-40);
+		text-decoration-thickness: 1px;
+		text-underline-offset: 4px;
 	}
 
 	.error,
@@ -202,14 +202,15 @@
 		color: var(--ink);
 	}
 	.error {
-		border-left: 1px solid var(--ink);
-		padding-left: 12px;
+		background: var(--card);
+		border-radius: var(--r-field);
+		padding: 12px 14px;
 	}
 	.sent {
 		font-family: var(--font-display);
-		font-size: var(--t-h4);
-		line-height: 1.3;
-		max-width: 28ch;
+		font-size: var(--t-h3);
+		line-height: 1.2;
+		max-width: 22ch;
 	}
 
 	@media (min-width: 640px) {
