@@ -30,18 +30,22 @@ House rules for copy, also at the top of that file:
 
 ## Add a house
 
-Add an entry to `houses` in `src/lib/content/site.ts`. Give it an `image` only
-when there is a real phone screenshot in `static/work/` (`<name>-phone.jpg` at
-780 by 1688 and `<name>-phone-390.jpg`); without one the card shows the name on
-its own.
+Add an entry to `houses` in `src/lib/content/site.ts`. The first house in the
+list is the lead and gets the big card; the rest sit in a row under it. Every
+house needs the same six screenshots as a piece of work (see below), and they
+must be screen grabs of the house's live site, not a local build or a mock-up.
+An archived house comes off the list.
 
 ## Add a piece of work
 
 1. Add an entry to `work` in `src/lib/content/site.ts`.
-2. Put four screenshots in `static/work/`: `<name>.jpg` at 1440 by 900,
-   `<name>-720.jpg` at 720 by 450, and the phone view as `<name>-phone.jpg`
-   at 780 by 1688 and `<name>-phone-390.jpg` at 390 by 844. The first three
-   entries in `work` are the three phones on the hero.
+2. Put six screenshots in `static/work/`: the laptop view as `<name>.jpg` at
+   1440 by 900 and `<name>-720.jpg` at 720 by 450, the tablet view as
+   `<name>-tablet.jpg` at 820 by 1180 and `<name>-tablet-410.jpg` at 410 by
+   590, and the phone view as `<name>-phone.jpg` at 780 by 1688 and
+   `<name>-phone-390.jpg` at 390 by 844. Grab them from the live site when
+   there is one. The first three entries in `work` are the three phones on
+   the hero.
 
 Leave `href` out for a site that is not live yet and set `status` to
 `'In build'`.

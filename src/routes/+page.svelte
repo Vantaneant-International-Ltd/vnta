@@ -25,6 +25,9 @@
 		euro
 	} from '$lib/content/site';
 
+	// The first house leads; the others follow in a row beneath it.
+	const [leadHouse, ...otherHouses] = houses;
+
 	const fromBuild = Math.min(...plans.map((p) => p.build));
 	const fromMonthly = Math.min(...plans.map((p) => p.monthly));
 
@@ -169,32 +172,43 @@
 				</p>
 			</div>
 
+			<article class="job card world" style={worldStyle(leadHouse.world)}>
+				<Devices image={leadHouse.image} alt={leadHouse.alt} />
+				<div class="job__text">
+					<div>
+						<p class="job__meta">
+							{leadHouse.kind}
+							<span class="tag tag--quiet">{leadHouse.status}</span>
+						</p>
+						<h3 class="job__name">{leadHouse.name}</h3>
+						<p class="job__foot">
+							<a class="link" href={leadHouse.href} rel="noopener">Visit {leadHouse.domain}</a>
+						</p>
+					</div>
+					<div>
+						<p class="job__summary">{leadHouse.line}</p>
+						{#if leadHouse.built}
+							<ul class="list">
+								{#each leadHouse.built as line}
+									<li>{line}</li>
+								{/each}
+							</ul>
+						{/if}
+					</div>
+				</div>
+			</article>
+
 			<div class="houses">
-				{#each houses as house}
+				{#each otherHouses as house}
 					<a class="house card world" style={worldStyle(house.world)} href={house.href} rel="noopener">
 						<div class="house__stage">
-							{#if house.image}
-								<div class="phone">
-									<img
-										src="{base}/work/{house.image}-phone.jpg"
-										srcset="{base}/work/{house.image}-phone-390.jpg 390w, {base}/work/{house.image}-phone.jpg 780w"
-										sizes="(min-width: 900px) 130px, 22vw"
-										width="780"
-										height="1688"
-										loading="lazy"
-										decoding="async"
-										alt="The {house.name} site on a phone."
-									/>
-								</div>
-							{:else}
-								<p class="house__plate" aria-hidden="true">{house.name}</p>
-							{/if}
+							<Devices image={house.image} alt={house.alt} />
 						</div>
 						<div class="house__text">
 							<h3 class="house__name">{house.name}</h3>
 							<p class="house__line">{house.line}</p>
 							<p class="house__foot">
-								{#if house.status}<span class="tag tag--quiet">{house.status}</span>{/if}
+								<span class="tag tag--quiet">{house.status}</span>
 								<span class="house__domain">{house.domain}</span>
 							</p>
 						</div>
@@ -507,51 +521,25 @@
 		background: var(--w-accent, var(--ink-40));
 	}
 
-	/* --- Our own houses: four small worlds in a row. ---------------------- */
+	/* --- Our own houses: one lead, the same as a job, then two beside each
+	   other. Every one shows its real, live site on the three screens. ------ */
 	.head--second {
 		margin-top: clamp(56px, 7vw, 96px);
 		scroll-margin-top: 72px;
 	}
 	.houses {
 		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: clamp(10px, 1.6vw, 20px);
+		grid-template-columns: 1fr;
+		gap: clamp(16px, 2vw, 24px);
+		margin-top: clamp(16px, 2vw, 24px);
 	}
 	.house {
 		display: flex;
 		flex-direction: column;
 		overflow: hidden;
 	}
-	/* The stage: a phone standing on the card's floor, or, until there is a
-	   real screenshot, the house's name on its own. */
 	.house__stage {
-		display: flex;
-		align-items: flex-end;
-		justify-content: center;
-		aspect-ratio: 1 / 1.05;
-		padding: 12% 12% 0;
-		overflow: hidden;
-	}
-	.house__stage .phone {
-		width: 62%;
-		border-bottom-left-radius: 0;
-		border-bottom-right-radius: 0;
-		padding-bottom: 0;
-		transform: translateY(18%);
-	}
-	.house__stage .phone img {
-		border-bottom-left-radius: 0;
-		border-bottom-right-radius: 0;
-	}
-	.house__plate {
-		align-self: center;
-		margin: 0 0 6%;
-		font-family: var(--font-display);
-		font-size: clamp(1.5rem, 3.4vw, 2.4rem);
-		line-height: 1.05;
-		text-align: center;
-		color: var(--ink);
-		opacity: 0.9;
+		padding: clamp(20px, 3.2vw, 40px) clamp(16px, 3vw, 36px) clamp(20px, 2.8vw, 32px);
 	}
 	.house__text {
 		padding: clamp(14px, 1.8vw, 22px);
@@ -817,6 +805,9 @@
 		.steps {
 			grid-template-columns: repeat(3, minmax(0, 1fr));
 		}
+		.houses {
+			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
 	}
 	@media (min-width: 900px) {
 		.hero__top {
@@ -830,9 +821,6 @@
 		}
 		.plans {
 			grid-template-columns: repeat(3, minmax(0, 1fr));
-		}
-		.houses {
-			grid-template-columns: repeat(4, minmax(0, 1fr));
 		}
 		.plan__for {
 			min-height: 2.8em;

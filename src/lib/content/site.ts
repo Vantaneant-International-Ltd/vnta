@@ -218,37 +218,53 @@ export const questions = [
 ];
 
 // --- Our own houses ----------------------------------------------------------
-// The companies VNTA builds and runs for itself. Each line is the house's own
-// published wording. `image` is the stem of a phone screenshot under /work
-// (<image>-phone.jpg and <image>-phone-390.jpg); leave it out until there is a
-// real screenshot and the card shows the name on its own.
+// The companies VNTA builds and runs for itself. The first one is the lead: it
+// gets the full spotlight, the same as a client job. The rest follow in a row
+// of smaller cards. Every line here is the house's own published wording, and
+// every picture is a screen grab of the house's live site, never a mock-up.
+//
+// `image` is the stem of the screenshots under /work, the same three files a
+// client job has (laptop, -tablet and -phone).
 
 export type House = {
 	world: World;
 	name: string;
+	kind?: string; // the lead house only
 	href: string;
 	domain: string;
 	line: string;
-	status?: string;
-	image?: string;
+	status: string;
+	image: string;
+	alt: string;
+	built?: string[]; // the lead house only
 };
 
 export const houses: House[] = [
 	{
-		world: { bg: '#141414', ink: '#ffffff', soft: '#a6a6a6', line: '#2e2e2e', accent: '#ffffff', dark: true },
+		world: { bg: '#eff0eb', ink: '#111111', soft: '#5b5c57', line: '#d6d7d1', accent: '#cf1f2a', dark: false },
+		name: 'Carbon Wheels',
+		kind: 'Online shop',
+		href: 'https://carbonwheels.ie',
+		domain: 'carbonwheels.ie',
+		line: 'Carbon steering wheels for BMW. Brand new and complete, with the airbag and buttons already fitted.',
+		status: 'Opens 1 November',
+		image: 'carbon-wheels',
+		alt: 'The Carbon Wheels home page on a laptop, a tablet and a phone: Carbon steering wheels for BMW, beside a photo of a steering wheel.',
+		built: [
+			'Type your reg to check a wheel fits your car',
+			'Six styles to swipe through',
+			'A list to join before opening day'
+		]
+	},
+	{
+		world: { bg: '#f4f4f4', ink: '#000000', soft: '#5c5c5c', line: '#d2d2d2', accent: '#000000', dark: false },
 		name: 'Vendr',
 		href: 'https://vendr.ie',
 		domain: 'vendr.ie',
-		line: 'A modern vending platform.',
+		line: 'A quieter form of retail.',
 		status: 'Coming soon',
-		image: 'vendr'
-	},
-	{
-		world: { bg: '#1f1f1f', ink: '#f7f7f6', soft: '#a9a9a6', line: '#353535', accent: '#e8742c', dark: true },
-		name: 'Éirvox',
-		href: 'https://eirvox.ie',
-		domain: 'eirvox.ie',
-		line: 'Verification led enthusiast commerce.'
+		image: 'vendr',
+		alt: 'The Vendr home page on a laptop, a tablet and a phone: A quieter form of retail.'
 	},
 	{
 		world: { bg: '#121619', ink: '#f2f3f1', soft: '#a9aeb1', line: '#2a3034', accent: '#f2f3f1', dark: true },
@@ -257,15 +273,8 @@ export const houses: House[] = [
 		domain: 'maisonseul.com',
 		line: 'Singular objects.',
 		status: '2027',
-		image: 'maison-seul'
-	},
-	{
-		world: { bg: '#333333', ink: '#ffffff', soft: '#cccccc', line: '#4d4d4d', accent: '#ffffff', dark: true },
-		name: 'Carbon Wheels',
-		href: 'https://carbonwheels.ie',
-		domain: 'carbonwheels.ie',
-		line: 'Carbon steering wheels for BMW.',
-		status: 'Opens 1 November'
+		image: 'maison-seul',
+		alt: 'The Maison Seul home page on a laptop, a tablet and a phone: the name on a dark page.'
 	}
 ];
 
