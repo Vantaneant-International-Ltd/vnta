@@ -131,25 +131,25 @@
 		min-width: 0;
 	}
 	.field label {
-		font-size: 0.82rem;
-		font-weight: 500;
-		color: var(--ink-85);
+		font-size: var(--t-body);
+		color: var(--ink);
 	}
 	.opt {
-		font-weight: 400;
-		color: var(--ink-50);
+		font-size: var(--t-small);
+		color: var(--ink-60);
 		margin-left: 0.4em;
 	}
 	.field input,
 	.field textarea {
 		width: 100%;
 		box-sizing: border-box;
-		font: inherit;
-		font-size: 1rem; /* 16px keeps iOS from zooming the page on focus */
+		font-family: var(--font-body); /* what people type is set in the plain sans */
+		font-size: 1.0625rem; /* 16px or more keeps iOS from zooming on focus */
+		line-height: 1.4;
 		color: var(--ink);
 		background: transparent;
 		border: 0;
-		border-bottom: 1px solid var(--ink-35);
+		border-bottom: 1px solid var(--ink-60);
 		border-radius: 0;
 		padding: 8px 0 10px;
 		transition: border-color var(--dur) var(--ease);
@@ -182,12 +182,12 @@
 		padding-top: 6px;
 	}
 	.actions__alt {
-		font-size: 0.86rem;
-		color: var(--ink-50);
+		font-size: var(--t-small);
+		color: var(--ink-60);
 	}
 	.actions__alt a {
 		color: var(--ink);
-		border-bottom: 1px solid var(--ink-35);
+		border-bottom: 1px solid var(--ink-60);
 		padding-bottom: 1px;
 	}
 	.actions__alt a:hover {
@@ -197,12 +197,12 @@
 	.error,
 	.sent {
 		margin: 0;
-		font-size: 0.95rem;
-		line-height: 1.5;
+		font-size: var(--t-body);
+		line-height: 1.45;
 		color: var(--ink);
 	}
 	.error {
-		border-left: 2px solid var(--ink);
+		border-left: 1px solid var(--ink);
 		padding-left: 12px;
 	}
 	.sent {

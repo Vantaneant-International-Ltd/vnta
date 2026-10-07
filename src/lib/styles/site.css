@@ -1,42 +1,63 @@
 /* =============================================================================
    VNTA — shared page chrome and components
    -----------------------------------------------------------------------------
-   Built to the Felixto brand guidelines v1.0:
-   - Palette (§3.1) is white and black only, with percentage shades. No hue.
-   - Typeface (§4.1) is Optima; Marcellus is the substitute the repo ships.
-   - Type scale (§4.3) is 64 / 48 / 36 / 24, which the --t-h* tokens carry.
-   - Common mistakes (§4.4): do not centre, no shadows. Everything is
-     left-aligned to the grid and depth comes from hairlines alone.
-   - Logo (§2.5) never below 50px; (§2.6) aligned to the grid, placed with
-     intention and consistency.
+   Built to the VNTA Brand Guidelines v1.0 (Felixto Brandworks):
+   - Colour (3.1, 3.2): white and black, with their shades. Most surfaces are
+     black, as most of the guideline is.
+   - Typeface (4.1): Optima. Titles are set in capitals, statements in
+     sentence case, both at the regular weight.
+   - Type scaling (4.3): 64 / 48 / 36 / 24.
+   - Common mistakes (4.4): do not centre, do not squeeze, no shadows.
+     Everything is left-aligned to the grid, type sits at its natural
+     spacing, and depth comes from rules alone.
+   - Logo (2.4 to 2.6): never below 50px wide, clear space kept, aligned to
+     the grid.
    ========================================================================== */
 
-.wrap {
-	max-width: 1920px;
-	margin: 0 auto;
-	padding: 0 clamp(20px, 3.6vw, 64px);
-}
-
-/* Hairlines are the only dividers on the site. */
-.masthead,
-.sec,
+/* --- Bands ----------------------------------------------------------------
+   The page is a stack of full-width bands, each white or black, the way the
+   guideline is a stack of white and black pages. A band paints edge to edge;
+   the wrap inside it holds the page margin. */
 .band {
-	border-bottom: 1px solid var(--line);
+	background: var(--paper);
+	color: var(--ink);
+}
+.wrap {
+	max-width: 1680px;
+	margin: 0 auto;
+	padding-left: var(--gutter);
+	padding-right: var(--gutter);
+}
+.band > .wrap {
+	padding-top: clamp(56px, 7.2vw, 120px);
+	padding-bottom: clamp(56px, 7.2vw, 120px);
+}
+.band[id] {
+	scroll-margin-top: 64px;
+}
+/* Two bands of the same colour in a row: one rule between them, no gap. */
+.band--joined > .wrap {
+	padding-top: 0;
 }
 
-/* --- Masthead ------------------------------------------------------------ */
-/* Stays with the reader: on a long page the price button is always one tap
-   away. Paper behind it, no blur and no shadow. */
+/* --- Masthead -------------------------------------------------------------
+   Black on every page, and it stays with the reader: on a long page the
+   price button is always one tap away. No blur, no shadow. */
 .masthead {
 	position: sticky;
 	top: 0;
 	z-index: 10;
+	background: var(--paper);
+	color: var(--ink);
+	border-bottom: 1px solid var(--line-soft);
+}
+.masthead > .wrap {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
 	gap: var(--s-6);
-	padding: 16px 0;
-	background: var(--paper);
+	padding-top: 14px;
+	padding-bottom: 14px;
 }
 .masthead__mark {
 	display: inline-flex;
@@ -48,33 +69,31 @@
 	gap: clamp(18px, 2.6vw, 44px);
 }
 .masthead__nav a:not(.btn) {
-	font-size: 0.72rem;
-	text-transform: uppercase;
-	letter-spacing: 0.18em;
-	color: var(--ink-70);
+	font-family: var(--font-text);
+	font-size: 0.95rem;
+	color: var(--ink-80);
 	border-bottom: 1px solid transparent;
 	padding-bottom: 2px;
 	transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
 }
-.masthead__nav a:not(.btn):hover,
-.masthead__nav a:not(.btn)[aria-current='page'] {
+.masthead__nav a:not(.btn):hover {
 	color: var(--ink);
-	border-bottom-color: var(--ink-35);
+	border-bottom-color: var(--ink-60);
 }
 
 /* --- Buttons --------------------------------------------------------------
-   Square, one weight, two kinds. Solid is the one action a page is asking
-   for; ghost is everything else. Inside an ink band the tokens invert, so
-   the same classes read white on black without a second set of rules. */
+   Square, two kinds. Solid is the one action a page is asking for; ghost is
+   everything else. The tokens invert with the band, so the same classes
+   read white on black and black on white. */
 .btn {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	min-height: 44px;
-	padding: 0 22px;
+	min-height: 46px;
+	padding: 0 24px;
 	box-sizing: border-box;
 	border: 1px solid var(--ink);
-	border-radius: var(--radius);
+	border-radius: 0;
 	font-family: var(--font-body);
 	font-size: 0.9rem;
 	font-weight: 600;
@@ -88,7 +107,8 @@
 	color: var(--paper);
 }
 .btn--solid:hover {
-	background: var(--ink-85);
+	background: var(--ink-80);
+	border-color: var(--ink-80);
 }
 .btn--ghost {
 	background: transparent;
@@ -108,35 +128,80 @@
 	font-size: 0.82rem;
 }
 
-/* --- Sections -------------------------------------------------------------
-   A section is a heading and what follows it. The heading sits in the left
-   third on a wide screen and on top on a narrow one. */
-.sec {
-	padding: clamp(48px, 6.4vw, 104px) 0;
-	scroll-margin-top: 72px;
-}
-.sec__head {
+/* --- Section head ---------------------------------------------------------
+   The guideline opens a page the same way every time: a full rule, the
+   title in capitals on the left, a short paragraph on the right. */
+.head {
 	display: grid;
 	grid-template-columns: 1fr;
-	gap: 12px clamp(24px, 3vw, 48px);
-	align-items: end;
-	margin-bottom: clamp(28px, 3.6vw, 56px);
+	gap: 14px clamp(24px, 3vw, 48px);
+	align-items: start;
+	border-top: 1px solid var(--rule);
+	padding-top: clamp(20px, 2.2vw, 32px);
+	margin-bottom: clamp(32px, 4.4vw, 72px);
 }
-.sec__title {
+.head__title {
 	margin: 0;
-	font-size: var(--t-h2);
+	font-family: var(--font-display);
+	font-weight: 400;
+	font-size: var(--t-h3);
+	line-height: 1.1;
+	letter-spacing: 0;
+	text-transform: uppercase;
 	color: var(--ink);
 }
-.sec__intro {
+.head__text {
 	margin: 0;
-	font-size: 1.0625rem;
-	line-height: 1.55;
-	color: var(--ink-70);
-	max-width: 46ch;
+	font-size: var(--t-body);
+	line-height: 1.45;
+	color: var(--ink-80);
+	max-width: 40ch;
 	text-wrap: pretty;
 }
 @media (min-width: 900px) {
-	.sec__head {
+	.head {
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+	}
+}
+
+/* --- Rows -----------------------------------------------------------------
+   A term on the left, what it means on the right, a rule between each. The
+   guideline sets its values and its tone of voice this way; here it carries
+   the prices, the steps and the small print. */
+.rows {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.row {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: 6px clamp(24px, 3vw, 48px);
+	align-items: baseline;
+	padding: clamp(18px, 2vw, 28px) 0;
+	border-bottom: 1px solid var(--line);
+}
+.rows > .row:first-child {
+	border-top: 1px solid var(--line);
+}
+.row__term {
+	margin: 0;
+	font-family: var(--font-display);
+	font-weight: 400;
+	font-size: var(--t-h4);
+	line-height: 1.2;
+	color: var(--ink);
+}
+.row__desc {
+	margin: 0;
+	font-size: var(--t-body);
+	line-height: 1.45;
+	color: var(--ink-80);
+	max-width: 52ch;
+	text-wrap: pretty;
+}
+@media (min-width: 760px) {
+	.row {
 		grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
 	}
 }
@@ -145,7 +210,7 @@
    tell it from the words around it. */
 .link {
 	color: var(--ink);
-	border-bottom: 1px solid var(--ink-35);
+	border-bottom: 1px solid var(--ink-60);
 	padding-bottom: 1px;
 	transition: border-color var(--dur) var(--ease);
 }
@@ -153,156 +218,34 @@
 	border-bottom-color: var(--ink);
 }
 
-/* --- Bands: label row across the top, items full width beneath -----------
-   The label sits in a tight channel between the rule above it and the item
-   rules below, which is what makes the register read as a heading rather
-   than as floating text. Top padding is deliberately smaller than bottom. */
-.band {
-	padding: clamp(22px, 1.9vw, 30px) 0 clamp(30px, 3.4vw, 54px);
-	scroll-margin-top: 24px;
-}
-.band__head {
-	display: flex;
-	align-items: baseline;
-	justify-content: space-between;
-	gap: var(--s-4);
-	margin-bottom: clamp(16px, 1.6vw, 24px);
-}
-.band__label {
-	padding-top: 3px;
-	display: flex;
-	align-items: baseline;
-	gap: 0.9em;
-}
-/* Folio: the band's numeral, the way a magazine numbers its sections. */
-.band__folio {
-	font-family: var(--font-sc);
-	color: var(--ink-50);
-	letter-spacing: 0.1em;
-}
-.band__aside {
-	font-size: 0.79rem;
-	color: var(--ink-50);
-	white-space: nowrap;
-	border-bottom: 1px solid transparent;
-	padding-bottom: 2px;
-	transition: color var(--dur) var(--ease), border-color var(--dur) var(--ease);
-}
-a.band__aside:hover {
-	color: var(--ink);
-	border-bottom-color: var(--ink-35);
+/* --- Small-print pages ----------------------------------------------------
+   Legal, privacy and terms keep their own layout; they only need the page
+   margin, which the old outer wrap used to give them. */
+.page-container {
+	padding-left: var(--gutter) !important;
+	padding-right: var(--gutter) !important;
+	box-sizing: content-box;
 }
 
-.band__items {
-	display: grid;
-	grid-template-columns: 1fr;
-	gap: clamp(20px, 2.6vw, 44px);
-}
-
-/* --- Item: number, name, line, arrow ------------------------------------- */
-.item {
-	display: grid;
-	grid-template-columns: auto 1fr;
-	grid-template-areas:
-		'n name'
-		'. body'
-		'. arrow';
-	column-gap: 0.8em;
-	row-gap: 0.35em;
-	align-content: start;
-	border-top: 1px solid var(--line);
-	padding-top: 14px;
-}
-.item__n {
-	grid-area: n;
-	font-family: var(--font-mono);
-	font-size: 0.68rem;
-	/* ink-35 measures 2.57:1 on the paper, under the 4.5 minimum for text
-	   this size. ink-50 is 4.93:1 and still reads as quiet. */
-	color: var(--ink-50);
-	padding-top: 0.5em;
-}
-.item__name {
-	grid-area: name;
-	margin: 0;
-	font-family: var(--font-display);
-	font-weight: 400;
-	font-size: clamp(1.05rem, 1.4vw, 1.25rem);
-	line-height: 1.15;
-	text-transform: uppercase;
-	letter-spacing: 0.1em;
-	color: var(--ink);
-}
-.item__body {
-	grid-area: body;
-	margin: 0;
-	font-size: 0.79rem;
-	line-height: 1.55;
-	color: var(--ink-50);
-	max-width: 30ch;
-	text-wrap: pretty;
-}
-.arrow {
-	display: inline-block;
-}
-.item .arrow {
-	grid-area: arrow;
-	margin-top: 14px;
-	color: var(--ink-35);
-	transition: color var(--dur) var(--ease), transform var(--dur) var(--ease);
-}
-.item:hover .arrow {
-	color: var(--ink);
-	transform: translateX(3px);
-}
-
-/* --- Prose --------------------------------------------------------------- */
-.prose {
-	max-width: 34rem;
-}
-.prose p {
-	margin: 0 0 1.2em;
-	font-size: 1.0625rem;
-	line-height: 1.6;
-	color: var(--ink-85);
-	text-wrap: pretty;
-}
-.prose p:last-child {
-	margin-bottom: 0;
-}
-/* Links inside prose read as part of the sentence and only admit to being
-   links on hover. */
-.prose a {
-	color: inherit;
-	border-bottom: 1px solid transparent;
-	transition: border-color var(--dur) var(--ease);
-}
-.prose a:hover {
-	border-bottom-color: var(--ink-35);
-}
-
-/* --- Foot ---------------------------------------------------------------- */
+/* --- Foot ----------------------------------------------------------------- */
 .foot {
+	background: var(--paper);
+	color: var(--ink-60);
+	border-top: 1px solid var(--line-soft);
+}
+.foot > .wrap {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: baseline;
 	gap: var(--s-3) clamp(22px, 3.2vw, 56px);
-	padding: 22px 0 26px;
-	font-size: 0.75rem;
-	color: var(--ink-50);
-}
-.foot__mark {
-	display: inline-flex;
-	color: var(--ink-50);
+	padding-top: 22px;
+	padding-bottom: 26px;
+	font-size: 0.9rem;
 }
 .foot__links {
 	display: flex;
-	gap: clamp(16px, 2.2vw, 34px);
-}
-.foot__links a {
-	font-size: 0.68rem;
-	text-transform: uppercase;
-	letter-spacing: 0.16em;
+	flex-wrap: wrap;
+	gap: 8px clamp(16px, 2.2vw, 34px);
 }
 .foot__links a {
 	transition: color var(--dur) var(--ease);
@@ -312,17 +255,6 @@ a.band__aside:hover {
 }
 .foot__copy {
 	margin-left: auto;
-	color: var(--ink-50);
-}
-
-/* --- Wide: the spread ---------------------------------------------------- */
-@media (min-width: 900px) {
-	.band__items {
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-	}
-	.band__items--two {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-	}
 }
 
 /* Narrow screens: the page is one scroll, so the masthead keeps the mark and
@@ -332,7 +264,6 @@ a.band__aside:hover {
 		display: none;
 	}
 }
-
 @media (max-width: 560px) {
 	.foot__copy {
 		margin-left: 0;

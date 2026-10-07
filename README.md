@@ -73,7 +73,7 @@ local dev the form shows its "that did not send" message; that is expected.
 
 ```
 src/routes/
-├── +layout.svelte      # Fonts, global type and colour, masthead and foot
+├── +layout.svelte      # Fonts, global type and colour, black masthead and foot
 ├── +page.svelte        # The home page: the whole pitch, in one scroll
 ├── contact/            # The enquiry form on its own address
 ├── llms.txt/           # Plain summary for AI assistants, built from site.ts
@@ -85,10 +85,10 @@ src/lib/
 ├── components/
 │   ├── EnquiryForm.svelte
 │   ├── CookieBanner.svelte
-│   └── ui/Wordmark.svelte
+│   └── ui/              # Wordmark.svelte and Symbol.svelte, the two halves of the logo
 └── styles/
     ├── tokens.css      # Single source of truth: colour, type, space, shape
-    └── site.css        # Masthead, buttons, sections, foot
+    └── site.css        # Bands, masthead, buttons, section heads, rows, foot
 functions/
 ├── api/inquiry.js      # Saves an enquiry to D1 and emails the studio
 └── portal/             # Live data for the client portal
@@ -102,15 +102,25 @@ static/
 
 ## Design principles
 
-- Two tones only: soft white paper and black. The only colour on the site is
-  the client work.
-- One inverted band per page, and it holds the one thing the page is asking for.
-- Typography-led. No decoration, no shadows, no glass, no gradients.
-- Square corners. Hairlines and space do the dividing.
-- Every spacing decision sits on the 4px grid, on a token.
+The site is built to the VNTA Brand Guidelines v1.0 (Felixto Brandworks). The
+values are in `src/lib/styles/tokens.css`, each with the section of the
+guideline it comes from.
 
-Design language follows the VNTA Brand Guidelines (Felixto Brandworks, v1.0);
-the reasoning is in `docs/REDESIGN-DIRECTION.md`. Proprietary assets are not
-included in this repository.
+- **Colour (3.1, 3.2):** white `#ffffff`, black `#000000`, and four shades of
+  each. Nothing else. Most bands are black, as most of the guideline is. The
+  only colour on the site is the client work.
+- **Typeface (4.1):** Optima. Apple devices carry it; every other device gets
+  Marcellus, the closest open face. Titles are in capitals, statements in
+  sentence case, all at the regular weight.
+- **Type scaling (4.3):** 64 / 48 / 36 / 24.
+- **Common mistakes (4.4):** nothing centred, nothing squeezed, no shadows.
+- **Logo (2.1 to 2.6):** the wordmark in the masthead, the symbol on the hero,
+  and the full lockup once, at the foot of the home page.
+- **Layout:** each section opens the way a page of the guideline does, with a
+  full rule, the title on the left and a short paragraph on the right. Lists
+  are set as ruled rows, like the guideline's Brand Values page.
+
+Proprietary assets (the guideline itself and its photography) are not included
+in this repository.
 
 Contact: studio@vnta.xyz

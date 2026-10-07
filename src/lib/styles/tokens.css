@@ -1,99 +1,117 @@
 /* =============================================================================
-   VNTA — Design Tokens (cold monochrome)
+   VNTA — Design Tokens (white and black)
    -----------------------------------------------------------------------------
    The single source of truth for colour, type, space, shape and motion.
-   Pages consume these vars and never hardcode a colour. The reasoning behind
-   the palette is in docs/REDESIGN-DIRECTION.md.
+   Pages consume these vars and never hardcode a colour. Every value here
+   comes from the VNTA Brand Guidelines v1.0 (Felixto Brandworks).
    ========================================================================== */
 
+/* Figures. Marcellus, the substitute for Optima, draws its zero as a small
+   round o, so "30 days" reads as "3O days" and a price can be misread. This
+   face holds only the ten digits and the euro sign, taken from the sans, and
+   sits in the type stacks between Optima and Marcellus: a device with Optima
+   never reaches it, and every other device gets figures that read as figures. */
+@font-face {
+	font-family: 'VNTA Figures';
+	font-style: normal;
+	font-weight: 400;
+	font-display: swap;
+	src: url('../../../node_modules/@fontsource/manrope/files/manrope-latin-400-normal.woff2') format('woff2');
+	unicode-range: U+0030-0039, U+20AC;
+}
+
 :root {
-	/* --- Canvas — soft white paper, near-black ink --------------------- */
-	/* GROUND: a soft white page with white panels lifted above it. Two tones,
-	   no third. Pure neutral, no warm/cool tint: the reference is the cold
-	   institutional register, NOT the warm ivory used by the houses, per the
-	   Felixto guideline (VNTA is cold, neutral, structural). */
-	--paper:        #f6f6f6; /* the page: soft white, not stark */
-	--paper-2:      #ffffff; /* lifted card / panel above the page */
-	--ink:          #0a0a0a; /* near-black — not stark #000 */
+	/* --- Colour (guideline 3.1): white, black, and four shades of each. ---
+	   Nothing else. No tint, no accent. The shade names are the guideline's:
+	   80 is the strongest shade short of full ink, 20 the faintest. */
+	--white:        #ffffff;
+	--black:        #000000;
 
-	/* Pure-neutral grey ramp (dark-on-light). No warm or cool tint. */
-	--ink-85:       #1a1a1a;
-	--ink-70:       #404040;
-	--ink-50:       #6b6b6b;
-	--ink-35:       #9b9b9b;
-	--ink-20:       #c7c7c7;
+	--paper:        var(--white); /* the surface */
+	--paper-2:      var(--white);
+	--ink:          var(--black); /* what is written on it */
+	--ink-80:       #333333;
+	--ink-60:       #666666;
+	--ink-40:       #999999; /* not for text on white: 2.8 to 1 */
+	--ink-20:       #cccccc;
 
-	/* Hairlines — black at low alpha. Definition, not decoration. */
-	--line:         rgba(0, 0, 0, 0.14);
-	--line-soft:    rgba(0, 0, 0, 0.08);
+	/* Rules. --rule is the full line that opens a section, as on the
+	   guideline's own pages; --line is the quiet one between rows. */
+	--rule:         var(--ink);
+	--line:         var(--ink-20);
+	--line-soft:    var(--ink-20);
 
 	/* No accent. The system is monochrome; any "accent" is just ink. */
-	--accent:       #0a0a0a;
+	--accent:       var(--ink);
 
-	/* Inverted band (cookie bar) — lifted near-black. */
-	--ink-bg:       #0a0a0a;
-	--ink-fg:       #f4f4f4;
+	/* The black surface, for the cookie bar and any inverted band. */
+	--ink-bg:       var(--black);
+	--ink-fg:       var(--white);
 
-	/* --- Type ----------------------------------------------------------- */
-	/* Display: Marcellus (Optima substitute, single 400 weight). Body: Manrope.
-	   Marcellus has ONE weight — never request 500/600/700 on display type. */
-	--font-display: 'Marcellus', 'Optima', 'Times New Roman', serif;
+	/* --- Type (guideline 4.1 to 4.3) ------------------------------------ */
+	/* The typeface is Optima. Apple devices carry it; everywhere else gets
+	   Marcellus, the closest open face, which ships at one weight only. So
+	   display and running text are set at 400 and never faux-bolded. To use
+	   Marcellus on every device, put it first in the two stacks below. */
+	--font-display: 'Optima', 'Optima Nova', 'VNTA Figures', 'Marcellus', 'Candara', serif;
+	--font-text:    'Optima', 'Optima Nova', 'VNTA Figures', 'Marcellus', 'Candara', serif;
 	--font-sc:      'Marcellus SC', 'Marcellus', serif;
+	/* A plain sans for the things Optima's substitute does badly: buttons,
+	   form fields and figures. The guideline sets its own small technical
+	   labels this way. The client portal uses it for running text. */
 	--font-body:    'Manrope', system-ui, -apple-system, 'Segoe UI', sans-serif;
-	/* Mono for labels, dates, and register figures. Neutral system stack (matches
-	   the ad-hoc stack pages already used inline; promoted to a token here). */
 	--font-mono:    ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;
-	/* Hero display face — its OWN token so the landing headline can swap to a
-	   Didone (e.g. Playfair Display) in one line without touching Marcellus
-	   site-wide. To switch: set this to 'Playfair Display', serif and add the
-	   @fontsource import in the landing (repo already loads fonts via @fontsource). */
 	--font-hero:    var(--font-display);
-	/* Statement-scale serif. The display face, per the guideline: the brand
-	   is Marcellus at a single 400 weight, not a Didone. */
 	--font-serif:   var(--font-display);
 
-	/* Book scale 64/48/36/24, fluid but cosy on mobile. */
-	--t-h1:   clamp(2.6rem, 5.6vw, 4rem);
-	--t-h2:   clamp(2.05rem, 4.2vw, 3rem);
-	--t-h3:   clamp(1.5rem, 2.8vw, 2.25rem);
-	--t-h4:   clamp(1.2rem, 1.8vw, 1.5rem);
-	--t-lede: clamp(1.12rem, 1.5vw, 1.35rem);
-	--t-body: 1.0625rem;
+	/* Type scaling (4.3): 64 / 48 / 36 / 24, eased down on a phone. */
+	--t-h1:   clamp(2.5rem, 5.6vw, 4rem);
+	--t-h2:   clamp(2rem, 4.2vw, 3rem);
+	--t-h3:   clamp(1.6rem, 3vw, 2.25rem);
+	--t-h4:   clamp(1.25rem, 1.8vw, 1.5rem);
+	--t-lede: clamp(1.2rem, 1.7vw, 1.5rem);
+	--t-body: 1.125rem;
+	--t-small: 0.95rem;
 	--t-label: 0.72rem;
 
-	--track-tight: -0.015em;  /* display */
-	--track-label: 0.22em;    /* small-caps labels, set open in the house register */
+	/* Common mistakes (4.4): do not squeeze. Display type is set at its
+	   natural spacing; only small capitals are opened up, as on the cover. */
+	--track-tight: 0;
+	--track-label: 0.22em;
 
 	/* --- Space — 4px grid, generous. Whitespace is the primary tool. ---- */
 	--s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px;
 	--s-6: 24px; --s-8: 32px; --s-12: 48px; --s-16: 64px;
 	--s-24: 96px; --s-32: 128px;
 	--section-y: clamp(56px, 8vw, 128px); /* vertical rhythm between bands */
+	--gutter: clamp(20px, 5vw, 80px);     /* the page margin, left and right */
 	--maxw: 1180px;
 	--measure: 64ch; /* readable text column */
 
-	/* --- Shape — square/near-square. NO pills. ------------------------- */
-	--radius: 2px;
+	/* --- Shape — square. NO pills. -------------------------------------- */
+	--radius: 0;
 
 	/* --- Motion — opacity/position only, brief. NO hover lifts. -------- */
 	--ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 	--dur:  180ms;
 
-	/* NO --shadow-*, NO blur. Removed on purpose. Depth = hairlines + space. */
-
+	/* NO shadows (4.4), NO blur. Depth = rules + space. */
 }
 
-/* --- Backward-compat aliases (old pure-black token names) -----------------
-   Lets un-ported pages resolve to the warm palette while they are migrated
-   onto the new tokens one by one. Remove once every page is ported. */
+/* --- Aliases for pages written against the older shade names --------------
+   The small-print pages and the client portal still ask for these. They
+   resolve to the guideline's four shades. */
 :root {
+	--ink-85:      var(--ink-80);
+	--ink-70:      var(--ink-80);
+	--ink-50:      var(--ink-60);
+	--ink-35:      var(--ink-40);
 	--bg:          var(--paper);
 	--fg:          var(--ink);
 	--ink-92:      var(--ink);
-	--ink-80:      var(--ink-85);
-	--ink-65:      var(--ink-70);
-	--ink-55:      var(--ink-50);
-	--ink-45:      var(--ink-35);
+	--ink-65:      var(--ink-80);
+	--ink-55:      var(--ink-60);
+	--ink-45:      var(--ink-40);
 	--surface:     var(--paper-2);
 	--surface-2:   var(--paper-2);
 	--shadow-soft: none;
@@ -102,16 +120,33 @@
 	--radius-pill: var(--radius);
 }
 
-/* Deliberate inverted region (footer band, hero moment). */
+/* --- Black (guideline 3.2): the same system, inverted. ----------------------
+   Most of the guideline is set white on black, so most of the site is too.
+   The shades swap ends: 80 is still the strongest. */
 [data-theme='ink'] {
-	--paper:     var(--ink-bg);
-	--paper-2:   #161616;
-	--ink:       var(--ink-fg);
-	--ink-85:    rgba(255, 255, 255, 0.85);
-	--ink-70:    rgba(255, 255, 255, 0.70);
-	--ink-50:    rgba(255, 255, 255, 0.52);
-	--ink-35:    rgba(255, 255, 255, 0.38);
-	--ink-20:    rgba(255, 255, 255, 0.22);
-	--line:      rgba(255, 255, 255, 0.16);
-	--line-soft: rgba(255, 255, 255, 0.08);
+	--paper:     var(--black);
+	--paper-2:   var(--black);
+	--ink:       var(--white);
+	--ink-80:    #cccccc;
+	--ink-60:    #999999;
+	--ink-40:    #666666; /* not for text on black: 3.7 to 1 */
+	--ink-20:    #333333;
+	--rule:      var(--ink);
+	--line:      var(--ink-40);
+	--line-soft: var(--ink-20);
+	--accent:    var(--ink);
+	/* The older names again: a custom property is worked out where it is
+	   declared, so the aliases have to be restated for this surface. */
+	--ink-85:    var(--ink-80);
+	--ink-70:    var(--ink-80);
+	--ink-50:    var(--ink-60);
+	--ink-35:    var(--ink-40);
+	--bg:        var(--paper);
+	--fg:        var(--ink);
+	--ink-92:    var(--ink);
+	--ink-65:    var(--ink-80);
+	--ink-55:    var(--ink-60);
+	--ink-45:    var(--ink-60);
+	--surface:   var(--paper-2);
+	--surface-2: var(--paper-2);
 }
