@@ -1,0 +1,6 @@
+# Findings the secret scan may skip, one fingerprint per line.
+#
+# The IndexNow key is public by design: it is published at
+# https://vnta.xyz/<key>.txt so search engines can check a ping came from us.
+# It was written into this script in one commit before being read from the file.
+8840c283f8fb808825f4f8ff3bc0c40fee4aa2e6:scripts/indexnow.mjs:generic-api-key:15
