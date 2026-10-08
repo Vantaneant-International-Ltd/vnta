@@ -56,6 +56,24 @@ House rules for copy, also at the top of that file:
   says. In the Cloudflare dashboard for vnta.xyz, under Security, the setting
   that blocks AI bots must be off, or GPTBot and ClaudeBot get a 403.
 
+## The wall of logos
+
+Under the top of the home page is a row of six dark tiles: who we have worked
+for, and what we build on. The row stands still, and every two seconds one
+tile turns over to the next name (`Logos.svelte`). The list is `wall` in
+`src/lib/content/site.ts`.
+
+- **A client or a house:** put its logo in `static/logos/`, drawn in white for
+  a dark tile, and name the file in its `wall` entry. Set `named` if the
+  picture already spells the name. Until we hold a logo, the name is set in
+  type.
+- **A tool:** add its mark to `src/lib/components/ui/toolMarks.ts` (shapes from
+  Simple Icons, one colour) and a line to `wall`. Only tools we really use.
+
+Logos are shown without their colour so the row stays in VNTA's greys. For
+anyone who has asked their device for less motion the tiles never turn, and
+every name is listed under the row instead.
+
 ## Add a house
 
 Add an entry to `houses` in `src/lib/content/site.ts`. The first house in the
@@ -128,6 +146,7 @@ src/routes/
 src/lib/
 ├── content/site.ts     # The words and the numbers
 ├── components/
+│   ├── Logos.svelte      # The row of tiles that turn, one at a time, from logo to logo
 │   ├── Flip.svelte       # The card on the home page that turns from site to site
 │   ├── ui/rays.ts        # The symbol taken apart, one path per ray, for the card's clock
 │   ├── ProjectCard.svelte # One job in its own colours
@@ -184,7 +203,10 @@ built out of those two, quietly:
 - **The turning card** waits five seconds on each site. It stops while the
   pointer rests on it, while it is off screen, and when the visitor presses
   pause. For anyone who has asked their device for less motion it never turns
-  by itself. It is the only thing on the site that moves without being asked.
+  by itself.
+- **The wall of logos** under it turns one tile at a time, every two seconds,
+  and follows the same rules. These two are the only things on the site that
+  move without being asked, and each has its own pause.
 - **Colour:** greys only, of our own. A soft black (`#2b2b2b`) is the ink and
   the dark section; white and an off-white (`#f4f4f4`) are the light ones;
   the guideline's 80, 60, 40 and 20 percent blacks do the rest. Pure black

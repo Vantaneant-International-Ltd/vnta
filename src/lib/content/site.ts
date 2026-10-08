@@ -152,6 +152,43 @@ export const work: Work[] = [
 	}
 ];
 
+// --- The wall ----------------------------------------------------------------
+// The row of tiles under the top of the home page. Six show at a time; every
+// couple of seconds one tile turns over to the next name in this list. The
+// first six are the ones a visitor sees before anything turns, so the clients
+// lead.
+//
+// Three kinds, and the page says so in the line above the tiles:
+//   client  a business we have worked for
+//   house   a company of our own
+//   tool    something we build on. Only tools we really use. Its mark comes
+//           from ui/toolMarks.ts, under the same name.
+// `image` is a file in static/logos, drawn in white for a dark tile. Set
+// `named` when the picture already spells the name out. A company with no
+// `image` yet is set in type; add the file and name it here when we have it.
+
+export type Mark = {
+	name: string;
+	kind: 'client' | 'house' | 'tool';
+	image?: string;
+	named?: boolean;
+};
+
+export const wall: Mark[] = [
+	{ name: 'EZGO Auto Works', kind: 'client', image: 'ezgo.svg' },
+	{ name: 'Cloudflare', kind: 'tool' },
+	{ name: 'BUILDT', kind: 'client', image: 'buildt.png', named: true },
+	{ name: 'Shopify', kind: 'tool' },
+	{ name: 'L.M. Motors', kind: 'client', image: 'lm-motors.png', named: true },
+	{ name: 'Claude', kind: 'tool' },
+	{ name: 'Carbon Wheels', kind: 'house' },
+	{ name: 'Svelte', kind: 'tool' },
+	{ name: 'Vendr', kind: 'house' },
+	{ name: 'GitHub', kind: 'tool' },
+	{ name: 'Maison Seul', kind: 'house' },
+	{ name: 'Google Analytics', kind: 'tool' }
+];
+
 // --- Prices ------------------------------------------------------------------
 // Brand work has no price list: it is priced after the sit-down. The websites
 // do. Two numbers per plan: a one-time build fee, then a monthly fee that

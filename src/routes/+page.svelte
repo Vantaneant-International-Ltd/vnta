@@ -11,11 +11,13 @@
 	import { base } from '$app/paths';
 	import EnquiryForm from '$lib/components/EnquiryForm.svelte';
 	import Flip from '$lib/components/Flip.svelte';
+	import Logos from '$lib/components/Logos.svelte';
 	import ProjectCard from '$lib/components/ProjectCard.svelte';
 	import Seo from '$lib/components/Seo.svelte';
 	import {
 		pitch,
 		offer,
+		wall,
 		work,
 		plans,
 		priceNotes,
@@ -108,9 +110,14 @@
 		</div>
 	</section>
 
-	<!-- WHAT WE DO: three things. You can come for any one of them. -->
+	<!-- WHAT WE DO: first the wall of who we have worked for and what we build
+	     on, then the three things we do. You can come for any one of them. -->
 	<section class="band" id="what" aria-labelledby="what-title">
 		<div class="wrap">
+			<div class="who">
+				<Logos marks={wall} title="Who we have worked for, and what we build on" />
+			</div>
+
 			<div class="head">
 				<h2 class="head__title" id="what-title">What we do</h2>
 				<p class="head__text">Not only websites. We start with the business.</p>
@@ -387,6 +394,14 @@
 		font-size: var(--t-h3);
 		line-height: 1.15;
 		color: var(--ink);
+	}
+
+	/* --- The wall sits at the top of its band, with room before the title. */
+	#what > .wrap {
+		padding-top: clamp(40px, 5vw, 64px);
+	}
+	.who {
+		margin-bottom: clamp(56px, 7vw, 104px);
 	}
 
 	/* --- What we do: three things side by side, each under its own rule. -- */
