@@ -1,12 +1,11 @@
 <script lang="ts">
-	// One client site on three screens: a laptop, a tablet and a phone, drawn in
-	// CSS as plain device shapes. Every size is a share of the scene's width, so
-	// the group scales as one picture.
+	// One client site on two screens: the wide view in a plain window, and the
+	// phone standing in front of its corner. Every size is a share of the
+	// scene's width, so the pair scales as one picture.
 	//
 	// `image` is the stem of the screenshots under /work:
-	//   <image>.jpg          laptop, 1440 by 900   (-720 beside it)
-	//   <image>-tablet.jpg   tablet, 820 by 1180   (-tablet-410 beside it)
-	//   <image>-phone.jpg    phone,  780 by 1688   (-phone-390 beside it)
+	//   <image>.jpg         laptop, 1440 by 900   (-720 beside it)
+	//   <image>-phone.jpg   phone,  780 by 1688   (-phone-390 beside it)
 	import { base } from '$app/paths';
 
 	let { image, alt, eager = false }: { image: string; alt: string; eager?: boolean } = $props();
@@ -14,32 +13,16 @@
 </script>
 
 <div class="scene">
-	<div class="laptop">
-		<div class="laptop__lid">
-			<img
-				src="{base}/work/{image}.jpg"
-				srcset="{base}/work/{image}-720.jpg 720w, {base}/work/{image}.jpg 1440w"
-				sizes="(min-width: 1100px) 740px, 68vw"
-				width="1440"
-				height="900"
-				{loading}
-				decoding="async"
-				{alt}
-			/>
-		</div>
-		<div class="laptop__base"></div>
-	</div>
-
-	<div class="tablet">
+	<div class="window">
 		<img
-			src="{base}/work/{image}-tablet.jpg"
-			srcset="{base}/work/{image}-tablet-410.jpg 410w, {base}/work/{image}-tablet.jpg 820w"
-			sizes="(min-width: 1100px) 240px, 22vw"
-			width="820"
-			height="1180"
+			src="{base}/work/{image}.jpg"
+			srcset="{base}/work/{image}-720.jpg 720w, {base}/work/{image}.jpg 1440w"
+			sizes="(min-width: 1320px) 640px, (min-width: 900px) 50vw, 86vw"
+			width="1440"
+			height="900"
 			{loading}
 			decoding="async"
-			alt=""
+			{alt}
 		/>
 	</div>
 
@@ -47,7 +30,7 @@
 		<img
 			src="{base}/work/{image}-phone.jpg"
 			srcset="{base}/work/{image}-phone-390.jpg 390w, {base}/work/{image}-phone.jpg 780w"
-			sizes="(min-width: 1100px) 125px, 12vw"
+			sizes="(min-width: 1320px) 150px, (min-width: 900px) 12vw, 22vw"
 			width="780"
 			height="1688"
 			{loading}
@@ -58,81 +41,37 @@
 </div>
 
 <style>
-	/* The laptop sits at the back, top and centre. The tablet and the phone
-	   stand in front of it, on the same floor line. */
+	/* The window sits top left. The phone stands in front of its right-hand
+	   corner and hangs a little below it. */
 	.scene {
 		position: relative;
-		aspect-ratio: 100 / 53;
-		/* A world can set these; otherwise the bodies are the site's soft black. */
-		--body: var(--device, #333333);
-		--m: var(--metal, #c7c7cc);
-		--m-dark: var(--metal-dark, #a1a1a6);
+		padding: 0 7% 7% 0;
 	}
 	.scene img {
 		display: block;
 		width: 100%;
 		height: auto;
 	}
-
-	.laptop {
-		position: absolute;
-		top: 0;
-		left: 15.5%;
-		width: 72%;
-	}
-	.laptop__lid {
-		background: var(--body);
-		padding: 2% 2% 2.4%;
-		border-radius: 2.6% 2.6% 0 0 / 4% 4% 0 0;
+	.window {
+		border-radius: clamp(8px, 1.2vw, 16px);
+		overflow: hidden;
 		line-height: 0;
+		/* An edge in the card's own line colour: a dark site on a dark card
+		   would otherwise have none. */
+		box-shadow: 0 0 0 1px var(--w-line, var(--line-soft));
 	}
-	.laptop__lid img {
-		border-radius: 0.6% / 1%;
-	}
-	/* The base: a wider metal bar with a thumb notch in the middle. */
-	.laptop__base {
-		position: relative;
-		width: 118%;
-		margin-left: -9%;
-		aspect-ratio: 100 / 2.3;
-		background: var(--m);
-		border-radius: 0 0 1.6% 1.6% / 0 0 70% 70%;
-	}
-	.laptop__base::before {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 43%;
-		width: 14%;
-		height: 38%;
-		background: var(--m-dark);
-		border-radius: 0 0 6% 6% / 0 0 100% 100%;
-	}
-
-	/* A ring in the card's own colour keeps each front device apart from the
-	   screen behind it. It is a cut-out, not a shadow. */
-	.tablet,
 	.phone {
 		position: absolute;
-		bottom: 0;
-		background: var(--body);
-		line-height: 0;
-		box-shadow: 0 0 0 clamp(2px, 0.5vw, 5px) var(--card);
-	}
-	.tablet {
-		left: 0;
-		width: 23%;
-		padding: 0.85%;
-		border-radius: 7% / 4.9%;
-	}
-	.tablet img {
-		border-radius: 4.4% / 3.1%;
-	}
-	.phone {
 		right: 0;
-		width: 12%;
-		padding: 0.42%;
+		bottom: 0;
+		width: 22%;
+		padding: 0.9%;
+		background: var(--device, #1f1f1f);
 		border-radius: 15% / 6.9%;
+		line-height: 0;
+		/* A ring in the card's own colour sets the phone apart from the
+		   window behind it. It is a cut-out, not a shadow. */
+		box-shadow: 0 0 0 clamp(3px, 0.5vw, 6px) var(--card);
 	}
 	.phone img {
 		border-radius: 12.5% / 5.8%;

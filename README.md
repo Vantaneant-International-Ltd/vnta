@@ -51,21 +51,25 @@ House rules for copy, also at the top of that file:
 ## Add a house
 
 Add an entry to `houses` in `src/lib/content/site.ts`. The first house in the
-list is the lead and gets the big card; the rest sit in a row under it. Every
-house needs the same six screenshots as a piece of work (see below), and they
-must be screen grabs of the house's live site, not a local build or a mock-up.
-An archived house comes off the list.
+list is the lead: it gets the big card, and it is the last site on the turning
+card at the top of the home page. The rest sit in a row under it. Every house
+needs the same four screenshots as a piece of work (see below), and they must
+show the house's real site, not a mock-up. An archived house comes off the
+list.
 
 ## Add a piece of work
 
 1. Add an entry to `work` in `src/lib/content/site.ts`.
-2. Put six screenshots in `static/work/`: the laptop view as `<name>.jpg` at
-   1440 by 900 and `<name>-720.jpg` at 720 by 450, the tablet view as
-   `<name>-tablet.jpg` at 820 by 1180 and `<name>-tablet-410.jpg` at 410 by
-   590, and the phone view as `<name>-phone.jpg` at 780 by 1688 and
-   `<name>-phone-390.jpg` at 390 by 844. Grab them from the live site when
-   there is one. The first three entries in `work` are the three phones on
-   the hero.
+2. Put four screenshots in `static/work/`: the laptop view as `<name>.jpg` at
+   1440 by 900 and `<name>-720.jpg` at 720 by 450, and the phone view as
+   `<name>-phone.jpg` at 780 by 1688 and `<name>-phone-390.jpg` at 390 by 844.
+   Grab them from the live site when there is one. Every entry in `work` is
+   also a face of the turning card at the top of the home page, in the same
+   order.
+3. Set the entry's `world` to the site's own colours: its ground, its text and
+   one accent. When a client's site changes its look, retake the screenshots
+   and change the `world` to match (EZGO went from white to charcoal in
+   October 2026).
 
 Leave `href` out for a site that is not live yet and set `status` to
 `'In build'`.
@@ -116,12 +120,15 @@ src/routes/
 src/lib/
 ├── content/site.ts     # The words and the numbers
 ├── components/
+│   ├── Flip.svelte       # The card on the home page that turns from site to site
+│   ├── ProjectCard.svelte # One job in its own colours
+│   ├── Devices.svelte    # A site on two screens: a window and a phone
 │   ├── EnquiryForm.svelte
 │   ├── CookieBanner.svelte
 │   └── ui/              # Wordmark.svelte and Symbol.svelte, the two halves of the logo
 └── styles/
     ├── tokens.css      # Single source of truth: colour, type, space, shape
-    └── site.css        # Bands, masthead, buttons, section heads, cards, groups, foot
+    └── site.css        # Bands, masthead, buttons, section heads, cards, prices, questions, foot
 functions/
 ├── api/inquiry.js      # Saves an enquiry to D1 and emails the studio
 └── portal/             # Live data for the client portal
@@ -135,13 +142,25 @@ static/
 
 ## Design principles
 
-Soft and plain, the way a well-made phone screen is. The values are in
+Large type, real pictures, plenty of room. The values are in
 `src/lib/styles/tokens.css`.
 
-- **Colour:** greys only, and the brand guideline's own. Its 80 percent black
-  (`#333333`) is the ink and the one dark surface; 60, 40 and 20 percent do
-  the rest; the page tint (`#f5f5f5`) is the one value not on its list. Pure
-  black against pure white glared on a screen, so neither is used full-bleed.
+- **The arc:** the page opens light, shows each client's site in that client's
+  own colours, and closes dark. Every page ends the same way: the enquiry on
+  the dark, then the foot, then the name written the full width of the page.
+- **One very large line:** the home page headline, and the title of each
+  landing page, is set in the display face at up to 148 pixels. Nothing else
+  on a page competes with it.
+- **The turning card:** under the headline, one real site sits still on a
+  card, then the card turns over and the next site is on the back
+  (`Flip.svelte`). It waits five seconds on each. It stops while the pointer
+  rests on it, while it is off screen, and when the visitor presses pause.
+  For anyone who has asked their device for less motion it never turns by
+  itself. This is the only thing on the site that moves without being asked.
+- **Colour:** greys only, of our own. A soft black (`#1f1f1f`) is the ink and
+  the dark sections; white and an off-white (`#f4f4f4`) are the light ones;
+  the guideline's 80, 60, 40 and 20 percent blacks do the rest. Pure black
+  against pure white glared on a screen, so neither is used full-bleed.
 - **Worlds:** each project's card borrows that project's own ground, text
   colour and one accent, so every client and every house gets its own
   spotlight. That is the only colour on the site, and it lives in
@@ -149,12 +168,19 @@ Soft and plain, the way a well-made phone screen is. The values are in
 - **Type:** Optima for every title (Apple devices carry it; others get
   Marcellus). Small reading text, buttons and fields are in the device's own
   face on Apple and Manrope elsewhere.
-- **Shape:** rounded. Cards 24px, fields 12px, buttons fully round.
-- **Layout:** white and grey sections in turn, content in cards, lists set as
-  one rounded group with hairlines, like a phone's settings.
-- **One dark thing per page:** the enquiry card.
+- **Shape:** rounded. Cards 28px and up, fields 12px, buttons fully round.
+- **Lines, not boxes:** lists (the steps, the questions, the small print under
+  the prices, the three facts) are ruled rows, not cards. Cards are kept for
+  the work and the three prices.
+- **The work stacks:** on a tall, wide screen each job holds its place while
+  the next one slides up over it.
 - **Still true from the guideline:** left-aligned, nothing squeezed, no
   shadows, the wordmark and symbol untouched.
+
+Wiro (wiro.agency) was the reference for confidence and scale in the October
+2026 redesign: a very large headline, large pictures of real work, the name
+large in the foot. Nothing of their look was taken: they are dark throughout
+with a heavy sans; this site is light, in VNTA's own display face.
 
 Proprietary assets (the guideline itself and its photography) are not included
 in this repository.

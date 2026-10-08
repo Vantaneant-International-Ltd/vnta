@@ -49,16 +49,15 @@
 </script>
 
 {#if visible}
-	<aside class="cb" data-theme="ink" role="region" aria-label="Cookie consent">
+	<!-- A small card in the corner, so it never covers the page it sits on. -->
+	<aside class="cb" data-theme="ink" role="region" aria-label="Cookies">
 		<p class="cb__copy">
-			<span class="eyebrow cb__label">Cookies</span>
-			VNTA uses essential cookies to run the site, plus anonymous analytics to
-			refine it. No advertising, ever.
-			<a class="cb__link" href="{base}/privacy">Privacy</a>
+			We use cookies to run the site and, if you accept, to count visits. No
+			advertising. <a class="cb__link" href="{base}/privacy">Privacy</a>
 		</p>
 		<div class="cb__actions">
-			<button class="btn btn--ghost cb__btn" onclick={decline}>Decline</button>
-			<button class="btn btn--solid cb__btn" onclick={accept}>Accept</button>
+			<button class="btn btn--ghost btn--small cb__btn" onclick={decline}>Decline</button>
+			<button class="btn btn--solid btn--small cb__btn" onclick={accept}>Accept</button>
 		</div>
 	</aside>
 {/if}
@@ -66,74 +65,38 @@
 <style>
 	.cb {
 		position: fixed;
-		bottom: 0;
-		left: 0;
-		right: 0;
+		left: 16px;
+		right: 16px;
+		bottom: calc(16px + env(safe-area-inset-bottom, 0px));
 		z-index: 200;
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: clamp(16px, 4vw, 48px);
-		flex-wrap: wrap;
+		display: grid;
+		gap: 14px;
+		max-width: 400px;
+		padding: 18px 20px;
+		border-radius: 20px;
 		background: var(--ink-bg);
 		color: var(--ink-fg);
-		border-top: 1px solid var(--line);
-		padding: clamp(16px, 2.4vw, 22px) clamp(20px, 6vw, 80px);
-		padding-bottom: calc(clamp(16px, 2.4vw, 22px) + env(safe-area-inset-bottom, 0px));
+		border: 1px solid var(--line-soft);
 	}
-
 	.cb__copy {
 		margin: 0;
-		max-width: 70ch;
-		font-size: 0.9rem;
-		line-height: 1.7;
-		color: var(--ink-65);
-	}
-
-	.cb__label {
-		margin-right: 10px;
-		color: var(--ink-45);
-	}
-
-	.cb__link {
-		margin-left: 4px;
+		font-size: 0.92rem;
+		line-height: 1.5;
 		color: var(--ink-80);
-		border-bottom: 1px solid var(--line);
-		padding-bottom: 1px;
-		transition: color 0.2s ease, border-color 0.2s ease;
+		text-wrap: pretty;
 	}
-
-	.cb__link:hover {
-		color: var(--fg);
-		border-bottom-color: var(--ink-35);
+	.cb__link {
+		color: var(--ink);
+		text-decoration: underline;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 3px;
 	}
-
 	.cb__actions {
 		display: flex;
-		gap: 10px;
-		flex-shrink: 0;
+		gap: 8px;
 	}
-
 	.cb__btn {
-		padding: 11px 22px;
-		font-size: 0.82rem;
-	}
-
-	@media (max-width: 600px) {
-		.cb {
-			flex-direction: column;
-			align-items: stretch;
-			gap: 14px;
-			padding: 18px 22px;
-			padding-bottom: calc(18px + env(safe-area-inset-bottom, 0px));
-		}
-
-		.cb__actions {
-			justify-content: stretch;
-		}
-
-		.cb__btn {
-			flex: 1;
-		}
+		flex: 1;
+		min-height: 44px;
 	}
 </style>

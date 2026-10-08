@@ -6,8 +6,10 @@
 > request, because pure black against pure white was hard on the eyes. The
 > current look keeps the guideline's wordmark, symbol and display face and
 > softens the rest: off-white and graphite, rounded cards, a system face for
-> reading. The current rules are in the README and in
-> `src/lib/styles/tokens.css`.
+> reading. A fourth pass, also in October, kept that palette and made it
+> larger and surer: a very large headline, a card that turns from site to
+> site, a dark close and the wordmark across the foot. The current rules are
+> in the README and in `src/lib/styles/tokens.css`.
 >
 > One correction to section 8: do not drop `vercel.json` yet. A Vercel project
 > is still connected to this repository, and that file is what stops it from

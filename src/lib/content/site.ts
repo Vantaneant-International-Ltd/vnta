@@ -43,7 +43,7 @@ export type World = {
 	soft: string; // quiet text
 	line: string; // hairlines
 	accent: string; // list marks and link underlines, nothing more
-	dark: boolean; // a dark card needs lighter device bodies
+	dark: boolean; // a dark card needs a lighter edge on its screens
 };
 
 export type Work = {
@@ -54,7 +54,7 @@ export type Work = {
 	status: 'Live' | 'In build';
 	href?: string;
 	domain?: string;
-	image: string; // stem under /work: laptop, -tablet and -phone screenshots
+	image: string; // stem under /work: the laptop and -phone screenshots
 	alt: string;
 	summary: string;
 	built: string[];
@@ -68,7 +68,7 @@ export const work: Work[] = [
 		place: 'Sallins, Co. Kildare',
 		status: 'In build',
 		image: 'lm-motors',
-		alt: 'The L.M. Motors home page on a laptop, a tablet and a phone: Used cars, exactly as described, with a search by make, model and budget.',
+		alt: 'The L.M. Motors home page on a laptop and a phone: Used cars, exactly as described, with a search by make, model and budget.',
 		summary:
 			'Customers search the stock, shortlist cars, then ring or message about the one they want.',
 		built: [
@@ -78,7 +78,7 @@ export const work: Work[] = [
 		]
 	},
 	{
-		world: { bg: '#f3f4f2', ink: '#0b0c0d', soft: '#555b56', line: '#dcdfda', accent: '#8cc63f', dark: false },
+		world: { bg: '#191a19', ink: '#f4f5f2', soft: '#b9beb8', line: '#333633', accent: '#8bc24a', dark: true },
 		name: 'EZGO Auto Works',
 		trade: 'Garage',
 		place: 'Finglas, Dublin 11',
@@ -86,7 +86,7 @@ export const work: Work[] = [
 		href: 'https://ezgoautoworks.ie',
 		domain: 'ezgoautoworks.ie',
 		image: 'ezgo-auto-works',
-		alt: 'The EZGO Auto Works home page on a laptop, a tablet and a phone: Fixed. Sprayed. Detailed. beside a photo of a mechanic under a car.',
+		alt: 'The EZGO Auto Works home page on a laptop and a phone: Fixed. Sprayed. Detailed. beside a photo of a mechanic under a car.',
 		summary:
 			'Mechanics, bodywork and detailing under one roof. The site shows the prices and gets people to ring or WhatsApp.',
 		built: [
@@ -104,7 +104,7 @@ export const work: Work[] = [
 		href: 'https://buildt.ie',
 		domain: 'buildt.ie',
 		image: 'buildt',
-		alt: 'The BUILDT home page on a laptop, a tablet and a phone: BUILDT by hand. Proven on the bench.',
+		alt: 'The BUILDT home page on a laptop and a phone: BUILDT by hand. Proven on the bench.',
 		summary: 'Customers build their own PC on the site, watch the price change, and order.',
 		built: [
 			'A build your own PC tool with live prices',
@@ -233,8 +233,8 @@ export const questions = [
 // of smaller cards. Every line here is the house's own published wording, and
 // every picture is a screen grab of the house's live site, never a mock-up.
 //
-// `image` is the stem of the screenshots under /work, the same three files a
-// client job has (laptop, -tablet and -phone).
+// `image` is the stem of the screenshots under /work, the same files a client
+// job has (the laptop and the -phone).
 
 export type House = {
 	world: World;
@@ -259,7 +259,7 @@ export const houses: House[] = [
 		line: 'Carbon steering wheels for BMW. Brand new and complete, with the airbag and buttons already fitted.',
 		status: 'Opens 1 November',
 		image: 'carbon-wheels',
-		alt: 'The Carbon Wheels home page on a laptop, a tablet and a phone: Carbon steering wheels for BMW, beside a photo of a steering wheel.',
+		alt: 'The Carbon Wheels home page on a laptop and a phone: Carbon steering wheels, done properly, beside a photo of a steering wheel.',
 		built: [
 			'Type your reg to check a wheel fits your car',
 			'Six styles to swipe through',
@@ -274,7 +274,7 @@ export const houses: House[] = [
 		line: 'A quieter form of retail.',
 		status: 'Coming soon',
 		image: 'vendr',
-		alt: 'The Vendr home page on a laptop, a tablet and a phone: A quieter form of retail.'
+		alt: 'The Vendr home page on a laptop and a phone: A quieter form of retail.'
 	},
 	{
 		world: { bg: '#121619', ink: '#f2f3f1', soft: '#a9aeb1', line: '#2a3034', accent: '#f2f3f1', dark: true },
@@ -284,7 +284,7 @@ export const houses: House[] = [
 		line: 'Singular objects.',
 		status: '2027',
 		image: 'maison-seul',
-		alt: 'The Maison Seul home page on a laptop, a tablet and a phone: the name on a dark page.'
+		alt: 'The Maison Seul home page on a laptop and a phone: the name on a dark page.'
 	}
 ];
 
@@ -441,7 +441,7 @@ export const landings: Landing[] = [
 /** A world as the inline custom properties its card reads. */
 export const worldStyle = (w: World) =>
 	`--w-bg:${w.bg};--w-ink:${w.ink};--w-soft:${w.soft};--w-line:${w.line};--w-accent:${w.accent};` +
-	`--device:${w.dark ? '#3a3a3c' : '#333333'};--metal:${w.dark ? '#8e8e93' : '#c7c7cc'};--metal-dark:${w.dark ? '#636366' : '#a1a1a6'}`;
+	`--device:${w.dark ? '#3a3a3c' : '#1f1f1f'}`;
 
 /** Formats a euro amount the way the page prints it: €1,900. */
 export const euro = (n: number) => `€${n.toLocaleString('en-IE')}`;

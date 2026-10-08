@@ -1,7 +1,8 @@
 <script lang="ts">
-	// One project in its own world: the site on three screens, then the words.
-	// Used for client work and for our own houses, on the home page and on the
-	// landing pages. The look lives in site.css (.job, .tag, .list).
+	// One project in its own world: the words on one side, the site on two
+	// screens on the other. Used for client work and for our own houses, on the
+	// home page and on the landing pages. The look lives in site.css (.job,
+	// .tag, .list).
 	import Devices from '$lib/components/Devices.svelte';
 	import { worldStyle, type World } from '$lib/content/site';
 
@@ -34,20 +35,14 @@
 	} = $props();
 </script>
 
-<article class="job card world" style={worldStyle(world)}>
-	<Devices {image} {alt} />
+<article class="job world" style={worldStyle(world)}>
 	<div class="job__text">
 		<div>
 			<p class="job__meta">
+				<span class="tag" class:tag--live={live} class:tag--quiet={!live}>{status}</span>
 				{meta}
-				<span class="tag" class:tag--quiet={!live}>{status}</span>
 			</p>
 			<svelte:element this={`h${level}`} class="job__name">{name}</svelte:element>
-			{#if href}
-				<p class="job__foot">
-					<a class="link" {href} rel="noopener">Visit {domain}</a>
-				</p>
-			{/if}
 		</div>
 		<div>
 			<p class="job__summary">{summary}</p>
@@ -58,6 +53,14 @@
 					{/each}
 				</ul>
 			{/if}
+			{#if href}
+				<p class="job__foot">
+					<a class="job__visit" {href} rel="noopener">Visit {domain}</a>
+				</p>
+			{/if}
 		</div>
+	</div>
+	<div class="job__screens">
+		<Devices {image} {alt} />
 	</div>
 </article>

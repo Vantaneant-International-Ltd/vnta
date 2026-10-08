@@ -1,14 +1,19 @@
 <script lang="ts">
 	// VNTA wordmark, inlined so it inherits `currentColor` — ink on the paper
 	// canvas, light on inverted ink bands. Set color on the parent.
-	let { height = 26, label = 'VNTA' } = $props();
+	//
+	// The drawing carries the guideline's clear space around the letters.
+	// `tight` trims the box to the letters themselves, for the one place the
+	// name runs the full width of the page and has to meet the margins.
+	let { height = 26, label = 'VNTA', tight = false } = $props();
 </script>
 
 <svg
 	class="wordmark"
-	viewBox="189 465 625 148"
-	role="img"
-	aria-label={label}
+	viewBox={tight ? '203.3 478.9 596.5 120.2' : '189 465 625 148'}
+	role={label ? 'img' : undefined}
+	aria-label={label || undefined}
+	aria-hidden={label ? undefined : 'true'}
 	style="height:{height}px"
 	fill="currentColor"
 	xmlns="http://www.w3.org/2000/svg"

@@ -17,7 +17,8 @@
 	import { trackPageView } from '$lib/analytics';
 	import CookieBanner from '$lib/components/CookieBanner.svelte';
 	import Wordmark from '$lib/components/ui/Wordmark.svelte';
-	import { landings, social } from '$lib/content/site';
+	import Symbol from '$lib/components/ui/Symbol.svelte';
+	import { landings, social, studioEmail } from '$lib/content/site';
 
 	let { children } = $props();
 
@@ -33,6 +34,7 @@
 	// it. The last one is the action the whole page is asking for.
 	const nav = [
 		{ label: 'Work', href: `${base}/#work` },
+		{ label: 'How it works', href: `${base}/#how` },
 		{ label: 'Prices', href: `${base}/#prices` },
 		{ label: 'Questions', href: `${base}/#questions` }
 	];
@@ -42,7 +44,7 @@
 	<link rel="icon" href="{base}/favicon.ico" sizes="48x48" />
 	<link rel="icon" type="image/svg+xml" href="{base}/symbol.svg" />
 	<link rel="apple-touch-icon" href="{base}/apple-touch-icon.png" />
-	<meta name="theme-color" content="#ffffff" />
+	<meta name="theme-color" content="#f4f4f4" />
 </svelte:head>
 
 {#if chrome}
@@ -50,7 +52,7 @@
 		<header class="masthead">
 			<div class="wrap">
 				<a class="masthead__mark" href="{base}/" aria-label="VNTA home">
-					<Wordmark height={16} />
+					<Wordmark height={17} />
 				</a>
 				<nav class="masthead__nav" aria-label="Primary">
 					{#each nav as item}
@@ -63,30 +65,50 @@
 
 		{@render children()}
 
-		<footer class="foot" data-theme="tint">
-			<div class="wrap foot__more">
-				<nav class="foot__links" aria-label="What we build">
-					{#each landings as l}
-						<a href="{base}/{l.slug}">{l.label}</a>
-					{/each}
-				</nav>
-				{#if social.length}
-					<nav class="foot__links" aria-label="VNTA elsewhere">
-						{#each social as s}
-							<a href={s.href} rel="me noopener">{s.name}</a>
-						{/each}
-					</nav>
-				{/if}
-			</div>
+		<!-- The foot is dark on every page, and ends on the name. -->
+		<footer class="foot" data-theme="ink">
 			<div class="wrap">
-				<span>Dublin &middot; Worldwide</span>
-				<nav class="foot__links" aria-label="Secondary">
-					<a href="{base}/contact">Contact</a>
-					<a href="{base}/legal">Legal</a>
-					<a href="{base}/privacy">Privacy</a>
-					<a href="{base}/terms">Terms</a>
-				</nav>
-				<span class="foot__copy">Est. MMXXV &middot; Vantanéant International Ltd</span>
+				<div class="foot__top">
+					<div class="foot__us">
+						<Symbol size={44} />
+						<p>
+							A small studio in Dublin. We build websites for other people's
+							businesses, and for <a class="link" href="{base}/#houses">our own</a>.
+						</p>
+					</div>
+
+					<nav class="foot__col" aria-labelledby="foot-build">
+						<h2 id="foot-build">What we build</h2>
+						<ul>
+							{#each landings as l}
+								<li><a href="{base}/{l.slug}">{l.label}</a></li>
+							{/each}
+						</ul>
+					</nav>
+
+					<nav class="foot__col" aria-labelledby="foot-studio">
+						<h2 id="foot-studio">The studio</h2>
+						<ul>
+							<li><a href="mailto:{studioEmail}">{studioEmail}</a></li>
+							<li><a href="{base}/contact">Contact</a></li>
+							{#each social as s}
+								<li><a href={s.href} rel="me noopener">{s.name}</a></li>
+							{/each}
+							<li><a href="{base}/legal">Legal</a></li>
+							<li><a href="{base}/privacy">Privacy</a></li>
+							<li><a href="{base}/terms">Terms</a></li>
+						</ul>
+					</nav>
+				</div>
+
+				<div class="foot__name" aria-hidden="true">
+					<Wordmark height={0} label="" tight />
+				</div>
+
+				<p class="foot__legal">
+					<span>Vantanéant International Ltd. Est. MMXXV</span>
+					<span>Dublin and worldwide</span>
+				</p>
 			</div>
 		</footer>
 	</div>

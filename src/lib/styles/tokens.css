@@ -1,15 +1,19 @@
 /* =============================================================================
-   VNTA — Design Tokens (soft)
+   VNTA — Design Tokens
    -----------------------------------------------------------------------------
    The single source of truth for colour, type, space, shape and motion.
    Pages consume these vars and never hardcode a colour.
 
    The brand guideline (Felixto Brandworks, v1.0) sets pure white and pure
    black. On a screen that pairing glares, so the site keeps the guideline's
-   idea, one light tone and one dark tone and greys between, and softens both
-   ends using the guideline's own shades: its 80 percent black for ink, an
-   off-white for the page, rounded corners, and a plain system face for small
-   reading text. The wordmark, the symbol and the display face are unchanged.
+   idea, one light tone and one dark tone and greys between, and takes a step
+   in from both ends: a soft black for ink and for the dark sections, an
+   off-white beside white. Greys only. The wordmark, the symbol and the
+   display face are the guideline's, unchanged.
+
+   October 2026: the type went up in size and the dark got deeper. The page
+   now opens light, shows the work in each client's own colours, and closes
+   dark. See the README, "Design principles".
    ========================================================================== */
 
 /* Figures. Marcellus, the substitute for Optima, draws its zero as a small
@@ -27,33 +31,31 @@
 }
 
 :root {
-	/* --- Colour (guideline 3.1): greys only, and the guideline's own. -----
-	   The guideline lists black at 80, 60, 40 and 20 percent. Its 80 percent
-	   black, #333333, is already a soft black, so that is the site's ink and
-	   its one dark surface. Neutral throughout: no warm or cool tint. The one
-	   value not on the guideline's list is the off-white page tint. */
+	/* --- Colour (guideline 3.1): greys only, neutral, no warm or cool tint.
+	   Ink is a soft black, firm enough to hold a headline 130 pixels tall.
+	   The guideline's 80, 60, 40 and 20 percent blacks do the rest. */
 	--white:        #ffffff;
-	--black:        #333333; /* 80% black: the darkest thing on the site */
+	--black:        #1f1f1f; /* the darkest thing on the site */
 
 	--paper:        #ffffff; /* a section */
-	--paper-2:      #f5f5f5; /* the section beside it, and cards on white */
+	--paper-2:      #f4f4f4; /* the section beside it, and cards on white */
 	--card:         var(--paper-2);
-	--ink:          #333333; /* 80% */
-	--ink-80:       #333333;
+	--ink:          #1f1f1f;
+	--ink-80:       #333333; /* 80%: reading text */
 	--ink-60:       #666666; /* 60%: quiet text, 5.7 to 1 on white */
 	--ink-40:       #999999; /* 40%: not for text */
 	--ink-20:       #cccccc; /* 20% */
 
 	--rule:         var(--ink-20);
 	--line:         var(--ink-20);
-	--line-soft:    #e6e6e6;
+	--line-soft:    #e2e2e2;
 	--field:        #ffffff;
 
 	--accent:       var(--ink);
 
-	/* The dark surface, for the cookie bar and the one dark card. */
-	--ink-bg:       #333333;
-	--ink-fg:       #ffffff;
+	/* The dark surface: the closing sections, the foot, the cookie card. */
+	--ink-bg:       #1f1f1f;
+	--ink-fg:       #f5f5f5;
 
 	/* --- Type ----------------------------------------------------------- */
 	/* Display: Optima, the brand face. Apple devices carry it; everywhere
@@ -70,35 +72,39 @@
 	--font-hero:    var(--font-display);
 	--font-serif:   var(--font-display);
 
-	/* Type scaling (guideline 4.3): 64 / 48 / 36 / 24, eased down on a phone. */
-	--t-h1:   clamp(2.5rem, 5.4vw, 4rem);
-	--t-h2:   clamp(2rem, 4vw, 3rem);
-	--t-h3:   clamp(1.5rem, 2.6vw, 2rem);
-	--t-h4:   clamp(1.15rem, 1.6vw, 1.3rem);
-	--t-lede: clamp(1.15rem, 1.6vw, 1.35rem);
-	--t-body: 1.0625rem;
+	/* Type scale. The display face is the loudest thing on the page, so it
+	   is set large and close: one giant line for the home page, then a
+	   steady step down. Everything eases to a phone. */
+	--t-giant: clamp(3rem, 9.6vw, 9.25rem);   /* the home page headline */
+	--t-h1:    clamp(2.6rem, 6.6vw, 5.75rem);  /* a page title, the closing call */
+	--t-h2:    clamp(2.2rem, 4.8vw, 4rem);     /* a section title */
+	--t-h3:    clamp(1.45rem, 2.3vw, 1.9rem);
+	--t-h4:    clamp(1.15rem, 1.5vw, 1.3rem);
+	--t-lede:  clamp(1.15rem, 1.5vw, 1.4rem);
+	--t-body:  1.0625rem;
 	--t-small: 0.94rem;
 	--t-label: 0.72rem;
 
-	--track-tight: 0;
+	--track-tight: 0;          /* the client portal reads this */
+	--track-display: -0.012em; /* display type at size, set a touch closer */
 	--track-label: 0.22em;
 
 	/* --- Space — 4px grid ------------------------------------------------ */
 	--s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px;
 	--s-6: 24px; --s-8: 32px; --s-12: 48px; --s-16: 64px;
 	--s-24: 96px; --s-32: 128px;
-	--section-y: clamp(56px, 8vw, 112px);
-	--gutter: clamp(20px, 5vw, 48px);
-	--maxw: 1120px;
+	--section-y: clamp(64px, 9vw, 144px);
+	--gutter: clamp(20px, 4vw, 56px);
+	--maxw: 1320px;
 	--measure: 64ch;
 
 	/* --- Shape: rounded, in three sizes. -------------------------------- */
-	--r-card:  24px;  /* cards and pictures */
+	--r-card:  28px;  /* cards and pictures */
 	--r-field: 12px;  /* fields and small tiles */
 	--r-pill:  999px; /* buttons and tags */
 	--radius:  2px;   /* the client portal's own corner; left as it was */
 
-	/* --- Motion — brief. ------------------------------------------------- */
+	/* --- Motion — brief, except the one card that turns. ----------------- */
 	--ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 	--dur:  180ms;
 }
@@ -125,25 +131,26 @@
 
 /* --- Tinted: a grey section, where the cards turn white. ------------------- */
 [data-theme='tint'] {
-	--paper: #f5f5f5;
+	--paper: #f4f4f4;
 	--card:  #ffffff;
 }
 
-/* --- Dark: the guideline's 80 percent black, never pure black. A custom property is worked out where
-   it is declared, so everything that depends on the surface is restated. --- */
+/* --- Dark: a soft black, never pure black. A custom property is worked out
+   where it is declared, so everything that depends on the surface is
+   restated. --- */
 [data-theme='ink'] {
-	--paper:     #333333;
-	--paper-2:   #404040;
-	--card:      #404040;
-	--field:     #404040;
-	--ink:       #ffffff;
-	--ink-80:    #cccccc;
-	--ink-60:    #b3b3b3;
-	--ink-40:    #808080;
-	--ink-20:    #666666;
+	--paper:     #1f1f1f;
+	--paper-2:   #2a2a2a;
+	--card:      #2a2a2a;
+	--field:     #2a2a2a;
+	--ink:       #f5f5f5;
+	--ink-80:    #dcdcdc;
+	--ink-60:    #a8a8a8; /* 7 to 1 on the dark */
+	--ink-40:    #7d7d7d;
+	--ink-20:    #4d4d4d;
 	--rule:      var(--ink-20);
 	--line:      var(--ink-20);
-	--line-soft: #4d4d4d;
+	--line-soft: #383838;
 	--accent:    var(--ink);
 	--ink-85:    var(--ink-80);
 	--ink-70:    var(--ink-80);

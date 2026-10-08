@@ -13,12 +13,12 @@
 	description="Tell VNTA what your business does and get a fixed price for a new website within {replyWithin}. It costs nothing to ask."
 />
 
-<main class="band" data-theme="tint">
+<main class="band band--close" data-theme="ink">
 	<div class="wrap">
-		<div class="contact card" data-theme="ink">
+		<div class="quote">
 			<div>
-				<h1 class="head__title">Get a price</h1>
-				<p class="head__text contact__text">
+				<h1 class="quote__title">Get a price</h1>
+				<p class="quote__text">
 					Tell us what you do. We reply within {replyWithin} with a fixed price. It costs
 					nothing to ask. <a class="link" href="{base}/#prices">See the prices</a>
 				</p>
@@ -27,24 +27,3 @@
 		</div>
 	</div>
 </main>
-
-<style>
-	.contact {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: clamp(24px, 4vw, 56px);
-		align-items: start;
-		background: var(--paper);
-		color: var(--ink);
-		padding: clamp(24px, 4.4vw, 56px);
-		border-radius: clamp(24px, 3vw, 32px);
-	}
-	.contact__text {
-		margin-top: 12px;
-	}
-	@media (min-width: 900px) {
-		.contact {
-			grid-template-columns: minmax(0, 4fr) minmax(0, 6fr);
-		}
-	}
-</style>

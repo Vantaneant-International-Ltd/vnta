@@ -4,16 +4,14 @@
 	// work, how do I start. Kept short on purpose: the reader is on a phone
 	// between jobs. All of the words and numbers live in $lib/content/site.ts.
 	//
-	// The look is soft on purpose: grey and white sections in turn, rounded
-	// cards, and the client sites shown on phones, because a phone is where
-	// their customers will see them.
+	// The look: one very large line, then a card that shows a real site and
+	// turns over to show the next. Each job after that sits in the client's
+	// own colours. The page opens light and closes dark.
 	import { base } from '$app/paths';
 	import EnquiryForm from '$lib/components/EnquiryForm.svelte';
-	import Devices from '$lib/components/Devices.svelte';
+	import Flip from '$lib/components/Flip.svelte';
 	import ProjectCard from '$lib/components/ProjectCard.svelte';
 	import Seo from '$lib/components/Seo.svelte';
-	import Wordmark from '$lib/components/ui/Wordmark.svelte';
-	import Symbol from '$lib/components/ui/Symbol.svelte';
 	import {
 		work,
 		plans,
@@ -44,6 +42,27 @@
 		'Online shop': 'online-shops'
 	};
 	const moreFor = (plan: string) => landings.find((l) => l.slug === more[plan]);
+
+	// The card at the top turns through every client job, then our own lead
+	// house: one real site at a time.
+	const reel = [
+		...work.map((j) => ({
+			world: j.world,
+			image: j.image,
+			name: j.name,
+			meta: `${j.trade}, ${j.place}`,
+			status: j.status,
+			live: j.status === 'Live'
+		})),
+		{
+			world: leadHouse.world,
+			image: leadHouse.image,
+			name: leadHouse.name,
+			meta: `Our own ${(leadHouse.kind ?? 'company').toLowerCase()}`,
+			status: leadHouse.status,
+			live: false
+		}
+	];
 </script>
 
 <Seo
@@ -54,48 +73,34 @@
 />
 
 <main>
-	<!-- HERO: what we do, and three real sites on three phones -->
+	<!-- HERO: what we do, in one large line, and a real site that turns over -->
 	<section class="band hero" data-theme="tint" aria-labelledby="hero-title">
 		<div class="wrap">
-			<div class="hero__top">
-				<div class="hero__say">
-					<h1 class="hero__title" id="hero-title">Websites that bring in the work.</h1>
-					<p class="hero__lede">
-						We build websites for Irish garages, dealers, shops and trades, and look
-						after them every month.
-					</p>
-					<div class="hero__cta">
-						<a class="btn btn--solid" href="#quote">Get a price</a>
-						<a class="btn btn--ghost" href="#work">See the work</a>
-					</div>
-				</div>
+			<h1 class="hero__title" id="hero-title">Websites that bring in the work.</h1>
 
-				<div class="phones">
-					{#each [work[0], work[1], work[2]] as job, i}
-						<div class="phone phone--{i}">
-							<img
-								src="{base}/work/{job.image}-phone.jpg"
-								srcset="{base}/work/{job.image}-phone-390.jpg 390w, {base}/work/{job.image}-phone.jpg 780w"
-								sizes="(min-width: 900px) 180px, 30vw"
-								width="780"
-								height="1688"
-								alt="The {job.name} site on a phone."
-							/>
-						</div>
-					{/each}
+			<div class="hero__row">
+				<p class="hero__lede">
+					We build websites for Irish garages, dealers, shops and trades, and look
+					after them every month.
+				</p>
+				<div class="hero__cta">
+					<a class="btn btn--solid" href="#quote">Get a price</a>
+					<a class="btn btn--ghost" href="#work">See the work</a>
 				</div>
 			</div>
 
+			<Flip slides={reel} />
+
 			<dl class="facts">
-				<div class="fact card">
+				<div class="fact">
 					<dt>A new website</dt>
 					<dd>from {euro(fromBuild)}</dd>
 				</div>
-				<div class="fact card">
+				<div class="fact">
 					<dt>Hosted and looked after</dt>
 					<dd>from {euro(fromMonthly)} a month</dd>
 				</div>
-				<div class="fact card">
+				<div class="fact">
 					<dt>Your price, in writing</dt>
 					<dd>within {replyWithin}</dd>
 				</div>
@@ -111,21 +116,23 @@
 				<p class="head__text">Three Irish businesses. Each site built from scratch.</p>
 			</div>
 
-			<div class="jobs">
-				{#each work as job}
-					<ProjectCard
-						world={job.world}
-						image={job.image}
-						alt={job.alt}
-						meta="{job.trade}, {job.place}"
-						status={job.status}
-						live={job.status === 'Live'}
-						name={job.name}
-						href={job.href}
-						domain={job.domain}
-						summary={job.summary}
-						built={job.built}
-					/>
+			<div class="jobs jobs--stack">
+				{#each work as job, i}
+					<div class="jobs__slot" style="--i:{i}">
+						<ProjectCard
+							world={job.world}
+							image={job.image}
+							alt={job.alt}
+							meta="{job.trade}, {job.place}"
+							status={job.status}
+							live={job.status === 'Live'}
+							name={job.name}
+							href={job.href}
+							domain={job.domain}
+							summary={job.summary}
+							built={job.built}
+						/>
+					</div>
 				{/each}
 			</div>
 
@@ -151,13 +158,24 @@
 
 			<div class="houses">
 				{#each otherHouses as house}
-					<a class="house card world" style={worldStyle(house.world)} href={house.href} rel="noopener">
-						<div class="house__stage">
-							<Devices image={house.image} alt={house.alt} />
+					<a class="house world" style={worldStyle(house.world)} href={house.href} rel="noopener">
+						<div class="house__shot">
+							<img
+								src="{base}/work/{house.image}.jpg"
+								srcset="{base}/work/{house.image}-720.jpg 720w, {base}/work/{house.image}.jpg 1440w"
+								sizes="(min-width: 700px) 46vw, 92vw"
+								width="1440"
+								height="900"
+								loading="lazy"
+								decoding="async"
+								alt={house.alt}
+							/>
 						</div>
 						<div class="house__text">
-							<h3 class="house__name">{house.name}</h3>
-							<p class="house__line">{house.line}</p>
+							<div>
+								<h3 class="house__name">{house.name}</h3>
+								<p class="house__line">{house.line}</p>
+							</div>
 							<p class="house__foot">
 								<span class="tag tag--quiet">{house.status}</span>
 								<span class="house__domain">{house.domain}</span>
@@ -166,6 +184,29 @@
 					</a>
 				{/each}
 			</div>
+		</div>
+	</section>
+
+	<!-- HOW IT WORKS: three steps, set large, on the dark -->
+	<section class="band" id="how" data-theme="ink" aria-labelledby="how-title">
+		<div class="wrap">
+			<div class="head">
+				<h2 class="head__title" id="how-title">How it works</h2>
+				<p class="head__text">
+					People design and build your site, with AI helping along the way. We are proud
+					of that.
+				</p>
+			</div>
+
+			<ol class="steps">
+				{#each steps as step, i}
+					<li class="step">
+						<span class="step__n" aria-hidden="true">{i + 1}</span>
+						<h3 class="step__name">{step.name}</h3>
+						<p class="step__body">{step.body}</p>
+					</li>
+				{/each}
+			</ol>
 		</div>
 	</section>
 
@@ -221,37 +262,18 @@
 		</div>
 	</section>
 
-	<!-- HOW IT WORKS -->
-	<section class="band" id="how" aria-labelledby="how-title">
-		<div class="wrap">
-			<div class="head">
-				<h2 class="head__title" id="how-title">How it works</h2>
+	<!-- QUESTIONS -->
+	<section class="band" id="questions" aria-labelledby="questions-title">
+		<div class="wrap asks">
+			<div class="asks__head">
+				<h2 class="head__title" id="questions-title">Questions</h2>
 				<p class="head__text">
-					People design and build your site, with AI helping along the way. We are proud
-					of that.
+					Something else? Email
+					<a class="link" href="mailto:{studioEmail}">{studioEmail}</a>
 				</p>
 			</div>
 
-			<ol class="steps">
-				{#each steps as step, i}
-					<li class="step card">
-						<span class="step__n" aria-hidden="true">{i + 1}</span>
-						<h3 class="step__name">{step.name}</h3>
-						<p class="step__body">{step.body}</p>
-					</li>
-				{/each}
-			</ol>
-		</div>
-	</section>
-
-	<!-- QUESTIONS -->
-	<section class="band" id="questions" data-theme="tint" aria-labelledby="questions-title">
-		<div class="wrap">
-			<div class="head">
-				<h2 class="head__title" id="questions-title">Questions</h2>
-			</div>
-
-			<div class="group qa">
+			<div class="qa">
 				{#each questions as item}
 					<details class="qa__item">
 						<summary>{item.q}</summary>
@@ -262,13 +284,13 @@
 		</div>
 	</section>
 
-	<!-- QUOTE: the one dark thing on the page, and it is a card, not a wall -->
-	<section class="band" id="quote" aria-labelledby="quote-title">
+	<!-- QUOTE: the dark close. It runs straight into the foot. -->
+	<section class="band band--close" id="quote" data-theme="ink" aria-labelledby="quote-title">
 		<div class="wrap">
-			<div class="quote card" data-theme="ink">
+			<div class="quote">
 				<div class="quote__say">
-					<h2 class="head__title" id="quote-title">Get a price</h2>
-					<p class="head__text">
+					<h2 class="quote__title" id="quote-title">Get a price</h2>
+					<p class="quote__text">
 						Tell us what you do. We reply within {replyWithin} with a fixed price. It
 						costs nothing to ask.
 					</p>
@@ -279,103 +301,59 @@
 			</div>
 		</div>
 	</section>
-
-	<!-- US -->
-	<section class="band us-band" id="us" data-theme="tint" aria-labelledby="us-title">
-		<div class="wrap">
-			<div class="us">
-				<h2 class="us__lockup" id="us-title">
-					<Symbol size={0} />
-					<Wordmark height={0} label="VNTA" />
-				</h2>
-				<div class="us__text">
-					<p>
-						A small studio in Dublin. We build websites for other people's businesses,
-						and for <a class="link" href="#houses">our own</a>.
-					</p>
-					<p class="us__mail">
-						<a class="link" href="mailto:{studioEmail}">{studioEmail}</a>
-					</p>
-				</div>
-			</div>
-		</div>
-	</section>
 </main>
 
 <style>
 	/* --- Hero ------------------------------------------------------------- */
+	.hero {
+		/* The turning card swings a little past its own edges. */
+		overflow-x: clip;
+	}
 	.hero > .wrap {
-		padding-top: clamp(40px, 6vw, 88px);
+		padding-top: clamp(28px, 5vw, 72px);
 		padding-bottom: clamp(40px, 5vw, 72px);
 	}
-	.hero__top {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: clamp(36px, 5vw, 64px);
-		align-items: center;
-	}
+	/* The one very large thing on the page. */
 	.hero__title {
 		margin: 0;
-		font-size: var(--t-h1);
-		line-height: 1.05;
-		max-width: 15ch;
-		text-wrap: balance;
+		font-size: var(--t-giant);
+		line-height: 0.94;
+		letter-spacing: -0.022em;
 		color: var(--ink);
+		text-wrap: balance;
+	}
+	.hero__row {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 24px clamp(24px, 4vw, 56px);
+		margin-top: clamp(22px, 3vw, 44px);
 	}
 	.hero__lede {
-		margin: clamp(16px, 2vw, 24px) 0 0;
+		margin: 0;
 		font-size: var(--t-lede);
 		line-height: 1.4;
-		color: var(--ink-60);
-		max-width: 32ch;
+		color: var(--ink-80);
+		max-width: 34ch;
 		text-wrap: pretty;
 	}
 	.hero__cta {
 		display: flex;
 		flex-wrap: wrap;
 		gap: 10px;
-		margin-top: clamp(22px, 2.6vw, 32px);
 	}
 
-	/* Three phones, three real sites. The frame is drawn in CSS: a graphite
-	   body with rounded corners, the screenshot rounded inside it. */
-	.phones {
-		display: grid;
-		grid-template-columns: repeat(3, minmax(0, 1fr));
-		gap: clamp(8px, 2vw, 18px);
-		align-items: center;
-		max-width: 560px;
-	}
-	.phone {
-		background: var(--device, var(--black));
-		padding: 3%;
-		border-radius: 15% / 6.9%;
-		line-height: 0;
-	}
-	.phone img {
-		display: block;
-		width: 100%;
-		height: auto;
-		border-radius: 12.5% / 5.8%;
-	}
-	/* The middle one stands a little proud of the other two. */
-	.phone--0,
-	.phone--2 {
-		transform: translateY(6%);
-	}
-
+	/* Three plain facts, ruled off, read across. */
 	.facts {
 		display: grid;
 		grid-template-columns: 1fr;
-		gap: 10px;
-		margin: clamp(36px, 5vw, 64px) 0 0;
+		margin: clamp(28px, 4vw, 56px) 0 0;
 	}
 	.fact {
 		display: flex;
 		flex-direction: column;
 		gap: 2px;
-		padding: 14px 20px;
-		border-radius: 16px;
+		padding: 14px 0;
+		border-top: 1px solid var(--line);
 	}
 	.fact dt {
 		font-size: var(--t-small);
@@ -383,16 +361,32 @@
 	}
 	.fact dd {
 		margin: 0;
-		font-size: var(--t-body);
-		font-weight: 600;
+		font-family: var(--font-display);
+		font-size: var(--t-h3);
+		line-height: 1.15;
 		color: var(--ink);
 	}
 
+	/* --- Work: on a tall wide screen each job holds its place while the next
+	   one slides up over it, like cards dealt onto a table. ---------------- */
+	.jobs__slot {
+		min-width: 0;
+	}
+	@media (min-width: 1000px) and (min-height: 760px) {
+		.jobs--stack {
+			gap: clamp(24px, 3vw, 40px);
+		}
+		.jobs__slot {
+			position: sticky;
+			top: calc(80px + var(--i) * 18px);
+		}
+	}
+
 	/* --- Our own houses: one lead, the same as a job, then two beside each
-	   other. Every one shows its real, live site on the three screens. ------ */
+	   other. Every one shows its real, live site. --------------------------- */
 	.head--second {
-		margin-top: clamp(56px, 7vw, 96px);
-		scroll-margin-top: 72px;
+		margin-top: clamp(72px, 9vw, 144px);
+		scroll-margin-top: 88px;
 	}
 	.houses {
 		display: grid;
@@ -404,23 +398,35 @@
 		display: flex;
 		flex-direction: column;
 		overflow: hidden;
+		border-radius: clamp(22px, 2.6vw, 36px);
+		border: 1px solid var(--w-line);
 	}
-	.house__stage {
-		padding: clamp(20px, 3.2vw, 40px) clamp(16px, 3vw, 36px) clamp(20px, 2.8vw, 32px);
+	.house__shot {
+		line-height: 0;
+		border-bottom: 1px solid var(--w-line);
+	}
+	.house__shot img {
+		display: block;
+		width: 100%;
+		height: auto;
 	}
 	.house__text {
-		padding: clamp(14px, 1.8vw, 22px);
-		border-top: 1px solid var(--line-soft);
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+		gap: 20px;
+		padding: clamp(18px, 2.4vw, 32px);
 	}
 	.house__name {
 		margin: 0;
-		font-size: var(--t-h4);
-		line-height: 1.2;
+		font-size: var(--t-h3);
+		line-height: 1.1;
 		color: var(--ink);
 	}
 	.house__line {
-		margin: 6px 0 0;
-		font-size: var(--t-small);
+		margin: 8px 0 0;
+		font-size: var(--t-body);
 		line-height: 1.4;
 		color: var(--ink-60);
 		text-wrap: pretty;
@@ -429,128 +435,106 @@
 		display: flex;
 		flex-wrap: wrap;
 		align-items: center;
-		gap: 6px 10px;
-		margin: 12px 0 0;
-		font-size: 0.82rem;
+		gap: 8px 12px;
+		margin: 0;
+		font-size: var(--t-small);
 		color: var(--ink-60);
 	}
 	.house:hover .house__domain {
+		color: var(--ink);
 		text-decoration: underline;
 		text-decoration-color: var(--w-accent);
 		text-underline-offset: 4px;
 	}
 
-	/* --- Steps: a real sequence, so it is numbered. ----------------------- */
+	/* --- Steps: a real sequence, so it is numbered. Each one is a ruled row
+	   with its name set large. ---------------------------------------------- */
 	.steps {
 		list-style: none;
 		margin: 0;
 		padding: 0;
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: clamp(12px, 1.6vw, 20px);
+		border-bottom: 1px solid var(--line);
 	}
 	.step {
-		padding: clamp(22px, 2.6vw, 32px);
+		display: grid;
+		grid-template-columns: auto minmax(0, 1fr);
+		gap: 6px clamp(14px, 3vw, 48px);
+		align-items: baseline;
+		padding: clamp(20px, 3vw, 40px) 0;
+		border-top: 1px solid var(--line);
+	}
+	.step__n,
+	.step__name {
+		font-family: var(--font-display);
+		font-size: clamp(1.8rem, 4.2vw, 3.5rem);
+		line-height: 1.02;
+		letter-spacing: var(--track-display);
 	}
 	.step__n {
-		display: grid;
-		place-items: center;
-		width: 36px;
-		height: 36px;
-		border-radius: 50%;
-		background: var(--ink);
-		color: var(--paper);
-		font-size: 0.95rem;
-		font-weight: 600;
+		min-width: 1.1em;
+		color: var(--ink-40);
 	}
 	.step__name {
-		margin: 18px 0 0;
-		font-size: var(--t-h3);
-		line-height: 1.15;
+		margin: 0;
 		color: var(--ink);
+		text-wrap: balance;
 	}
 	.step__body {
-		margin: 8px 0 0;
-		font-size: var(--t-body);
-		line-height: 1.45;
+		grid-column: 2;
+		margin: 0;
+		font-size: var(--t-lede);
+		line-height: 1.4;
 		color: var(--ink-60);
+		max-width: 30ch;
 		text-wrap: pretty;
 	}
 
-	/* --- Us --------------------------------------------------------------- */
-	.us-band > .wrap {
-		padding-top: clamp(40px, 6vw, 72px);
-		padding-bottom: clamp(40px, 6vw, 72px);
-	}
-	.us {
+	/* --- Questions: the title holds on the left while the list runs. ------ */
+	.asks {
 		display: grid;
 		grid-template-columns: 1fr;
 		gap: clamp(28px, 4vw, 56px);
-		align-items: center;
 	}
-	/* The lockup keeps its own arrangement, symbol centred over wordmark. */
-	.us__lockup {
-		display: inline-flex;
-		flex-direction: column;
-		align-items: center;
-		gap: 16px;
-		width: clamp(140px, 16vw, 190px);
-		margin: 0;
-		color: var(--ink);
-	}
-	.us__lockup :global(.symbol) {
-		width: 36%;
-		height: auto;
-	}
-	.us__lockup :global(.wordmark) {
-		width: 100%;
-		height: auto !important;
-	}
-	.us__text p {
-		margin: 0;
-		font-size: var(--t-lede);
-		line-height: 1.45;
-		color: var(--ink-80);
-		max-width: 38ch;
-		text-wrap: pretty;
-	}
-	.us__text .us__mail {
-		margin-top: 14px;
-		font-size: var(--t-body);
+	.asks__head {
+		display: grid;
+		gap: 14px;
+		align-content: start;
 	}
 
 	/* --- Wide ------------------------------------------------------------- */
 	@media (min-width: 700px) {
 		.facts {
 			grid-template-columns: repeat(3, minmax(0, 1fr));
-			gap: clamp(12px, 1.6vw, 20px);
+			gap: 0 clamp(20px, 3vw, 48px);
 		}
 		.fact {
 			gap: 6px;
-			padding: 22px 24px;
-			border-radius: var(--r-card);
-		}
-		.fact dd {
-			font-family: var(--font-display);
-			font-size: var(--t-h4);
-			font-weight: 400;
-		}
-		.steps {
-			grid-template-columns: repeat(3, minmax(0, 1fr));
+			padding: 18px 0 0;
 		}
 		.houses {
 			grid-template-columns: repeat(2, minmax(0, 1fr));
 		}
 	}
 	@media (min-width: 900px) {
-		.hero__top {
-			grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
+		.hero__row {
+			grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+			align-items: end;
 		}
-		.phones {
-			justify-self: end;
+		.hero__cta {
+			justify-content: flex-end;
 		}
-		.us {
-			grid-template-columns: auto minmax(0, 1fr);
+		.step {
+			grid-template-columns: auto minmax(0, 7fr) minmax(0, 4fr);
+		}
+		.step__body {
+			grid-column: auto;
+		}
+		.asks {
+			grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+		}
+		.asks__head {
+			position: sticky;
+			top: 96px;
 		}
 	}
 </style>

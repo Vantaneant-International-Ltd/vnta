@@ -119,7 +119,7 @@
 			<div class="head">
 				<h2 class="head__title" id="questions-title">Questions</h2>
 			</div>
-			<div class="group qa">
+			<div class="qa">
 				{#each l.questions as item}
 					<details class="qa__item" open>
 						<summary>{item.q}</summary>
@@ -133,12 +133,13 @@
 		</div>
 	</section>
 
-	<section class="band" id="quote" data-theme="tint" aria-labelledby="quote-title">
+	<!-- The dark close, the same as the home page. It runs into the foot. -->
+	<section class="band band--close" id="quote" data-theme="ink" aria-labelledby="quote-title">
 		<div class="wrap">
-			<div class="quote card" data-theme="ink">
+			<div class="quote">
 				<div class="quote__say">
-					<h2 class="head__title" id="quote-title">Get a price</h2>
-					<p class="head__text">
+					<h2 class="quote__title" id="quote-title">Get a price</h2>
+					<p class="quote__text">
 						Tell us what you do. We reply within {replyWithin} with a fixed price. It
 						costs nothing to ask.
 					</p>
@@ -159,23 +160,24 @@
 </main>
 
 <style>
-	.lead {
-		padding-top: clamp(40px, 6vw, 88px);
-		padding-bottom: clamp(40px, 6vw, 80px);
+	/* Specific enough to beat the shared band padding. */
+	.band > .lead {
+		padding-top: clamp(36px, 6vw, 96px);
+		padding-bottom: clamp(44px, 6vw, 96px);
 	}
 	.lead__title {
 		margin: 0;
-		font-size: var(--t-h1);
-		line-height: 1.05;
-		max-width: 16ch;
+		font-size: var(--t-giant);
+		line-height: 0.94;
+		letter-spacing: -0.022em;
 		text-wrap: balance;
 		color: var(--ink);
 	}
 	.lead__lede {
-		margin: clamp(16px, 2vw, 24px) 0 0;
+		margin: clamp(20px, 3vw, 40px) 0 0;
 		font-size: var(--t-lede);
 		line-height: 1.4;
-		color: var(--ink-60);
+		color: var(--ink-80);
 		max-width: 40ch;
 		text-wrap: pretty;
 	}
@@ -213,7 +215,7 @@
 		display: flex;
 		flex-wrap: wrap;
 		gap: 8px 20px;
-		margin-top: clamp(24px, 3vw, 40px);
+		margin-top: clamp(40px, 5vw, 72px);
 		font-size: var(--t-small);
 		color: var(--ink-60);
 	}
