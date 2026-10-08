@@ -26,6 +26,7 @@
 		meta: string;
 		status: string;
 		live: boolean;
+		href?: string; // the site itself, where it is live
 	};
 
 	let { slides, seconds = 5 }: { slides: Slide[]; seconds?: number } = $props();
@@ -42,7 +43,9 @@
 
 	let ready = $state(false);
 	let paused = $state(false); // the visitor pressed pause
-	let held = $state(false); // pointer or keyboard is on the card
+	let over = $state(false); // the pointer is on the card
+	let keyed = $state(false); // the keyboard is on the card or its keys
+	const held = $derived(over || keyed);
 	let away = $state(false); // off screen, or the tab is behind
 	let still = $state(false); // the device asks for less motion
 	let turning = $state(false);
@@ -117,8 +120,10 @@
 	<!-- svelte-ignore a11y_no_static_element_interactions -->
 	<div
 		class="flip__stage"
-		onpointerenter={(e) => e.pointerType === 'mouse' && (held = true)}
-		onpointerleave={() => (held = false)}
+		onpointerenter={(e) => e.pointerType === 'mouse' && (over = true)}
+		onpointerleave={() => (over = false)}
+		onfocusin={(e) => (keyed = (e.target as HTMLElement).matches(':focus-visible'))}
+		onfocusout={() => (keyed = false)}
 	>
 		<div class="flip__card" style="transform: rotateX({turn * 180}deg)">
 			{#each [0, 1] as f}
@@ -129,6 +134,17 @@
 					aria-hidden={f !== front}
 					inert={f !== front}
 				>
+					{#if s.href}
+						<!-- The whole card is the way in to the site it shows. It is laid
+						     over the face, so it comes first and the caption stays last. -->
+						<a
+							class="flip__go"
+							href={s.href}
+							target="_blank"
+							rel="noopener"
+							aria-label="Visit the {s.name} website (opens in a new tab)"
+						></a>
+					{/if}
 					<div class="flip__shot">
 						<picture>
 							<source media={PHONE} srcset={phone(s)} sizes="92vw" />
@@ -158,8 +174,8 @@
 	{#if slides.length > 1}
 		<div
 			class="flip__bar"
-			onfocusin={(e) => (held = (e.target as HTMLElement).matches(':focus-visible'))}
-			onfocusout={() => (held = false)}
+			onfocusin={(e) => (keyed = (e.target as HTMLElement).matches(':focus-visible'))}
+			onfocusout={() => (keyed = false)}
 			role="group"
 			aria-label="Choose a site"
 		>
@@ -242,6 +258,7 @@
 		transition: transform 900ms cubic-bezier(0.66, 0, 0.2, 1);
 	}
 	.flip__face {
+		position: relative;
 		display: flex;
 		flex-direction: column;
 		margin: 0;
@@ -273,6 +290,22 @@
 		height: 100%;
 		object-fit: cover;
 		object-position: top center;
+	}
+
+	/* A link laid over the whole face. */
+	.flip__go {
+		position: absolute;
+		inset: 0;
+		border-radius: inherit;
+	}
+	.flip__go:focus-visible {
+		outline: 2px solid var(--w-ink);
+		outline-offset: -4px;
+	}
+	.flip__face:has(.flip__go:hover) .flip__name {
+		text-decoration: underline;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 4px;
 	}
 
 	.flip__cap {

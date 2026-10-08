@@ -107,7 +107,7 @@
 				</div>
 
 				<p class="foot__legal">
-					<span>Vantanéant International Ltd. Est. MMXXV</span>
+					<span>Vantanéant International Ltd. Est. 2025</span>
 					<span>Dublin and worldwide</span>
 				</p>
 			</div>

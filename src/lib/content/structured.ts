@@ -12,6 +12,7 @@ import {
 	studioEmail,
 	social,
 	pitch,
+	sitDown,
 	plans,
 	work,
 	houses,
@@ -60,14 +61,24 @@ export const organisation = (description: string) => ({
 		availableLanguage: 'en'
 	},
 	...(social.length ? { sameAs: social.map((s) => s.href) } : {}),
-	makesOffer: plans.map((p) => ({
-		'@type': 'Offer',
-		name: `${p.name}`,
-		description: `${p.for} From €${p.build} to build, then €${p.monthly} a month. ${p.time}.`,
-		price: p.build,
-		priceCurrency: 'EUR',
-		url: `${siteUrl}/#prices`
-	})),
+	makesOffer: [
+		{
+			'@type': 'Offer',
+			name: 'The sit-down',
+			description: `We look at the whole business with you and tell you plainly what we would change. Takes ${sitDown.length}. You get ${sitDown.leaves}. ${sitDown.credit}`,
+			price: sitDown.price,
+			priceCurrency: 'EUR',
+			url: `${siteUrl}/#prices`
+		},
+		...plans.map((p) => ({
+			'@type': 'Offer',
+			name: `${p.name}`,
+			description: `${p.for} From €${p.build} to build, then €${p.monthly} a month. ${p.time}.`,
+			price: p.build,
+			priceCurrency: 'EUR',
+			url: `${siteUrl}/#prices`
+		}))
+	],
 	// The companies VNTA owns and runs.
 	subOrganization: houses.map((h) => ({
 		'@type': 'Organization',

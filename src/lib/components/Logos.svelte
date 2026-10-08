@@ -5,10 +5,15 @@
 	// tile is a small card with two faces, the same way the large card at the
 	// top of the page works.
 	//
-	// It turns only while it is on screen, the tab is in front and the visitor
-	// has not pressed pause. For anyone who has asked their device for less
-	// motion it never turns, and every name is listed underneath instead. With
-	// no JavaScript it is the first six, standing still.
+	// A tile with somewhere to go is a link to that company's or tool's own
+	// site, opened in a new tab.
+	//
+	// It turns only while it is on screen, the tab is in front, the pointer is
+	// not on the row, the keyboard is not on a tile and the visitor has not
+	// pressed pause: a tile must never turn away under a finger about to press
+	// it. For anyone who has asked their device for less motion it never
+	// turns, and every name is listed underneath instead. With no JavaScript
+	// it is the first six, standing still.
 	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
 	import { toolMarks } from '$lib/components/ui/toolMarks';
@@ -32,9 +37,14 @@
 
 	let ready = $state(false);
 	let paused = $state(false);
+	let over = $state(false); // the pointer is on the row
+	let keyed = $state(false); // the keyboard is on a tile
+	const held = $derived(over || keyed);
 	let away = $state(false);
 	let still = $state(false);
-	const running = $derived(ready && !still && !paused && !away && waiting.length > 0);
+	const running = $derived(
+		ready && !still && !paused && !held && !away && waiting.length > 0
+	);
 
 	function turnOne() {
 		const tile = tiles[ORDER[step++ % ORDER.length] % tiles.length];
@@ -121,25 +131,53 @@
 		{/if}
 	</div>
 
-	<!-- What the eye sees: six tiles. Hidden from screen readers, which get
-	     the whole list just below, where nothing moves. -->
-	<div class="wall__row" aria-hidden="true" data-theme="ink">
+	<!-- Six tiles. The face on show is a link where there is somewhere to go;
+	     the face behind it is out of reach until it comes round. -->
+	<!-- svelte-ignore a11y_no_static_element_interactions -->
+	<div
+		class="wall__row"
+		data-theme="ink"
+		onpointerenter={(e) => e.pointerType === 'mouse' && (over = true)}
+		onpointerleave={() => (over = false)}
+		onfocusin={(e) => (keyed = (e.target as HTMLElement).matches(':focus-visible'))}
+		onfocusout={() => (keyed = false)}
+	>
 		{#each tiles as tile}
+			{@const front = ((tile.turn % 2) + 2) % 2}
 			<div class="wall__cell">
 				<div class="wall__tile" style="transform: rotateX({tile.turn * 180}deg)">
 					{#each [0, 1] as f}
-						<div class="wall__face wall__face--{f}">
-							{@render face(marks[tile.faces[f]])}
-						</div>
+						{@const m = marks[tile.faces[f]]}
+						<svelte:element
+							this={m.href ? 'a' : 'div'}
+							class="wall__face wall__face--{f}"
+							href={m.href}
+							target={m.href ? '_blank' : undefined}
+							rel={m.href ? 'noopener' : undefined}
+							aria-label={m.href ? `${m.name} (opens in a new tab)` : m.name}
+							role={m.href ? undefined : 'img'}
+							aria-hidden={f !== front}
+							inert={f !== front}
+						>
+							{@render face(m)}
+						</svelte:element>
 					{/each}
 				</div>
 			</div>
 		{/each}
 	</div>
 
+	<!-- Every name, where nothing moves: read out by screen readers, and shown
+	     to everyone when the tiles do not turn. -->
 	<ul class="wall__all" class:is-shown={ready && still}>
 		{#each marks as m}
-			<li>{m.name}</li>
+			<li>
+				{#if ready && still && m.href}
+					<a href={m.href} target="_blank" rel="noopener">{m.name}</a>
+				{:else}
+					{m.name}
+				{/if}
+			</li>
 		{/each}
 	</ul>
 </section>
@@ -187,6 +225,15 @@
 		backface-visibility: hidden;
 		-webkit-backface-visibility: hidden;
 		transform: rotateX(0deg);
+		transition: background var(--dur) var(--ease);
+	}
+	/* A tile that goes somewhere lifts a shade under the pointer. */
+	a.wall__face:hover {
+		background: var(--paper-2);
+	}
+	a.wall__face:focus-visible {
+		outline: 2px solid var(--black);
+		outline-offset: 3px;
 	}
 	.wall__face--1 {
 		transform: rotateX(180deg);
@@ -279,6 +326,11 @@
 		gap: 4px 18px;
 		font-size: var(--t-small);
 		color: var(--ink-60);
+	}
+	.wall__all a {
+		text-decoration: underline;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 3px;
 	}
 
 	@media (min-width: 560px) {

@@ -33,6 +33,19 @@ export const social: { name: string; href: string }[] = [];
 /** How fast we answer an enquiry. Used in the hero, the steps and the form. */
 export const replyWithin = 'two working days';
 
+// --- The sit-down ------------------------------------------------------------
+// The first thing we sell, and the place every client starts. One price, one
+// length, one thing you leave with. Change a value here and the top of the
+// page, what we do, the steps, the prices, the questions, llms.txt and the
+// search data all follow.
+
+export const sitDown = {
+	price: 150, // euro. Comes off the bill if the client goes ahead with brand or website work.
+	length: 'about 90 minutes',
+	leaves: 'a short written summary of what we would change',
+	credit: 'If you go ahead with us, it comes off your bill.'
+};
+
 // --- The pitch ---------------------------------------------------------------
 // The first thing anyone reads. The headline is also the line on the share
 // card (static/og.png): change it there too.
@@ -44,19 +57,26 @@ export const pitch = {
 	short: 'A brand studio in Dublin. We design brands and build websites, for other people\'s businesses and for our own.'
 };
 
-/** What we do: three things, and a client can come for any one of them. */
+/**
+ * What we do: three things, and a client can come for any one of them. Each
+ * says what it costs. The website line is filled in from `plans` further down
+ * (see `offerPrices`), so the two can never disagree.
+ */
 export const offer = [
 	{
 		name: 'The sit-down',
-		body: 'We look at the whole business with you: what you sell, who buys it, and what is getting in the way. Then we tell you plainly what we would change.'
+		body: 'We look at the whole business with you: what you sell, who buys it, and what is getting in the way. Then we tell you plainly what we would change, and send it to you in writing.',
+		price: `€${sitDown.price}, ${sitDown.length}`
 	},
 	{
 		name: 'The brand',
-		body: 'How the business looks and sounds everywhere a customer meets it. The logo, the colours, the type and the words.'
+		body: 'How the business looks and sounds everywhere a customer meets it. The logo, the colours, the type and the words.',
+		price: 'Priced after the sit-down'
 	},
 	{
 		name: 'The website',
-		body: 'Designed and built from scratch, set up to be found, and looked after every month.'
+		body: 'Designed and built from scratch, set up to be found, and looked after every month.',
+		price: '' // from the cheapest plan: see offerPrices below
 	}
 ];
 
@@ -166,32 +186,37 @@ export const work: Work[] = [
 // `image` is a file in static/logos, drawn in white for a dark tile. Set
 // `named` when the picture already spells the name out. A company with no
 // `image` yet is set in type; add the file and name it here when we have it.
+//
+// `href` makes the tile a link to that company's or tool's own site, opened in
+// a new tab. Leave it out where there is nowhere of ours to send people yet:
+// L.M. Motors has none until the site we are building for them is live.
 
 export type Mark = {
 	name: string;
 	kind: 'client' | 'house' | 'tool';
+	href?: string;
 	image?: string;
 	named?: boolean;
 };
 
 export const wall: Mark[] = [
-	{ name: 'EZGO Auto Works', kind: 'client', image: 'ezgo.svg' },
-	{ name: 'Cloudflare', kind: 'tool' },
-	{ name: 'BUILDT', kind: 'client', image: 'buildt.png', named: true },
-	{ name: 'Shopify', kind: 'tool' },
+	{ name: 'EZGO Auto Works', kind: 'client', href: 'https://ezgoautoworks.ie', image: 'ezgo.svg' },
+	{ name: 'Cloudflare', kind: 'tool', href: 'https://www.cloudflare.com' },
+	{ name: 'BUILDT', kind: 'client', href: 'https://buildt.ie', image: 'buildt.png', named: true },
+	{ name: 'Shopify', kind: 'tool', href: 'https://www.shopify.com' },
 	{ name: 'L.M. Motors', kind: 'client', image: 'lm-motors.png', named: true },
-	{ name: 'Claude', kind: 'tool' },
-	{ name: 'Carbon Wheels', kind: 'house' },
-	{ name: 'Svelte', kind: 'tool' },
-	{ name: 'Vendr', kind: 'house' },
-	{ name: 'GitHub', kind: 'tool' },
-	{ name: 'Maison Seul', kind: 'house' },
-	{ name: 'Google Analytics', kind: 'tool' }
+	{ name: 'Claude', kind: 'tool', href: 'https://claude.ai' },
+	{ name: 'Carbon Wheels', kind: 'house', href: 'https://carbonwheels.ie' },
+	{ name: 'Svelte', kind: 'tool', href: 'https://svelte.dev' },
+	{ name: 'Vendr', kind: 'house', href: 'https://vendr.ie' },
+	{ name: 'GitHub', kind: 'tool', href: 'https://github.com' },
+	{ name: 'Maison Seul', kind: 'house', href: 'https://maisonseul.com' },
+	{ name: 'Google Analytics', kind: 'tool', href: 'https://marketingplatform.google.com/about/analytics/' }
 ];
 
 // --- Prices ------------------------------------------------------------------
-// Brand work has no price list: it is priced after the sit-down. The websites
-// do. Two numbers per plan: a one-time build fee, then a monthly fee that
+// The sit-down has one price (`sitDown`, above). Brand work has no price list:
+// it is priced after the sit-down. The websites do. Two numbers per plan: a one-time build fee, then a monthly fee that
 // covers running the site. Both are "from" prices; the quote is fixed before
 // we start.
 
@@ -245,6 +270,13 @@ export const plans: Plan[] = [
 	}
 ];
 
+/** The price line under each thing we do, with the website's taken from the cheapest plan. */
+export const offerPrices = offer.map((o) =>
+	o.name === 'The website'
+		? `From €${Math.min(...plans.map((p) => p.build)).toLocaleString('en-IE')}, then €${Math.min(...plans.map((p) => p.monthly))} a month`
+		: o.price
+);
+
 /** The three things people ask straight after the price. */
 export const ownedFrom = 699; // buying the site outright: code, database, hosting
 export const priceNotes = [
@@ -271,7 +303,7 @@ export const steps = [
 	},
 	{
 		name: 'We sit down',
-		body: 'You talk, we ask questions, and we tell you plainly what we would change.'
+		body: `For ${sitDown.length}. You talk, we ask questions, and we tell you plainly what we would change. You get it in writing after.`
 	},
 	{
 		name: 'We design it',
@@ -287,8 +319,12 @@ export const steps = [
 
 export const questions = [
 	{
+		q: 'What does the sit-down cost?',
+		a: `€${sitDown.price}. It takes ${sitDown.length}, and afterwards you get ${sitDown.leaves}. If you go ahead with brand or website work, the €${sitDown.price} comes off your bill.`
+	},
+	{
 		q: 'Do I have to want a website?',
-		a: 'No. You can come for the brand alone, or just to talk the business through. We start with the conversation and see what you need.'
+		a: 'No. You can come for the brand alone, or for the sit-down alone. We start there and see what you need.'
 	},
 	{
 		q: 'What is brand design?',
@@ -296,7 +332,7 @@ export const questions = [
 	},
 	{
 		q: 'What does brand work cost?',
-		a: 'It depends on what the business needs, so we price it after we talk. You get the figure in writing before we start.'
+		a: 'It depends on what the business needs, so we price it after the sit-down. You get the figure in writing before we start.'
 	},
 	{
 		q: 'I already have a website. Can you redo it?',

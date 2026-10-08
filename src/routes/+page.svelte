@@ -17,6 +17,8 @@
 	import {
 		pitch,
 		offer,
+		offerPrices,
+		sitDown,
 		wall,
 		work,
 		plans,
@@ -38,7 +40,7 @@
 
 	const fromBuild = Math.min(...plans.map((p) => p.build));
 
-	const description = `VNTA is a brand studio in Dublin. We sit down with you, work out what your business needs, then design the brand and build the website. Websites from ${euro(fromBuild)}.`;
+	const description = `VNTA is a brand studio in Dublin. We look at your business, tell you plainly what to change, then design the brand and build the website. A sit-down is ${euro(sitDown.price)}.`;
 
 	// Each plan links to the page that says more about it.
 	const more: Record<string, string> = {
@@ -57,7 +59,8 @@
 			name: j.name,
 			meta: `${j.trade}, ${j.place}`,
 			status: j.status,
-			live: j.status === 'Live'
+			live: j.status === 'Live',
+			href: j.href
 		})),
 		{
 			world: leadHouse.world,
@@ -65,7 +68,8 @@
 			name: leadHouse.name,
 			meta: `Our own ${(leadHouse.kind ?? 'company').toLowerCase()}`,
 			status: leadHouse.status,
-			live: false
+			live: false,
+			href: leadHouse.href
 		}
 	];
 </script>
@@ -95,8 +99,8 @@
 
 			<dl class="facts">
 				<div class="fact">
-					<dt>It starts with</dt>
-					<dd>a conversation</dd>
+					<dt>It starts with a sit-down</dt>
+					<dd>{euro(sitDown.price)}</dd>
 				</div>
 				<div class="fact">
 					<dt>We reply</dt>
@@ -124,10 +128,11 @@
 			</div>
 
 			<div class="offer">
-				{#each offer as item}
+				{#each offer as item, i}
 					<div class="offer__item">
 						<h3 class="offer__name">{item.name}</h3>
 						<p class="offer__body">{item.body}</p>
+						<p class="offer__price">{offerPrices[i]}</p>
 					</div>
 				{/each}
 			</div>
@@ -243,10 +248,28 @@
 			<div class="head">
 				<h2 class="head__title" id="prices-title">Prices</h2>
 				<p class="head__text">
-					Brand work is priced after we talk, once we know what you need. Websites
-					start here, and you get the exact figure before we start.
+					Start with the sit-down. Brand work is priced after it, once we know what
+					you need. Websites start at the prices here.
 				</p>
 			</div>
+
+			<!-- The sit-down: the first thing we sell, and where everyone starts. -->
+			<article class="sit card">
+				<div class="sit__say">
+					<h3 class="plan__name">The sit-down</h3>
+					<p class="plan__for">For any business. The place to start.</p>
+					<p class="plan__price">
+						<span class="plan__build">{euro(sitDown.price)}</span>
+					</p>
+				</div>
+				<ul class="list sit__list">
+					<li>Takes {sitDown.length}</li>
+					<li>We look at the whole business with you</li>
+					<li>You get {sitDown.leaves}</li>
+					<li>{sitDown.credit}</li>
+				</ul>
+				<p class="sit__go"><a class="btn btn--solid" href="#quote">Book a sit-down</a></p>
+			</article>
 
 			<div class="plans">
 				{#each plans as plan}
@@ -428,6 +451,36 @@
 		max-width: 38ch;
 		text-wrap: pretty;
 	}
+	.offer__price {
+		margin: 14px 0 0;
+		font-family: var(--font-label);
+		font-size: var(--t-body);
+		letter-spacing: 0.06em;
+		color: var(--ink);
+	}
+
+	/* --- The sit-down's own price card: one wide card over the three plans. */
+	.sit {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: clamp(18px, 2.4vw, 32px);
+		align-items: center;
+		padding: clamp(22px, 2.6vw, 36px);
+		margin-bottom: clamp(12px, 1.4vw, 20px);
+	}
+	.sit .plan__price {
+		margin-top: clamp(14px, 1.8vw, 22px);
+	}
+	.sit__list {
+		font-size: var(--t-body);
+		gap: 10px;
+	}
+	.sit__list li::before {
+		top: 0.72em;
+	}
+	.sit__go {
+		margin: 0;
+	}
 
 	/* --- Work: on a tall wide screen each job holds its place while the next
 	   one slides up over it, like cards dealt onto a table. ---------------- */
@@ -599,6 +652,9 @@
 		}
 		.asks {
 			grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
+		}
+		.sit {
+			grid-template-columns: minmax(0, 4fr) minmax(0, 5fr) auto;
 		}
 		.asks__head {
 			position: sticky;

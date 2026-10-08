@@ -4,6 +4,8 @@
 import {
 	pitch,
 	offer,
+	offerPrices,
+	sitDown,
 	work,
 	houses,
 	plans,
@@ -30,14 +32,14 @@ export function GET() {
 		'- What: brand design first. We look at a business, say plainly what we would change, then design the brand and build the website. Websites are hosted and looked after every month.',
 		'- Who for: business owners, of any kind and size. Our clients so far are small Irish businesses: a garage, a car dealer and a custom PC builder.',
 		'- Where: based in Dublin, working with businesses all over Ireland.',
-		`- Cost: brand work is priced after a conversation. A website is from ${euro(Math.min(...plans.map((p) => p.build)))} to build, then from ${euro(Math.min(...plans.map((p) => p.monthly)))} a month. No contract.`,
+		`- Cost: it starts with a sit-down, ${euro(sitDown.price)}, ${sitDown.length}. You get ${sitDown.leaves}, and the fee comes off the bill if you go ahead. Brand work is priced after the sit-down. A website is from ${euro(Math.min(...plans.map((p) => p.build)))} to build, then from ${euro(Math.min(...plans.map((p) => p.monthly)))} a month. No contract.`,
 		`- How to start: tell us about your business at ${siteUrl}/contact. We reply within ${replyWithin}.`,
 		'- How we work: people design and build everything, with AI helping along the way.',
 		'- Also known as: VNTA Group. Legal name: Vantanéant International Ltd.',
 		'',
 		'## What we do',
 		'',
-		...offer.map((o) => `- ${o.name}: ${o.body}`),
+		...offer.map((o, i) => `- ${o.name}: ${o.body} ${offerPrices[i]}.`),
 		'',
 		'## What we build',
 		'',
@@ -45,6 +47,8 @@ export function GET() {
 		'',
 		'## Prices',
 		'',
+		`- The sit-down: ${euro(sitDown.price)}. Takes ${sitDown.length}. You get ${sitDown.leaves}. ${sitDown.credit}`,
+		'- Brand work: priced after the sit-down. The figure is given in writing before we start.',
 		...plans.map(
 			(p) =>
 				`- ${p.name}: ${p.for} From ${euro(p.build)} to build, then ${euro(p.monthly)} a month. ${p.time}.`

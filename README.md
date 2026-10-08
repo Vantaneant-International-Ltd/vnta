@@ -23,6 +23,10 @@ Everything the pages say that is likely to change lives in one file:
 src/lib/content/site.ts
 ```
 
+The sit-down has one price, one length and one thing you leave with: `sitDown`.
+Change it there and the top of the page, what we do, the steps, the prices and
+the questions all follow.
+
 The pitch (`pitch`), what we do (`offer`), the work, the three website prices,
 the monthly fee, the steps and the questions are all there. Change a line once
 and the page, the search data and `/llms.txt` all follow. The headline is also
@@ -69,6 +73,10 @@ tile turns over to the next name (`Logos.svelte`). The list is `wall` in
   type.
 - **A tool:** add its mark to `src/lib/components/ui/toolMarks.ts` (shapes from
   Simple Icons, one colour) and a line to `wall`. Only tools we really use.
+
+A tile with an `href` is a link to that company's or tool's own site, opened
+in a new tab. The large card above it links the same way to the site it is
+showing. L.M. Motors has no link until the site we are building is live.
 
 Logos are shown without their colour so the row stays in VNTA's greys. For
 anyone who has asked their device for less motion the tiles never turn, and
