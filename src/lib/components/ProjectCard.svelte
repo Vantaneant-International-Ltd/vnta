@@ -14,6 +14,7 @@
 		status,
 		live = false,
 		name,
+		did = '',
 		href,
 		domain,
 		summary,
@@ -27,6 +28,7 @@
 		status: string;
 		live?: boolean;
 		name: string;
+		did?: string; // what we made: 'Brand and website', 'Website'
 		href?: string;
 		domain?: string;
 		summary: string;
@@ -43,6 +45,9 @@
 				{meta}
 			</p>
 			<svelte:element this={`h${level}`} class="job__name">{name}</svelte:element>
+			{#if did}
+				<p class="job__did">{did}</p>
+			{/if}
 		</div>
 		<div>
 			<p class="job__summary">{summary}</p>

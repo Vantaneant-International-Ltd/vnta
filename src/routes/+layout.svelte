@@ -18,7 +18,7 @@
 	import CookieBanner from '$lib/components/CookieBanner.svelte';
 	import Wordmark from '$lib/components/ui/Wordmark.svelte';
 	import Symbol from '$lib/components/ui/Symbol.svelte';
-	import { landings, social, studioEmail } from '$lib/content/site';
+	import { landings, social, studioEmail, pitch } from '$lib/content/site';
 
 	let { children } = $props();
 
@@ -33,6 +33,7 @@
 	// The home page is one long scroll, so the masthead links are anchors into
 	// it. The last one is the action the whole page is asking for.
 	const nav = [
+		{ label: 'What we do', href: `${base}/#what` },
 		{ label: 'Work', href: `${base}/#work` },
 		{ label: 'How it works', href: `${base}/#how` },
 		{ label: 'Prices', href: `${base}/#prices` },
@@ -58,28 +59,27 @@
 					{#each nav as item}
 						<a href={item.href}>{item.label}</a>
 					{/each}
-					<a class="btn btn--solid btn--small" href="{base}/#quote">Get a price</a>
+					<a class="btn btn--solid btn--small" href="{base}/#quote">Talk to us</a>
 				</nav>
 			</div>
 		</header>
 
 		{@render children()}
 
-		<!-- The foot is dark on every page, and ends on the name. -->
+		<!-- The foot is dark on every page, and is signed with the name. -->
 		<footer class="foot" data-theme="ink">
+			<!-- The symbol, rising behind the foot: large and barely there. -->
+			<div class="foot__sun" aria-hidden="true"><Symbol size={0} /></div>
 			<div class="wrap">
 				<div class="foot__top">
 					<div class="foot__us">
-						<Symbol size={44} />
-						<p>
-							A small studio in Dublin. We build websites for other people's
-							businesses, and for <a class="link" href="{base}/#houses">our own</a>.
-						</p>
+						<p>{pitch.short}</p>
 					</div>
 
 					<nav class="foot__col" aria-labelledby="foot-build">
 						<h2 id="foot-build">What we build</h2>
 						<ul>
+							<li><a href="{base}/#what">Brands</a></li>
 							{#each landings as l}
 								<li><a href="{base}/{l.slug}">{l.label}</a></li>
 							{/each}
@@ -102,6 +102,7 @@
 				</div>
 
 				<div class="foot__name" aria-hidden="true">
+					<Symbol size={0} />
 					<Wordmark height={0} label="" tight />
 				</div>
 

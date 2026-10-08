@@ -1,8 +1,9 @@
 /* =============================================================================
    VNTA — shared page chrome and components
    -----------------------------------------------------------------------------
-   Large type, real pictures, plenty of room. The page opens light, shows each
-   client's site in that client's own colours, and closes dark. Still only
+   Clear type, real pictures, plenty of room, nothing shouting. The page is
+   light, shows each client's site in that client's own colours, and closes on
+   one dark section. Still only
    greys of our own, still left-aligned, still no shadows. The brand shows in
    the wordmark, the symbol and the display face.
    ========================================================================== */
@@ -82,8 +83,8 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	min-height: 52px;
-	padding: 0 28px;
+	min-height: 48px;
+	padding: 0 24px;
 	box-sizing: border-box;
 	border: 0;
 	border-radius: var(--r-pill);
@@ -124,14 +125,14 @@
 .head {
 	display: grid;
 	gap: 14px;
-	margin-bottom: clamp(32px, 5vw, 72px);
+	margin-bottom: clamp(28px, 4vw, 52px);
 }
 .head__title {
 	margin: 0;
 	font-family: var(--font-display);
 	font-weight: 400;
 	font-size: var(--t-h2);
-	line-height: 1;
+	line-height: 1.05;
 	letter-spacing: var(--track-display);
 	color: var(--ink);
 	text-wrap: balance;
@@ -154,6 +155,18 @@
 	.head > :only-child {
 		grid-column: 1 / -1;
 	}
+}
+
+/* --- Label: small capitals in the display face, set a little open. The
+   wordmark is four flared capitals; the small words that name things (a
+   trade, a status, a column in the foot) are cut the same way, so they read
+   as its kin. Kept to a few words, never a sentence. ----------------------- */
+.label {
+	font-family: var(--font-label);
+	font-size: var(--t-small);
+	font-weight: 400;
+	letter-spacing: 0.07em;
+	color: var(--ink-60);
 }
 
 /* --- Card: a rounded surface, one step off the section behind it. --------- */
@@ -249,8 +262,8 @@
 	display: grid;
 	grid-template-columns: 1fr;
 	gap: clamp(24px, 4vw, 56px);
-	padding: clamp(18px, 3.4vw, 48px);
-	border-radius: clamp(22px, 2.6vw, 36px);
+	padding: clamp(18px, 3vw, 40px);
+	border-radius: clamp(20px, 2.2vw, 28px);
 	/* A hairline, so a card close in tone to the page still has an edge. */
 	box-shadow: inset 0 0 0 1px var(--w-line);
 }
@@ -266,19 +279,23 @@
 	align-items: center;
 	gap: 8px 12px;
 	margin: 0;
+	font-family: var(--font-label);
 	font-size: var(--t-small);
+	letter-spacing: 0.07em;
 	color: var(--ink-60);
 }
 .tag {
 	display: inline-flex;
 	align-items: center;
 	gap: 7px;
-	padding: 4px 11px;
+	padding: 3px 11px 4px;
 	border-radius: var(--r-pill);
 	box-shadow: inset 0 0 0 1px var(--ink-20);
 	color: var(--ink);
-	font-size: 0.78rem;
-	font-weight: 600;
+	font-family: var(--font-label);
+	font-size: 0.86rem;
+	font-weight: 400;
+	letter-spacing: 0.07em;
 	line-height: 1.4;
 }
 /* A live site carries a small lit dot in the client's own accent. */
@@ -294,11 +311,18 @@
 }
 .job__name {
 	margin: 14px 0 0;
-	font-size: clamp(2.1rem, 4.4vw, 3.75rem);
-	line-height: 1;
+	font-size: clamp(1.8rem, 3vw, 2.5rem);
+	line-height: 1.05;
 	letter-spacing: var(--track-display);
 	color: var(--ink);
 	text-wrap: balance;
+}
+.job__did {
+	margin: 10px 0 0;
+	font-family: var(--font-label);
+	font-size: var(--t-body);
+	letter-spacing: 0.07em;
+	color: var(--ink);
 }
 .job__summary {
 	margin: 0;
@@ -331,7 +355,7 @@
 	opacity: 0.86;
 }
 
-/* A plain list of what you get, with a small round mark. */
+/* A plain list of what you get. Each mark is one ray of the symbol. */
 .list {
 	list-style: none;
 	margin: 0;
@@ -345,17 +369,19 @@
 }
 .list li {
 	position: relative;
-	padding-left: 18px;
+	padding-left: 22px;
 }
 .list li::before {
 	content: '';
 	position: absolute;
-	left: 2px;
-	top: 0.55em;
-	width: 5px;
-	height: 5px;
-	border-radius: 50%;
-	background: var(--w-accent, var(--ink-40));
+	left: 0;
+	top: 0.7em;
+	width: 12px;
+	height: 4px;
+	margin-top: -2px;
+	/* Wide at the rim, drawn to a point at the centre, like the rays. */
+	clip-path: polygon(0 0, 100% 42%, 100% 58%, 0 100%);
+	background: var(--w-accent, var(--ink-60));
 }
 
 /* --- Prices: three plans read across, like a price board. --------------- */
@@ -386,16 +412,18 @@
 	display: flex;
 	align-items: baseline;
 	gap: 10px;
-	margin: clamp(28px, 4vw, 56px) 0 0;
+	margin: clamp(24px, 3vw, 36px) 0 0;
 }
 .plan__from {
+	font-family: var(--font-label);
 	font-size: var(--t-small);
+	letter-spacing: 0.07em;
 	color: var(--ink-60);
 }
 .plan__build {
 	font-family: var(--font-display);
-	font-size: clamp(3rem, 5.4vw, 4.75rem);
-	line-height: 0.9;
+	font-size: clamp(2.5rem, 3.8vw, 3.25rem);
+	line-height: 1;
 	letter-spacing: var(--track-display);
 	color: var(--ink);
 }
@@ -445,9 +473,9 @@
 	justify-content: space-between;
 	align-items: center;
 	gap: 20px;
-	padding: clamp(18px, 2.2vw, 28px) 0;
+	padding: clamp(16px, 1.8vw, 22px) 0;
 	font-family: var(--font-display);
-	font-size: var(--t-h3);
+	font-size: var(--t-h4);
 	font-weight: 400;
 	line-height: 1.2;
 	color: var(--ink);
@@ -473,8 +501,8 @@
 }
 .qa__item p {
 	margin: 0;
-	padding: 0 0 clamp(20px, 2.4vw, 30px);
-	font-size: var(--t-lede);
+	padding: 0 0 clamp(18px, 2vw, 24px);
+	font-size: var(--t-body);
 	line-height: 1.5;
 	color: var(--ink-60);
 	max-width: 54ch;
@@ -493,7 +521,7 @@
 	font-family: var(--font-display);
 	font-weight: 400;
 	font-size: var(--t-h1);
-	line-height: 0.98;
+	line-height: 1.02;
 	letter-spacing: var(--track-display);
 	color: var(--ink);
 }
@@ -507,13 +535,34 @@
 }
 /* The quote band runs straight into the foot, so it gives up its own floor. */
 .band--close > .wrap {
-	padding-bottom: clamp(48px, 6vw, 96px);
+	padding-bottom: clamp(48px, 6vw, 88px);
 }
 
-/* --- Foot: dark, with the name written across the full width. ----------- */
+
+
+/* --- Foot: dark, and signed with the name. The symbol rises behind it from
+   the corner, large and barely there. ------------------------------------- */
 .foot {
+	position: relative;
+	overflow: hidden;
 	background: var(--paper);
 	color: var(--ink-60);
+}
+.foot > .wrap {
+	position: relative;
+}
+.foot__sun {
+	position: absolute;
+	right: clamp(-300px, -16vw, -110px);
+	bottom: clamp(-300px, -16vw, -110px);
+	width: clamp(380px, 52vw, 820px);
+	color: var(--ink);
+	opacity: 0.05;
+	pointer-events: none;
+}
+.foot__sun .symbol {
+	width: 100%;
+	height: auto;
 }
 .foot > .wrap {
 	padding-bottom: clamp(20px, 2.4vw, 32px);
@@ -526,15 +575,7 @@
 	border-top: 1px solid var(--line-soft);
 }
 .foot__us {
-	display: flex;
-	align-items: flex-start;
-	gap: 18px;
 	color: var(--ink);
-}
-.foot__us .symbol {
-	flex: none;
-	width: 44px;
-	height: 44px;
 }
 .foot__us p {
 	margin: 0;
@@ -545,9 +586,10 @@
 }
 .foot__col h2 {
 	margin: 0 0 12px;
-	font-family: var(--font-ui);
+	font-family: var(--font-label);
 	font-size: var(--t-small);
 	font-weight: 400;
+	letter-spacing: 0.07em;
 	color: var(--ink-60);
 }
 .foot__col ul {
@@ -569,11 +611,20 @@
 	text-decoration-thickness: 1px;
 	text-underline-offset: 5px;
 }
-/* The wordmark, as wide as the page. It is the last thing you see. */
+/* The lockup signs the page off: the symbol over the name, as the guideline
+   draws it. Present, not shouted. */
 .foot__name {
-	display: block;
-	margin: clamp(48px, 7vw, 112px) 0 clamp(18px, 2vw, 28px);
+	display: inline-flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 14px;
+	width: clamp(120px, 13vw, 168px);
+	margin: clamp(40px, 5vw, 72px) 0 clamp(18px, 2vw, 26px);
 	color: var(--ink);
+}
+.foot__name .symbol {
+	width: 38%;
+	height: auto;
 }
 .foot__name .wordmark {
 	width: 100%;

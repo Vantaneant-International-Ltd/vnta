@@ -7,6 +7,7 @@
 	//   <image>.jpg         laptop, 1440 by 900   (-720 beside it)
 	//   <image>-phone.jpg   phone,  780 by 1688   (-phone-390 beside it)
 	import { base } from '$app/paths';
+	import { shot } from '$lib/content/site';
 
 	let { image, alt, eager = false }: { image: string; alt: string; eager?: boolean } = $props();
 	const loading = $derived(eager ? 'eager' : 'lazy');
@@ -15,9 +16,9 @@
 <div class="scene">
 	<div class="window">
 		<img
-			src="{base}/work/{image}.jpg"
-			srcset="{base}/work/{image}-720.jpg 720w, {base}/work/{image}.jpg 1440w"
-			sizes="(min-width: 1320px) 640px, (min-width: 900px) 50vw, 86vw"
+			src="{base}{shot(image)}"
+			srcset="{base}{shot(image, '-720')} 720w, {base}{shot(image)} 1440w"
+			sizes="(min-width: 1200px) 580px, (min-width: 900px) 50vw, 86vw"
 			width="1440"
 			height="900"
 			{loading}
@@ -28,9 +29,9 @@
 
 	<div class="phone">
 		<img
-			src="{base}/work/{image}-phone.jpg"
-			srcset="{base}/work/{image}-phone-390.jpg 390w, {base}/work/{image}-phone.jpg 780w"
-			sizes="(min-width: 1320px) 150px, (min-width: 900px) 12vw, 22vw"
+			src="{base}{shot(image, '-phone')}"
+			srcset="{base}{shot(image, '-phone-390')} 390w, {base}{shot(image, '-phone')} 780w"
+			sizes="(min-width: 1200px) 135px, (min-width: 900px) 12vw, 22vw"
 			width="780"
 			height="1688"
 			{loading}

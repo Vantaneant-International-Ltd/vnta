@@ -11,6 +11,7 @@ import {
 	siteUrl,
 	studioEmail,
 	social,
+	pitch,
 	plans,
 	work,
 	houses,
@@ -35,11 +36,13 @@ export const organisation = (description: string) => ({
 	image: `${siteUrl}/og.png`,
 	email: studioEmail,
 	description,
-	slogan: 'Websites that bring in the work.',
+	slogan: pitch.headline,
 	foundingDate: '2025',
 	address: { '@type': 'PostalAddress', addressLocality: 'Dublin', addressCountry: 'IE' },
 	areaServed: { '@type': 'Country', name: 'Ireland' },
 	knowsAbout: [
+		'Brand design',
+		'Brand strategy',
 		'Website design',
 		'Website development',
 		'Websites for garages',
@@ -97,16 +100,16 @@ export const faq = (items: { q: string; a: string }[]) => ({
 	}))
 });
 
-/** The sites VNTA built, each one credited to VNTA. */
+/** The brands and sites VNTA made, each one credited to VNTA. */
 export const portfolio = () => ({
 	'@context': 'https://schema.org',
 	'@type': 'ItemList',
-	name: 'Websites built by VNTA',
+	name: 'Brands and websites by VNTA',
 	itemListElement: [
 		...work.map((w) => ({
 			name: w.name,
 			url: w.href,
-			about: `${w.trade}, ${w.place}. ${w.summary}`
+			about: `${w.did} for a ${w.trade.toLowerCase()}, ${w.place}. ${w.summary}`
 		})),
 		...houses.map((h) => ({ name: h.name, url: h.href, about: h.line }))
 	].map((item, i) => ({

@@ -11,7 +11,7 @@
 		description,
 		shareTitle = title,
 		image = '/og.png',
-		imageAlt = 'VNTA. Websites that bring in the work. For Irish garages, dealers, shops and trades.',
+		imageAlt = 'VNTA. We look at your business and see what to change. A brand studio in Dublin.',
 		ld = []
 	}: {
 		title: string;

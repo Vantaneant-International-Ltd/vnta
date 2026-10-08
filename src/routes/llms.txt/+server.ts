@@ -1,7 +1,9 @@
-// /llms.txt: a plain summary of who we are and what a site costs, for the AI
+// /llms.txt: a plain summary of who we are, what we do and what a site costs, for the AI
 // assistants people now ask instead of searching. Written from the same
 // content file as the page, so the two can never disagree on a price.
 import {
+	pitch,
+	offer,
 	work,
 	houses,
 	plans,
@@ -21,17 +23,21 @@ export function GET() {
 	const lines = [
 		'# VNTA',
 		'',
-		'> VNTA is a small studio in Dublin, Ireland. We build websites for Irish garages, car dealers, shops and trades, and look after them every month. VNTA is the trading name of Vantanéant International Ltd.',
+		`> ${pitch.lede} VNTA is the trading name of Vantanéant International Ltd.`,
 		'',
 		'## At a glance',
 		'',
-		'- What: website design and development, then hosting and care every month.',
-		'- Who for: small Irish businesses. Garages, car dealers, shops, trades, salons and cafés.',
+		'- What: brand design first. We look at a business, say plainly what we would change, then design the brand and build the website. Websites are hosted and looked after every month.',
+		'- Who for: business owners, of any kind and size. Our clients so far are small Irish businesses: a garage, a car dealer and a custom PC builder.',
 		'- Where: based in Dublin, working with businesses all over Ireland.',
-		`- Cost: from ${euro(Math.min(...plans.map((p) => p.build)))} to build, then from ${euro(Math.min(...plans.map((p) => p.monthly)))} a month. No contract.`,
-		`- How to start: tell us what you do at ${siteUrl}/contact and get a fixed price within ${replyWithin}.`,
-		'- How we work: people design and build every site, with AI helping along the way.',
+		`- Cost: brand work is priced after a conversation. A website is from ${euro(Math.min(...plans.map((p) => p.build)))} to build, then from ${euro(Math.min(...plans.map((p) => p.monthly)))} a month. No contract.`,
+		`- How to start: tell us about your business at ${siteUrl}/contact. We reply within ${replyWithin}.`,
+		'- How we work: people design and build everything, with AI helping along the way.',
 		'- Also known as: VNTA Group. Legal name: Vantanéant International Ltd.',
+		'',
+		'## What we do',
+		'',
+		...offer.map((o) => `- ${o.name}: ${o.body}`),
 		'',
 		'## What we build',
 		'',
@@ -50,8 +56,8 @@ export function GET() {
 		'',
 		...work.map((w) =>
 			w.href
-				? `- [${w.name}](${w.href}): ${w.trade}, ${w.place}. ${w.summary}`
-				: `- ${w.name}: ${w.trade}, ${w.place}. ${w.status}. ${w.summary}`
+				? `- [${w.name}](${w.href}): ${w.did}. ${w.trade}, ${w.place}. ${w.summary}`
+				: `- ${w.name}: ${w.did}. ${w.trade}, ${w.place}. ${w.status}. ${w.summary}`
 		),
 		'',
 		'## Our own houses',
@@ -65,7 +71,7 @@ export function GET() {
 		...questions.flatMap((item) => [`### ${item.q}`, '', item.a, '']),
 		'## Contact',
 		'',
-		`- [Get a price](https://vnta.xyz/contact): a fixed price back within ${replyWithin}.`,
+		`- [Talk to us](${siteUrl}/contact): a reply within ${replyWithin}.`,
 		`- Email: ${studioEmail}`,
 		...social.map((p) => `- ${p.name}: ${p.href}`),
 		''

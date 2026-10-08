@@ -11,9 +11,10 @@
    off-white beside white. Greys only. The wordmark, the symbol and the
    display face are the guideline's, unchanged.
 
-   October 2026: the type went up in size and the dark got deeper. The page
-   now opens light, shows the work in each client's own colours, and closes
-   dark. See the README, "Design principles".
+   October 2026: the page opens light, shows the work in each client's own
+   colours, and closes on one dark section. The type is confident but not
+   loud: a first pass set it far larger and it shouted. See the README,
+   "Design principles".
    ========================================================================== */
 
 /* Figures. Marcellus, the substitute for Optima, draws its zero as a small
@@ -32,15 +33,16 @@
 
 :root {
 	/* --- Colour (guideline 3.1): greys only, neutral, no warm or cool tint.
-	   Ink is a soft black, firm enough to hold a headline 130 pixels tall.
-	   The guideline's 80, 60, 40 and 20 percent blacks do the rest. */
+	   Ink is a soft black, a shade firmer than the guideline's 80 percent so
+	   a headline holds, and never pure black. The guideline's 80, 60, 40 and
+	   20 percent blacks do the rest. */
 	--white:        #ffffff;
-	--black:        #1f1f1f; /* the darkest thing on the site */
+	--black:        #2b2b2b; /* the darkest thing on the site */
 
 	--paper:        #ffffff; /* a section */
 	--paper-2:      #f4f4f4; /* the section beside it, and cards on white */
 	--card:         var(--paper-2);
-	--ink:          #1f1f1f;
+	--ink:          #2b2b2b;
 	--ink-80:       #333333; /* 80%: reading text */
 	--ink-60:       #666666; /* 60%: quiet text, 5.7 to 1 on white */
 	--ink-40:       #999999; /* 40%: not for text */
@@ -54,8 +56,8 @@
 	--accent:       var(--ink);
 
 	/* The dark surface: the closing sections, the foot, the cookie card. */
-	--ink-bg:       #1f1f1f;
-	--ink-fg:       #f5f5f5;
+	--ink-bg:       #2b2b2b;
+	--ink-fg:       #f2f2f2;
 
 	/* --- Type ----------------------------------------------------------- */
 	/* Display: Optima, the brand face. Apple devices carry it; everywhere
@@ -63,6 +65,9 @@
 	--font-display: 'Optima', 'Optima Nova', 'VNTA Figures', 'Marcellus', 'Candara', serif;
 	--font-text:    var(--font-ui);
 	--font-sc:      'Marcellus SC', 'Marcellus', serif;
+	/* Small-capital labels. The figures come from the sans: the small-capital
+	   face draws 1 like the letter I, so "Dublin 11" would read "Dublin II". */
+	--font-label:   'VNTA Figures', 'Marcellus SC', 'Marcellus', serif;
 	/* Reading and controls: the device's own face on Apple, Manrope
 	   elsewhere. Plain, familiar, easy on the eyes. */
 	--font-ui:      -apple-system, BlinkMacSystemFont, 'Manrope', 'Segoe UI', Roboto, sans-serif;
@@ -72,15 +77,15 @@
 	--font-hero:    var(--font-display);
 	--font-serif:   var(--font-display);
 
-	/* Type scale. The display face is the loudest thing on the page, so it
-	   is set large and close: one giant line for the home page, then a
-	   steady step down. Everything eases to a phone. */
-	--t-giant: clamp(3rem, 9.6vw, 9.25rem);   /* the home page headline */
-	--t-h1:    clamp(2.6rem, 6.6vw, 5.75rem);  /* a page title, the closing call */
-	--t-h2:    clamp(2.2rem, 4.8vw, 4rem);     /* a section title */
-	--t-h3:    clamp(1.45rem, 2.3vw, 1.9rem);
+	/* Type scale. One large line for the top of a page, then a steady step
+	   down. Large enough to be sure of itself, not so large that it shouts.
+	   Everything eases to a phone. */
+	--t-giant: clamp(2.6rem, 6vw, 5.25rem);    /* the top of a page */
+	--t-h1:    clamp(2.2rem, 4.4vw, 3.75rem);  /* the closing call */
+	--t-h2:    clamp(1.9rem, 3.2vw, 2.75rem);  /* a section title */
+	--t-h3:    clamp(1.35rem, 1.9vw, 1.65rem);
 	--t-h4:    clamp(1.15rem, 1.5vw, 1.3rem);
-	--t-lede:  clamp(1.15rem, 1.5vw, 1.4rem);
+	--t-lede:  clamp(1.1rem, 1.35vw, 1.25rem);
 	--t-body:  1.0625rem;
 	--t-small: 0.94rem;
 	--t-label: 0.72rem;
@@ -93,9 +98,9 @@
 	--s-1: 4px;  --s-2: 8px;  --s-3: 12px; --s-4: 16px;
 	--s-6: 24px; --s-8: 32px; --s-12: 48px; --s-16: 64px;
 	--s-24: 96px; --s-32: 128px;
-	--section-y: clamp(64px, 9vw, 144px);
+	--section-y: clamp(56px, 7.5vw, 112px);
 	--gutter: clamp(20px, 4vw, 56px);
-	--maxw: 1320px;
+	--maxw: 1200px;
 	--measure: 64ch;
 
 	/* --- Shape: rounded, in three sizes. -------------------------------- */
@@ -139,18 +144,18 @@
    where it is declared, so everything that depends on the surface is
    restated. --- */
 [data-theme='ink'] {
-	--paper:     #1f1f1f;
-	--paper-2:   #2a2a2a;
-	--card:      #2a2a2a;
-	--field:     #2a2a2a;
-	--ink:       #f5f5f5;
+	--paper:     #2b2b2b;
+	--paper-2:   #363636;
+	--card:      #363636;
+	--field:     #363636;
+	--ink:       #f2f2f2;
 	--ink-80:    #dcdcdc;
-	--ink-60:    #a8a8a8; /* 7 to 1 on the dark */
-	--ink-40:    #7d7d7d;
-	--ink-20:    #4d4d4d;
+	--ink-60:    #b0b0b0; /* 6.5 to 1 on the dark */
+	--ink-40:    #858585;
+	--ink-20:    #585858;
 	--rule:      var(--ink-20);
 	--line:      var(--ink-20);
-	--line-soft: #383838;
+	--line-soft: #424242;
 	--accent:    var(--ink);
 	--ink-85:    var(--ink-80);
 	--ink-70:    var(--ink-80);

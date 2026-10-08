@@ -3,9 +3,15 @@
 **Vantanéant International**, trading as VNTA. The public site at
 [vnta.xyz](https://vnta.xyz), built with SvelteKit.
 
-The site has one job: get an Irish business owner to ask for a price. It is one
-long page (what we do, the work, prices, how it works, questions, the enquiry
-form) plus a contact page, the small print, and the private client portal.
+VNTA is a brand studio. It looks at a business, works out what it needs to
+change, and then designs it: the brand first, and a website where one is
+needed. The site has one job: get a business owner to start that conversation.
+It is one long page (the pitch, what we do, the work, how it works, the website
+prices, questions, the enquiry form) plus a contact page, four pages for people
+searching for a website, the small print, and the private client portal.
+
+Nothing on the public site is addressed to investors. It should simply read as
+a real, working studio to anyone who looks.
 
 ---
 
@@ -17,16 +23,18 @@ Everything the pages say that is likely to change lives in one file:
 src/lib/content/site.ts
 ```
 
-The work, the three prices, the monthly fee, the steps and the questions are all
-there. Change a number once and the page, the search data and `/llms.txt` all
-follow.
+The pitch (`pitch`), what we do (`offer`), the work, the three website prices,
+the monthly fee, the steps and the questions are all there. Change a line once
+and the page, the search data and `/llms.txt` all follow. The headline is also
+drawn on the share card, `static/og.png`: if it changes, redraw the card.
 
 House rules for copy, also at the top of that file:
 
-- The reader runs a garage, a shop or a trade, and is on a phone. Short words,
-  short lines.
+- The reader owns or runs a business, of any kind and size, and is often on a
+  phone. Short words, short lines.
 - Plain punctuation. No em or en dashes.
-- No claim that is not true today.
+- No claim that is not true today. Each entry in `work` says what we made for
+  that client (`did`): only say "Brand and website" where the brand is ours.
 
 ## Being found: search engines, AI assistants and share cards
 
@@ -121,6 +129,7 @@ src/lib/
 ├── content/site.ts     # The words and the numbers
 ├── components/
 │   ├── Flip.svelte       # The card on the home page that turns from site to site
+│   ├── ui/rays.ts        # The symbol taken apart, one path per ray, for the card's clock
 │   ├── ProjectCard.svelte # One job in its own colours
 │   ├── Devices.svelte    # A site on two screens: a window and a phone
 │   ├── EnquiryForm.svelte
@@ -142,45 +151,60 @@ static/
 
 ## Design principles
 
-Large type, real pictures, plenty of room. The values are in
+Clear type, real pictures, plenty of room, nothing shouting. The values are in
 `src/lib/styles/tokens.css`.
 
-- **The arc:** the page opens light, shows each client's site in that client's
-  own colours, and closes dark. Every page ends the same way: the enquiry on
-  the dark, then the foot, then the name written the full width of the page.
-- **One very large line:** the home page headline, and the title of each
-  landing page, is set in the display face at up to 148 pixels. Nothing else
-  on a page competes with it.
-- **The turning card:** under the headline, one real site sits still on a
-  card, then the card turns over and the next site is on the back
-  (`Flip.svelte`). It waits five seconds on each. It stops while the pointer
-  rests on it, while it is off screen, and when the visitor presses pause.
-  For anyone who has asked their device for less motion it never turns by
-  itself. This is the only thing on the site that moves without being asked.
-- **Colour:** greys only, of our own. A soft black (`#1f1f1f`) is the ink and
-  the dark sections; white and an off-white (`#f4f4f4`) are the light ones;
+**What makes it VNTA.** The guideline gives us two things nobody else has: the
+symbol (a burst of 32 rays) and a wordmark of four flared capitals. The site is
+built out of those two, quietly:
+
+- **The symbol is the clock.** Under the headline, one real site sits still on
+  a card, then the card turns over and the next site is on the back
+  (`Flip.svelte`). Beside it the symbol lights ray by ray; when the last ray
+  is lit, the card turns. The rays are the guideline's own shapes, taken apart
+  in `ui/rays.ts`.
+- **Every bullet is one ray.** List marks are a single tapered ray, in the
+  client's own accent inside a job card.
+- **Small capitals for the small words.** A trade, a status, a column heading
+  in the foot: set in small capitals of the display face, a little open, so
+  they read as kin to the wordmark (`--font-label`). A few words, never a
+  sentence. Figures in these labels come from the sans, because the
+  small-capital 1 reads as the letter I.
+- **The symbol rises behind the foot**, large and barely there, and the lockup
+  (symbol over wordmark) signs the page off.
+
+**The rest.**
+
+- **The arc:** light all the way down, each client's site in that client's own
+  colours, and one dark section at the close: the enquiry and the foot.
+- **One large line** at the top of a page, in the display face. Large enough
+  to be sure of itself. An earlier pass set it at twice the size, with a dark
+  section mid-page and the wordmark the full width of the foot; it shouted,
+  and was turned down.
+- **The turning card** waits five seconds on each site. It stops while the
+  pointer rests on it, while it is off screen, and when the visitor presses
+  pause. For anyone who has asked their device for less motion it never turns
+  by itself. It is the only thing on the site that moves without being asked.
+- **Colour:** greys only, of our own. A soft black (`#2b2b2b`) is the ink and
+  the dark section; white and an off-white (`#f4f4f4`) are the light ones;
   the guideline's 80, 60, 40 and 20 percent blacks do the rest. Pure black
   against pure white glared on a screen, so neither is used full-bleed.
 - **Worlds:** each project's card borrows that project's own ground, text
-  colour and one accent, so every client and every house gets its own
-  spotlight. That is the only colour on the site, and it lives in
+  colour and one accent. That is the only colour on the site, and it lives in
   `content/site.ts` beside the project it belongs to.
 - **Type:** Optima for every title (Apple devices carry it; others get
-  Marcellus). Small reading text, buttons and fields are in the device's own
-  face on Apple and Manrope elsewhere.
-- **Shape:** rounded. Cards 28px and up, fields 12px, buttons fully round.
-- **Lines, not boxes:** lists (the steps, the questions, the small print under
-  the prices, the three facts) are ruled rows, not cards. Cards are kept for
-  the work and the three prices.
+  Marcellus). Reading text, buttons and fields are in the device's own face
+  on Apple and Manrope elsewhere.
+- **Shape:** rounded. Cards 20 to 28px, fields 12px, buttons fully round.
+- **Lines, not boxes:** what we do, the steps, the questions, the facts and
+  the small print are ruled rows. Cards are kept for the work and the prices.
 - **The work stacks:** on a tall, wide screen each job holds its place while
   the next one slides up over it.
 - **Still true from the guideline:** left-aligned, nothing squeezed, no
   shadows, the wordmark and symbol untouched.
 
-Wiro (wiro.agency) was the reference for confidence and scale in the October
-2026 redesign: a very large headline, large pictures of real work, the name
-large in the foot. Nothing of their look was taken: they are dark throughout
-with a heavy sans; this site is light, in VNTA's own display face.
+Wiro (wiro.agency) was looked at for confidence, not for its look: they are
+dark throughout with a heavy sans. Nothing of theirs is here.
 
 Proprietary assets (the guideline itself and its photography) are not included
 in this repository.

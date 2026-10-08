@@ -1,12 +1,18 @@
 // =============================================================================
 // VNTA site content
 // -----------------------------------------------------------------------------
-// Everything the public pages say that is likely to change: the work, the
-// prices, the steps, the questions. Change it here, once.
+// Everything the public pages say that is likely to change: the pitch, the
+// work, the prices, the steps, the questions. Change it here, once.
+//
+// VNTA is a brand studio. It looks at a business, works out what it needs to
+// change, and then designs it: the brand first, and a website where one is
+// needed. The website prices are still on the page, lower down.
 //
 // House rules for copy:
-// - The reader runs a garage, a shop or a trade, and is on a phone. Short
-//   words, short lines, nothing they have to work out.
+// - The reader owns or runs a business, of any kind and any size, and is
+//   often on a phone. Short words, short lines, nothing they have to work
+//   out. An investor reading the same page should see a real, working
+//   studio; nothing on the public site is addressed to investors.
 // - Plain punctuation. No em or en dashes.
 // - No claim that is not true today, and no client fact that is not on the
 //   client's own site or in their repo.
@@ -26,6 +32,33 @@ export const social: { name: string; href: string }[] = [];
 
 /** How fast we answer an enquiry. Used in the hero, the steps and the form. */
 export const replyWithin = 'two working days';
+
+// --- The pitch ---------------------------------------------------------------
+// The first thing anyone reads. The headline is also the line on the share
+// card (static/og.png): change it there too.
+
+export const pitch = {
+	headline: 'We look at your business and see what to change.',
+	lede: 'VNTA is a brand studio in Dublin. We sit down with you, work out what the business needs, then design the brand and build the website.',
+	/** One line for search results, share cards and the foot. */
+	short: 'A brand studio in Dublin. We design brands and build websites, for other people\'s businesses and for our own.'
+};
+
+/** What we do: three things, and a client can come for any one of them. */
+export const offer = [
+	{
+		name: 'The sit-down',
+		body: 'We look at the whole business with you: what you sell, who buys it, and what is getting in the way. Then we tell you plainly what we would change.'
+	},
+	{
+		name: 'The brand',
+		body: 'How the business looks and sounds everywhere a customer meets it. The logo, the colours, the type and the words.'
+	},
+	{
+		name: 'The website',
+		body: 'Designed and built from scratch, set up to be found, and looked after every month.'
+	}
+];
 
 // --- The work ----------------------------------------------------------------
 // Newest first. `href` is left out for a site that is not live yet.
@@ -49,6 +82,7 @@ export type World = {
 export type Work = {
 	world: World;
 	name: string;
+	did: 'Brand and website' | 'Website'; // what VNTA made for them. Only claim the brand where it is ours.
 	trade: string;
 	place: string;
 	status: 'Live' | 'In build';
@@ -64,6 +98,7 @@ export const work: Work[] = [
 	{
 		world: { bg: '#151921', ink: '#eef1f6', soft: '#9a9fa8', line: '#38404c', accent: '#62a1f6', dark: true },
 		name: 'L.M. Motors',
+		did: 'Website',
 		trade: 'Used car dealer',
 		place: 'Sallins, Co. Kildare',
 		status: 'In build',
@@ -80,6 +115,7 @@ export const work: Work[] = [
 	{
 		world: { bg: '#191a19', ink: '#f4f5f2', soft: '#b9beb8', line: '#333633', accent: '#8bc24a', dark: true },
 		name: 'EZGO Auto Works',
+		did: 'Brand and website',
 		trade: 'Garage',
 		place: 'Finglas, Dublin 11',
 		status: 'Live',
@@ -88,7 +124,7 @@ export const work: Work[] = [
 		image: 'ezgo-auto-works',
 		alt: 'The EZGO Auto Works home page on a laptop and a phone: Fixed. Sprayed. Detailed. beside a photo of a mechanic under a car.',
 		summary:
-			'Mechanics, bodywork and detailing under one roof. The site shows the prices and gets people to ring or WhatsApp.',
+			'The brand and the site. Mechanics, bodywork and detailing under one roof, with the prices shown and a ring or a WhatsApp one tap away.',
 		built: [
 			'A clear price list',
 			'WhatsApp and phone on every page',
@@ -98,6 +134,7 @@ export const work: Work[] = [
 	{
 		world: { bg: '#070810', ink: '#f3f1ee', soft: '#a8a39c', line: '#22232b', accent: '#b06a4e', dark: true },
 		name: 'BUILDT',
+		did: 'Brand and website',
 		trade: 'Custom PC builder',
 		place: 'Dublin',
 		status: 'Live',
@@ -105,7 +142,8 @@ export const work: Work[] = [
 		domain: 'buildt.ie',
 		image: 'buildt',
 		alt: 'The BUILDT home page on a laptop and a phone: BUILDT by hand. Proven on the bench.',
-		summary: 'Customers build their own PC on the site, watch the price change, and order.',
+		summary:
+			'The brand and the site. Customers build their own PC on it, watch the price change, and order.',
 		built: [
 			'A build your own PC tool with live prices',
 			'Ready built PCs to buy',
@@ -115,8 +153,10 @@ export const work: Work[] = [
 ];
 
 // --- Prices ------------------------------------------------------------------
-// Two numbers per plan: a one-time build fee, then a monthly fee that covers
-// running the site. Both are "from" prices; the quote is fixed before we start.
+// Brand work has no price list: it is priced after the sit-down. The websites
+// do. Two numbers per plan: a one-time build fee, then a monthly fee that
+// covers running the site. Both are "from" prices; the quote is fixed before
+// we start.
 
 export type Plan = {
 	name: string;
@@ -189,12 +229,16 @@ export const priceNotes = [
 
 export const steps = [
 	{
-		name: 'Tell us what you do',
-		body: `We send you a fixed price within ${replyWithin}.`
+		name: 'Tell us about your business',
+		body: `We reply within ${replyWithin}.`
+	},
+	{
+		name: 'We sit down',
+		body: 'You talk, we ask questions, and we tell you plainly what we would change.'
 	},
 	{
 		name: 'We design it',
-		body: 'You see it and change what you like before we build.'
+		body: 'The brand first, then the website if you need one. You see it and change what you like.'
 	},
 	{
 		name: 'We build it and run it',
@@ -205,6 +249,18 @@ export const steps = [
 // --- Questions ---------------------------------------------------------------
 
 export const questions = [
+	{
+		q: 'Do I have to want a website?',
+		a: 'No. You can come for the brand alone, or just to talk the business through. We start with the conversation and see what you need.'
+	},
+	{
+		q: 'What is brand design?',
+		a: 'It is how your business looks and sounds everywhere a customer meets it: the logo, the colours, the type and the words. Done well, people know it is you before they read the name.'
+	},
+	{
+		q: 'What does brand work cost?',
+		a: 'It depends on what the business needs, so we price it after we talk. You get the figure in writing before we start.'
+	},
 	{
 		q: 'I already have a website. Can you redo it?',
 		a: 'Yes. We keep the page addresses Google already knows, so you do not lose the customers who find you today.'
@@ -437,6 +493,14 @@ export const landings: Landing[] = [
 		]
 	}
 ];
+
+/**
+ * The address of a screenshot under /work. Browsers keep these pictures for a
+ * week, so when any of them is retaken, change `shotsVersion` and every
+ * visitor gets the new ones straight away instead of next week.
+ */
+export const shotsVersion = '2026-10-08';
+export const shot = (stem: string, variant = '') => `/work/${stem}${variant}.jpg?v=${shotsVersion}`;
 
 /** A world as the inline custom properties its card reads. */
 export const worldStyle = (w: World) =>

@@ -90,6 +90,7 @@
 						status={job.status}
 						live={job.status === 'Live'}
 						name={job.name}
+						did={job.did}
 						href={job.href}
 						domain={job.domain}
 						summary={job.summary}
@@ -162,19 +163,19 @@
 <style>
 	/* Specific enough to beat the shared band padding. */
 	.band > .lead {
-		padding-top: clamp(36px, 6vw, 96px);
-		padding-bottom: clamp(44px, 6vw, 96px);
+		padding-top: clamp(32px, 5vw, 72px);
+		padding-bottom: clamp(40px, 5vw, 72px);
 	}
 	.lead__title {
 		margin: 0;
 		font-size: var(--t-giant);
-		line-height: 0.94;
-		letter-spacing: -0.022em;
+		line-height: 1;
+		letter-spacing: -0.018em;
 		text-wrap: balance;
 		color: var(--ink);
 	}
 	.lead__lede {
-		margin: clamp(20px, 3vw, 40px) 0 0;
+		margin: clamp(16px, 2vw, 24px) 0 0;
 		font-size: var(--t-lede);
 		line-height: 1.4;
 		color: var(--ink-80);

@@ -1,18 +1,21 @@
 <script lang="ts">
 	// The home page, and most of the site. One scroll, in the order a business
-	// owner asks the questions: what do you do, show me, how much, how does it
-	// work, how do I start. Kept short on purpose: the reader is on a phone
-	// between jobs. All of the words and numbers live in $lib/content/site.ts.
+	// owner asks the questions: what do you do, show me, how does it work, how
+	// much, how do I start. VNTA is a brand studio first; the website prices
+	// are here too, lower down. All of the words and numbers live in
+	// $lib/content/site.ts.
 	//
-	// The look: one very large line, then a card that shows a real site and
-	// turns over to show the next. Each job after that sits in the client's
-	// own colours. The page opens light and closes dark.
+	// The look: one large line, then a card that shows a real site and turns
+	// over to show the next. Each job after that sits in the client's own
+	// colours. The page is light and closes on one dark section.
 	import { base } from '$app/paths';
 	import EnquiryForm from '$lib/components/EnquiryForm.svelte';
 	import Flip from '$lib/components/Flip.svelte';
 	import ProjectCard from '$lib/components/ProjectCard.svelte';
 	import Seo from '$lib/components/Seo.svelte';
 	import {
+		pitch,
+		offer,
 		work,
 		plans,
 		priceNotes,
@@ -21,6 +24,7 @@
 		houses,
 		landings,
 		worldStyle,
+		shot,
 		studioEmail,
 		replyWithin,
 		euro
@@ -31,9 +35,8 @@
 	const [leadHouse, ...otherHouses] = houses;
 
 	const fromBuild = Math.min(...plans.map((p) => p.build));
-	const fromMonthly = Math.min(...plans.map((p) => p.monthly));
 
-	const description = `VNTA builds websites for Irish garages, dealers, shops and trades, and looks after them every month. From ${euro(fromBuild)}, then ${euro(fromMonthly)} a month.`;
+	const description = `VNTA is a brand studio in Dublin. We sit down with you, work out what your business needs, then design the brand and build the website. Websites from ${euro(fromBuild)}.`;
 
 	// Each plan links to the page that says more about it.
 	const more: Record<string, string> = {
@@ -66,8 +69,8 @@
 </script>
 
 <Seo
-	title="Websites for Irish businesses, from {euro(fromBuild)} | VNTA"
-	shareTitle="VNTA | Websites that bring in the work"
+	title="VNTA | Brand design and websites, Dublin"
+	shareTitle="VNTA | {pitch.headline}"
 	{description}
 	ld={[organisation(description), website(), faq(questions), portfolio()]}
 />
@@ -76,15 +79,12 @@
 	<!-- HERO: what we do, in one large line, and a real site that turns over -->
 	<section class="band hero" data-theme="tint" aria-labelledby="hero-title">
 		<div class="wrap">
-			<h1 class="hero__title" id="hero-title">Websites that bring in the work.</h1>
+			<h1 class="hero__title" id="hero-title">{pitch.headline}</h1>
 
 			<div class="hero__row">
-				<p class="hero__lede">
-					We build websites for Irish garages, dealers, shops and trades, and look
-					after them every month.
-				</p>
+				<p class="hero__lede">{pitch.lede}</p>
 				<div class="hero__cta">
-					<a class="btn btn--solid" href="#quote">Get a price</a>
+					<a class="btn btn--solid" href="#quote">Talk to us</a>
 					<a class="btn btn--ghost" href="#work">See the work</a>
 				</div>
 			</div>
@@ -93,27 +93,46 @@
 
 			<dl class="facts">
 				<div class="fact">
+					<dt>It starts with</dt>
+					<dd>a conversation</dd>
+				</div>
+				<div class="fact">
+					<dt>We reply</dt>
+					<dd>within {replyWithin}</dd>
+				</div>
+				<div class="fact">
 					<dt>A new website</dt>
 					<dd>from {euro(fromBuild)}</dd>
-				</div>
-				<div class="fact">
-					<dt>Hosted and looked after</dt>
-					<dd>from {euro(fromMonthly)} a month</dd>
-				</div>
-				<div class="fact">
-					<dt>Your price, in writing</dt>
-					<dd>within {replyWithin}</dd>
 				</div>
 			</dl>
 		</div>
 	</section>
 
+	<!-- WHAT WE DO: three things. You can come for any one of them. -->
+	<section class="band" id="what" aria-labelledby="what-title">
+		<div class="wrap">
+			<div class="head">
+				<h2 class="head__title" id="what-title">What we do</h2>
+				<p class="head__text">Not only websites. We start with the business.</p>
+			</div>
+
+			<div class="offer">
+				{#each offer as item}
+					<div class="offer__item">
+						<h3 class="offer__name">{item.name}</h3>
+						<p class="offer__body">{item.body}</p>
+					</div>
+				{/each}
+			</div>
+		</div>
+	</section>
+
 	<!-- WORK -->
-	<section class="band" id="work" aria-labelledby="work-title">
+	<section class="band" id="work" data-theme="tint" aria-labelledby="work-title">
 		<div class="wrap">
 			<div class="head">
 				<h2 class="head__title" id="work-title">The work</h2>
-				<p class="head__text">Three Irish businesses. Each site built from scratch.</p>
+				<p class="head__text">Three Irish businesses. The brand, the website, or both.</p>
 			</div>
 
 			<div class="jobs jobs--stack">
@@ -127,6 +146,7 @@
 							status={job.status}
 							live={job.status === 'Live'}
 							name={job.name}
+							did={job.did}
 							href={job.href}
 							domain={job.domain}
 							summary={job.summary}
@@ -161,8 +181,8 @@
 					<a class="house world" style={worldStyle(house.world)} href={house.href} rel="noopener">
 						<div class="house__shot">
 							<img
-								src="{base}/work/{house.image}.jpg"
-								srcset="{base}/work/{house.image}-720.jpg 720w, {base}/work/{house.image}.jpg 1440w"
+								src="{base}{shot(house.image)}"
+								srcset="{base}{shot(house.image, '-720')} 720w, {base}{shot(house.image)} 1440w"
 								sizes="(min-width: 700px) 46vw, 92vw"
 								width="1440"
 								height="900"
@@ -187,8 +207,8 @@
 		</div>
 	</section>
 
-	<!-- HOW IT WORKS: three steps, set large, on the dark -->
-	<section class="band" id="how" data-theme="ink" aria-labelledby="how-title">
+	<!-- HOW IT WORKS: the steps, in order, as ruled rows -->
+	<section class="band" id="how" aria-labelledby="how-title">
 		<div class="wrap">
 			<div class="head">
 				<h2 class="head__title" id="how-title">How it works</h2>
@@ -216,8 +236,8 @@
 			<div class="head">
 				<h2 class="head__title" id="prices-title">Prices</h2>
 				<p class="head__text">
-					One price to build it. One a month to run it. You get the exact figure before
-					we start.
+					Brand work is priced after we talk, once we know what you need. Websites
+					start here, and you get the exact figure before we start.
 				</p>
 			</div>
 
@@ -289,10 +309,10 @@
 		<div class="wrap">
 			<div class="quote">
 				<div class="quote__say">
-					<h2 class="quote__title" id="quote-title">Get a price</h2>
+					<h2 class="quote__title" id="quote-title">Talk to us</h2>
 					<p class="quote__text">
-						Tell us what you do. We reply within {replyWithin} with a fixed price. It
-						costs nothing to ask.
+						Tell us about your business. We reply within {replyWithin}. It costs
+						nothing to ask.
 					</p>
 				</div>
 				<div class="quote__form">
@@ -310,15 +330,15 @@
 		overflow-x: clip;
 	}
 	.hero > .wrap {
-		padding-top: clamp(28px, 5vw, 72px);
-		padding-bottom: clamp(40px, 5vw, 72px);
+		padding-top: clamp(28px, 4.5vw, 64px);
+		padding-bottom: clamp(40px, 5vw, 64px);
 	}
-	/* The one very large thing on the page. */
+	/* The one large thing on the page. */
 	.hero__title {
 		margin: 0;
 		font-size: var(--t-giant);
-		line-height: 0.94;
-		letter-spacing: -0.022em;
+		line-height: 1;
+		letter-spacing: -0.018em;
 		color: var(--ink);
 		text-wrap: balance;
 	}
@@ -326,7 +346,7 @@
 		display: grid;
 		grid-template-columns: 1fr;
 		gap: 24px clamp(24px, 4vw, 56px);
-		margin-top: clamp(22px, 3vw, 44px);
+		margin-top: clamp(18px, 2.2vw, 28px);
 	}
 	.hero__lede {
 		margin: 0;
@@ -356,7 +376,9 @@
 		border-top: 1px solid var(--line);
 	}
 	.fact dt {
+		font-family: var(--font-label);
 		font-size: var(--t-small);
+		letter-spacing: 0.07em;
 		color: var(--ink-60);
 	}
 	.fact dd {
@@ -365,6 +387,31 @@
 		font-size: var(--t-h3);
 		line-height: 1.15;
 		color: var(--ink);
+	}
+
+	/* --- What we do: three things side by side, each under its own rule. -- */
+	.offer {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 0 clamp(24px, 4vw, 56px);
+	}
+	.offer__item {
+		padding: 20px 0 clamp(20px, 3vw, 28px);
+		border-top: 1px solid var(--line);
+	}
+	.offer__name {
+		margin: 0;
+		font-size: var(--t-h3);
+		line-height: 1.15;
+		color: var(--ink);
+	}
+	.offer__body {
+		margin: 10px 0 0;
+		font-size: var(--t-body);
+		line-height: 1.5;
+		color: var(--ink-60);
+		max-width: 38ch;
+		text-wrap: pretty;
 	}
 
 	/* --- Work: on a tall wide screen each job holds its place while the next
@@ -385,7 +432,7 @@
 	/* --- Our own houses: one lead, the same as a job, then two beside each
 	   other. Every one shows its real, live site. --------------------------- */
 	.head--second {
-		margin-top: clamp(72px, 9vw, 144px);
+		margin-top: clamp(64px, 7.5vw, 112px);
 		scroll-margin-top: 88px;
 	}
 	.houses {
@@ -398,7 +445,7 @@
 		display: flex;
 		flex-direction: column;
 		overflow: hidden;
-		border-radius: clamp(22px, 2.6vw, 36px);
+		border-radius: clamp(20px, 2.2vw, 28px);
 		border: 1px solid var(--w-line);
 	}
 	.house__shot {
@@ -460,18 +507,18 @@
 		grid-template-columns: auto minmax(0, 1fr);
 		gap: 6px clamp(14px, 3vw, 48px);
 		align-items: baseline;
-		padding: clamp(20px, 3vw, 40px) 0;
+		padding: clamp(18px, 2.2vw, 28px) 0;
 		border-top: 1px solid var(--line);
 	}
 	.step__n,
 	.step__name {
 		font-family: var(--font-display);
-		font-size: clamp(1.8rem, 4.2vw, 3.5rem);
-		line-height: 1.02;
+		font-size: clamp(1.5rem, 2.4vw, 2.1rem);
+		line-height: 1.1;
 		letter-spacing: var(--track-display);
 	}
 	.step__n {
-		min-width: 1.1em;
+		min-width: 1.4em;
 		color: var(--ink-40);
 	}
 	.step__name {
@@ -513,6 +560,12 @@
 		}
 		.houses {
 			grid-template-columns: repeat(2, minmax(0, 1fr));
+		}
+		.offer {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
+		.offer__item {
+			padding-bottom: 0;
 		}
 	}
 	@media (min-width: 900px) {

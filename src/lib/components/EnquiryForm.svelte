@@ -67,7 +67,7 @@
 
 {#if status === 'sent'}
 	<p class="sent" role="status">
-		Sent. We will reply within {replyWithin} with a fixed price.
+		Sent. We will reply within {replyWithin}.
 	</p>
 {:else}
 	<form class="form" onsubmit={submit} novalidate>
@@ -93,7 +93,7 @@
 		</div>
 
 		<div class="field field--wide">
-			<label for="eq-notes">What do you need? <span class="opt">optional</span></label>
+			<label for="eq-notes">What is on your mind? <span class="opt">optional</span></label>
 			<textarea id="eq-notes" name="notes" rows="3" bind:value={notes}></textarea>
 		</div>
 

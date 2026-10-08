@@ -4,6 +4,10 @@
 	// with two faces: before each turn the hidden face is given the next site,
 	// then the whole card rotates half a turn.
 	//
+	// Its clock is the VNTA symbol. The rays light one at a time, clockwise
+	// from the top; when the last one is lit the card turns and they start
+	// again.
+	//
 	// It only turns by itself while it is on screen, the tab is in front, the
 	// pointer is not resting on it, the keyboard is not on its keys and the
 	// visitor has not pressed pause. For
@@ -12,7 +16,8 @@
 	// JavaScript it is simply the first site, standing still.
 	import { onMount } from 'svelte';
 	import { base } from '$app/paths';
-	import { worldStyle, type World } from '$lib/content/site';
+	import { worldStyle, shot, type World } from '$lib/content/site';
+	import { rays, rayBox } from '$lib/components/ui/rays';
 
 	type Slide = {
 		world: World;
@@ -60,10 +65,10 @@
 	const next = () => go(current + 1, 1);
 	const prev = () => go(current - 1, -1);
 
-	const laptop = (s: Slide) => `${base}/work/${s.image}-720.jpg 720w, ${base}/work/${s.image}.jpg 1440w`;
+	const laptop = (s: Slide) => `${base}${shot(s.image, '-720')} 720w, ${base}${shot(s.image)} 1440w`;
 	const phone = (s: Slide) =>
-		`${base}/work/${s.image}-phone-390.jpg 390w, ${base}/work/${s.image}-phone.jpg 780w`;
-	const SIZES = '(min-width: 1320px) 1208px, 92vw';
+		`${base}${shot(s.image, '-phone-390')} 390w, ${base}${shot(s.image, '-phone')} 780w`;
+	const SIZES = '(min-width: 1200px) 1090px, 92vw';
 
 	let root: HTMLElement;
 
@@ -128,7 +133,7 @@
 						<picture>
 							<source media={PHONE} srcset={phone(s)} sizes="92vw" />
 							<img
-								src="{base}/work/{s.image}.jpg"
+								src="{base}{shot(s.image)}"
 								srcset={laptop(s)}
 								sizes={SIZES}
 								width="1440"
@@ -158,6 +163,25 @@
 			role="group"
 			aria-label="Choose a site"
 		>
+			<!-- The clock: the symbol, lighting ray by ray until the card turns. -->
+			{#key turn}
+				<svg
+					class="flip__clock"
+					class:is-auto={auto}
+					viewBox={rayBox}
+					aria-hidden="true"
+					style="--secs: {seconds}s; --state: {running ? 'running' : 'paused'}"
+				>
+					{#each rays as d, i}
+						<path
+							{d}
+							style="--at: {i / rays.length}"
+							onanimationend={i === rays.length - 1 ? next : undefined}
+						/>
+					{/each}
+				</svg>
+			{/key}
+
 			<ol class="flip__ticks">
 				{#each slides as s, i}
 					<li>
@@ -168,20 +192,7 @@
 							aria-current={i === current ? 'true' : undefined}
 							onclick={() => go(i, i > current ? 1 : -1)}
 						>
-							<span class="flip__track">
-								{#if i === current}
-									{#key turn}
-										<span
-											class="flip__fill"
-											class:is-auto={auto}
-											style="animation-duration: {seconds}s; animation-play-state: {running
-												? 'running'
-												: 'paused'}"
-											onanimationend={next}
-										></span>
-									{/key}
-								{/if}
-							</span>
+							<span class="flip__track"></span>
 						</button>
 					</li>
 				{/each}
@@ -218,7 +229,7 @@
 
 <style>
 	.flip {
-		margin-top: clamp(32px, 5vw, 72px);
+		margin-top: clamp(28px, 4vw, 52px);
 	}
 
 	/* The stage gives the turn its depth. */
@@ -235,7 +246,7 @@
 		flex-direction: column;
 		margin: 0;
 		border: 1px solid var(--w-line);
-		border-radius: clamp(18px, 2.2vw, 32px);
+		border-radius: clamp(16px, 2vw, 24px);
 		overflow: hidden;
 		backface-visibility: hidden;
 		-webkit-backface-visibility: hidden;
@@ -283,7 +294,9 @@
 	.flip__meta {
 		flex: 1;
 		min-width: 0;
+		font-family: var(--font-label);
 		font-size: var(--t-small);
+		letter-spacing: 0.06em;
 		color: var(--ink-60);
 		white-space: nowrap;
 		overflow: hidden;
@@ -297,7 +310,6 @@
 	.flip__bar {
 		display: flex;
 		align-items: center;
-		justify-content: space-between;
 		gap: 16px;
 		margin-top: 14px;
 		/* Held back until the page can answer a press. */
@@ -306,14 +318,37 @@
 	.is-ready .flip__bar {
 		visibility: visible;
 	}
+	/* The symbol as a clock. Each ray waits its turn, then lights and stays
+	   lit. With the card stopped, or for anyone who asks for less motion, the
+	   whole symbol is simply lit. */
+	.flip__clock {
+		flex: none;
+		width: 40px;
+		height: 40px;
+		fill: var(--ink);
+	}
+	.flip__clock.is-auto path {
+		animation: ray 0.25s linear both;
+		animation-delay: calc(var(--secs) * var(--at));
+		animation-play-state: var(--state);
+	}
+	@keyframes ray {
+		from {
+			opacity: 0.16;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
 	.flip__ticks {
 		list-style: none;
-		margin: 0;
+		margin: 0 auto 0 0;
 		padding: 0;
 		display: flex;
 		gap: 6px;
 		flex: 1;
-		max-width: 320px;
+		max-width: 240px;
 	}
 	.flip__ticks li {
 		flex: 1;
@@ -327,34 +362,17 @@
 		background: none;
 		cursor: pointer;
 	}
+	/* One short line per site; the one on show is the dark one. */
 	.flip__track {
 		display: block;
 		height: 2px;
-		background: var(--ink-40);
-		overflow: hidden;
+		background: var(--ink-20);
 	}
 	.flip__tick:hover .flip__track {
 		background: var(--ink-60);
 	}
-	.flip__fill {
-		display: block;
-		height: 100%;
+	.flip__tick[aria-current] .flip__track {
 		background: var(--ink);
-	}
-	/* While the card turns by itself, the line fills as the time runs down. */
-	.flip__fill.is-auto {
-		transform-origin: left;
-		animation-name: fill;
-		animation-timing-function: linear;
-		animation-fill-mode: both;
-	}
-	@keyframes fill {
-		from {
-			transform: scaleX(0);
-		}
-		to {
-			transform: scaleX(1);
-		}
 	}
 
 	.flip__keys {
@@ -406,6 +424,9 @@
 	@media (prefers-reduced-motion: reduce) {
 		.flip__card {
 			transition: none;
+		}
+		.flip__clock path {
+			animation: none !important;
 		}
 	}
 </style>
