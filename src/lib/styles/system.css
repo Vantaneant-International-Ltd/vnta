@@ -303,6 +303,18 @@
 .shell .stage--research::before {
 	border: 1.5px solid currentColor;
 }
+/* The one thing that is current. Green, and used once on a page. */
+.shell .stage--now {
+	background: var(--green-soft);
+	color: var(--green);
+}
+.shell .stage--now::before {
+	background: currentColor;
+}
+/* The same marks on the dark surface. */
+.shell [data-theme='ink'] .stage--research {
+	background: var(--ground-2);
+}
 
 /* --- Section head --------------------------------------------------------- */
 .shell .head {

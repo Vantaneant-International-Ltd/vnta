@@ -1,7 +1,7 @@
 <script lang="ts">
-	// The home page of the parent company. It says what VNTA is designing, shows
-	// the one system in development (VNTA Robotics), and is honest about what
-	// is still research. Kept short. All of the words live in
+	// The home page of the parent company. It says what VNTA is building, shows
+	// the one business area in development (VNTA Robotics), and is honest about
+	// what is still research. Kept short. All of the words live in
 	// $lib/content/site.ts.
 	import { base } from '$app/paths';
 	import Seo from '$lib/components/Seo.svelte';
@@ -27,7 +27,7 @@
 	title="VNTA | Infrastructure for autonomous systems"
 	shareTitle="VNTA | {pitch.headline}"
 	image="/share/home.png"
-	description="{pitch.short} Its first system, VNTA Robotics, is a vendor-neutral control layer for robots and autonomous machines, now in development."
+	description="{pitch.short} Its current work, VNTA Robotics, is developer infrastructure for autonomous machines: it connects to a robot or fleet system, tests what it can actually do, and keeps the evidence. In development."
 	ld={[organisation(), website()]}
 />
 
@@ -78,7 +78,7 @@
 				</table>
 
 				<div class="panel__foot">
-					<p class="eyebrow">Shared foundation</p>
+					<p class="eyebrow">VNTA Robotics today</p>
 					<ul class="chips">
 						{#each layer as l}
 							<li><Icon name={l.icon} size={15} />{l.name}</li>
@@ -104,7 +104,7 @@
 				<div class="lead__say">
 					<p class="eyebrow">01 / {robotics.name}</p>
 					<h2 class="head__title" id="robotics-title">{robotics.headline}</h2>
-					<p class="head__text">{robotics.body}</p>
+					<p class="head__text">{robotics.what} {robotics.body}</p>
 					<a class="go" href={roboticsHref}>Explore Robotics <Icon name="arrow" size={16} /></a>
 				</div>
 			</div>

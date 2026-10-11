@@ -13,7 +13,7 @@ const ORG = `${siteUrl}/#organisation`;
 const SITE = `${siteUrl}/#website`;
 
 /** Every public page, for the sitemap and llms.txt. */
-export const publicPaths = () => ['/', '/robotics', ...studioPaths(), '/contact', '/legal', '/privacy', '/terms'];
+export const publicPaths = () => ['/', '/robotics', '/robotics/pricing', ...studioPaths(), '/contact', '/legal', '/privacy', '/terms'];
 
 /** VNTA itself. */
 export const organisation = () => ({
@@ -60,8 +60,10 @@ export const website = () => ({
 });
 
 /**
- * VNTA Robotics, described as what it is: software in development, a proof of concept. No price,
- * no rating, no availability, because none of those exist yet.
+ * VNTA Robotics, described as what it is: software in development. No price,
+ * no rating and no availability in the data: the prices on the pricing page
+ * are starting points for a scoped engagement, not offers a machine should
+ * read as a product for sale.
  */
 export const roboticsProduct = () => ({
 	'@context': 'https://schema.org',
@@ -69,7 +71,7 @@ export const roboticsProduct = () => ({
 	'@id': `${siteUrl}/robotics#software`,
 	name: robotics.name,
 	applicationCategory: 'Robotics infrastructure',
-	description: `${robotics.what} ${robotics.honest}`,
+	description: `${robotics.what} ${robotics.honest} ${robotics.notSafety}`,
 	url: `${siteUrl}/robotics`,
 	creator: { '@id': ORG },
 	featureList: capabilities.map((c) => c.name)
@@ -82,4 +84,11 @@ export const breadcrumb = (name: string, path: string) => ({
 		{ '@type': 'ListItem', position: 1, name: 'VNTA', item: `${siteUrl}/` },
 		{ '@type': 'ListItem', position: 2, name, item: `${siteUrl}${path}` }
 	]
+});
+
+/** The questions on a page, for search engines. The same words the page shows. */
+export const faqPage = (items: { q: string; a: string }[]) => ({
+	'@context': 'https://schema.org',
+	'@type': 'FAQPage',
+	mainEntity: items.map((i) => ({ '@type': 'Question', name: i.q, acceptedAnswer: { '@type': 'Answer', text: i.a } }))
 });

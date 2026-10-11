@@ -1,24 +1,30 @@
 <script lang="ts">
-	// The architecture, as one picture: machines on one side, the systems an
-	// organisation already runs on the other, and VNTA Robotics between them.
-	// Three panels joined by two dotted lines; side by side on a wide screen,
-	// stacked top to bottom on a narrow one.
+	// The architecture, as one picture: the interfaces robots and fleet systems
+	// already speak on one side, the people who work with them on the other, and
+	// VNTA Robotics between. Three panels joined by two dotted lines; side by
+	// side on a wide screen, stacked top to bottom on a narrow one.
 	//
-	// It is a diagram of a design, not a screenshot of a product, and the line
-	// under it says so.
+	// VNTA sits above those interfaces and replaces none of them. Each tile on
+	// the left says whether an adapter for it works today or is only planned,
+	// because a picture that showed four interfaces without saying so would read
+	// as four that work.
 	import Icon from '$lib/components/ui/Icon.svelte';
 	import Symbol from '$lib/components/ui/Symbol.svelte';
-	import { machines, layer, enterprise, robotics } from '$lib/content/site';
+	import { interfaces, layer, audiences, robotics } from '$lib/content/site';
 </script>
 
 <figure class="arch">
 	<div class="arch__row">
 		<div class="arch__side card">
-			<p class="arch__name">Robots and autonomous machines</p>
-			<p class="arch__note">Designed to work across manufacturers.</p>
-			<ul class="arch__tiles arch__tiles--2">
-				{#each machines as m}
-					<li><Icon name={m.icon} size={22} /><span>{m.name}</span></li>
+			<p class="arch__name">Robot and fleet interfaces</p>
+			<p class="arch__note">Reached through adapters. VNTA replaces none of them.</p>
+			<ul class="arch__tiles arch__tiles--2 arch__tiles--status">
+				{#each interfaces as i}
+					<li class:is-live={i.support === 'Works today'}>
+						<span class="arch__iface">{i.name}</span>
+						<span class="arch__state">{i.support}</span>
+						<span class="arch__sub">{i.note}</span>
+					</li>
 				{/each}
 			</ul>
 		</div>
@@ -29,7 +35,7 @@
 			<div class="arch__brand">
 				<Symbol size={30} />
 				<p class="arch__name">{robotics.name}</p>
-				<p class="arch__note">The control layer</p>
+				<p class="arch__note">Runtime</p>
 			</div>
 			<ul class="arch__tiles arch__tiles--3">
 				{#each layer as l}
@@ -41,18 +47,18 @@
 		<div class="arch__link" aria-hidden="true"><span></span></div>
 
 		<div class="arch__side card">
-			<p class="arch__name">Enterprise systems</p>
-			<p class="arch__note">The systems an organisation already runs.</p>
-			<ul class="arch__tiles arch__tiles--3 arch__tiles--text">
-				{#each enterprise as e}
-					<li><span>{e}</span></li>
+			<p class="arch__name">Who it is for</p>
+			<p class="arch__note">The people who connect, commission and build on robots.</p>
+			<ul class="arch__tiles arch__tiles--2 arch__tiles--text">
+				{#each audiences as a}
+					<li><span>{a}</span></li>
 				{/each}
 			</ul>
 		</div>
 	</div>
 	<figcaption class="arch__cap">
 		<span class="stage stage--build">{robotics.stage}</span>
-		<span>Architecture of the design. {robotics.honest}</span>
+		<span>Architecture of the design. Only VDA 5050 2.1.0 has an adapter today. {robotics.honest}</span>
 	</figcaption>
 </figure>
 
@@ -131,10 +137,39 @@
 	}
 	.arch__tiles--text li {
 		min-height: 52px;
-		font-family: var(--font-mono);
-		font-size: 0.76rem;
-		letter-spacing: 0.01em;
+		font-size: 0.84rem;
 		color: var(--ink-80);
+	}
+	/* An interface tile: its name, whether it works today, and a small note. */
+	.arch__tiles--status li {
+		gap: 3px;
+		min-height: 86px;
+	}
+	.arch__iface {
+		font-size: 0.9rem;
+		font-weight: 600;
+		letter-spacing: -0.01em;
+	}
+	.arch__state {
+		font-size: 0.66rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		text-transform: uppercase;
+		color: var(--ink-60);
+	}
+	.arch__tiles--status li.is-live {
+		border-color: color-mix(in srgb, var(--green) 35%, var(--line));
+	}
+	.arch__tiles--status li.is-live .arch__state {
+		color: var(--green);
+	}
+	.arch__tiles--status li:not(.is-live) .arch__iface {
+		color: var(--ink-60);
+	}
+	.arch__sub {
+		font-size: 0.74rem;
+		font-weight: 400;
+		color: var(--ink-60);
 	}
 
 	/* The join between two panels: a dotted line with a point at each end. */

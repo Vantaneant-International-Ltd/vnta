@@ -4,11 +4,17 @@
 [vnta.xyz](https://vnta.xyz), built with SvelteKit.
 
 VNTA is a technology company. It builds infrastructure for autonomous systems.
-Its first system is **VNTA Robotics**: a vendor-neutral control layer for
-robots and autonomous machines (identity, permissions, connectivity,
-orchestration, telemetry, audit). VNTA Robotics is in development: a first
-proof of concept runs against simulated robots only (it lives in the private
-`vnta-robotics` repository), and the site says so.
+Its current business area is **VNTA Robotics**: developer infrastructure for
+autonomous machines. It connects to a robot or fleet system, tests what it can
+actually do, and keeps the evidence. VNTA Robotics is in development: it runs
+against simulated robots and one external virtual vehicle (the code is in the
+private `vnta-robotics` repository, whose `STATUS.md` says what is true), and
+the site says so.
+
+Names, used the same way everywhere: **VNTA** (the company), **VNTA Robotics**
+(the business area), and inside it **Runtime** (the platform), **Validation**
+(the first module, the current one), **Access** and **Identity** (future
+modules). Not "VNTA for Robots", not "VNTA Validation".
 
 VNTA also runs a studio that designs brands and builds websites for Irish
 businesses. Until October 2026 the studio *was* this site. It now lives at
@@ -71,12 +77,19 @@ House rules for copy, also at the top of that file:
 
 - Short, technical, quiet, precise. No hype and no startup cliches.
 - **Nothing is claimed that is not true today.** VNTA Robotics is in
-  development: a proof of concept exists and runs against simulated robots
-  only. Say "designed to" and "will" about the product; never the present
-  tense for what it does, and nothing that reads as a product someone can
-  have. When a real machine is connected, change `robotics.honest` in
-  `site.ts` and the site follows. No customer names,
-  no metrics, no testimonials, no manufacturer logos until they are real.
+  development. Validation runs against simulated robots and one external
+  virtual vehicle; no real machine has been connected, no pilot has been run.
+  Only VDA 5050 2.1.0 is supported; ROS 2, Open-RMF and vendor APIs are
+  planned. Anything not built is marked next, later, planned or future. When
+  that changes, change `robotics.honest` and `support` in `site.ts` and the
+  site follows. No customer names, no metrics, no testimonials, no
+  manufacturer logos until they are real.
+- **A validation report is not a safety certification.** Never imply it is.
+- **Prices** (`content/pricing.ts`) are starting points, ex VAT, for a scope
+  agreed in advance. No checkout, no per-robot pricing, no enterprise price,
+  no savings claims. Runtime as an annual platform is planned and must not
+  look purchasable. The internal cost and margin rules are in the
+  `vnta-robotics` repository, not here.
 - The parent is wider than robotics. Agents and compute are research
   directions, not products: they are always marked "Research" and never
   presented as available.
@@ -100,14 +113,17 @@ commented out, in `static/_redirects`.
 
 There are two pictures of the product, and neither is a screenshot:
 
-- **The architecture** (`Architecture.svelte`): machines, the control layer,
-  enterprise systems. Its caption says it is the architecture of a design and
-  that the product is not yet available.
-- **The interface concept** (`Concept.svelte`): one machine's record. It
-  carries a strip that reads "Interface concept / Example data" at all times.
-  Its site, its manufacturer and its robot are invented for the picture and
-  named so nobody could take them for real ("Example site", "Example
-  Robotics"). Never put a real company's name in it.
+- **The architecture** (`Architecture.svelte`): the interfaces robots already
+  speak, VNTA Robotics above them, and who it is for. Each interface tile
+  says "Works today" or "Planned", because four tiles without that would read
+  as four that work. Only VDA 5050 2.1.0 works today.
+- **The validation result** (`CapabilityPanel.svelte`): one machine after one
+  run, declared against verified. It is not a mock-up: the rows are what the
+  Runtime produced for the one external test subject, an open-source VDA 5050
+  virtual vehicle. It carries a strip that reads "Validation result / Virtual
+  vehicle" at all times. If the suite or the subject changes, run it again and
+  update the rows; never edit them to look better. Do not name the software's
+  author on the site: it is not a partner and nothing should suggest it is.
 
 ## Being found: search engines, AI assistants and share cards
 
@@ -164,7 +180,7 @@ local dev the form shows its "that did not send" message; that is expected.
 src/routes/
 ├── +layout.svelte      # Fonts, masthead and foot. The portal opts out
 ├── +page.svelte        # Home: the parent company
-├── robotics/           # VNTA Robotics. Moves to robotics.vnta.xyz one day
+├── robotics/           # VNTA Robotics, and its pricing page (robotics/pricing). Moves to robotics.vnta.xyz one day
 ├── studio/             # VNTA Studio: its home page and four landing pages
 ├── contact/            # The contact form
 ├── llms.txt/           # Plain summary for AI assistants, built from site.ts
@@ -173,15 +189,17 @@ src/routes/
 └── +error.svelte       # 404 / error
 src/lib/
 ├── content/site.ts     # The company's words
+├── content/pricing.ts  # VNTA Robotics pricing: offers, questions, the request form
 ├── content/structured.ts # The same facts for search engines
 ├── content/studio.ts   # The studio's words, work and prices
 ├── content/studioStructured.ts
 ├── studio/             # The studio's own components: Flip, Logos, ProjectCard, Devices
 ├── components/
-│   ├── Architecture.svelte # Machines, the control layer, enterprise systems
-│   ├── Concept.svelte    # The labelled interface concept
-│   ├── Stage.svelte      # "In development" / "Research"
+│   ├── Architecture.svelte # Interfaces below, VNTA Robotics above, who it is for
+│   ├── CapabilityPanel.svelte # A real validation result: declared against verified
+│   ├── Stage.svelte      # Status marks: current, in development, planned
 │   ├── EnquiryForm.svelte
+│   ├── PilotForm.svelte  # The pilot request on the pricing page. Not a checkout
 │   ├── CookieBanner.svelte
 │   └── ui/               # Icon.svelte, Wordmark.svelte, Symbol.svelte
 └── styles/

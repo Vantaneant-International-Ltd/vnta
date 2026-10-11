@@ -50,11 +50,13 @@
 	// address comes from one place (roboticsUrl in content/site.ts).
 	const robotics = roboticsUrl.startsWith('http') ? roboticsUrl : `${base}${roboticsUrl}`;
 
-	// Three places, and no more. Technology and Company are parts of the home
-	// page.
+	// Four places, and no more. Technology and Company are parts of the home
+	// page; Pricing is VNTA Robotics' pricing.
+	const pricing = `${base}/robotics/pricing`;
 	const nav = [
 		{ label: 'Technology', href: `${base}/#technology` },
 		{ label: 'Robotics', href: robotics },
+		{ label: 'Pricing', href: pricing },
 		{ label: 'Company', href: `${base}/#company` }
 	];
 	const host = siteUrl.replace(/^https?:\/\//, '');
@@ -86,15 +88,22 @@
 				</a>
 				<nav class="masthead__nav" aria-label="Primary">
 					{#each nav as item}
-						<a href={item.href} aria-current={path === '/robotics' && item.label === 'Robotics' ? 'page' : undefined}>
+						<a href={item.href} aria-current={(path === '/robotics' && item.label === 'Robotics') || (path === '/robotics/pricing' && item.label === 'Pricing') ? 'page' : undefined}>
 							{item.label}
 						</a>
 					{/each}
 				</nav>
-				<a class="btn btn--solid btn--small masthead__cta" href={robotics}>
-					Explore Robotics
-					<Icon name="arrow" size={16} />
-				</a>
+				{#if path.startsWith('/robotics')}
+					<a class="btn btn--solid btn--small masthead__cta" href="{pricing}#request">
+						Request a pilot
+						<Icon name="arrow" size={16} />
+					</a>
+				{:else}
+					<a class="btn btn--solid btn--small masthead__cta" href={robotics}>
+						Explore Robotics
+						<Icon name="arrow" size={16} />
+					</a>
+				{/if}
 			</div>
 		</header>
 
@@ -113,6 +122,7 @@
 						<ul class="foot__nav">
 							<li><a href="{base}/">VNTA</a></li>
 							<li><a href={robotics}>Robotics</a></li>
+							<li><a href={pricing}>Pricing</a></li>
 							<li><a href="{base}/#company">Company</a></li>
 							<li><a href={studio}>Studio</a></li>
 							<li><a href={githubUrl} rel="me noopener">GitHub</a></li>

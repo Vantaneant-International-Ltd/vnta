@@ -28,6 +28,7 @@ try {
 
 const site = await import(`${root}src/lib/content/site.ts`);
 const studio = await import(`${root}src/lib/content/studio.ts`);
+const pricing = await import(`${root}src/lib/content/pricing.ts`);
 
 const b64 = (p, type) => `data:${type};base64,${readFileSync(root + p).toString('base64')}`;
 const font = (p) => b64(`node_modules/${p}`, 'font/woff2');
@@ -99,6 +100,12 @@ const cards = {
 		chip: site.robotics.stage,
 		tiles: site.layer.map((l) => l.name),
 		address: 'vnta.xyz/robotics'
+	}),
+	'robotics-pricing': company({
+		eyebrow: `${site.robotics.name} pricing`,
+		headline: pricing.pricing.headline,
+		chip: site.robotics.stage,
+		address: 'vnta.xyz/robotics/pricing'
 	}),
 	contact: company({ eyebrow: 'Contact', headline: 'Talk to VNTA.', address: 'vnta.xyz/contact' }),
 	studio: studioCard({
