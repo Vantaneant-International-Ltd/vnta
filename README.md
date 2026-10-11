@@ -143,6 +143,26 @@ A note published before a network's keys were added is not posted there
 afterwards: only notes from the last two days are, so adding a key never
 floods the feed.
 
+## The profiles on Mastodon and Bluesky
+
+One VNTA account on each, for the whole company. `src/lib/content/social.ts`
+says what each profile should carry, and `.github/workflows/social-profile.yml`
+applies it when that file changes: the links under the Mastodon profile, and a
+description on either network only where there is none. It never overwrites a
+description a person typed, and never touches the name, picture, followers or
+posts.
+
+Two proofs that the accounts are VNTA's live on this site:
+
+- Every page links back to the Mastodon profile with `rel="me"` (in
+  `src/routes/+layout.svelte`). That is what puts the green tick beside
+  vnta.xyz on the profile.
+- `static/.well-known/atproto-did` holds the Bluesky account's public id. That
+  is what lets the account be named `@vnta.xyz`. It is not a secret.
+
+The Mastodon key is wider than posting needs, by the owner's choice, so that
+this job can read and update the profile.
+
 ## Where things will live
 
 | Address | What | Today |

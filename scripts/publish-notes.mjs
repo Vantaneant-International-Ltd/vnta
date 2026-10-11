@@ -246,16 +246,32 @@ async function postMastodon(n) {
 
 // --- Bluesky ---------------------------------------------------------------------
 
+/**
+ * Signs in. The account's name changes when its domain is verified, which
+ * would leave BLUESKY_HANDLE out of date, so the account's permanent id (kept
+ * in static/.well-known/atproto-did by the profile job) is tried as well.
+ */
+async function blueskySignIn(pds) {
+	const idFile = `${root}static/.well-known/atproto-did`;
+	const id = existsSync(idFile) ? readFileSync(idFile, 'utf8').trim() : '';
+	let res;
+	for (const identifier of [...new Set([process.env.BLUESKY_HANDLE, id].filter(Boolean))]) {
+		res = await fetch(`${pds}/xrpc/com.atproto.server.createSession`, {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({ identifier, password: process.env.BLUESKY_APP_PASSWORD })
+		});
+		if (res.ok) break;
+	}
+	return res;
+}
+
 async function postBluesky(n) {
 	const pds = (process.env.BLUESKY_PDS || 'https://bsky.social').replace(/\/$/, '');
 	const fail = async (what, res) => new Error(`Bluesky ${what}: ${res.status} ${(await res.text()).slice(0, 300)}`);
 	const json = { 'content-type': 'application/json' };
 
-	const login = await fetch(`${pds}/xrpc/com.atproto.server.createSession`, {
-		method: 'POST',
-		headers: json,
-		body: JSON.stringify({ identifier: process.env.BLUESKY_HANDLE, password: process.env.BLUESKY_APP_PASSWORD })
-	});
+	const login = await blueskySignIn(pds);
 	if (!login.ok) throw await fail('sign-in', login);
 	const { accessJwt, did, handle } = await login.json();
 	const auth = { authorization: `Bearer ${accessJwt}` };
@@ -326,17 +342,14 @@ async function verify(which) {
 			console.error(`Mastodon: the key may not ${missing.join(' or ')}. Posting will fail.`);
 			process.exit(1);
 		}
-		if (extra.length) console.log(`::warning::The Mastodon key can do more than post (${extra.join(', ')}). The job only needs ${MASTODON_NEEDS.join(' and ')}. A narrower key is safer.`);
+		// The owner chose a wider key on purpose, so that the profile job can keep the profile up to date. Said once, plainly, not as a warning.
+		if (extra.length) console.log(`Mastodon: this key can do more than post (${extra.join(', ')}). Publishing notes only uses ${MASTODON_NEEDS.join(' and ')}.`);
 		return;
 	}
 	if (which === 'bluesky') {
 		if (!process.env.BLUESKY_HANDLE || !process.env.BLUESKY_APP_PASSWORD) return console.log('Bluesky: no key set.');
 		const pds = (process.env.BLUESKY_PDS || 'https://bsky.social').replace(/\/$/, '');
-		const res = await fetch(`${pds}/xrpc/com.atproto.server.createSession`, {
-			method: 'POST',
-			headers: { 'content-type': 'application/json' },
-			body: JSON.stringify({ identifier: process.env.BLUESKY_HANDLE, password: process.env.BLUESKY_APP_PASSWORD })
-		});
+		const res = await blueskySignIn(pds);
 		if (!res.ok) {
 			console.error(`Bluesky refused the key (${res.status}). Check BLUESKY_HANDLE and BLUESKY_APP_PASSWORD.`);
 			process.exit(1);

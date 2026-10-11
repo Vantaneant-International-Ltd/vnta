@@ -1,0 +1,83 @@
+# Keeps VNTA's Mastodon and Bluesky profiles matching
+# src/lib/content/social.ts, and puts the Bluesky account's id on the site so
+# the account can be named vnta.xyz.
+#
+# Runs when that file (or the script) changes, and by hand: Actions >
+# Social profiles > Run workflow.
+#
+# It uses the same repository secrets as "Publish notes". The Mastodon key
+# must be allowed to read and write the profile (read:accounts,
+# write:accounts); with a key that can only post, this job says so and
+# changes nothing.
+name: Social profiles
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - src/lib/content/social.ts
+      - scripts/social-profile.mjs
+      - .github/workflows/social-profile.yml
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run: say what would change, change nothing'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+# The same group as the deploy and the notes, so only one builds the site at a time.
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: false
+
+jobs:
+  profiles:
+    runs-on: ubuntu-latest
+    env:
+      SOCIAL_DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
+      MASTODON_URL: ${{ secrets.MASTODON_URL }}
+      MASTODON_TOKEN: ${{ secrets.MASTODON_TOKEN }}
+      BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
+      BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      - name: Check the profile job itself
+        run: node --test scripts/social-profile.test.mjs
+
+      - name: Put the Bluesky account's id on the site
+        id: did
+        run: node scripts/social-profile.mjs did
+
+      - name: Save it
+        if: steps.did.outputs.changed == '1'
+        run: |
+          git config user.name "vnta-notes"
+          git config user.email "studio@vnta.xyz"
+          git add -f static/.well-known/atproto-did
+          git commit -m "Add the Bluesky account's id, so the account can be named vnta.xyz"
+          git push origin HEAD:main
+
+      # The site must carry the link back to the profiles before they are
+      # saved, or there is no green tick. A push made by this job does not
+      # start the deploy, so it is done here.
+      - name: Build and deploy the site
+        if: ${{ !inputs.dry_run }}
+        run: |
+          npm ci
+          npm run deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
+      - name: Set the links and any missing description
+        run: node scripts/social-profile.mjs apply

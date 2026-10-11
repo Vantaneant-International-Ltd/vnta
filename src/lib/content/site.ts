@@ -56,7 +56,11 @@ export const roboticsUrl = '/robotics';
  * handed to search engines as "this profile is the same VNTA". Only add a
  * profile that is real and ours, with its full address.
  */
-export const social: { name: string; href: string }[] = [{ name: 'GitHub', href: githubUrl }];
+export const mastodonUrl = 'https://mastodon.social/@vntagroup';
+export const social: { name: string; href: string }[] = [
+	{ name: 'GitHub', href: githubUrl },
+	{ name: 'Mastodon', href: mastodonUrl }
+];
 
 // --- The parent: VNTA --------------------------------------------------------
 

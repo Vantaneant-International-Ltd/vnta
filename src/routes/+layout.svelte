@@ -31,7 +31,7 @@
 	import Wordmark from '$lib/components/ui/Wordmark.svelte';
 	import Symbol from '$lib/components/ui/Symbol.svelte';
 	import Icon from '$lib/components/ui/Icon.svelte';
-	import { roboticsUrl, githubUrl, pitch, siteUrl } from '$lib/content/site';
+	import { roboticsUrl, githubUrl, mastodonUrl, pitch, siteUrl } from '$lib/content/site';
 	import { notesPath } from '$lib/content/notePaths';
 	import { pitch as studioPitch, landings, studioEmail } from '$lib/content/studio';
 
@@ -81,6 +81,9 @@
 	<link rel="icon" type="image/svg+xml" href="{base}/symbol.svg" />
 	<link rel="apple-touch-icon" href="{base}/apple-touch-icon.png" />
 	<meta name="theme-color" content="#ffffff" />
+	<!-- "This profile is ours." Mastodon reads this on every page and shows a
+	     green tick beside a link to the site on the profile. -->
+	<link rel="me" href={mastodonUrl} />
 </svelte:head>
 
 {#if frame === 'company'}
@@ -131,6 +134,8 @@
 							<li><a href="{base}/#company">Company</a></li>
 							<li><a href={studio}>Studio</a></li>
 							<li><a href={githubUrl} rel="me noopener">GitHub</a></li>
+							<li><a href={mastodonUrl} rel="me noopener">Mastodon</a></li>
+							<li><a href={data.blueskyUrl} rel="me noopener">Bluesky</a></li>
 							<li><a href="{base}/contact">Contact</a></li>
 						</ul>
 					</nav>
@@ -190,6 +195,8 @@
 						<ul>
 							<li><a href="mailto:{studioEmail}">{studioEmail}</a></li>
 							<li><a href="{studio}#quote">Contact</a></li>
+							<li><a href={mastodonUrl} rel="me noopener">Mastodon</a></li>
+							<li><a href={data.blueskyUrl} rel="me noopener">Bluesky</a></li>
 							<li><a href="{base}/">VNTA, the company</a></li>
 							<li><a href="{base}/legal">Legal</a></li>
 							<li><a href="{base}/privacy">Privacy</a></li>

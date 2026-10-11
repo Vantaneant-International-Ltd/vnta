@@ -18,3 +18,8 @@
 /api/*
   X-Robots-Tag: noindex
 
+# Bluesky reads this to check that the account named vnta.xyz owns vnta.xyz.
+# It is the account's public id, written by scripts/social-profile.mjs.
+/.well-known/atproto-did
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=300
