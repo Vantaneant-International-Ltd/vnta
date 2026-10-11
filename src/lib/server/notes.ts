@@ -13,9 +13,15 @@
 //   - it has no `hold`,
 //   - and no other note went out that day (one a day, oldest first).
 //
-// To write a new note: add it here with a date. To stop one going out: give it
-// a `hold` saying why. To release a held note: delete its `hold` line and push.
-// It goes out at the next morning run.
+// To write a new note: add it here with a date. To pause one: give it a
+// `hold`. To release it: delete the `hold` line and push. It goes out at the
+// next morning run.
+//
+// THIS REPOSITORY IS PUBLIC. Anyone can read this file, held notes and all.
+// A draft that should not be seen yet does not belong here: keep it in the
+// private vnta-robotics repository (docs/notes/HELD.md) and move it into this
+// file on the day it may go out. Keep a `hold` reason here to one neutral
+// word or two; the real reason goes in the private file.
 //
 // House rules, the same as the rest of the site:
 // - Only what is true today. Say "in development". Say what a result was run
@@ -58,7 +64,7 @@ export type Note = {
 	image?: { file: string; alt: string };
 	/** Hashtags for Mastodon, where they are how a post is found. No "#". */
 	tags?: string[];
-	/** While this is set the note is not published. Say what must be true first. */
+	/** While this is set the note is not published. This file is public: keep the reason neutral. */
 	hold?: string;
 };
 
@@ -146,29 +152,6 @@ export const notes: Note[] = [
 		tags: ['robotics', 'AMR', 'AGV']
 	},
 	{
-		slug: 'every-message-was-valid',
-		date: '2026-10-27',
-		title: 'Every message was valid',
-		kind: 'Show',
-		summary: 'Each message passed the schema. The system was still wrong, and only doing something to it showed that.',
-		body: [
-			'Every message was valid. The system was still wrong.',
-			'We ran our validation suite against an open-source VDA 5050 virtual vehicle. Each message it sent passed the official schema.',
-			'Then we cut its network link and brought it back.',
-			'The vehicle reconnected in about a second and carried on reporting its state. But it never announced that it was online again. A fresh subscriber, arriving the way a master control that starts late would, was still told the connection was broken. While the vehicle was connected and working.',
-			'You cannot see that by checking messages one at a time. You only see it by doing something to the system and watching what happens next.',
-			'Two caveats. This is one version of one library’s virtual vehicle in one configuration, not a real machine. And most of what it does simply works: 32 of 37 checks passed.',
-			'That kind of finding is what VNTA Robotics is being built to catch.'
-		],
-		short: 'Every message was valid. The system was still wrong.\n\nWe cut a virtual vehicle’s link and brought it back. It reconnected in a second, and never said it was online again.',
-		image: {
-			file: 'post-05-every-message-was-valid.png',
-			alt: 'A timeline: the link is cut, the vehicle reconnects after a second, and six seconds later it has still not said it is online.'
-		},
-		tags: ['robotics', 'VDA5050', 'testing'],
-		hold: 'Tell the maintainers of the open-source library first (open an issue) and give them a few days. Their issue tracker could not be read when this was written, so it may already be known.'
-	},
-	{
 		slug: 'our-own-rig-lied-first',
 		date: '2026-10-29',
 		title: 'Our own rig lied first',
@@ -231,47 +214,6 @@ export const notes: Note[] = [
 		tags: ['robotics', 'testing']
 	},
 	{
-		slug: 'why-the-prices-are-public',
-		date: '2026-11-10',
-		title: 'Why the prices are public',
-		kind: 'Status',
-		summary: 'VNTA Robotics is priced per integration, not per robot, and the prices are on the site.',
-		body: [
-			'We have put our prices on the website. Here is the thinking.',
-			'VNTA Robotics is priced per integration, not per robot.',
-			'The value today is in integrating and validating, not in running a fleet day to day. Charging per robot per month would be charging for something we do not do.',
-			'A validation pilot starts from €6,500 ex VAT: one robot or fleet integration, tested, with a readiness report and the evidence behind it.',
-			'Three things the page says plainly:',
-			'1. The product is in development and has not been used on a real robot yet.\n2. Every price is a starting point. Scope is agreed before work begins.\n3. A report is not a safety certification.',
-			'There is no checkout. There is a form, and we read every request. It is at vnta.xyz/robotics/pricing.'
-		],
-		short: 'Our prices are public. A validation pilot starts from €6,500 ex VAT, per integration, not per robot.\n\nIn development, no checkout, and not yet used on a real robot.',
-		image: {
-			file: 'post-09-why-the-prices-are-public.png',
-			alt: 'Four offers and their starting prices, with the annual platform marked as planned.'
-		},
-		tags: ['robotics'],
-		hold: 'These prices have not been quoted to anyone yet. Release this once you are comfortable defending them out loud.'
-	},
-	{
-		slug: 'one-design-partner',
-		date: '2026-11-12',
-		title: 'One design partner',
-		kind: 'Ask',
-		summary: 'We are looking for one integrator or operator with a real VDA 5050 system to be our first real integration.',
-		body: [
-			'We are looking for one design partner.',
-			'You: an integrator or operator with a real robot or fleet system that speaks VDA 5050, and a commissioning project coming up.',
-			'Us: we connect VNTA Robotics to it, run the validation suite, and give you a readiness report with the evidence behind it. You get it at a reduced price. We get to learn on a real system.',
-			'What you should know first:',
-			'1. It would be our first real integration. Part of the work is us learning.\n2. We test software behaviour through the interface. It is not a safety certification.\n3. Link-cut and restart tests only run if you and the manufacturer agree to them.',
-			'If that is you, or someone you know, write to us at vnta.xyz/robotics/pricing.'
-		],
-		short: 'Looking for one design partner: an integrator or operator with a real VDA 5050 system and a commissioning project coming up.\n\nIt would be our first real integration, and we say so.',
-		tags: ['robotics', 'VDA5050'],
-		hold: 'Release this only when you could deliver: a robotics engineer lined up, insurance checked, and a contract that says the report is not a safety certification.'
-	},
-	{
 		slug: 'what-it-cannot-do-yet',
 		date: '2026-11-17',
 		title: 'What it cannot do yet',
@@ -285,25 +227,5 @@ export const notes: Note[] = [
 		],
 		short: 'What VNTA Robotics can’t do yet: it has never met a real robot, has one protocol adapter, no SDK, and nobody has paid for it.\n\nWe’d rather you heard that from us.',
 		tags: ['robotics']
-	},
-	{
-		slug: 'what-the-conversations-taught-us',
-		date: '2026-11-19',
-		title: 'What the conversations taught us',
-		kind: 'Status',
-		summary: '[ONE SENTENCE ON WHAT CHANGED.]',
-		body: [
-			'A few weeks ago we asked people who commission robots for 20 minutes. [NUMBER] of you said yes. Thank you.',
-			'Here is what we had wrong.',
-			'[THE THING WE ASSUMED, AND WHAT PEOPLE ACTUALLY TOLD US.]',
-			'Here is what we had right.',
-			'[THE CHECK OR IDEA THAT PEOPLE SAID THEY WOULD USE.]',
-			'The line in our report people cared about most: [WHICH ONE].\nThe line nobody cared about: [WHICH ONE].',
-			'What changes because of it: [ONE CONCRETE CHANGE TO THE PRODUCT OR THE PLAN].',
-			'If you do this work and we have not spoken yet, the offer stands.'
-		],
-		short: '[SHORT VERSION, WRITTEN FROM WHAT PEOPLE ACTUALLY SAID.]',
-		tags: ['robotics'],
-		hold: 'This is a template. Fill every bracket from what people actually said, with no names or companies without permission. If there were no conversations, delete this note.'
 	}
 ];

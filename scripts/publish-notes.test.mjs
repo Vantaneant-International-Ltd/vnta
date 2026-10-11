@@ -13,6 +13,8 @@ import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const script = fileURLToPath(new URL('./publish-notes.mjs', import.meta.url));
+// Made-up notes, so the tests do not depend on what the real ones say.
+const fixture = fileURLToPath(new URL('./fixtures/notes.fixture.ts', import.meta.url));
 
 /** A pretend Mastodon server and Bluesky server in one, remembering what it was sent. */
 async function pretend() {
@@ -71,6 +73,7 @@ async function world(t, { keys = true } = {}) {
 		PATH: process.env.PATH,
 		NOTES_LEDGER: ledger,
 		NOTES_SITE: 'https://vnta.xyz',
+		NOTES_FILE: fixture,
 		...(keys ? { MASTODON_URL: fake.origin, MASTODON_TOKEN: 'masto-token', BLUESKY_PDS: fake.origin, BLUESKY_HANDLE: 'vnta.example', BLUESKY_APP_PASSWORD: 'app-pass' } : {})
 	};
 	// Run without blocking: the pretend servers live in this process and must be free to answer.
@@ -90,11 +93,20 @@ async function world(t, { keys = true } = {}) {
 	};
 }
 
-test('every note that is not held is fit to publish', async (t) => {
+test('the real notes are all fit to publish', async (t) => {
 	const w = await world(t);
-	const r = (await w.run('check', '2026-10-11'));
+	const r = await w.run('check', '2026-10-11', { NOTES_FILE: '' });
 	assert.equal(r.code, 0, r.out);
-	assert.match(r.out, /8 notes fit to publish, 4 held/);
+	assert.match(r.out, /notes fit to publish/);
+});
+
+test('the check fails on a note that is not held and not finished', async (t) => {
+	const w = await world(t);
+	const r = await w.run('check', '2026-10-11');
+	assert.equal(r.code, 1);
+	assert.match(r.out, /unfinished/);
+	assert.match(r.out, /there is still a \[BRACKET\] to fill in/);
+	assert.doesNotMatch(r.out, /✗ template/, 'a held note may be unfinished');
 });
 
 test('nothing goes out before its date', async (t) => {
@@ -103,31 +115,30 @@ test('nothing goes out before its date', async (t) => {
 	assert.deepEqual(w.read(), []);
 });
 
-test('one note a day, oldest first, and a held note never goes out', async (t) => {
+test('one note a day, oldest first; a held note and an unfinished note never go out', async (t) => {
 	const w = await world(t);
-	assert.match((await w.run('site', '2026-10-13')).out, /Published on the site: the-one-question/);
+	assert.match((await w.run('site', '2026-10-13')).out, /Published on the site: alpha/);
 	assert.match((await w.run('site', '2026-10-13')).out, /Nothing to publish today/, 'a second run the same day publishes nothing more');
-	assert.match((await w.run('site', '2026-10-15')).out, /declared-is-not-verified/);
-	assert.match((await w.run('site', '2026-10-20')).out, /what-we-tested-against/);
-	assert.match((await w.run('site', '2026-10-22')).out, /twenty-minutes/);
+	assert.match((await w.run('site', '2026-10-15')).out, /bravo/);
+	assert.match((await w.run('site', '2026-10-20')).out, /charlie/);
+	assert.match((await w.run('site', '2026-10-22')).out, /delta/);
 	// 27 October is the held note's day. Nothing else is due, so nothing goes out.
 	assert.match((await w.run('site', '2026-10-27')).out, /Nothing to publish today/);
-	assert.match((await w.run('site', '2026-10-29')).out, /our-own-rig-lied-first/);
-	// Far in the future: the rest come out one a day, and the four held notes never do.
-	const days = ['2027-01-04', '2027-01-05', '2027-01-06', '2027-01-07', '2027-01-08'];
-	for (const d of days) (await w.run('site', d));
+	assert.match((await w.run('site', '2026-10-29')).out, /echo/);
+	// Far in the future: the rest come out one a day. The held ones and the unfinished one never do.
+	for (const d of ['2027-01-04', '2027-01-05', '2027-01-06']) await w.run('site', d);
 	assert.deepEqual(
 		w.read().map((e) => e.slug),
-		['the-one-question', 'declared-is-not-verified', 'what-we-tested-against', 'twenty-minutes', 'our-own-rig-lied-first', 'above-not-instead', 'a-timeout-is-not-a-pass', 'what-it-cannot-do-yet']
+		['alpha', 'bravo', 'charlie', 'delta', 'echo', 'foxtrot']
 	);
 });
 
 test('a backlog is worked off one day at a time', async (t) => {
 	const w = await world(t);
 	// The job was switched on late: three notes are already due.
-	assert.match((await w.run('site', '2026-10-21')).out, /the-one-question/);
+	assert.match((await w.run('site', '2026-10-21')).out, /alpha/);
 	assert.match((await w.run('site', '2026-10-21')).out, /Nothing to publish today/);
-	assert.match((await w.run('site', '2026-10-22')).out, /declared-is-not-verified/);
+	assert.match((await w.run('site', '2026-10-22')).out, /bravo/);
 });
 
 test('a note with a picture goes to both networks, with its link, picture and description', async (t) => {
@@ -135,16 +146,16 @@ test('a note with a picture goes to both networks, with its link, picture and de
 	(await w.run('site', '2026-10-13'));
 	const r = (await w.run('social', '2026-10-13'));
 	assert.equal(r.code, 0, r.out);
-	const url = 'https://vnta.xyz/robotics/notes/the-one-question';
+	const url = 'https://vnta.xyz/robotics/notes/alpha';
 
 	// Mastodon
 	assert.equal(w.seen.media.length, 1);
 	assert.equal(w.seen.media[0].auth, 'Bearer masto-token');
 	assert.ok(w.seen.media[0].hasAlt && w.seen.media[0].bytes > 100_000, 'the picture and its description were sent');
 	const status = w.seen.statuses[0];
-	assert.ok(status.status.includes(url) && status.status.endsWith('#robotics #commissioning'));
+	assert.ok(status.status.includes(url) && status.status.endsWith('#testing #robotics'));
 	assert.ok(status.status.length <= 500);
-	assert.deepEqual([status.media_ids, status.visibility, status.key], [['m1'], 'public', 'vnta-note-the-one-question']);
+	assert.deepEqual([status.media_ids, status.visibility, status.key], [['m1'], 'public', 'vnta-note-alpha']);
 
 	// Bluesky
 	const record = w.seen.records[0];
@@ -192,7 +203,7 @@ test('a note with no picture is posted with a card for the page', async (t) => {
 	assert.equal(r.code, 0, r.out);
 	const record = w.seen.records.at(-1);
 	assert.equal(record.embed.$type, 'app.bsky.embed.external');
-	assert.equal(record.embed.external.uri, 'https://vnta.xyz/robotics/notes/twenty-minutes');
+	assert.equal(record.embed.external.uri, 'https://vnta.xyz/robotics/notes/delta');
 	assert.deepEqual(w.seen.statuses.at(-1).media_ids, []);
 });
 
@@ -220,7 +231,7 @@ test('if one network refuses, the other still gets the note and the run is marke
 	(await w.run('site', '2026-10-13'));
 	const r = (await w.run('social', '2026-10-13', { BLUESKY_APP_PASSWORD: 'wrong' }));
 	assert.equal(r.code, 1);
-	assert.match(r.out, /Bluesky: the-one-question was not posted/);
+	assert.match(r.out, /Bluesky: alpha was not posted/);
 	const [entry] = w.read();
 	assert.ok(entry.mastodon && !entry.bluesky);
 	// The next run, with the right password, posts only what is missing.
@@ -230,13 +241,13 @@ test('if one network refuses, the other still gets the note and the run is marke
 
 test('a dry run writes and posts nothing', async (t) => {
 	const w = await world(t);
-	assert.match((await w.run('site', '2026-10-13', { NOTES_DRY_RUN: '1' })).out, /Would publish on the site: the-one-question/);
+	assert.match((await w.run('site', '2026-10-13', { NOTES_DRY_RUN: '1' })).out, /Would publish on the site: alpha/);
 	assert.deepEqual(w.read(), []);
 });
 
 test('waiting for a page returns once the page answers', async (t) => {
 	const w = await world(t);
-	const r = (await w.run('wait the-one-question', '2026-10-13', { NOTES_SITE: w.origin }));
+	const r = (await w.run('wait alpha', '2026-10-13', { NOTES_SITE: w.origin }));
 	assert.equal(r.code, 0, r.out);
 	assert.match(r.out, /is live/);
 });

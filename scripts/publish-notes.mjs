@@ -29,7 +29,7 @@
 //   BLUESKY_PDS    only if the account is not on bsky.social
 //
 // For testing: NOTES_TODAY=2026-10-13 pretends it is that day; NOTES_DRY_RUN=1
-// writes and posts nothing; NOTES_SITE and NOTES_LEDGER point elsewhere.
+// writes and posts nothing; NOTES_SITE, NOTES_LEDGER and NOTES_FILE point elsewhere.
 import { readFileSync, writeFileSync, existsSync, statSync, mkdirSync, rmSync, copyFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
@@ -43,7 +43,7 @@ const MASTODON_LIMIT = 500; // characters; a link counts as 23 there, we count i
 const BLUESKY_IMAGE_LIMIT = 1_000_000; // bytes
 const FRESH_DAYS = 2;
 
-const { notes } = await import(`${root}src/lib/server/notes.ts`);
+const { notes } = await import(process.env.NOTES_FILE || `${root}src/lib/server/notes.ts`);
 
 // --- Small helpers -------------------------------------------------------------
 

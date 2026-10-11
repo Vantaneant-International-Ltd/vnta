@@ -115,9 +115,12 @@ the two open networks are signs pointing at it.
 - **The pictures** are in `src/lib/content/note-images`, outside the served
   folder. A picture is copied into the site only when its note is published,
   so a held note's picture cannot be found by guessing its address.
-- **To hold a note back**, give it a `hold` line saying what must be true
-  first. **To release it**, delete that line and push. It goes out the next
-  morning.
+- **This repository is public.** A draft that should not be read yet does not
+  belong in it, held or not. Such drafts are kept in the private
+  `vnta-robotics` repository (`docs/notes/HELD.md`), with the reason each is
+  waiting, and are moved here on the day they may go out.
+- **To pause a note that is here**, give it a `hold` line with a neutral word.
+  **To release it**, delete that line and push. It goes out the next morning.
 - **To see what is out and what is next:** `npm run notes`.
 - **To try the job without publishing:** Actions > Publish notes > Run
   workflow > tick "Dry run".
