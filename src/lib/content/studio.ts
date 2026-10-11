@@ -250,8 +250,8 @@ export const plans: Plan[] = [
 	{
 		name: 'Website with stock',
 		for: 'For car dealers and anyone with a list that changes.',
-		build: 1900,
-		monthly: 59,
+		build: 1500,
+		monthly: 49,
 		time: 'Live in 3 to 5 weeks',
 		includes: [
 			'Everything in Website',
@@ -477,9 +477,9 @@ export const landings: Landing[] = [
 		slug: 'websites-for-car-dealers',
 		label: 'Websites for car dealers',
 		title: 'Websites for car dealers',
-		metaTitle: 'Websites for car dealers in Ireland, from €1,900 | VNTA',
+		metaTitle: 'Websites for car dealers in Ireland, from €1,500 | VNTA',
 		description:
-			'VNTA builds websites for Irish car dealers. Your stock with search and filters, a page for every car, and you add and remove cars yourself. From €1,900.',
+			'VNTA builds websites for Irish car dealers. Your stock with search and filters, and you add and remove cars yourself. From €1,500, then €49 a month.',
 		lede: 'People come to a dealer website to see the cars. So we put your stock first, with search, filters and a page for every car.',
 		plans: ['Website with stock'],
 		gets: [
@@ -501,7 +501,7 @@ export const landings: Landing[] = [
 			},
 			{
 				q: 'How much is a website for a car dealer?',
-				a: 'From €1,900 to build, then from €59 a month to host it and look after it. You get the exact price in writing before we start.'
+				a: 'From €1,500 to build, then from €49 a month to host it and look after it. You get the exact price in writing before we start.'
 			}
 		]
 	},
@@ -584,5 +584,5 @@ export const worldStyle = (w: World) =>
 	`--w-bg:${w.bg};--w-ink:${w.ink};--w-soft:${w.soft};--w-line:${w.line};--w-accent:${w.accent};` +
 	`--device:${w.dark ? '#3a3a3c' : '#1f1f1f'}`;
 
-/** Formats a euro amount the way the page prints it: €1,900. */
+/** Formats a euro amount the way the page prints it: €1,500. */
 export const euro = (n: number) => `€${n.toLocaleString('en-IE')}`;
