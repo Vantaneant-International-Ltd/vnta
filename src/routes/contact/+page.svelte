@@ -1,6 +1,6 @@
 <script lang="ts">
 	// Contact: one form, for anyone who wants to talk to VNTA about what it is
-	// building.
+	// designing.
 	import Seo from '$lib/components/Seo.svelte';
 	import EnquiryForm from '$lib/components/EnquiryForm.svelte';
 	import { breadcrumb } from '$lib/content/structured';
@@ -21,7 +21,7 @@
 				<p class="eyebrow">Contact</p>
 				<h1 class="quote__title">Talk to VNTA.</h1>
 				<p class="quote__text">
-					Write to us about VNTA, or about VNTA Robotics and what it is being built to do.
+					Write to us about VNTA, or about VNTA Robotics and what it is being designed to do.
 				</p>
 			</div>
 			<div class="quote__form card">

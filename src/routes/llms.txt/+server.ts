@@ -1,4 +1,4 @@
-// /llms.txt: a plain summary of who VNTA is and what it is building, for the AI
+// /llms.txt: a plain summary of who VNTA is and what it is designing, for the AI
 // assistants people now ask instead of searching. Written from the same
 // content file as the pages, so the two can never disagree.
 import {
@@ -48,7 +48,7 @@ export function GET() {
 		'',
 		...systems.map((s) => `- ${s.name} (${s.stage.toLowerCase()}): ${s.body}`),
 		'',
-		'Only robotics is being built today. Agents and compute are research directions, not products.',
+		'Only robotics is being worked on today, and it is at the design stage. Agents and compute are research directions, not products.',
 		'',
 		'## Principles',
 		'',

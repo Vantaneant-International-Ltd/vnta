@@ -270,7 +270,7 @@
 }
 
 /* --- Status: where a system stands. The mark carries it, not the colour
-   alone: a filled dot for what is being built, a hollow ring for research. -- */
+   alone: a filled dot for what is being worked on, a hollow ring for research. -- */
 .shell .stage {
 	display: inline-flex;
 	align-items: center;

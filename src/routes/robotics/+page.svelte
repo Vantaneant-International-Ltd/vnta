@@ -1,10 +1,10 @@
 <script lang="ts">
-	// VNTA Robotics: the first system, and the only one being built. This page
+	// VNTA Robotics: the first system, and the only one being worked on. This page
 	// lives on the parent site for now. When robotics.vnta.xyz exists it moves
 	// there: change roboticsUrl in content/site.ts and add the redirect in
 	// static/_redirects.
 	//
-	// The product is in development. Every claim on this page is about what it
+	// The product is in design: nothing is built yet. Every claim on this page is about what it
 	// is being designed to do, and the one picture of an interface is labelled
 	// as a concept with example data.
 	import { base } from '$app/paths';
@@ -27,8 +27,8 @@
 	title="VNTA Robotics | Infrastructure for trusted autonomous machines"
 	shareTitle="VNTA Robotics | {robotics.positioning}"
 	image="/share/robotics.png"
-	imageAlt="VNTA Robotics. {robotics.positioning} In development."
-	description="{robotics.what} Identity, permissions, connectivity, orchestration, telemetry and audit. In development."
+	imageAlt="VNTA Robotics. {robotics.positioning} In design."
+	description="{robotics.what} Identity, permissions, connectivity, orchestration, telemetry and audit. In design; not yet built."
 	ld={[roboticsProduct(), breadcrumb('Robotics', '/robotics')]}
 />
 
@@ -84,7 +84,7 @@
 				<p class="eyebrow">Designed to provide</p>
 				<h2 class="head__title" id="capabilities-title">One layer under every machine.</h2>
 				<p class="head__text">
-					What the control layer is being built to do. None of this is available to buy yet.
+					What the control layer is being designed to do. None of this exists yet.
 				</p>
 			</div>
 

@@ -1,6 +1,6 @@
 <script lang="ts">
-	// The home page of the parent company. It says what VNTA is building, shows
-	// the one system in development (VNTA Robotics), and is honest about what
+	// The home page of the parent company. It says what VNTA is designing, shows
+	// the one system in design (VNTA Robotics), and is honest about what
 	// is still research. Kept short. All of the words live in
 	// $lib/content/site.ts.
 	import { base } from '$app/paths';
@@ -27,7 +27,7 @@
 	title="VNTA | Infrastructure for autonomous systems"
 	shareTitle="VNTA | {pitch.headline}"
 	image="/share/home.png"
-	description="{pitch.short} Its first system, VNTA Robotics, is a vendor-neutral control layer for robots and autonomous machines, now in development."
+	description="{pitch.short} Its first system, VNTA Robotics, is a vendor-neutral control layer for robots and autonomous machines, now in design."
 	ld={[organisation(), website()]}
 />
 
@@ -97,7 +97,7 @@
 		</div>
 	</section>
 
-	<!-- 01 / VNTA ROBOTICS: the one system being built -->
+	<!-- 01 / VNTA ROBOTICS: the one system being worked on -->
 	<section class="band" id="robotics" aria-labelledby="robotics-title">
 		<div class="wrap">
 			<div class="lead">
@@ -112,7 +112,7 @@
 		</div>
 	</section>
 
-	<!-- TECHNOLOGY: one layer, three kinds of system. Only one is being built. -->
+	<!-- TECHNOLOGY: one layer, three kinds of system. Only one is being worked on. -->
 	<section class="band band--paper" id="technology" aria-labelledby="technology-title">
 		<div class="wrap">
 			<div class="head">
@@ -124,14 +124,14 @@
 
 			<div class="systems">
 				{#each systems as s}
-					<article class="system card" class:system--later={s.stage !== 'In development'}>
+					<article class="system card" class:system--later={s.stage !== 'In design'}>
 						<div class="system__top">
 							<span class="well"><Icon name={s.icon} size={20} /></span>
 							<Stage stage={s.stage} />
 						</div>
 						<h3 class="system__name">{s.name}</h3>
 						<p class="system__body">{s.body}</p>
-						{#if s.stage === 'In development'}
+						{#if s.stage === 'In design'}
 							<a class="go" href={roboticsHref}>{robotics.name} <Icon name="arrow" size={16} /></a>
 						{/if}
 					</article>
@@ -337,7 +337,7 @@
 		justify-items: start;
 	}
 
-	/* --- The three kinds of system. The one being built is solid; the two
+	/* --- The three kinds of system. The one being worked on is solid; the two
 	   in research are drawn with a broken edge and stand back. ------------- */
 	.systems {
 		display: grid;

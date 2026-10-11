@@ -12,8 +12,12 @@
 // House rules for copy:
 // - Short, technical, quiet, precise. No hype, no "revolutionary", no
 //   "AI-powered", no startup cliches.
-// - Nothing is claimed that is not true today. VNTA Robotics is in
-//   development: say "developing", "building", "designed to". No customer
+// - Nothing is claimed that is not true today. VNTA Robotics is in design:
+//   building has not started (October 2026). Say "designing", "designed to",
+//   "will". Never "building", "developing" or "develops" about the product,
+//   and never the present tense for what it does. When the first code is
+//   written, change `Stage` and `robotics.honest` below and the whole site
+//   follows. No customer
 //   names, no metrics, no testimonials until they are real.
 // - The parent, VNTA, is wider than robotics. Agents and compute are research
 //   directions, not products: never present them as available.
@@ -45,18 +49,18 @@ export const social: { name: string; href: string }[] = [{ name: 'GitHub', href:
 export const pitch = {
 	eyebrow: 'Autonomous infrastructure',
 	headline: 'Infrastructure for autonomous systems.',
-	lede: 'VNTA develops the software infrastructure that allows autonomous machines and intelligent systems to operate securely in the real world.',
+	lede: 'VNTA is designing the software infrastructure that will allow autonomous machines and intelligent systems to operate securely in the real world.',
 	/** One line for search results and share cards. */
 	short: 'VNTA is an independent technology company developing infrastructure for autonomous systems.'
 };
 
 export const statement = {
 	headline: 'The autonomous world needs infrastructure.',
-	body: 'Robots, intelligent agents, vehicles and machines are becoming increasingly autonomous. VNTA is building the control, identity and trust infrastructure that allows these systems to operate safely across organisations and environments.'
+	body: 'Robots, intelligent agents, vehicles and machines are becoming increasingly autonomous. VNTA is designing the control, identity and trust infrastructure that will allow these systems to operate safely across organisations and environments.'
 };
 
-/** A system's standing. Only one of these means there is something being built. */
-export type Stage = 'In development' | 'Research';
+/** A system's standing. "In design" is the one being worked on; nothing is built yet. */
+export type Stage = 'In design' | 'Research';
 
 /** The three kinds of autonomous system the infrastructure is meant to reach. */
 export const systems: { name: string; layer: string; body: string; stage: Stage; icon: string }[] = [
@@ -64,7 +68,7 @@ export const systems: { name: string; layer: string; body: string; stage: Stage;
 		name: 'Robots',
 		layer: 'Machine control layer',
 		body: 'Physical machines operating across warehouses, factories and field environments.',
-		stage: 'In development',
+		stage: 'In design',
 		icon: 'robot'
 	},
 	{
@@ -83,7 +87,7 @@ export const systems: { name: string; layer: string; body: string; stage: Stage;
 	}
 ];
 
-/** How the infrastructure is built. */
+/** The principles the infrastructure is designed on. */
 export const principles = [
 	{ name: 'Open', body: 'Designed around interoperable standards and APIs.', icon: 'open' },
 	{ name: 'Secure', body: 'Identity, permissions and auditability from the foundation.', icon: 'shield' },
@@ -108,13 +112,13 @@ export const company = {
 
 export const robotics = {
 	name: 'VNTA Robotics',
-	stage: 'In development' as Stage,
+	stage: 'In design' as Stage,
 	positioning: 'Infrastructure for trusted autonomous machines.',
 	headline: 'A control layer for the physical world.',
-	body: 'VNTA Robotics connects autonomous machines to a shared infrastructure layer for identity, permissions, orchestration, telemetry and audit.',
-	what: 'VNTA Robotics is developing a vendor-neutral machine control plane for robots and autonomous machines.',
+	body: 'VNTA Robotics is designed to connect autonomous machines to a shared infrastructure layer for identity, permissions, orchestration, telemetry and audit.',
+	what: 'VNTA Robotics is a vendor-neutral machine control plane for robots and autonomous machines, now being designed.',
 	/** Said wherever the product is shown, so nobody mistakes a design for a deployment. */
-	honest: 'VNTA Robotics is in development. It is not yet commercially available.'
+	honest: 'VNTA Robotics is in design. It has not been built yet and is not available.'
 };
 
 /** The six parts of the control layer, as drawn in the architecture. */

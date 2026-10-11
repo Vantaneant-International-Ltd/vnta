@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------------------
 // The same facts as the page, written in the form search engines and AI
 // assistants read (schema.org, as JSON-LD). It answers, without guessing: who
-// VNTA is, where it is, and what it is building. Everything here is read from
+// VNTA is, where it is, and what it is designing. Everything here is read from
 // site.ts. Nothing is offered for sale, so there are no prices and no offers.
 // =============================================================================
 import { siteUrl, contactEmail, social, pitch, company, robotics, capabilities } from '$lib/content/site';
@@ -60,7 +60,7 @@ export const website = () => ({
 });
 
 /**
- * VNTA Robotics, described as what it is: software in development. No price,
+ * VNTA Robotics, described as what it is: software in design, not yet built. No price,
  * no rating, no availability, because none of those exist yet.
  */
 export const roboticsProduct = () => ({
