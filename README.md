@@ -51,8 +51,19 @@ src/lib/content/site.ts
 The pitch, the statement, the three kinds of system and where each stands, the
 principles, the company facts, and everything about VNTA Robotics (its six
 layer parts and its ten capabilities). Change a line once and the pages, the
-search data and `/llms.txt` all follow. The headline is also drawn on the share
-card, `static/og.png`: if it changes, redraw the card.
+search data and `/llms.txt` all follow.
+
+## Share cards
+
+Every main page has its own picture for when its link is sent on WhatsApp,
+iMessage or LinkedIn: `static/share/home.png`, `robotics.png`, `contact.png`,
+`studio.png` and one per studio landing page. They are drawn from the content
+files by `node scripts/share-cards.mjs` (it needs Playwright; the script says
+how). Run it again after changing a headline, a landing page title or a price,
+and copy `share/home.png` over `static/og.png`, the default for the small-print
+pages. A page names its card in its `<Seo image="...">` line. Chat apps keep a
+link's old card for days; a link shared before a change may go on showing the
+old picture.
 
 House rules for copy, also at the top of that file:
 

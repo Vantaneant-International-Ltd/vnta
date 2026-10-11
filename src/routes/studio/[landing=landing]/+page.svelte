@@ -22,8 +22,8 @@
 <Seo
 	title={l.metaTitle}
 	shareTitle="{l.title} | VNTA Studio"
-	image="/og-studio.png"
-	imageAlt="VNTA Studio. We look at your business and see what to change. A brand studio in Dublin."
+	image="/share/studio-{l.slug}.png"
+	imageAlt="VNTA Studio. {l.title}."
 	description={l.description}
 	ld={[service(l), breadcrumb(l), faq(l.questions)]}
 />

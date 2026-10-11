@@ -26,6 +26,8 @@
 <Seo
 	title="VNTA Robotics | Infrastructure for trusted autonomous machines"
 	shareTitle="VNTA Robotics | {robotics.positioning}"
+	image="/share/robotics.png"
+	imageAlt="VNTA Robotics. {robotics.positioning} In development."
 	description="{robotics.what} Identity, permissions, connectivity, orchestration, telemetry and audit. In development."
 	ld={[roboticsProduct(), breadcrumb('Robotics', '/robotics')]}
 />

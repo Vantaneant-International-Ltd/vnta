@@ -9,7 +9,7 @@
   Cache-Control: public, max-age=604800
 /og.png
   Cache-Control: public, max-age=86400
-/og-studio.png
+/share/*
   Cache-Control: public, max-age=86400
 
 # Not for search results.

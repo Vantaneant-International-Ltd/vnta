@@ -26,6 +26,7 @@
 <Seo
 	title="VNTA | Infrastructure for autonomous systems"
 	shareTitle="VNTA | {pitch.headline}"
+	image="/share/home.png"
 	description="{pitch.short} Its first system, VNTA Robotics, is a vendor-neutral control layer for robots and autonomous machines, now in development."
 	ld={[organisation(), website()]}
 />

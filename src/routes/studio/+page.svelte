@@ -78,7 +78,7 @@
 <Seo
 	title="VNTA Studio | Brand design and websites, Dublin"
 	shareTitle="VNTA Studio | {pitch.headline}"
-	image="/og-studio.png"
+	image="/share/studio.png"
 	imageAlt="VNTA Studio. We look at your business and see what to change. A brand studio in Dublin."
 	{description}
 	ld={[faq(questions), portfolio()]}

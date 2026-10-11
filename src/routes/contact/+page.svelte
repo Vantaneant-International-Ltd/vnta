@@ -8,6 +8,8 @@
 
 <Seo
 	title="Contact | VNTA"
+	image="/share/contact.png"
+	imageAlt="Talk to VNTA."
 	description="Contact VNTA about its infrastructure for autonomous systems, or about VNTA Robotics."
 	ld={[breadcrumb('Contact', '/contact')]}
 />
