@@ -1,22 +1,17 @@
-// /llms.txt: a plain summary of who we are, what we do and what a site costs, for the AI
+// /llms.txt: a plain summary of who VNTA is and what it is building, for the AI
 // assistants people now ask instead of searching. Written from the same
-// content file as the page, so the two can never disagree on a price.
+// content file as the pages, so the two can never disagree.
 import {
 	pitch,
-	offer,
-	offerPrices,
-	sitDown,
-	work,
-	houses,
-	plans,
-	priceNotes,
-	questions,
-	landings,
+	statement,
+	systems,
+	principles,
+	company,
+	robotics,
+	capabilities,
 	social,
 	siteUrl,
-	studioEmail,
-	replyWithin,
-	euro
+	contactEmail
 } from '$lib/content/site';
 
 export const prerender = true;
@@ -25,58 +20,44 @@ export function GET() {
 	const lines = [
 		'# VNTA',
 		'',
-		`> ${pitch.lede} VNTA is the trading name of Vantanéant International Ltd.`,
+		`> ${pitch.short} ${pitch.lede} VNTA is the trading name of ${company.legalName}.`,
 		'',
 		'## At a glance',
 		'',
-		'- What: brand design first. We look at a business, say plainly what we would change, then design the brand and build the website. Websites are hosted and looked after every month.',
-		'- Who for: business owners, of any kind and size. Our clients so far are small Irish businesses: a garage, a car dealer and a custom PC builder.',
-		'- Where: based in Dublin, working with businesses all over Ireland.',
-		`- Cost: it starts with a sit-down, ${euro(sitDown.price)}, ${sitDown.length}. You get ${sitDown.leaves}, and the fee comes off the bill if you go ahead. Brand work is priced after the sit-down. A website is from ${euro(Math.min(...plans.map((p) => p.build)))} to build, then from ${euro(Math.min(...plans.map((p) => p.monthly)))} a month. No contract.`,
-		`- How to start: tell us about your business at ${siteUrl}/contact. We reply within ${replyWithin}.`,
-		'- How we work: people design and build everything, with AI helping along the way.',
-		'- Also known as: VNTA Group. Legal name: Vantanéant International Ltd.',
+		'- What: software infrastructure for autonomous systems. Identity, permissions, connectivity, orchestration, telemetry and audit.',
+		`- First system: ${robotics.name}. ${robotics.what}`,
+		`- Status: ${robotics.honest}`,
+		'- What VNTA is not: an agency, a consultancy or a creative studio.',
+		`- Founded: ${company.founded}. Based in ${company.place}.`,
 		'',
-		'## What we do',
+		'## Why',
 		'',
-		...offer.map((o, i) => `- ${o.name}: ${o.body} ${offerPrices[i]}.`),
+		statement.body,
 		'',
-		'## What we build',
+		`## ${robotics.name}`,
 		'',
-		...landings.map((l) => `- [${l.title}](${siteUrl}/${l.slug}): ${l.description}`),
+		`${robotics.positioning} ${robotics.body}`,
 		'',
-		'## Prices',
+		'It is being designed to provide:',
 		'',
-		`- The sit-down: ${euro(sitDown.price)}. Takes ${sitDown.length}. You get ${sitDown.leaves}. ${sitDown.credit}`,
-		'- Brand work: priced after the sit-down. The figure is given in writing before we start.',
-		...plans.map(
-			(p) =>
-				`- ${p.name}: ${p.for} From ${euro(p.build)} to build, then ${euro(p.monthly)} a month. ${p.time}.`
-		),
+		...capabilities.map((c) => `- ${c.name}: ${c.body}`),
 		'',
-		...priceNotes.map((n) => `- ${n.name}: ${n.body}`),
+		`More: ${siteUrl}/robotics`,
 		'',
-		'## Work',
+		'## One infrastructure layer, many autonomous systems',
 		'',
-		...work.map((w) =>
-			w.href
-				? `- [${w.name}](${w.href}): ${w.did}. ${w.trade}, ${w.place}. ${w.summary}`
-				: `- ${w.name}: ${w.did}. ${w.trade}, ${w.place}. ${w.status}. ${w.summary}`
-		),
+		...systems.map((s) => `- ${s.name} (${s.stage.toLowerCase()}): ${s.body}`),
 		'',
-		'## Our own houses',
+		'Only robotics is being built today. Agents and compute are research directions, not products.',
 		'',
-		'VNTA owns and runs these companies. Each one is a VNTA Group company.',
+		'## Principles',
 		'',
-		...houses.map((h) => `- [${h.name}](${h.href}): ${h.line} ${h.status}.`),
+		...principles.map((p) => `- ${p.name}: ${p.body}`),
 		'',
-		'## Questions',
-		'',
-		...questions.flatMap((item) => [`### ${item.q}`, '', item.a, '']),
 		'## Contact',
 		'',
-		`- [Talk to us](${siteUrl}/contact): a reply within ${replyWithin}.`,
-		`- Email: ${studioEmail}`,
+		`- Contact page: ${siteUrl}/contact`,
+		`- Email: ${contactEmail}`,
 		...social.map((p) => `- ${p.name}: ${p.href}`),
 		''
 	];

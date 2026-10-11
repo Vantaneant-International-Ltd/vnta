@@ -1,9 +1,9 @@
 <script lang="ts">
-	// The enquiry form: four boxes, two of them optional. Posts to the Pages
+	// The contact form: four boxes, two of them optional. Posts to the Pages
 	// Function at /api/inquiry, which saves to D1 and emails the studio. The
 	// function's columns are fixed (name, email, company, notes), so a phone
 	// number travels inside the notes rather than as a new column.
-	import { studioEmail, replyWithin } from '$lib/content/site';
+	import { contactEmail } from '$lib/content/site';
 
 	let { source = '/' }: { source?: string } = $props();
 
@@ -16,7 +16,7 @@
 	let status = $state<'idle' | 'sending' | 'sent' | 'error'>('idle');
 	let error = $state('');
 
-	const fallback = `That did not send. Email ${studioEmail} and we will pick it up there.`;
+	const fallback = `That did not send. Email ${contactEmail} and we will pick it up there.`;
 
 	async function submit(event: SubmitEvent) {
 		event.preventDefault();
@@ -67,7 +67,7 @@
 
 {#if status === 'sent'}
 	<p class="sent" role="status">
-		Sent. We will reply within {replyWithin}.
+		Sent. Thank you. We will reply by email or phone.
 	</p>
 {:else}
 	<form class="form" onsubmit={submit} novalidate>
@@ -82,7 +82,7 @@
 		</div>
 
 		<div class="field field--wide">
-			<label for="eq-business">Your business <span class="opt">name or website</span></label>
+			<label for="eq-business">Organisation <span class="opt">optional</span></label>
 			<input
 				id="eq-business"
 				name="business"
@@ -93,7 +93,7 @@
 		</div>
 
 		<div class="field field--wide">
-			<label for="eq-notes">What is on your mind? <span class="opt">optional</span></label>
+			<label for="eq-notes">Message <span class="opt">optional</span></label>
 			<textarea id="eq-notes" name="notes" rows="3" bind:value={notes}></textarea>
 		</div>
 
@@ -108,7 +108,7 @@
 				{status === 'sending' ? 'Sending' : 'Send'}
 			</button>
 			<span class="actions__alt">
-				or email <a href="mailto:{studioEmail}?subject=Website%20enquiry">{studioEmail}</a>
+				or email <a href="mailto:{contactEmail}">{contactEmail}</a>
 			</span>
 		</div>
 
@@ -151,8 +151,8 @@
 		color: var(--ink);
 		background: var(--field);
 		border: 1px solid var(--line);
-		border-radius: var(--r-field);
-		padding: 13px 14px;
+		border-radius: var(--r-ctl, var(--r-field));
+		padding: 12px 14px;
 		transition: border-color var(--dur) var(--ease);
 	}
 	.field textarea {
@@ -164,7 +164,7 @@
 	.field textarea:hover,
 	.field input:focus,
 	.field textarea:focus {
-		border-color: var(--ink-60);
+		border-color: var(--blue, var(--ink-60));
 	}
 
 	.hp {
@@ -202,15 +202,16 @@
 		color: var(--ink);
 	}
 	.error {
-		background: var(--card);
-		border-radius: var(--r-field);
+		background: var(--red-soft, var(--card));
+		color: var(--red, var(--ink));
+		border-radius: var(--r-ctl, var(--r-field));
 		padding: 12px 14px;
 	}
 	.sent {
-		font-family: var(--font-display);
-		font-size: var(--t-h3);
-		line-height: 1.2;
-		max-width: 22ch;
+		font-size: var(--t-lede);
+		font-weight: 600;
+		line-height: 1.35;
+		max-width: 26ch;
 	}
 
 	@media (min-width: 640px) {

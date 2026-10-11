@@ -1,5 +1,11 @@
 # VNTA — Redesign Direction (cold monochrome)
 
+> **Note, 11 October 2026.** VNTA was repositioned from a brand and web studio
+> to a technology company building infrastructure for autonomous systems, and
+> the public site was redrawn in the white, grey and navy language of the VNTA
+> Robotics product. Everything below describes looks that no longer exist. The
+> current rules are in the README and in `src/lib/styles/system.css`.
+>
 > **Note, October 2026. This document is history.** It records the June
 > rebuild. The site has since been rebuilt twice in October: first strictly
 > from the guideline PDF (pure black and white), then softened at Renato's

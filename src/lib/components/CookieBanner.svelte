@@ -49,15 +49,16 @@
 </script>
 
 {#if visible}
-	<!-- A small card in the corner, so it never covers the page it sits on. -->
-	<aside class="cb" data-theme="ink" role="region" aria-label="Cookies">
+	<!-- A small card in the corner, so it never covers the page it sits on. It
+	     is outside the public shell, so it carries its own colours. -->
+	<aside class="cb" role="region" aria-label="Cookies">
 		<p class="cb__copy">
 			We use cookies to run the site and, if you accept, to count visits. No
 			advertising. <a class="cb__link" href="{base}/privacy">Privacy</a>
 		</p>
 		<div class="cb__actions">
-			<button class="btn btn--ghost btn--small cb__btn" onclick={decline}>Decline</button>
-			<button class="btn btn--solid btn--small cb__btn" onclick={accept}>Accept</button>
+			<button class="cb__btn" onclick={decline}>Decline</button>
+			<button class="cb__btn cb__btn--solid" onclick={accept}>Accept</button>
 		</div>
 	</aside>
 {/if}
@@ -73,20 +74,20 @@
 		gap: 14px;
 		max-width: 400px;
 		padding: 18px 20px;
-		border-radius: 20px;
-		background: var(--ink-bg);
-		color: var(--ink-fg);
-		border: 1px solid var(--line-soft);
+		border-radius: 14px;
+		background: #0f1b2d;
+		border: 1px solid #26364d;
+		color: #d6dde8;
+		font-family: 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 	}
 	.cb__copy {
 		margin: 0;
 		font-size: 0.92rem;
 		line-height: 1.5;
-		color: var(--ink-80);
 		text-wrap: pretty;
 	}
 	.cb__link {
-		color: var(--ink);
+		color: #ffffff;
 		text-decoration: underline;
 		text-decoration-thickness: 1px;
 		text-underline-offset: 3px;
@@ -98,5 +99,28 @@
 	.cb__btn {
 		flex: 1;
 		min-height: 44px;
+		border-radius: 10px;
+		border: 1px solid #33435b;
+		background: transparent;
+		color: #ffffff;
+		font: inherit;
+		font-size: 0.92rem;
+		font-weight: 600;
+		cursor: pointer;
+	}
+	.cb__btn:hover {
+		border-color: #6f7d92;
+	}
+	.cb__btn--solid {
+		background: #ffffff;
+		border-color: #ffffff;
+		color: #0f1b2d;
+	}
+	.cb__btn--solid:hover {
+		background: #e6ebf2;
+	}
+	.cb__btn:focus-visible {
+		outline: 2px solid #8fb4ff;
+		outline-offset: 3px;
 	}
 </style>

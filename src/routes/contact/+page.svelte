@@ -1,29 +1,36 @@
 <script lang="ts">
-	// Contact: the same enquiry form as the close of the home page, on its own
-	// address for anyone who was sent a link to it.
-	import { base } from '$app/paths';
+	// Contact: one form, for anyone who wants to talk to VNTA about what it is
+	// building.
 	import Seo from '$lib/components/Seo.svelte';
 	import EnquiryForm from '$lib/components/EnquiryForm.svelte';
-	import { replyWithin } from '$lib/content/site';
+	import { breadcrumb } from '$lib/content/structured';
 </script>
 
 <Seo
-	title="Talk to VNTA about your brand or your website"
-	shareTitle="Talk to us | VNTA"
-	description="Tell VNTA about your business. Brand design, a new website, or just a conversation about what to change. We reply within {replyWithin}. It costs nothing to ask."
+	title="Contact | VNTA"
+	description="Contact VNTA about its infrastructure for autonomous systems, or about VNTA Robotics."
+	ld={[breadcrumb('Contact', '/contact')]}
 />
 
-<main class="band band--close" data-theme="ink">
+<main class="band">
 	<div class="wrap">
 		<div class="quote">
 			<div>
-				<h1 class="quote__title">Talk to us</h1>
+				<p class="eyebrow">Contact</p>
+				<h1 class="quote__title">Talk to VNTA.</h1>
 				<p class="quote__text">
-					Tell us about your business. We reply within {replyWithin}. It costs nothing
-					to ask. <a class="link" href="{base}/#prices">See the prices</a>
+					Write to us about VNTA, or about VNTA Robotics and what it is being built to do.
 				</p>
 			</div>
-			<EnquiryForm source="/contact" />
+			<div class="quote__form card">
+				<EnquiryForm source="/contact" />
+			</div>
 		</div>
 	</div>
 </main>
+
+<style>
+	.quote__title {
+		margin-top: 14px;
+	}
+</style>

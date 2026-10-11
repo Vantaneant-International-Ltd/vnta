@@ -1,9 +1,11 @@
 <script lang="ts">
 	// Chrome for every public page: the masthead and the foot. Pages supply
-	// their own bands between them. /portal keeps its own lean chrome and
-	// opts out.
+	// their own bands between them. /portal keeps its own lean chrome, its own
+	// older tokens and opts out of all of this.
 	import '$lib/styles/tokens.css';
-	import '$lib/styles/site.css';
+	import '$lib/styles/system.css';
+	import '@fontsource-variable/inter';
+	// The portal's faces. The public pages no longer use them.
 	import '@fontsource/marcellus/400.css';
 	import '@fontsource/marcellus-sc/400.css';
 	import '@fontsource/manrope/400.css';
@@ -17,8 +19,8 @@
 	import { trackPageView } from '$lib/analytics';
 	import CookieBanner from '$lib/components/CookieBanner.svelte';
 	import Wordmark from '$lib/components/ui/Wordmark.svelte';
-	import Symbol from '$lib/components/ui/Symbol.svelte';
-	import { landings, social, studioEmail, pitch } from '$lib/content/site';
+	import Icon from '$lib/components/ui/Icon.svelte';
+	import { roboticsUrl, githubUrl, pitch, siteUrl } from '$lib/content/site';
 
 	let { children } = $props();
 
@@ -30,22 +32,25 @@
 	const path = $derived($page.url.pathname.replace(base, '') || '/');
 	const chrome = $derived(!path.startsWith('/portal'));
 
-	// The home page is one long scroll, so the masthead links are anchors into
-	// it. The last one is the action the whole page is asking for.
+	// Robotics is a page of its own today and a site of its own later, so its
+	// address comes from one place (roboticsUrl in content/site.ts).
+	const robotics = roboticsUrl.startsWith('http') ? roboticsUrl : `${base}${roboticsUrl}`;
+
+	// Three places, and no more. Technology and Company are parts of the home
+	// page.
 	const nav = [
-		{ label: 'What we do', href: `${base}/#what` },
-		{ label: 'Work', href: `${base}/#work` },
-		{ label: 'How it works', href: `${base}/#how` },
-		{ label: 'Prices', href: `${base}/#prices` },
-		{ label: 'Questions', href: `${base}/#questions` }
+		{ label: 'Technology', href: `${base}/#technology` },
+		{ label: 'Robotics', href: robotics },
+		{ label: 'Company', href: `${base}/#company` }
 	];
+	const host = siteUrl.replace(/^https?:\/\//, '');
 </script>
 
 <svelte:head>
 	<link rel="icon" href="{base}/favicon.ico" sizes="48x48" />
 	<link rel="icon" type="image/svg+xml" href="{base}/symbol.svg" />
 	<link rel="apple-touch-icon" href="{base}/apple-touch-icon.png" />
-	<meta name="theme-color" content="#f4f4f4" />
+	<meta name="theme-color" content="#ffffff" />
 </svelte:head>
 
 {#if chrome}
@@ -57,59 +62,48 @@
 				</a>
 				<nav class="masthead__nav" aria-label="Primary">
 					{#each nav as item}
-						<a href={item.href}>{item.label}</a>
+						<a href={item.href} aria-current={path === '/robotics' && item.label === 'Robotics' ? 'page' : undefined}>
+							{item.label}
+						</a>
 					{/each}
-					<a class="btn btn--solid btn--small" href="{base}/#quote">Talk to us</a>
 				</nav>
+				<a class="btn btn--solid btn--small masthead__cta" href={robotics}>
+					Explore Robotics
+					<Icon name="arrow" size={16} />
+				</a>
 			</div>
 		</header>
 
 		{@render children()}
 
-		<!-- The foot is dark on every page, and is signed with the name. -->
 		<footer class="foot" data-theme="ink">
-			<!-- The symbol, rising behind the foot: large and barely there. -->
-			<div class="foot__sun" aria-hidden="true"><Symbol size={0} /></div>
 			<div class="wrap">
 				<div class="foot__top">
-					<div class="foot__us">
-						<p>{pitch.short}</p>
+					<div>
+						<a class="foot__mark" href="{base}/" aria-label="VNTA home">
+							<Wordmark height={20} />
+						</a>
+						<p class="foot__line">{pitch.headline}</p>
 					</div>
-
-					<nav class="foot__col" aria-labelledby="foot-build">
-						<h2 id="foot-build">What we build</h2>
-						<ul>
-							<li><a href="{base}/#what">Brands</a></li>
-							{#each landings as l}
-								<li><a href="{base}/{l.slug}">{l.label}</a></li>
-							{/each}
-						</ul>
-					</nav>
-
-					<nav class="foot__col" aria-labelledby="foot-studio">
-						<h2 id="foot-studio">The studio</h2>
-						<ul>
-							<li><a href="mailto:{studioEmail}">{studioEmail}</a></li>
+					<nav aria-label="Site">
+						<ul class="foot__nav">
+							<li><a href="{base}/">VNTA</a></li>
+							<li><a href={robotics}>Robotics</a></li>
+							<li><a href="{base}/#company">Company</a></li>
+							<li><a href={githubUrl} rel="me noopener">GitHub</a></li>
 							<li><a href="{base}/contact">Contact</a></li>
-							{#each social as s}
-								<li><a href={s.href} rel="me noopener">{s.name}</a></li>
-							{/each}
-							<li><a href="{base}/legal">Legal</a></li>
-							<li><a href="{base}/privacy">Privacy</a></li>
-							<li><a href="{base}/terms">Terms</a></li>
 						</ul>
 					</nav>
 				</div>
 
-				<div class="foot__name" aria-hidden="true">
-					<Symbol size={0} />
-					<Wordmark height={0} label="" tight />
+				<div class="foot__base">
+					<span>&copy; VNTA <span class="foot__host">&nbsp;{host}</span></span>
+					<nav aria-label="Small print">
+						<a href="{base}/legal">Legal</a>
+						<a href="{base}/privacy">Privacy</a>
+						<a href="{base}/terms">Terms</a>
+					</nav>
 				</div>
-
-				<p class="foot__legal">
-					<span>Vantanéant International Ltd. Est. 2025</span>
-					<span>Dublin and worldwide</span>
-				</p>
 			</div>
 		</footer>
 	</div>
@@ -123,17 +117,21 @@
 	:global(body) {
 		margin: 0;
 		min-height: 100vh;
-		background: var(--paper);
-		color: var(--ink);
+		background: #ffffff;
+		color: #0c1626;
 		font-family: var(--font-body);
 		font-size: var(--t-body);
 		line-height: 1.6;
 		text-rendering: optimizeLegibility;
 		-webkit-font-smoothing: antialiased;
 		-moz-osx-font-smoothing: grayscale;
-		font-synthesis: none; /* the substitute face has one weight: never faux-bold */
 	}
-	:global(a) { color: inherit; text-decoration: none; }
+	:global(a) {
+		color: inherit;
+		text-decoration: none;
+	}
+	/* The portal's base type. The public pages override all of this inside
+	   .shell (styles/system.css). */
 	:global(h1, h2, h3, h4, h5, h6) {
 		font-family: var(--font-display);
 		font-weight: 400;
@@ -148,22 +146,14 @@
 		color: var(--ink-60);
 		margin: 0;
 	}
-	:global(.rule) { height: 1px; background: var(--line); border: 0; margin: 0; }
 	:global(*:focus-visible) {
 		outline: 2px solid var(--ink);
 		outline-offset: 3px;
 	}
-	/* Legal pages still use these two. */
-	:global(.page-container) { max-width: 800px; margin: 0 auto; padding: clamp(40px, 6vw, 72px) 0; }
-	:global(.content-width) { max-width: 680px; }
-
-	/* The public pages read in the device's own face. The portal keeps the
-	   sans it was built with. */
-	.shell {
-		min-height: 100svh;
-		display: flex;
-		flex-direction: column;
-		font-family: var(--font-ui);
+	:global(.rule) {
+		height: 1px;
+		background: var(--line);
+		border: 0;
+		margin: 0;
 	}
-	.shell :global(main) { flex: 1 0 auto; }
 </style>

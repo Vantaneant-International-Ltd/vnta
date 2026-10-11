@@ -11,7 +11,7 @@
 		description,
 		shareTitle = title,
 		image = '/og.png',
-		imageAlt = 'VNTA. We look at your business and see what to change. A brand studio in Dublin.',
+		imageAlt = 'VNTA. Infrastructure for autonomous systems.',
 		ld = []
 	}: {
 		title: string;

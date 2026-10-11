@@ -1,5 +1,5 @@
-// /sitemap.xml: the list of every public page, for search engines. Built from
-// the same list as llms.txt, so a new landing page is in both the day it ships.
+// /sitemap.xml: the list of every public page, for search engines. The list is
+// `publicPaths` in content/structured.ts: add a page there and it is here.
 import { siteUrl } from '$lib/content/site';
 import { publicPaths } from '$lib/content/structured';
 

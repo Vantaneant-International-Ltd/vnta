@@ -3,110 +3,87 @@
 **Vantanéant International**, trading as VNTA. The public site at
 [vnta.xyz](https://vnta.xyz), built with SvelteKit.
 
-VNTA is a brand studio. It looks at a business, works out what it needs to
-change, and then designs it: the brand first, and a website where one is
-needed. The site has one job: get a business owner to start that conversation.
-It is one long page (the pitch, what we do, the work, how it works, the website
-prices, questions, the enquiry form) plus a contact page, four pages for people
-searching for a website, the small print, and the private client portal.
+VNTA is a technology company. It builds infrastructure for autonomous systems.
+Its first system is **VNTA Robotics**: a vendor-neutral control layer for
+robots and autonomous machines (identity, permissions, connectivity,
+orchestration, telemetry, audit). VNTA Robotics is in development.
 
-Nothing on the public site is addressed to investors. It should simply read as
-a real, working studio to anyone who looks.
+VNTA is not an agency, a consultancy or a studio. Until October 2026 this site
+sold brand design and websites; that is gone, and the old sales pages redirect
+home (`static/_redirects`).
+
+The site is small on purpose: a home page for the parent company, a page for
+VNTA Robotics, a contact page, the small print, and the private client portal.
 
 ---
 
-## Change the words or the prices
+## Change the words
 
-Everything the pages say that is likely to change lives in one file:
+Everything the pages say lives in one file:
 
 ```
 src/lib/content/site.ts
 ```
 
-The sit-down has one price, one length and one thing you leave with: `sitDown`.
-Change it there and the top of the page, what we do, the steps, the prices and
-the questions all follow.
-
-The pitch (`pitch`), what we do (`offer`), the work, the three website prices,
-the monthly fee, the steps and the questions are all there. Change a line once
-and the page, the search data and `/llms.txt` all follow. The headline is also
-drawn on the share card, `static/og.png`: if it changes, redraw the card.
+The pitch, the statement, the three kinds of system and where each stands, the
+principles, the company facts, and everything about VNTA Robotics (its six
+layer parts and its ten capabilities). Change a line once and the pages, the
+search data and `/llms.txt` all follow. The headline is also drawn on the share
+card, `static/og.png`: if it changes, redraw the card.
 
 House rules for copy, also at the top of that file:
 
-- The reader owns or runs a business, of any kind and size, and is often on a
-  phone. Short words, short lines.
-- Plain punctuation. No em or en dashes.
-- No claim that is not true today. Each entry in `work` says what we made for
-  that client (`did`): only say "Brand and website" where the brand is ours.
+- Short, technical, quiet, precise. No hype and no startup cliches.
+- **Nothing is claimed that is not true today.** VNTA Robotics is in
+  development: say "developing", "building", "designed to". No customer names,
+  no metrics, no testimonials, no manufacturer logos until they are real.
+- The parent is wider than robotics. Agents and compute are research
+  directions, not products: they are always marked "Research" and never
+  presented as available.
+
+## Where things will live
+
+| Address | What | Today |
+| --- | --- | --- |
+| `vnta.xyz` | The parent company | This site |
+| `robotics.vnta.xyz` | VNTA Robotics | Not created. The page is `/robotics` here |
+| `app.vnta.xyz` | The application | Not created |
+| `api.vnta.xyz` | The API | Not created |
+| `docs.vnta.xyz` | Developer documentation | Not created |
+
+Nothing on the site links to an address that does not exist. When
+`robotics.vnta.xyz` goes up, change `roboticsUrl` in `content/site.ts` (every
+"Explore Robotics" link follows) and switch on the redirect that is waiting,
+commented out, in `static/_redirects`.
+
+## Showing the product honestly
+
+There are two pictures of the product, and neither is a screenshot:
+
+- **The architecture** (`Architecture.svelte`): machines, the control layer,
+  enterprise systems. Its caption says it is the architecture of a design and
+  that the product is not yet available.
+- **The interface concept** (`Concept.svelte`): one machine's record. It
+  carries a strip that reads "Interface concept / Example data" at all times.
+  Its site, its manufacturer and its robot are invented for the picture and
+  named so nobody could take them for real ("Example site", "Example
+  Robotics"). Never put a real company's name in it.
 
 ## Being found: search engines, AI assistants and share cards
 
 - **Every page's title, description, share card and address** come from one
   component, `src/lib/components/Seo.svelte`. Use it on every public page.
-- **Structured data** (who VNTA is, prices, the work, the houses it owns) is in
-  `src/lib/content/structured.ts` and reads from `site.ts`.
-- **Landing pages** for what people search ("websites for garages", "web design
-  Dublin") are entries in `landings` in `site.ts`. Add an entry and the page,
-  the foot link, the sitemap line and the llms.txt line all appear.
-- **Profiles.** Put VNTA's real Instagram, Facebook, LinkedIn and X addresses
-  in `social` in `site.ts`. They show in the foot and tell Google and AI
-  assistants that those profiles are the same VNTA.
+- **Structured data** is in `src/lib/content/structured.ts` and reads from
+  `site.ts`. VNTA Robotics is described as software in development, with no
+  price and no rating, because neither exists.
 - **`/robots.txt`** welcomes search engines and AI crawlers by name.
-  **`/sitemap.xml`** and **`/llms.txt`** are built from the content file.
+  **`/sitemap.xml`** and **`/llms.txt`** are built from the content file. The
+  list of public pages is `publicPaths` in `structured.ts`.
 - **IndexNow.** `npm run deploy` ends by telling Bing and friends the site
   changed (`scripts/indexnow.mjs`). The key file in `static/` proves it is us.
 - **Cloudflare can still block AI crawlers at the door**, whatever robots.txt
   says. In the Cloudflare dashboard for vnta.xyz, under Security, the setting
   that blocks AI bots must be off, or GPTBot and ClaudeBot get a 403.
-
-## The wall of logos
-
-Under the top of the home page is a row of six dark tiles: who we have worked
-for, and what we build on. The row stands still, and every two seconds one
-tile turns over to the next name (`Logos.svelte`). The list is `wall` in
-`src/lib/content/site.ts`.
-
-- **A client or a house:** put its logo in `static/logos/`, drawn in white for
-  a dark tile, and name the file in its `wall` entry. Set `named` if the
-  picture already spells the name. Until we hold a logo, the name is set in
-  type.
-- **A tool:** add its mark to `src/lib/components/ui/toolMarks.ts` (shapes from
-  Simple Icons, one colour) and a line to `wall`. Only tools we really use.
-
-A tile with an `href` is a link to that company's or tool's own site, opened
-in a new tab. The large card above it links the same way to the site it is
-showing. L.M. Motors has no link until the site we are building is live.
-
-Logos are shown without their colour so the row stays in VNTA's greys. For
-anyone who has asked their device for less motion the tiles never turn, and
-every name is listed under the row instead.
-
-## Add a house
-
-Add an entry to `houses` in `src/lib/content/site.ts`. The first house in the
-list is the lead: it gets the big card, and it is the last site on the turning
-card at the top of the home page. The rest sit in a row under it. Every house
-needs the same four screenshots as a piece of work (see below), and they must
-show the house's real site, not a mock-up. An archived house comes off the
-list.
-
-## Add a piece of work
-
-1. Add an entry to `work` in `src/lib/content/site.ts`.
-2. Put four screenshots in `static/work/`: the laptop view as `<name>.jpg` at
-   1440 by 900 and `<name>-720.jpg` at 720 by 450, and the phone view as
-   `<name>-phone.jpg` at 780 by 1688 and `<name>-phone-390.jpg` at 390 by 844.
-   Grab them from the live site when there is one. Every entry in `work` is
-   also a face of the turning card at the top of the home page, in the same
-   order.
-3. Set the entry's `world` to the site's own colours: its ground, its text and
-   one accent. When a client's site changes its look, retake the screenshots
-   and change the `world` to match (EZGO went from white to charcoal in
-   October 2026).
-
-Leave `href` out for a site that is not live yet and set `status` to
-`'In build'`.
 
 ---
 
@@ -117,7 +94,8 @@ Leave `href` out for a site that is not live yet and set `status` to
   Functions in `functions/`
 - **Language:** TypeScript
 - **Styling:** Bespoke CSS on tokens. No Tailwind, no UI kits
-- **Fonts:** Marcellus (display), Manrope (body), via `@fontsource`
+- **Fonts:** Inter (the public site), via `@fontsource-variable`. Marcellus and
+  Manrope remain for the client portal
 - **Hosting:** Cloudflare Pages. Every push to `main` deploys
   (`.github/workflows/deploy.yml`)
 
@@ -144,97 +122,63 @@ local dev the form shows its "that did not send" message; that is expected.
 
 ```
 src/routes/
-├── +layout.svelte      # Fonts, global type and colour, masthead and foot
-├── +page.svelte        # The home page: the whole pitch, in one scroll
-├── contact/            # The enquiry form on its own address
+├── +layout.svelte      # Fonts, masthead and foot. The portal opts out
+├── +page.svelte        # Home: the parent company
+├── robotics/           # VNTA Robotics. Moves to robotics.vnta.xyz one day
+├── contact/            # The contact form
 ├── llms.txt/           # Plain summary for AI assistants, built from site.ts
 ├── legal/ privacy/ terms/
-├── portal/             # Client portal. Its own chrome, unlinked from the site
+├── portal/             # Client portal. Its own chrome and tokens, unlinked
 └── +error.svelte       # 404 / error
 src/lib/
-├── content/site.ts     # The words and the numbers
+├── content/site.ts     # The words
+├── content/structured.ts # The same facts for search engines
 ├── components/
-│   ├── Logos.svelte      # The row of tiles that turn, one at a time, from logo to logo
-│   ├── Flip.svelte       # The card on the home page that turns from site to site
-│   ├── ui/rays.ts        # The symbol taken apart, one path per ray, for the card's clock
-│   ├── ProjectCard.svelte # One job in its own colours
-│   ├── Devices.svelte    # A site on two screens: a window and a phone
+│   ├── Architecture.svelte # Machines, the control layer, enterprise systems
+│   ├── Concept.svelte    # The labelled interface concept
+│   ├── Stage.svelte      # "In development" / "Research"
 │   ├── EnquiryForm.svelte
 │   ├── CookieBanner.svelte
-│   └── ui/              # Wordmark.svelte and Symbol.svelte, the two halves of the logo
+│   └── ui/               # Icon.svelte, Wordmark.svelte, Symbol.svelte
 └── styles/
-    ├── tokens.css      # Single source of truth: colour, type, space, shape
-    └── site.css        # Bands, masthead, buttons, section heads, cards, prices, questions, foot
+    ├── system.css      # The public site's tokens and components, under .shell
+    └── tokens.css      # The older tokens. Only the client portal reads them now
 functions/
-├── api/inquiry.js      # Saves an enquiry to D1 and emails the studio
+├── api/inquiry.js      # Saves a message to D1 and emails us
 └── portal/             # Live data for the client portal
 static/
-├── work/               # Screenshots of client sites
 ├── _redirects          # Old addresses that now point home
 ├── symbol.svg          # Favicon
-├── sitemap.xml
 └── robots.txt
 ```
 
 ## Design principles
 
-Clear type, real pictures, plenty of room, nothing shouting. The values are in
-`src/lib/styles/tokens.css`.
+White, cool grey and navy, with one blue. The language is that of the product
+itself. The values are in `src/lib/styles/system.css`.
 
-**What makes it VNTA.** The guideline gives us two things nobody else has: the
-symbol (a burst of 32 rays) and a wordmark of four flared capitals. The site is
-built out of those two, quietly:
-
-- **The symbol is the clock.** Under the headline, one real site sits still on
-  a card, then the card turns over and the next site is on the back
-  (`Flip.svelte`). Beside it the symbol lights ray by ray; when the last ray
-  is lit, the card turns. The rays are the guideline's own shapes, taken apart
-  in `ui/rays.ts`.
-- **Every bullet is one ray.** List marks are a single tapered ray, in the
-  client's own accent inside a job card.
-- **Small capitals for the small words.** A trade, a status, a column heading
-  in the foot: set in small capitals of the display face, a little open, so
-  they read as kin to the wordmark (`--font-label`). A few words, never a
-  sentence. Figures in these labels come from the sans, because the
-  small-capital 1 reads as the letter I.
-- **The symbol rises behind the foot**, large and barely there, and the lockup
-  (symbol over wordmark) signs the page off.
-
-**The rest.**
-
-- **The arc:** light all the way down, each client's site in that client's own
-  colours, and one dark section at the close: the enquiry and the foot.
-- **One large line** at the top of a page, in the display face. Large enough
-  to be sure of itself. An earlier pass set it at twice the size, with a dark
-  section mid-page and the wordmark the full width of the foot; it shouted,
-  and was turned down.
-- **The turning card** waits five seconds on each site. It stops while the
-  pointer rests on it, while it is off screen, and when the visitor presses
-  pause. For anyone who has asked their device for less motion it never turns
-  by itself.
-- **The wall of logos** under it turns one tile at a time, every two seconds,
-  and follows the same rules. These two are the only things on the site that
-  move without being asked, and each has its own pause.
-- **Colour:** greys only, of our own. A soft black (`#2b2b2b`) is the ink and
-  the dark section; white and an off-white (`#f4f4f4`) are the light ones;
-  the guideline's 80, 60, 40 and 20 percent blacks do the rest. Pure black
-  against pure white glared on a screen, so neither is used full-bleed.
-- **Worlds:** each project's card borrows that project's own ground, text
-  colour and one accent. That is the only colour on the site, and it lives in
-  `content/site.ts` beside the project it belongs to.
-- **Type:** Optima for every title (Apple devices carry it; others get
-  Marcellus). Reading text, buttons and fields are in the device's own face
-  on Apple and Manrope elsewhere.
-- **Shape:** rounded. Cards 20 to 28px, fields 12px, buttons fully round.
-- **Lines, not boxes:** what we do, the steps, the questions, the facts and
-  the small print are ruled rows. Cards are kept for the work and the prices.
-- **The work stacks:** on a tall, wide screen each job holds its place while
-  the next one slides up over it.
-- **Still true from the guideline:** left-aligned, nothing squeezed, no
-  shadows, the wordmark and symbol untouched.
-
-Wiro (wiro.agency) was looked at for confidence, not for its look: they are
-dark throughout with a heavy sans. Nothing of theirs is here.
+- **One family with the product.** The site is drawn the way the VNTA Robotics
+  application is designed: panels with a hairline edge, small status marks,
+  tables that read like a control screen, dense but calm.
+- **Colour:** a cool off-white page (`#f5f7fa`), white panels, navy ink
+  (`#0c1626`) and a navy solid (`#0f1b2d`) for the main button, the core of
+  the diagram and the foot. One blue (`#1f55d6`) for links and for the one
+  live status. Green, amber and red appear only inside the interface concept,
+  where they mean what they mean in the product.
+- **Status is a shape, not only a colour:** a filled dot for what is being
+  built, a hollow ring for research; and the two research systems are drawn
+  with a broken edge and stand back.
+- **Type:** Inter, one family, set tight and semi-bold for headings. Small
+  labels above headings are capitals, set open. Monospace only for addresses
+  and times.
+- **Shape:** panels 14px, buttons and fields 10px, chips 7px. One soft shadow,
+  kept for the one panel that floats beside a headline.
+- **No stock imagery, no gradients for mood, no glowing anything.** The only
+  pictures are the architecture and the interface concept.
+- **The logo is unchanged:** VNTA's own wordmark and symbol, from the brand
+  guideline.
+- **The client portal is untouched.** It sits outside `.shell` and keeps the
+  earlier look and tokens.
 
 Proprietary assets (the guideline itself and its photography) are not included
 in this repository.
