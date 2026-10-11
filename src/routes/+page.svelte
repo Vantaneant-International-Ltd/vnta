@@ -1,6 +1,6 @@
 <script lang="ts">
 	// The home page of the parent company. It says what VNTA is designing, shows
-	// the one system in design (VNTA Robotics), and is honest about what
+	// the one system in development (VNTA Robotics), and is honest about what
 	// is still research. Kept short. All of the words live in
 	// $lib/content/site.ts.
 	import { base } from '$app/paths';
@@ -27,7 +27,7 @@
 	title="VNTA | Infrastructure for autonomous systems"
 	shareTitle="VNTA | {pitch.headline}"
 	image="/share/home.png"
-	description="{pitch.short} Its first system, VNTA Robotics, is a vendor-neutral control layer for robots and autonomous machines, now in design."
+	description="{pitch.short} Its first system, VNTA Robotics, is a vendor-neutral control layer for robots and autonomous machines, now in development."
 	ld={[organisation(), website()]}
 />
 
@@ -124,14 +124,14 @@
 
 			<div class="systems">
 				{#each systems as s}
-					<article class="system card" class:system--later={s.stage !== 'In design'}>
+					<article class="system card" class:system--later={s.stage !== 'In development'}>
 						<div class="system__top">
 							<span class="well"><Icon name={s.icon} size={20} /></span>
 							<Stage stage={s.stage} />
 						</div>
 						<h3 class="system__name">{s.name}</h3>
 						<p class="system__body">{s.body}</p>
-						{#if s.stage === 'In design'}
+						{#if s.stage === 'In development'}
 							<a class="go" href={roboticsHref}>{robotics.name} <Icon name="arrow" size={16} /></a>
 						{/if}
 					</article>

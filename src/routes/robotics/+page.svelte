@@ -4,9 +4,10 @@
 	// there: change roboticsUrl in content/site.ts and add the redirect in
 	// static/_redirects.
 	//
-	// The product is in design: nothing is built yet. Every claim on this page is about what it
-	// is being designed to do, and the one picture of an interface is labelled
-	// as a concept with example data.
+	// The product is in development: a proof of concept exists, run against
+	// simulated robots only. Every claim on this page is about what it is
+	// designed to do, and the one picture of an interface is labelled as a
+	// concept with example data.
 	import { base } from '$app/paths';
 	import Seo from '$lib/components/Seo.svelte';
 	import Icon from '$lib/components/ui/Icon.svelte';
@@ -27,8 +28,8 @@
 	title="VNTA Robotics | Infrastructure for trusted autonomous machines"
 	shareTitle="VNTA Robotics | {robotics.positioning}"
 	image="/share/robotics.png"
-	imageAlt="VNTA Robotics. {robotics.positioning} In design."
-	description="{robotics.what} Identity, permissions, connectivity, orchestration, telemetry and audit. In design; not yet built."
+	imageAlt="VNTA Robotics. {robotics.positioning} In development."
+	description="{robotics.what} Identity, permissions, connectivity, orchestration, telemetry and audit. In development; not yet available."
 	ld={[roboticsProduct(), breadcrumb('Robotics', '/robotics')]}
 />
 
@@ -84,7 +85,7 @@
 				<p class="eyebrow">Designed to provide</p>
 				<h2 class="head__title" id="capabilities-title">One layer under every machine.</h2>
 				<p class="head__text">
-					What the control layer is being designed to do. None of this exists yet.
+					What the control layer is designed to do. {robotics.sofar}
 				</p>
 			</div>
 

@@ -21,7 +21,7 @@
 				<p class="eyebrow">Contact</p>
 				<h1 class="quote__title">Talk to VNTA.</h1>
 				<p class="quote__text">
-					Write to us about VNTA, or about VNTA Robotics and what it is being designed to do.
+					Write to us about VNTA, or about VNTA Robotics and what it is designed to do.
 				</p>
 			</div>
 			<div class="quote__form card">

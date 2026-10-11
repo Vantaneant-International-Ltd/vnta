@@ -60,7 +60,7 @@ export const website = () => ({
 });
 
 /**
- * VNTA Robotics, described as what it is: software in design, not yet built. No price,
+ * VNTA Robotics, described as what it is: software in development, a proof of concept. No price,
  * no rating, no availability, because none of those exist yet.
  */
 export const roboticsProduct = () => ({

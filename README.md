@@ -6,8 +6,9 @@
 VNTA is a technology company. It builds infrastructure for autonomous systems.
 Its first system is **VNTA Robotics**: a vendor-neutral control layer for
 robots and autonomous machines (identity, permissions, connectivity,
-orchestration, telemetry, audit). VNTA Robotics is in design: building has not
-started, and the site says so.
+orchestration, telemetry, audit). VNTA Robotics is in development: a first
+proof of concept runs against simulated robots only (it lives in the private
+`vnta-robotics` repository), and the site says so.
 
 VNTA also runs a studio that designs brands and builds websites for Irish
 businesses. Until October 2026 the studio *was* this site. It now lives at
@@ -69,11 +70,12 @@ old picture.
 House rules for copy, also at the top of that file:
 
 - Short, technical, quiet, precise. No hype and no startup cliches.
-- **Nothing is claimed that is not true today.** VNTA Robotics is in design;
-  building has not started. Say "designing", "designed to", "will"; never
-  "building" or "developing" about the product, and never the present tense
-  for what it does. When the first code is written, change `Stage` and
-  `robotics.honest` in `site.ts` and the site follows. No customer names,
+- **Nothing is claimed that is not true today.** VNTA Robotics is in
+  development: a proof of concept exists and runs against simulated robots
+  only. Say "designed to" and "will" about the product; never the present
+  tense for what it does, and nothing that reads as a product someone can
+  have. When a real machine is connected, change `robotics.honest` in
+  `site.ts` and the site follows. No customer names,
   no metrics, no testimonials, no manufacturer logos until they are real.
 - The parent is wider than robotics. Agents and compute are research
   directions, not products: they are always marked "Research" and never
@@ -112,7 +114,7 @@ There are two pictures of the product, and neither is a screenshot:
 - **Every page's title, description, share card and address** come from one
   component, `src/lib/components/Seo.svelte`. Use it on every public page.
 - **Structured data** is in `src/lib/content/structured.ts` and reads from
-  `site.ts`. VNTA Robotics is described as software in design, with no
+  `site.ts`. VNTA Robotics is described as software in development, with no
   price and no rating, because neither exists.
 - **`/robots.txt`** welcomes search engines and AI crawlers by name.
   **`/sitemap.xml`** and **`/llms.txt`** are built from the content file. The
@@ -178,7 +180,7 @@ src/lib/
 ├── components/
 │   ├── Architecture.svelte # Machines, the control layer, enterprise systems
 │   ├── Concept.svelte    # The labelled interface concept
-│   ├── Stage.svelte      # "In design" / "Research"
+│   ├── Stage.svelte      # "In development" / "Research"
 │   ├── EnquiryForm.svelte
 │   ├── CookieBanner.svelte
 │   └── ui/               # Icon.svelte, Wordmark.svelte, Symbol.svelte

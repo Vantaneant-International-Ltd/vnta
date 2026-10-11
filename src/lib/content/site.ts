@@ -12,12 +12,13 @@
 // House rules for copy:
 // - Short, technical, quiet, precise. No hype, no "revolutionary", no
 //   "AI-powered", no startup cliches.
-// - Nothing is claimed that is not true today. VNTA Robotics is in design:
-//   building has not started (October 2026). Say "designing", "designed to",
-//   "will". Never "building", "developing" or "develops" about the product,
-//   and never the present tense for what it does. When the first code is
-//   written, change `Stage` and `robotics.honest` below and the whole site
-//   follows. No customer
+// - Nothing is claimed that is not true today. VNTA Robotics is in
+//   development (October 2026): a first proof of concept exists and runs
+//   against simulated robots only. No real machine has been connected and
+//   nothing is available to use. Say "designed to" and "will" about the
+//   product; never the present tense for what it does, and never anything
+//   that reads as a product someone can have. When a real machine is
+//   connected, change `robotics.honest` below and the whole site follows. No customer
 //   names, no metrics, no testimonials until they are real.
 // - The parent, VNTA, is wider than robotics. Agents and compute are research
 //   directions, not products: never present them as available.
@@ -59,8 +60,8 @@ export const statement = {
 	body: 'Robots, intelligent agents, vehicles and machines are becoming increasingly autonomous. VNTA is designing the control, identity and trust infrastructure that will allow these systems to operate safely across organisations and environments.'
 };
 
-/** A system's standing. "In design" is the one being worked on; nothing is built yet. */
-export type Stage = 'In design' | 'Research';
+/** A system's standing. "In development" is the one being built (a proof of concept so far). */
+export type Stage = 'In development' | 'Research';
 
 /** The three kinds of autonomous system the infrastructure is meant to reach. */
 export const systems: { name: string; layer: string; body: string; stage: Stage; icon: string }[] = [
@@ -68,7 +69,7 @@ export const systems: { name: string; layer: string; body: string; stage: Stage;
 		name: 'Robots',
 		layer: 'Machine control layer',
 		body: 'Physical machines operating across warehouses, factories and field environments.',
-		stage: 'In design',
+		stage: 'In development',
 		icon: 'robot'
 	},
 	{
@@ -112,13 +113,15 @@ export const company = {
 
 export const robotics = {
 	name: 'VNTA Robotics',
-	stage: 'In design' as Stage,
+	stage: 'In development' as Stage,
 	positioning: 'Infrastructure for trusted autonomous machines.',
 	headline: 'A control layer for the physical world.',
 	body: 'VNTA Robotics is designed to connect autonomous machines to a shared infrastructure layer for identity, permissions, orchestration, telemetry and audit.',
-	what: 'VNTA Robotics is a vendor-neutral machine control plane for robots and autonomous machines, now being designed.',
-	/** Said wherever the product is shown, so nobody mistakes a design for a deployment. */
-	honest: 'VNTA Robotics is in design. It has not been built yet and is not available.'
+	what: 'VNTA Robotics is a vendor-neutral machine control plane for robots and autonomous machines, now in development.',
+	/** Said wherever the product is shown, so nobody mistakes a proof of concept for a product. */
+	honest: 'VNTA Robotics is in development. A first proof of concept runs against simulated robots only. It is not available, and it has not been tested with a real machine.',
+	/** How far the proof of concept goes. Said beside the list of what the layer is designed to do. */
+	sofar: 'A first proof of concept covers identity, permissions and audit, against simulated robots. The rest is not built.'
 };
 
 /** The six parts of the control layer, as drawn in the architecture. */
@@ -131,7 +134,7 @@ export const layer = [
 	{ name: 'Audit', icon: 'audit' }
 ];
 
-/** What VNTA Robotics is being designed to provide. Not a feature list of a shipped product. */
+/** What VNTA Robotics is designed to provide. Not a feature list of a shipped product. */
 export const capabilities = [
 	{ name: 'Machine identity', body: 'A verifiable identity for every machine.', icon: 'identity' },
 	{ name: 'Authentication', body: 'A machine proves what it is before it connects.', icon: 'key' },
