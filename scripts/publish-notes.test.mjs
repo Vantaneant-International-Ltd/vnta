@@ -30,6 +30,11 @@ async function pretend() {
 		const url = new URL(req.url, 'http://x');
 		if (req.method === 'GET' && url.pathname.startsWith('/robotics/notes/')) return send(200, {});
 		// Mastodon
+		if (url.pathname === '/api/v1/apps/verify_credentials') {
+			if (req.headers.authorization !== 'Bearer masto-token' && req.headers.authorization !== 'Bearer wide-token') return send(401, { error: 'The access token is invalid' });
+			const wide = req.headers.authorization === 'Bearer wide-token';
+			return send(200, { name: 'VNTA notes', scopes: wide ? ['read', 'write', 'follow', 'push'] : ['write:statuses', 'write:media'] });
+		}
 		if (url.pathname === '/api/v2/media') {
 			seen.media.push({ auth: req.headers.authorization, type: req.headers['content-type'], bytes: body.length, hasAlt: body.includes('name="description"') });
 			return send(200, { id: `m${seen.media.length}`, url: 'https://files.example/m.png' });
@@ -250,4 +255,25 @@ test('waiting for a page returns once the page answers', async (t) => {
 	const r = (await w.run('wait alpha', '2026-10-13', { NOTES_SITE: w.origin }));
 	assert.equal(r.code, 0, r.out);
 	assert.match(r.out, /is live/);
+});
+
+test('a key can be checked without posting anything', async (t) => {
+	const w = await world(t);
+	const m = await w.run('verify mastodon', '2026-10-13');
+	assert.equal(m.code, 0, m.out);
+	assert.match(m.out, /Mastodon: the key works/);
+	assert.doesNotMatch(m.out, /can do more than post/);
+	const b = await w.run('verify bluesky', '2026-10-13');
+	assert.equal(b.code, 0, b.out);
+	assert.match(b.out, /Bluesky: the key works \(signed in as vnta.example\)/);
+	assert.deepEqual([w.seen.statuses.length, w.seen.records.length, w.seen.media.length], [0, 0, 0], 'nothing was posted');
+});
+
+test('a key that is refused fails the check, and a key that can do too much is pointed out', async (t) => {
+	const w = await world(t);
+	assert.equal((await w.run('verify mastodon', '2026-10-13', { MASTODON_TOKEN: 'nope' })).code, 1);
+	assert.equal((await w.run('verify bluesky', '2026-10-13', { BLUESKY_APP_PASSWORD: 'nope' })).code, 1);
+	const wide = await w.run('verify mastodon', '2026-10-13', { MASTODON_TOKEN: 'wide-token' });
+	assert.equal(wide.code, 0, wide.out);
+	assert.match(wide.out, /can do more than post \(read, write, follow, push\)/);
 });

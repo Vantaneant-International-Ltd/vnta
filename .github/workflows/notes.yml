@@ -44,6 +44,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NOTES_DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
+      # Whether each network has its keys. A step for a network with none is skipped.
+      HAS_MASTODON: ${{ secrets.MASTODON_URL != '' && secrets.MASTODON_TOKEN != '' }}
+      HAS_BLUESKY: ${{ secrets.BLUESKY_HANDLE != '' && secrets.BLUESKY_APP_PASSWORD != '' }}
     steps:
       - uses: actions/checkout@v5
         with:
@@ -83,6 +86,7 @@ jobs:
       # A push made by this job does not start the deploy workflow, so the
       # site is built and deployed here, with the same command.
       - name: Build and deploy the site
+        id: deploy
         if: steps.site.outputs.slug != ''
         run: |
           npm ci
@@ -91,13 +95,35 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
 
       - name: Wait until the note's page is live
+        id: wait
         if: steps.site.outputs.slug != ''
         run: node scripts/publish-notes.mjs wait "${{ steps.site.outputs.slug }}"
 
+      # Do the keys still work? Checked every day without posting anything, so a
+      # key that has been deleted or mistyped shows up red here, by name, and
+      # not as a failed post. Skipped (grey) means that network has no key.
+      - name: The Mastodon key works
+        if: env.HAS_MASTODON == 'true'
+        run: node scripts/publish-notes.mjs verify mastodon
+        env:
+          MASTODON_URL: ${{ secrets.MASTODON_URL }}
+          MASTODON_TOKEN: ${{ secrets.MASTODON_TOKEN }}
+
+      - name: The Bluesky key works
+        if: always() && env.HAS_BLUESKY == 'true'
+        run: node scripts/publish-notes.mjs verify bluesky
+        env:
+          BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
+          BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
+
       # Runs every day, so a network that failed yesterday is tried again
       # while the note is still fresh.
+      # A refused key for one network must not stop the other, so this runs
+      # even if a check above failed. It does not run if the page could not be
+      # published or did not come up: no link is posted to a page that is not there.
       - name: Post to Mastodon and Bluesky
         id: social
+        if: ${{ !cancelled() && steps.site.outcome == 'success' && steps.deploy.outcome != 'failure' && steps.wait.outcome != 'failure' }}
         run: node scripts/publish-notes.mjs social
         env:
           MASTODON_URL: ${{ secrets.MASTODON_URL }}

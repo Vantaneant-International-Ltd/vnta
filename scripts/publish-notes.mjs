@@ -9,6 +9,7 @@
 //   node scripts/publish-notes.mjs site      publish the next due note on the site (writes the record)
 //   node scripts/publish-notes.mjs wait <slug>   wait until that note's page is live
 //   node scripts/publish-notes.mjs social    post fresh notes to Mastodon and Bluesky
+//   node scripts/publish-notes.mjs verify mastodon|bluesky   check a key works, without posting anything
 //   node scripts/publish-notes.mjs assets    copy published notes' pictures into the site (runs before each build)
 //
 // The rules, in one place:
@@ -300,6 +301,53 @@ async function postBluesky(n) {
 	return { uri, url: web(uri) };
 }
 
+// --- Verify ----------------------------------------------------------------------
+
+/** What the publisher needs a Mastodon key to be allowed to do, and nothing more. */
+const MASTODON_NEEDS = ['write:statuses', 'write:media'];
+
+/** Checks that a network's key is accepted, without posting anything. */
+async function verify(which) {
+	if (which === 'mastodon') {
+		const base = (process.env.MASTODON_URL || '').replace(/\/$/, '');
+		if (!base || !process.env.MASTODON_TOKEN) return console.log('Mastodon: no key set.');
+		const res = await fetch(`${base}/api/v1/apps/verify_credentials`, { headers: { authorization: `Bearer ${process.env.MASTODON_TOKEN}` } });
+		if (!res.ok) {
+			console.error(`Mastodon refused the key (${res.status}). Check MASTODON_URL and MASTODON_TOKEN.`);
+			process.exit(1);
+		}
+		const app = await res.json();
+		console.log(`Mastodon: the key works (application "${app.name}").`);
+		// Newer servers say what the key may do. Say so if it is more than posting.
+		const scopes = Array.isArray(app.scopes) ? app.scopes : [];
+		const extra = scopes.filter((x) => !MASTODON_NEEDS.includes(x));
+		const missing = scopes.length ? MASTODON_NEEDS.filter((x) => !scopes.includes(x) && !scopes.includes('write')) : [];
+		if (missing.length) {
+			console.error(`Mastodon: the key may not ${missing.join(' or ')}. Posting will fail.`);
+			process.exit(1);
+		}
+		if (extra.length) console.log(`::warning::The Mastodon key can do more than post (${extra.join(', ')}). The job only needs ${MASTODON_NEEDS.join(' and ')}. A narrower key is safer.`);
+		return;
+	}
+	if (which === 'bluesky') {
+		if (!process.env.BLUESKY_HANDLE || !process.env.BLUESKY_APP_PASSWORD) return console.log('Bluesky: no key set.');
+		const pds = (process.env.BLUESKY_PDS || 'https://bsky.social').replace(/\/$/, '');
+		const res = await fetch(`${pds}/xrpc/com.atproto.server.createSession`, {
+			method: 'POST',
+			headers: { 'content-type': 'application/json' },
+			body: JSON.stringify({ identifier: process.env.BLUESKY_HANDLE, password: process.env.BLUESKY_APP_PASSWORD })
+		});
+		if (!res.ok) {
+			console.error(`Bluesky refused the key (${res.status}). Check BLUESKY_HANDLE and BLUESKY_APP_PASSWORD.`);
+			process.exit(1);
+		}
+		console.log(`Bluesky: the key works (signed in as ${(await res.json()).handle}).`);
+		return;
+	}
+	console.error('Usage: node scripts/publish-notes.mjs verify mastodon|bluesky');
+	process.exit(2);
+}
+
 // --- Social ----------------------------------------------------------------------
 
 async function social() {
@@ -340,7 +388,7 @@ async function social() {
 // --- Go --------------------------------------------------------------------------
 
 const [command, arg] = process.argv.slice(2);
-const commands = { check, status, site, wait: () => wait(arg), social, assets };
+const commands = { check, status, site, wait: () => wait(arg), social, assets, verify: () => verify(arg) };
 if (!commands[command]) {
 	console.error('Usage: node scripts/publish-notes.mjs check | status | site | wait <slug> | social | assets');
 	process.exit(2);
