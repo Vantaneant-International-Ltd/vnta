@@ -1,0 +1,129 @@
+# Publishes VNTA Robotics notes. Every morning this looks at
+# src/lib/server/notes.ts and, if a note is due and not held, it:
+#
+#   1. records it as published (src/lib/server/notes-published.json) and pushes that,
+#   2. builds and deploys the site, so the note has a page,
+#   3. waits until the page is really there,
+#   4. posts the short version, with a link to that page, on Mastodon and Bluesky.
+#
+# One note a day at most. A held note waits until its `hold` line is deleted.
+# A network with no key is skipped. The rules are in scripts/publish-notes.mjs.
+#
+# Repository secrets (Settings > Secrets and variables > Actions):
+#   CLOUDFLARE_API_TOKEN   already there, for the deploy
+#   MASTODON_URL           the server, for example https://mastodon.social
+#   MASTODON_TOKEN         an access token with write:statuses and write:media
+#   BLUESKY_HANDLE         for example vnta.bsky.social
+#   BLUESKY_APP_PASSWORD   an app password, never the account password
+#
+# To try it without publishing anything: Actions > Publish notes > Run workflow
+# > tick "Dry run".
+name: Publish notes
+
+on:
+  schedule:
+    # 07:17 UTC every day: 08:17 in Dublin in summer, 07:17 in winter.
+    - cron: '17 7 * * *'
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run: say what would happen, publish and post nothing'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+# The same group as the deploy, so the two never build the site at once.
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env:
+      NOTES_DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+          cache: 'npm'
+
+      # Before anything is published: can this job save its record? If it
+      # cannot, stop here, rather than publish a note and lose track of it.
+      - name: Check this job is allowed to save its record
+        run: git push --dry-run origin HEAD:main
+
+      - name: Check every note, and the publisher itself
+        run: |
+          node scripts/publish-notes.mjs check
+          node --test scripts/publish-notes.test.mjs
+
+      - name: What is out, what is next, what is held
+        run: node scripts/publish-notes.mjs status
+
+      - name: Publish the next due note on the site
+        id: site
+        run: node scripts/publish-notes.mjs site
+
+      - name: Save the record
+        if: steps.site.outputs.slug != ''
+        run: |
+          git config user.name "vnta-notes"
+          git config user.email "studio@vnta.xyz"
+          git add src/lib/server/notes-published.json
+          git commit -m "Publish note: ${{ steps.site.outputs.slug }}"
+          git push origin HEAD:main
+
+      # A push made by this job does not start the deploy workflow, so the
+      # site is built and deployed here, with the same command.
+      - name: Build and deploy the site
+        if: steps.site.outputs.slug != ''
+        run: |
+          npm ci
+          npm run deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+
+      - name: Wait until the note's page is live
+        if: steps.site.outputs.slug != ''
+        run: node scripts/publish-notes.mjs wait "${{ steps.site.outputs.slug }}"
+
+      # Runs every day, so a network that failed yesterday is tried again
+      # while the note is still fresh.
+      - name: Post to Mastodon and Bluesky
+        id: social
+        run: node scripts/publish-notes.mjs social
+        env:
+          MASTODON_URL: ${{ secrets.MASTODON_URL }}
+          MASTODON_TOKEN: ${{ secrets.MASTODON_TOKEN }}
+          BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
+          BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
+
+      # Even if one network failed, keep the record of the one that worked.
+      - name: Save where it was posted
+        id: record
+        if: always()
+        run: |
+          if ! git diff --quiet -- src/lib/server/notes-published.json; then
+            git config user.name "vnta-notes"
+            git config user.email "studio@vnta.xyz"
+            git add src/lib/server/notes-published.json
+            git commit -m "Record where the note was posted"
+            git push origin HEAD:main
+            echo "recorded=1" >> "$GITHUB_OUTPUT"
+          fi
+
+      # The "also posted on" links on the note's page need one more build.
+      - name: Deploy again so the page links to the posts
+        if: always() && steps.record.outputs.recorded == '1'
+        run: |
+          [ -d node_modules ] || npm ci
+          npm run deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}

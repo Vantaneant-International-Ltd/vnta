@@ -16,6 +16,11 @@
 	import CapabilityPanel from '$lib/components/CapabilityPanel.svelte';
 	import { robotics, capabilities, modules, progression } from '$lib/content/site';
 	import { roboticsProduct, breadcrumb } from '$lib/content/structured';
+	import { notePath, notesPath, longDate } from '$lib/content/notePaths';
+
+	// The latest notes (see +page.server.ts). The section is not drawn until one has been published.
+	let { data } = $props();
+	const latest = $derived(data.latest);
 
 	const pricing = `${base}/robotics/pricing`;
 
@@ -188,6 +193,29 @@
 			<p class="disclaimer">{robotics.notSafety}</p>
 		</div>
 	</section>
+
+	{#if latest.length}
+		<section class="band" aria-labelledby="notes-title">
+			<div class="wrap">
+				<div class="head">
+					<p class="eyebrow">Notes</p>
+					<h2 class="head__title" id="notes-title">What we built, and what it found.</h2>
+				</div>
+				<ul class="notes">
+					{#each latest as n}
+						<li>
+							<a class="note card" href="{base}{notePath(n.slug)}">
+								<span class="note__date">{longDate(n.publishedAt)}</span>
+								<span class="note__title">{n.title}</span>
+								<span class="note__sum">{n.summary}</span>
+							</a>
+						</li>
+					{/each}
+				</ul>
+				<p class="notes__all"><a href="{base}{notesPath}">All notes <Icon name="arrow" size={16} /></a></p>
+			</div>
+		</section>
+	{/if}
 
 	<!-- The close: dark, and it runs into the foot. -->
 	<section class="band close" data-theme="ink" aria-labelledby="next-title">
@@ -456,6 +484,59 @@
 		font-size: 0.84rem;
 		line-height: 1.55;
 		color: var(--ink-60);
+	}
+
+	.notes {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 10px;
+	}
+	.note {
+		display: grid;
+		gap: 6px;
+		height: 100%;
+		align-content: start;
+		padding: 18px;
+		transition: border-color var(--dur) var(--ease);
+	}
+	.note:hover {
+		border-color: var(--ink-40);
+	}
+	.note__date {
+		font-size: var(--t-micro);
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--ink-60);
+	}
+	.note__title {
+		font-size: 1.1rem;
+		font-weight: 600;
+		letter-spacing: -0.015em;
+		color: var(--ink);
+	}
+	.note__sum {
+		font-size: 0.93rem;
+		line-height: 1.5;
+		color: var(--ink-60);
+	}
+	.notes__all {
+		margin: 18px 0 0;
+	}
+	.notes__all a {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		font-weight: 600;
+		color: var(--blue);
+	}
+	@media (min-width: 900px) {
+		.notes {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
 	}
 
 	.next {

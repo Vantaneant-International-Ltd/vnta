@@ -6,3 +6,6 @@ dist/
 .env.local
 .svelte-kit/
 supabase/.temp/
+
+# Pictures of published notes, copied in before each build (scripts/publish-notes.mjs assets)
+/static/notes/

@@ -94,6 +94,52 @@ House rules for copy, also at the top of that file:
   directions, not products: they are always marked "Research" and never
   presented as available.
 
+## Notes, and how they are published
+
+VNTA Robotics posts short notes: what is being built, what it found, what is
+not done. They live on this site first, at `/robotics/notes`, with an RSS feed
+at `/robotics/notes/rss.xml`. A short version with a link back goes to Mastodon
+and Bluesky. There is no LinkedIn, X or Meta in this: the site is the home, and
+the two open networks are signs pointing at it.
+
+- **The words** are in `src/lib/server/notes.ts`. Being in that file does not
+  make a note public, and because it is under `server/` the build refuses to
+  send it to a visitor's browser: a held note stays unseen.
+- **What is public** is whatever is listed in
+  `src/lib/server/notes-published.json`. The site shows only those. Do not
+  edit that file by hand: the job writes it.
+- **The job** is `.github/workflows/notes.yml`, every morning at 07:17 UTC. If
+  a note's date has come and it has no `hold`, it records the note, deploys the
+  site, waits for the page to be live, and posts to the two networks. One note
+  a day at most.
+- **The pictures** are in `src/lib/content/note-images`, outside the served
+  folder. A picture is copied into the site only when its note is published,
+  so a held note's picture cannot be found by guessing its address.
+- **To hold a note back**, give it a `hold` line saying what must be true
+  first. **To release it**, delete that line and push. It goes out the next
+  morning.
+- **To see what is out and what is next:** `npm run notes`.
+- **To try the job without publishing:** Actions > Publish notes > Run
+  workflow > tick "Dry run".
+
+The two networks need keys, kept as repository secrets (Settings > Secrets and
+variables > Actions). Until a network's keys exist, the job skips it and
+nothing breaks.
+
+| Secret | What it is |
+| --- | --- |
+| `MASTODON_URL` | The server the account is on, for example `https://mastodon.social` |
+| `MASTODON_TOKEN` | An access token: on that server, Preferences > Development > New application, with `write:statuses` and `write:media` ticked |
+| `BLUESKY_HANDLE` | The handle, for example `vnta.bsky.social` |
+| `BLUESKY_APP_PASSWORD` | An app password: Settings > Privacy and security > App passwords. Never the account password |
+
+A key lets the job post and nothing else. To stop the job posting, delete the
+key on the network, or delete the secret here.
+
+A note published before a network's keys were added is not posted there
+afterwards: only notes from the last two days are, so adding a key never
+floods the feed.
+
 ## Where things will live
 
 | Address | What | Today |
@@ -190,6 +236,8 @@ src/routes/
 src/lib/
 ├── content/site.ts     # The company's words
 ├── content/pricing.ts  # VNTA Robotics pricing: offers, questions, the request form
+├── server/notes.ts     # VNTA Robotics notes: the words, the dates, the holds. Never sent to a browser
+├── server/notes-published.json # What the daily job has published. The site shows only this
 ├── content/structured.ts # The same facts for search engines
 ├── content/studio.ts   # The studio's words, work and prices
 ├── content/studioStructured.ts

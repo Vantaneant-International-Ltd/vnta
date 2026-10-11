@@ -32,9 +32,10 @@
 	import Symbol from '$lib/components/ui/Symbol.svelte';
 	import Icon from '$lib/components/ui/Icon.svelte';
 	import { roboticsUrl, githubUrl, pitch, siteUrl } from '$lib/content/site';
+	import { notesPath } from '$lib/content/notePaths';
 	import { pitch as studioPitch, landings, studioEmail } from '$lib/content/studio';
 
-	let { children } = $props();
+	let { children, data } = $props();
 
 	// GA page_view on every client navigation (also fires on first mount).
 	afterNavigate(({ to }) => {
@@ -60,6 +61,9 @@
 		{ label: 'Company', href: `${base}/#company` }
 	];
 	const host = siteUrl.replace(/^https?:\/\//, '');
+
+	// Notes are linked only once one has been published (see +layout.server.ts).
+	const hasNotes = $derived(data.hasNotes);
 
 	// The studio's own places: all parts of its one long page.
 	const studio = `${base}/studio`;
@@ -123,6 +127,7 @@
 							<li><a href="{base}/">VNTA</a></li>
 							<li><a href={robotics}>Robotics</a></li>
 							<li><a href={pricing}>Pricing</a></li>
+							{#if hasNotes}<li><a href="{base}{notesPath}">Notes</a></li>{/if}
 							<li><a href="{base}/#company">Company</a></li>
 							<li><a href={studio}>Studio</a></li>
 							<li><a href={githubUrl} rel="me noopener">GitHub</a></li>
