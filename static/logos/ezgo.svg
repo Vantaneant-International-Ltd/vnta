@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 240" width="240" height="240" role="img" aria-label="EZGO Auto Works">
+<circle cx="120" cy="120" r="120" fill="#1d4733"/><circle cx="120" cy="120" r="120" fill="url(#g)"/>
+<defs><radialGradient id="g" cx=".35" cy=".25" r=".9"><stop offset="0" stop-color="#34775a"/><stop offset="1" stop-color="#1d4733"/></radialGradient>
+<linearGradient id="ez" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3a8460"/><stop offset="1" stop-color="#25593e"/></linearGradient></defs>
+<path d="M107.88 37.99 L109.90 20.56 L130.10 20.56 L132.12 37.99 L146.51 41.84 L156.98 27.76 L174.47 37.85 L167.50 53.96 L178.04 64.50 L194.15 57.53 L204.24 75.02 L190.16 85.49 L194.01 99.88 L211.44 101.90 L211.44 122.10 L194.01 124.12 L190.16 138.51 L204.24 148.98 L194.15 166.47 L178.04 159.50 L167.50 170.04 L174.47 186.15 L156.98 196.24 L146.51 182.16 L132.12 186.01 L130.10 203.44 L109.90 203.44 L107.88 186.01 L93.49 182.16 L83.02 196.24 L65.53 186.15 L72.50 170.04 L61.96 159.50 L45.85 166.47 L35.76 148.98 L49.84 138.51 L45.99 124.12 L28.56 122.10 L28.56 101.90 L45.99 99.88 L49.84 85.49 L35.76 75.02 L45.85 57.53 L61.96 64.50 L72.50 53.96 L65.53 37.85 L83.02 27.76 L93.49 41.84Z" fill="#161716" stroke="#ffffff" stroke-width="5" stroke-linejoin="round"/>
+<circle cx="120" cy="112" r="60" fill="none" stroke="#ffffff" stroke-width="3.5"/>
+<g transform="translate(120 95) scale(1.08)">
+  <path fill="#ffffff" d="M-19 -27 Q0 -31 19 -27 Q25 -25 29 -17 L34 -8 Q41 -8 43 -5 L43 -2 L37 -2 Q44 2 44 10 L44 22 Q44 25 41 25 L-41 25 Q-44 25 -44 22 L-44 10 Q-44 2 -37 -2 L-43 -2 L-43 -5 Q-41 -8 -34 -8 L-29 -17 Q-25 -25 -19 -27Z"/>
+  <path fill="#161716" d="M-17.5 -23 Q0 -26 17.5 -23 Q21 -22 23.5 -17 L28 -8.5 Q0 -11.5 -28 -8.5 L-23.5 -17 Q-21 -22 -17.5 -23Z"/>
+  <path fill="#161716" d="M-39.5 1.5 L-17 6.5 Q-17.5 11.5 -22 11.5 L-33 10.5 Q-38.5 9 -39.5 1.5Z"/>
+  <path fill="#161716" d="M39.5 1.5 L17 6.5 Q17.5 11.5 22 11.5 L33 10.5 Q38.5 9 39.5 1.5Z"/>
+  <path fill="#161716" d="M-13 9 L13 9 Q15 9 14.3 11 L11.5 19 Q11 20.5 9.5 20.5 L-9.5 20.5 Q-11 20.5 -11.5 19 L-14.3 11 Q-15 9 -13 9Z"/>
+  <path stroke="#ffffff" stroke-width="1.5" d="M-13.5 12.9 H13.5 M-12.2 16.7 H12.2"/>
+  <path fill="#161716" d="M-39 15 L-21 16 L-23 21 L-36 21Z M39 15 L21 16 L23 21 L36 21Z"/>
+</g>
+<path d="M62 201 L73 146 H182 L171 201Z" fill="#161716"/>
+<g transform="translate(40 174.5) scale(.92) scale(1 1)">
+  <path fill="#ffffff" stroke="#161716" stroke-width="3" stroke-linejoin="round" d="M30 -8 H10 A17 17 0 1 0 10 8 H30Z"/>
+  <path fill="#161716" d="M-22 -7.5 H-4 A7.5 7.5 0 0 1 -4 7.5 H-22Z"/>
+</g><g transform="translate(200 174.5) scale(.92) scale(-1 1)">
+  <path fill="#ffffff" stroke="#161716" stroke-width="3" stroke-linejoin="round" d="M30 -8 H10 A17 17 0 1 0 10 8 H30Z"/>
+  <path fill="#161716" d="M-22 -7.5 H-4 A7.5 7.5 0 0 1 -4 7.5 H-22Z"/>
+</g>
+<g fill="url(#ez)" stroke="#ffffff" stroke-width="102.2" stroke-linejoin="round" paint-order="stroke"><path transform="translate(58.50 198.00) scale(0.06851)" d="M28 0 149 -688H884L854 -517H367L351 -428H771L743 -266H323L306 -171H801L771 0Z"/><path transform="translate(58.50 198.00) scale(0.06851)" d="M836 0 848 -71 1315 -517H956L986 -688H1768L1756 -617L1287 -171H1687L1657 0Z"/></g>
+</svg>

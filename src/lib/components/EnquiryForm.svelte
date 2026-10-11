@@ -5,7 +5,9 @@
 	// number travels inside the notes rather than as a new column.
 	import { contactEmail } from '$lib/content/site';
 
-	let { source = '/' }: { source?: string } = $props();
+	// `studio` words it for the studio's visitors (a business owner asking about
+	// a brand or a website). Without it, it is the company's contact form.
+	let { source = '/', studio = false }: { source?: string; studio?: boolean } = $props();
 
 	let name = $state('');
 	let contact = $state(''); // a phone number or an email, whichever they prefer
@@ -67,7 +69,7 @@
 
 {#if status === 'sent'}
 	<p class="sent" role="status">
-		Sent. Thank you. We will reply by email or phone.
+		{studio ? 'Sent. We will reply within two working days.' : 'Sent. Thank you. We will reply by email or phone.'}
 	</p>
 {:else}
 	<form class="form" onsubmit={submit} novalidate>
@@ -82,7 +84,10 @@
 		</div>
 
 		<div class="field field--wide">
-			<label for="eq-business">Organisation <span class="opt">optional</span></label>
+			<label for="eq-business">
+				{studio ? 'Your business' : 'Organisation'}
+				<span class="opt">{studio ? 'name or website' : 'optional'}</span>
+			</label>
 			<input
 				id="eq-business"
 				name="business"
@@ -93,7 +98,10 @@
 		</div>
 
 		<div class="field field--wide">
-			<label for="eq-notes">Message <span class="opt">optional</span></label>
+			<label for="eq-notes">
+				{studio ? 'What is on your mind?' : 'Message'}
+				<span class="opt">optional</span>
+			</label>
 			<textarea id="eq-notes" name="notes" rows="3" bind:value={notes}></textarea>
 		</div>
 

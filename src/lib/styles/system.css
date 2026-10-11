@@ -112,30 +112,30 @@
 }
 
 /* --- Bands ---------------------------------------------------------------- */
-.band {
+.shell .band {
 	background: var(--ground);
 }
-.band--paper {
+.shell .band--paper {
 	background: var(--paper);
 	border-top: 1px solid var(--line);
 	border-bottom: 1px solid var(--line);
 }
-.wrap {
+.shell .wrap {
 	max-width: var(--maxw);
 	margin: 0 auto;
 	padding-left: var(--gutter);
 	padding-right: var(--gutter);
 }
-.band > .wrap {
+.shell .band > .wrap {
 	padding-top: var(--section-y);
 	padding-bottom: var(--section-y);
 }
-.band[id] {
+.shell .band[id] {
 	scroll-margin-top: 64px;
 }
 
 /* --- Masthead ------------------------------------------------------------- */
-.masthead {
+.shell .masthead {
 	position: sticky;
 	top: 0;
 	z-index: 20;
@@ -145,43 +145,43 @@
 	border-bottom: 1px solid var(--line);
 }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-	.masthead {
+	.shell .masthead {
 		background: var(--paper);
 	}
 }
-.masthead > .wrap {
+.shell .masthead > .wrap {
 	display: flex;
 	align-items: center;
 	gap: clamp(20px, 4vw, 56px);
 	min-height: 64px;
 }
-.masthead__mark {
+.shell .masthead__mark {
 	display: inline-flex;
 	padding: 12px 0;
 	color: var(--ink);
 }
-.masthead__nav {
+.shell .masthead__nav {
 	display: flex;
 	align-items: center;
 	gap: clamp(18px, 2.4vw, 34px);
 	flex: 1;
 }
-.masthead__nav a {
+.shell .masthead__nav a {
 	font-size: 0.94rem;
 	font-weight: 500;
 	color: var(--ink-60);
 	transition: color var(--dur) var(--ease);
 }
-.masthead__nav a:hover,
-.masthead__nav a[aria-current='page'] {
+.shell .masthead__nav a:hover,
+.shell .masthead__nav a[aria-current='page'] {
 	color: var(--ink);
 }
-.masthead__cta {
+.shell .masthead__cta {
 	margin-left: auto;
 }
 
 /* --- Buttons: a rounded rectangle, two kinds. ----------------------------- */
-.btn {
+.shell .btn {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -199,36 +199,36 @@
 	cursor: pointer;
 	transition: background var(--dur) var(--ease), border-color var(--dur) var(--ease);
 }
-.btn--solid {
+.shell .btn--solid {
 	background: var(--navy);
 	color: #ffffff;
 }
-.btn--solid:hover {
+.shell .btn--solid:hover {
 	background: #1b2c47;
 }
-.btn--ghost {
+.shell .btn--ghost {
 	background: var(--paper);
 	border-color: var(--ink-20);
 	color: var(--ink);
 }
-.btn--ghost:hover {
+.shell .btn--ghost:hover {
 	border-color: var(--ink-40);
 }
-.btn[disabled] {
+.shell .btn[disabled] {
 	opacity: 0.55;
 	cursor: default;
 }
-.btn--small {
+.shell .btn--small {
 	min-height: 40px;
 	padding: 0 16px;
 	font-size: 0.9rem;
 }
 /* The solid button on the dark foot turns over: white on navy. */
-[data-theme='ink'] .btn--solid {
+.shell [data-theme='ink'] .btn--solid {
 	background: #ffffff;
 	color: #0f1b2d;
 }
-[data-theme='ink'] .btn--solid:hover {
+.shell [data-theme='ink'] .btn--solid:hover {
 	background: #e6ebf2;
 }
 
@@ -245,7 +245,7 @@
 	color: var(--ink-60);
 }
 /* A link that stands alone under a paragraph. */
-.go {
+.shell .go {
 	display: inline-flex;
 	align-items: center;
 	gap: 8px;
@@ -254,24 +254,24 @@
 	font-weight: 600;
 	color: var(--blue);
 }
-.go:hover {
+.shell .go:hover {
 	text-decoration: underline;
 	text-underline-offset: 4px;
 }
-.link {
+.shell .link {
 	color: var(--blue);
 	text-decoration: underline;
 	text-decoration-color: color-mix(in srgb, var(--blue) 40%, transparent);
 	text-decoration-thickness: 1px;
 	text-underline-offset: 3px;
 }
-.link:hover {
+.shell .link:hover {
 	text-decoration-color: var(--blue);
 }
 
 /* --- Status: where a system stands. The mark carries it, not the colour
    alone: a filled dot for what is being built, a hollow ring for research. -- */
-.stage {
+.shell .stage {
 	display: inline-flex;
 	align-items: center;
 	gap: 7px;
@@ -282,43 +282,43 @@
 	line-height: 1.3;
 	white-space: nowrap;
 }
-.stage::before {
+.shell .stage::before {
 	content: '';
 	box-sizing: border-box;
 	width: 8px;
 	height: 8px;
 	border-radius: 50%;
 }
-.stage--build {
+.shell .stage--build {
 	background: var(--blue-soft);
 	color: var(--blue);
 }
-.stage--build::before {
+.shell .stage--build::before {
 	background: currentColor;
 }
-.stage--research {
+.shell .stage--research {
 	background: var(--ground-2);
 	color: var(--ink-60);
 }
-.stage--research::before {
+.shell .stage--research::before {
 	border: 1.5px solid currentColor;
 }
 
 /* --- Section head --------------------------------------------------------- */
-.head {
+.shell .head {
 	display: grid;
 	gap: 14px;
 	margin-bottom: clamp(28px, 3.6vw, 48px);
 	max-width: 46rem;
 }
-.head__title {
+.shell .head__title {
 	margin: 0;
 	font-size: var(--t-h2);
 	line-height: 1.1;
 	letter-spacing: -0.03em;
 	text-wrap: balance;
 }
-.head__text {
+.shell .head__text {
 	margin: 0;
 	font-size: var(--t-lede);
 	line-height: 1.5;
@@ -327,13 +327,13 @@
 }
 
 /* --- Panel: a white surface with a hairline edge. ------------------------- */
-.card {
+.shell .card {
 	background: var(--card);
 	border: 1px solid var(--line);
 	border-radius: var(--r-card);
 }
 /* The well an icon sits in. */
-.well {
+.shell .well {
 	display: grid;
 	place-items: center;
 	flex: none;
@@ -345,30 +345,30 @@
 }
 
 /* --- Small-print pages keep their own layout and need the margin. --------- */
-.page-container {
+.shell .page-container {
 	max-width: 800px;
 	margin: 0 auto;
 	padding: clamp(40px, 6vw, 72px) var(--gutter);
 	box-sizing: content-box;
 }
-.content-width {
+.shell .content-width {
 	max-width: 680px;
 }
 
 /* --- The enquiry ---------------------------------------------------------- */
-.quote {
+.shell .quote {
 	display: grid;
 	grid-template-columns: 1fr;
 	gap: clamp(28px, 4vw, 64px);
 	align-items: start;
 }
-.quote__title {
+.shell .quote__title {
 	margin: 0;
 	font-size: var(--t-h1);
 	line-height: 1.05;
 	letter-spacing: -0.035em;
 }
-.quote__text {
+.shell .quote__text {
 	margin: 16px 0 0;
 	font-size: var(--t-lede);
 	line-height: 1.5;
@@ -376,35 +376,35 @@
 	max-width: 34ch;
 	text-wrap: pretty;
 }
-.quote__form {
+.shell .quote__form {
 	padding: clamp(20px, 2.6vw, 32px);
 }
 
 /* --- Foot ----------------------------------------------------------------- */
-.foot {
+.shell .foot {
 	background: var(--paper);
 	color: var(--ink-60);
 }
-.foot > .wrap {
+.shell .foot > .wrap {
 	padding-top: clamp(40px, 5vw, 64px);
 	padding-bottom: clamp(22px, 2.6vw, 32px);
 }
-.foot__top {
+.shell .foot__top {
 	display: grid;
 	grid-template-columns: 1fr;
 	gap: 32px;
 }
-.foot__mark {
+.shell .foot__mark {
 	display: inline-flex;
 	color: var(--ink);
 }
-.foot__line {
+.shell .foot__line {
 	margin: 14px 0 0;
 	font-size: var(--t-small);
 	line-height: 1.5;
 	max-width: 30ch;
 }
-.foot__nav {
+.shell .foot__nav {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 4px clamp(20px, 3vw, 40px);
@@ -412,18 +412,18 @@
 	margin: 0;
 	padding: 0;
 }
-.foot__nav a {
+.shell .foot__nav a {
 	display: inline-block;
 	padding: 8px 0;
 	font-size: 0.96rem;
 	font-weight: 500;
 	color: var(--ink);
 }
-.foot__nav a:hover {
+.shell .foot__nav a:hover {
 	text-decoration: underline;
 	text-underline-offset: 5px;
 }
-.foot__base {
+.shell .foot__base {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
@@ -433,30 +433,30 @@
 	border-top: 1px solid var(--line);
 	font-size: 0.84rem;
 }
-.foot__base nav {
+.shell .foot__base nav {
 	display: flex;
 	flex-wrap: wrap;
 	gap: 4px 20px;
 }
-.foot__base a:hover {
+.shell .foot__base a:hover {
 	color: var(--ink);
 }
-.foot__host {
+.shell .foot__host {
 	font-family: var(--font-mono);
 	font-size: 0.8rem;
 }
 
 @media (min-width: 900px) {
-	.quote {
+	.shell .quote {
 		grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
 	}
-	.foot__top {
+	.shell .foot__top {
 		grid-template-columns: minmax(0, 1fr) auto;
 		align-items: start;
 	}
 }
 @media (max-width: 899px) {
-	.masthead__nav {
+	.shell .masthead__nav {
 		display: none;
 	}
 }

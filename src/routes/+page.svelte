@@ -162,6 +162,10 @@
 				<p class="eyebrow">Company</p>
 				<h2 class="company__title" id="company-title">VNTA</h2>
 				<p class="split__text">{company.body}</p>
+				<p class="company__also">
+					{company.studio}
+					<a class="link" href="{base}/studio">VNTA Studio</a>
+				</p>
 			</div>
 			<dl class="facts card">
 				<div class="facts__row">
@@ -396,6 +400,13 @@
 		font-size: var(--t-h1);
 		line-height: 1;
 		letter-spacing: -0.04em;
+	}
+	.company__also {
+		margin: 16px 0 0;
+		font-size: var(--t-small);
+		line-height: 1.5;
+		color: var(--ink-60);
+		max-width: 34rem;
 	}
 	.facts {
 		margin: 0;

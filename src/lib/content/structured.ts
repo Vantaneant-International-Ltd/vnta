@@ -7,12 +7,13 @@
 // site.ts. Nothing is offered for sale, so there are no prices and no offers.
 // =============================================================================
 import { siteUrl, contactEmail, social, pitch, company, robotics, capabilities } from '$lib/content/site';
+import { studioPaths } from '$lib/content/studioStructured';
 
 const ORG = `${siteUrl}/#organisation`;
 const SITE = `${siteUrl}/#website`;
 
 /** Every public page, for the sitemap and llms.txt. */
-export const publicPaths = () => ['/', '/robotics', '/contact', '/legal', '/privacy', '/terms'];
+export const publicPaths = () => ['/', '/robotics', ...studioPaths(), '/contact', '/legal', '/privacy', '/terms'];
 
 /** VNTA itself. */
 export const organisation = () => ({

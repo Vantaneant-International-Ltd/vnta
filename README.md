@@ -8,18 +8,41 @@ Its first system is **VNTA Robotics**: a vendor-neutral control layer for
 robots and autonomous machines (identity, permissions, connectivity,
 orchestration, telemetry, audit). VNTA Robotics is in development.
 
-VNTA is not an agency, a consultancy or a studio. Until October 2026 this site
-sold brand design and websites; that is gone, and the old sales pages redirect
-home (`static/_redirects`).
+VNTA also runs a studio that designs brands and builds websites for Irish
+businesses. Until October 2026 the studio *was* this site. It now lives at
+[vnta.xyz/studio](https://vnta.xyz/studio), whole and unchanged, and the
+technology company has the front door.
 
-The site is small on purpose: a home page for the parent company, a page for
-VNTA Robotics, a contact page, the small print, and the private client portal.
+## Two doors
+
+The two speak to different readers, so they do not share a page:
+
+| | Address | Reader | Look | Words |
+| --- | --- | --- | --- | --- |
+| **VNTA** | `/`, `/robotics`, `/contact` | Operators, manufacturers, investors | White, grey, navy, Inter (`styles/system.css`, under `.shell`) | `content/site.ts` |
+| **VNTA Studio** | `/studio`, `/studio/websites-for-…` | An Irish business owner | Soft greys, Optima, each client's colours (`styles/studio.css`, under `.studio`) | `content/studio.ts` |
+
+- They meet in exactly two places: a "Studio" link in the company's foot with
+  one sentence in its Company section, and "VNTA, the company" in the studio's
+  foot. Do not put studio prices on a company page, or robotics on a studio
+  page.
+- Every rule in `system.css` starts with `.shell` and every rule in
+  `studio.css` starts with `.studio`, so the two looks cannot leak into each
+  other. `src/routes/+layout.svelte` picks the frame from the address.
+- The studio's four landing pages used to sit at the top level. Their old
+  addresses forward to the new ones (`static/_redirects`), so search results
+  and the "Site by VNTA" links on client sites still land in the right place.
+- The studio's own notes (the turning card, the wall of logos, the sit-down
+  price, adding a piece of work) are at the foot of this file.
+
+The rest of the site: the small print, and the private client portal.
 
 ---
 
 ## Change the words
 
-Everything the pages say lives in one file:
+Everything the company pages say lives in one file (the studio's is
+`src/lib/content/studio.ts`):
 
 ```
 src/lib/content/site.ts
@@ -125,14 +148,18 @@ src/routes/
 ├── +layout.svelte      # Fonts, masthead and foot. The portal opts out
 ├── +page.svelte        # Home: the parent company
 ├── robotics/           # VNTA Robotics. Moves to robotics.vnta.xyz one day
+├── studio/             # VNTA Studio: its home page and four landing pages
 ├── contact/            # The contact form
 ├── llms.txt/           # Plain summary for AI assistants, built from site.ts
 ├── legal/ privacy/ terms/
 ├── portal/             # Client portal. Its own chrome and tokens, unlinked
 └── +error.svelte       # 404 / error
 src/lib/
-├── content/site.ts     # The words
+├── content/site.ts     # The company's words
 ├── content/structured.ts # The same facts for search engines
+├── content/studio.ts   # The studio's words, work and prices
+├── content/studioStructured.ts
+├── studio/             # The studio's own components: Flip, Logos, ProjectCard, Devices
 ├── components/
 │   ├── Architecture.svelte # Machines, the control layer, enterprise systems
 │   ├── Concept.svelte    # The labelled interface concept
@@ -141,13 +168,15 @@ src/lib/
 │   ├── CookieBanner.svelte
 │   └── ui/               # Icon.svelte, Wordmark.svelte, Symbol.svelte
 └── styles/
-    ├── system.css      # The public site's tokens and components, under .shell
-    └── tokens.css      # The older tokens. Only the client portal reads them now
+    ├── system.css      # The company's tokens and components, under .shell
+    ├── studio.css      # The studio's components, under .studio
+    └── tokens.css      # The older tokens: the studio and the client portal read them
 functions/
 ├── api/inquiry.js      # Saves a message to D1 and emails us
 └── portal/             # Live data for the client portal
 static/
-├── _redirects          # Old addresses that now point home
+├── _redirects          # Old addresses, forwarded to where the page lives now
+├── work/ logos/        # The studio's screenshots and client logos
 ├── symbol.svg          # Favicon
 └── robots.txt
 ```
@@ -177,8 +206,28 @@ itself. The values are in `src/lib/styles/system.css`.
   pictures are the architecture and the interface concept.
 - **The logo is unchanged:** VNTA's own wordmark and symbol, from the brand
   guideline.
-- **The client portal is untouched.** It sits outside `.shell` and keeps the
-  earlier look and tokens.
+- **The studio and the client portal are untouched.** They sit outside
+  `.shell` and keep the earlier look and tokens.
+
+## The studio (`/studio`)
+
+- **The sit-down** has one price, one length and one thing you leave with:
+  `sitDown` in `content/studio.ts`. Change it there and every mention follows.
+- **A piece of work:** an entry in `work`, four screenshots in `static/work/`
+  (`<name>.jpg` 1440 by 900, `<name>-720.jpg`, `<name>-phone.jpg` 780 by 1688,
+  `<name>-phone-390.jpg`), and its `world` (the client's own ground, text and
+  one accent). When any screenshot is retaken, change `shotsVersion` so
+  visitors get it at once. Only say "Brand and website" (`did`) where the
+  brand is ours.
+- **The turning card** at the top (`studio/Flip.svelte`) shows one site, holds
+  five seconds and turns to the next; the symbol beside it is its clock.
+- **The wall of logos** (`studio/Logos.svelte`, the `wall` list) turns one
+  tile at a time. Client logos go in `static/logos/`; tool marks in
+  `studio/ui/toolMarks.ts`. Only tools we really use.
+- Both stop on hover, off screen and on pause, and never turn by themselves
+  for anyone who asks for less motion.
+- **Copy:** plain words for someone on a phone between jobs. No claim that is
+  not true today.
 
 Proprietary assets (the guideline itself and its photography) are not included
 in this repository.

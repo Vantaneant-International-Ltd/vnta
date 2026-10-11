@@ -97,6 +97,8 @@ export const principles = [
 
 export const company = {
 	body: 'VNTA is an independent technology company developing infrastructure for autonomous systems.',
+	/** VNTA also runs a studio, at /studio. One plain sentence, and no more: the parent is not an agency. */
+	studio: 'VNTA also runs a studio that designs brands and builds websites for Irish businesses.',
 	founded: '2025',
 	place: 'Dublin, Ireland',
 	legalName: 'Vantanéant International Ltd'
