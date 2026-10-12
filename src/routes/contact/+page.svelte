@@ -26,7 +26,7 @@
 				</p>
 				<p class="quote__follow">
 					Or follow along on
-					{#each follow as s, i}{#if i > 0}{' '}and{' '}{/if}<a href={s.href} rel="me noopener">{s.name}</a>{/each}.
+					{#each follow as s, i}{i === 0 ? '' : i === follow.length - 1 ? ' and ' : ', '}<a href={s.href} rel="me noopener">{s.name}</a>{/each}.
 				</p>
 			</div>
 			<div class="quote__form card">

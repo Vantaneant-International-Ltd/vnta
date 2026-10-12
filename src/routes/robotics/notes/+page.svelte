@@ -54,7 +54,7 @@
 		{/if}
 		<p class="feed">
 			Follow on
-			{#each follow as s, i}{#if i > 0}{' '}or{' '}{/if}<a class="link" href={s.href} rel="me noopener">{s.name}</a>{/each}{#if list.length > 0}, or without an account by <a class="link" href="{base}/robotics/notes/rss.xml">RSS feed</a>{/if}.
+			{#each follow as s, i}{i === 0 ? '' : i === follow.length - 1 ? ' or ' : ', '}<a class="link" href={s.href} rel="me noopener">{s.name}</a>{/each}{#if list.length > 0}, or without an account by <a class="link" href="{base}/robotics/notes/rss.xml">RSS feed</a>{/if}.
 		</p>
 	</div>
 </main>

@@ -62,7 +62,7 @@
 				{:else}
 					<p class="note__also">
 						Follow on
-						{#each follow as s, i}{#if i > 0}{' '}or{' '}{/if}<a href={s.href} rel="me noopener">{s.name}</a>{/each}.
+						{#each follow as s, i}{i === 0 ? '' : i === follow.length - 1 ? ' or ' : ', '}<a href={s.href} rel="me noopener">{s.name}</a>{/each}.
 					</p>
 				{/if}
 

@@ -62,12 +62,14 @@ export const mastodonUrl = 'https://mastodon.social/@vntagroup';
  * as static/.well-known/atproto-did is on the site.
  */
 export const blueskyUrl = 'https://bsky.app/profile/vnta.xyz';
+export const pixelfedUrl = 'https://pixelfed.social/vnta';
 export const social: { name: string; href: string }[] = [
 	{ name: 'GitHub', href: githubUrl },
 	{ name: 'Mastodon', href: mastodonUrl },
-	{ name: 'Bluesky', href: blueskyUrl }
+	{ name: 'Bluesky', href: blueskyUrl },
+	{ name: 'Pixelfed', href: pixelfedUrl }
 ];
-/** The two where VNTA posts. GitHub is code, not posts. */
+/** The ones where VNTA posts. GitHub is code, not posts. */
 export const follow = social.filter((s) => s.name !== 'GitHub');
 
 // --- The parent: VNTA --------------------------------------------------------
