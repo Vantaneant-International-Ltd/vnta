@@ -8,6 +8,7 @@
 // The two networks are not given the same thing:
 //   Mastodon   `short`, the link and the hashtags, the morning it is published.
 //   Bluesky    `bluesky`, its own shorter line, and the link, the morning after.
+//   Pixelfed   `pixelfed`, a caption for the picture, two mornings after.
 //
 // NOTHING HERE IS PUBLIC JUST BECAUSE IT IS IN THIS FILE. A note is published
 // by the daily job (.github/workflows/notes.yml, scripts/publish-notes.mjs),
@@ -68,6 +69,14 @@ export type Note = {
 	 */
 	bluesky?: string;
 	/**
+	 * Pixelfed's own caption, for a note with a picture. The picture leads
+	 * there, so the caption says what is in it. The job adds the link and the
+	 * hashtags, which are how a picture is found on Pixelfed. Pixelfed gets it
+	 * two mornings after the note is published. Left out, the note does not go
+	 * to Pixelfed.
+	 */
+	pixelfed?: { caption: string; tags: string[] };
+	/**
 	 * In src/lib/content/note-images, 1080 by 1350. It is copied into the site
 	 * only once the note is published. The alt text goes to both networks.
 	 */
@@ -81,7 +90,7 @@ export type Note = {
 export const notes: Note[] = [
 	{
 		slug: 'the-one-question',
-		date: '2026-10-13',
+		date: '2026-10-12',
 		title: 'The one question',
 		kind: 'Explain',
 		summary: 'What can this robot actually do, and do we have evidence that it works? VNTA Robotics is being built to answer that.',
@@ -96,6 +105,10 @@ export const notes: Note[] = [
 		],
 		short: 'What can this robot actually do, and do we have evidence that it works?\n\nWe’re building VNTA Robotics to answer that: connect to a robot, run the same checks, keep every raw message. In development.',
 		bluesky: 'What can this robot actually do, and do we have evidence that it works?\n\nWe’re building VNTA Robotics to answer that. In development.',
+		pixelfed: {
+			caption: 'One question, and one real test run behind it.\n\nWhat can this robot actually do, and do we have evidence that it works? VNTA Robotics is being built to answer that. It is in development, and this run was on a virtual vehicle, not a real machine.',
+			tags: ['robotics', 'automation', 'engineering']
+		},
 		image: {
 			file: 'post-01-the-one-question.png',
 			alt: 'The question in large type, above the result of one validation run on a virtual vehicle: 32 of 37 checks passed, 13 of 14 capabilities verified.'
@@ -118,6 +131,10 @@ export const notes: Note[] = [
 		],
 		short: 'A capability in a manual is a claim. A capability that has been tested is evidence.\n\nOne virtual vehicle: 14 capabilities declared, 13 verified, 1 failed. A real result, on a vehicle that is not real.',
 		bluesky: 'A capability in a manual is a claim. A capability that has been tested is evidence.',
+		pixelfed: {
+			caption: 'Declared is not verified.\n\nSix capabilities from one test run: all six declared, five verified, one failed. On a virtual vehicle, not a real one.',
+			tags: ['robotics', 'testing', 'engineering']
+		},
 		image: {
 			file: 'post-02-declared-is-not-verified.png',
 			alt: 'A table of six capabilities, all declared. Five are verified and one, capability discovery, failed.'
@@ -140,6 +157,10 @@ export const notes: Note[] = [
 		],
 		short: 'We’ve tested our robot validation software against four systems. None is a real robot.\n\nThree simulators we wrote, with planted faults. One open-source VDA 5050 virtual vehicle we didn’t: 32 of 37 checks passed.',
 		bluesky: 'We’ve tested our robot validation software against four systems. None is a real robot.',
+		pixelfed: {
+			caption: 'Everything we have tested against so far: three simulators we wrote, and one virtual vehicle we did not. None of them is a real robot.',
+			tags: ['robotics', 'VDA5050', 'simulation']
+		},
 		image: {
 			file: 'post-03-what-we-tested-against.png',
 			alt: 'Four systems and their verdicts: three simulated robots and one external virtual vehicle.'
@@ -181,6 +202,10 @@ export const notes: Note[] = [
 		],
 		short: 'The first bug our robot test rig found was in our robot test rig.\n\nA badly injected fault looks exactly like a fault in the system. Now every finding gets one more question: did we cause this?',
 		bluesky: 'The first bug our robot test rig found was in our robot test rig.',
+		pixelfed: {
+			caption: '30 seconds to come back with the faulty test rig. About 1 second once the rig was fixed.\n\nThe fault was in our own test rig, not in the system it was testing.',
+			tags: ['robotics', 'testing', 'debugging']
+		},
 		image: {
 			file: 'post-06-our-own-rig-lied-first.png',
 			alt: 'Two bars: 30 seconds to come back with the faulty test rig, about 1 second once the rig was fixed.'
@@ -203,6 +228,10 @@ export const notes: Note[] = [
 		],
 		short: 'VNTA Robotics doesn’t replace ROS 2, VDA 5050, Open-RMF or your fleet manager. It sits above them, through adapters.\n\nOne adapter works today (VDA 5050 2.1.0). The rest are planned.',
 		bluesky: 'VNTA Robotics doesn’t replace ROS 2, VDA 5050, Open-RMF or your fleet manager. It sits above them.\n\nOne adapter works today (VDA 5050 2.1.0). The rest are planned.',
+		pixelfed: {
+			caption: 'Where VNTA Robotics sits: above the interfaces you already run, not instead of them. VDA 5050 works today. ROS 2, Open-RMF and vendor APIs are planned.',
+			tags: ['robotics', 'ROS2', 'VDA5050']
+		},
 		image: {
 			file: 'post-07-above-not-instead.png',
 			alt: 'VNTA Robotics drawn above four interfaces. VDA 5050 works today; ROS 2, Open-RMF and vendor APIs are planned.'
@@ -224,6 +253,10 @@ export const notes: Note[] = [
 		],
 		short: 'A timeout is not a pass. It is not a fail either.\n\nOur validation reports five outcomes: pass, warning, fail, unsupported, unknown. “We don’t know” is an answer.',
 		bluesky: 'A timeout is not a pass. It is not a fail either.\n\n“We don’t know” is an answer.',
+		pixelfed: {
+			caption: 'Five ways a test can end. “Unknown” is one of them, and it is not a pass.',
+			tags: ['robotics', 'testing', 'engineering']
+		},
 		image: {
 			file: 'post-08-a-timeout-is-not-a-pass.png',
 			alt: 'The five ways a test can end: pass, warning, fail, unsupported, unknown.'

@@ -22,6 +22,16 @@
 		publisher: { '@type': 'Organization', name: company.legalName, url: siteUrl },
 		...(note.image ? { image: `${siteUrl}/notes/${note.image.file}` } : {})
 	});
+	// Where this note went, in the order it went there.
+	const also = $derived(
+		[
+			['Mastodon', note.posted.mastodon],
+			['Bluesky', note.posted.bluesky],
+			['Pixelfed', note.posted.pixelfed]
+		]
+			.filter(([, p]) => p)
+			.map(([name, p]) => ({ name: name as string, url: (p as { url: string }).url }))
+	);
 </script>
 
 <Seo
@@ -52,12 +62,10 @@
 
 				<p class="note__honest">{robotics.honest} {robotics.notSafety}</p>
 
-				{#if note.posted.mastodon || note.posted.bluesky}
+				{#if also.length}
 					<p class="note__also">
 						Also posted on
-						{#if note.posted.mastodon}<a href={note.posted.mastodon.url} rel="me noopener">Mastodon</a>{/if}
-						{#if note.posted.mastodon && note.posted.bluesky}and{/if}
-						{#if note.posted.bluesky}<a href={note.posted.bluesky.url} rel="me noopener">Bluesky</a>{/if}.
+						{#each also as s, i}{i === 0 ? '' : i === also.length - 1 ? ' and ' : ', '}<a href={s.url} rel="me noopener">{s.name}</a>{/each}.
 					</p>
 				{:else}
 					<p class="note__also">

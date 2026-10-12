@@ -47,6 +47,7 @@ jobs:
       # Whether each network has its keys. A step for a network with none is skipped.
       HAS_MASTODON: ${{ secrets.MASTODON_URL != '' && secrets.MASTODON_TOKEN != '' }}
       HAS_BLUESKY: ${{ secrets.BLUESKY_HANDLE != '' && secrets.BLUESKY_APP_PASSWORD != '' }}
+      HAS_PIXELFED: ${{ secrets.PIXELFED_URL != '' && secrets.PIXELFED_TOKEN != '' }}
     steps:
       - uses: actions/checkout@v5
         with:
@@ -116,12 +117,19 @@ jobs:
           BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
           BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
 
+      - name: The Pixelfed key works
+        if: always() && env.HAS_PIXELFED == 'true'
+        run: node scripts/publish-notes.mjs verify pixelfed
+        env:
+          PIXELFED_URL: ${{ secrets.PIXELFED_URL }}
+          PIXELFED_TOKEN: ${{ secrets.PIXELFED_TOKEN }}
+
       # Runs every day, so a network that failed yesterday is tried again
       # while the note is still fresh.
       # A refused key for one network must not stop the other, so this runs
       # even if a check above failed. It does not run if the page could not be
       # published or did not come up: no link is posted to a page that is not there.
-      - name: Post to Mastodon and Bluesky
+      - name: Post to Mastodon, Bluesky and Pixelfed
         id: social
         if: ${{ !cancelled() && steps.site.outcome == 'success' && steps.deploy.outcome != 'failure' && steps.wait.outcome != 'failure' }}
         run: node scripts/publish-notes.mjs social
@@ -130,6 +138,8 @@ jobs:
           MASTODON_TOKEN: ${{ secrets.MASTODON_TOKEN }}
           BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
           BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
+          PIXELFED_URL: ${{ secrets.PIXELFED_URL }}
+          PIXELFED_TOKEN: ${{ secrets.PIXELFED_TOKEN }}
 
       # Even if one network failed, keep the record of the one that worked.
       - name: Save where it was posted

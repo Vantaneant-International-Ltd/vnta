@@ -10,14 +10,14 @@ import { notes, type Note } from './notes';
 import ledger from './notes-published.json';
 
 /** Where a published note also went. Filled in by the job. */
-export type Posted = { slug: string; at: string; mastodon?: { url: string }; bluesky?: { url: string } };
+export type Posted = { slug: string; at: string; mastodon?: { url: string }; bluesky?: { url: string }; pixelfed?: { url: string } };
 
 const entries = (ledger as { published: Posted[] }).published;
 
 /** A note as a page may see it: no `hold`, and with when and where it went out. */
 export type PublicNote = Omit<Note, 'hold' | 'short' | 'tags' | 'date'> & {
 	publishedAt: string;
-	posted: { mastodon?: { url: string }; bluesky?: { url: string } };
+	posted: { mastodon?: { url: string }; bluesky?: { url: string }; pixelfed?: { url: string } };
 };
 
 /** Published notes, newest first. */
@@ -30,6 +30,7 @@ export const publishedNotes = (): PublicNote[] => {
 		const posted: PublicNote['posted'] = {};
 		if (e.mastodon) posted.mastodon = { url: e.mastodon.url };
 		if (e.bluesky) posted.bluesky = { url: e.bluesky.url };
+		if (e.pixelfed) posted.pixelfed = { url: e.pixelfed.url };
 		out.push({ ...rest, publishedAt: e.at, posted });
 	}
 	return out.sort((a, b) => (a.publishedAt < b.publishedAt ? 1 : -1));

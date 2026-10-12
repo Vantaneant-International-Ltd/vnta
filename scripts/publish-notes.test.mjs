@@ -179,7 +179,12 @@ test('a note with a picture goes to both networks, each on its own day and in it
 	assert.deepEqual([w.seen.statuses.length, w.seen.records.length], [1, 0], 'the first morning is Mastodon only');
 	const r = (await w.run('social', '2026-10-14'));
 	assert.equal(r.code, 0, r.out);
-	assert.deepEqual([w.seen.statuses.length, w.seen.records.length], [1, 1], 'the next morning is Bluesky only');
+	assert.deepEqual([w.seen.statuses.length, w.seen.records.length, w.seen.pix.length], [1, 1, 0], 'the next morning is Bluesky only');
+	assert.match(r.out, /Pixelfed: alpha goes out tomorrow/);
+	assert.equal((await w.run('social', '2026-10-15')).code, 0);
+	assert.deepEqual([w.seen.statuses.length, w.seen.records.length, w.seen.pix.length], [1, 1, 1], 'two mornings on is Pixelfed only');
+	assert.equal(w.seen.pix[0].status, 'What is in the picture of alpha.\n\nThe full note: https://vnta.xyz/robotics/notes/alpha\n\n#photo #robotics', 'Pixelfed gets its own caption');
+	assert.ok(w.seen.pixMedia[0].hasAlt);
 	const url = 'https://vnta.xyz/robotics/notes/alpha';
 
 	// Mastodon
@@ -217,7 +222,8 @@ test('nothing is posted twice', async (t) => {
 	(await w.run('social', '2026-10-14'));
 	(await w.run('social', '2026-10-14'));
 	(await w.run('social', '2026-10-15'));
-	assert.deepEqual([w.seen.statuses.length, w.seen.records.length], [1, 1]);
+	(await w.run('social', '2026-10-16'));
+	assert.deepEqual([w.seen.statuses.length, w.seen.records.length, w.seen.pix.length], [1, 1, 1]);
 });
 
 test('if the record of a Bluesky post is lost, it is found again and not repeated', async (t) => {

@@ -8,9 +8,11 @@
 // (src/lib/server/posts.ts, recorded in posts-sent.json), run by
 // .github/workflows/posts.yml.
 //
-// The two networks are not given the same thing:
+// The networks are not given the same thing:
 //   Mastodon   the fuller version with hashtags, the morning the note is published.
 //   Bluesky    its own shorter line, the morning after.
+//   Pixelfed   the picture first, with its own caption and hashtags, two mornings
+//              after. Only a note with a picture and a `pixelfed` caption goes there.
 //
 //   node scripts/publish-notes.mjs check     every note is fit to publish (run in CI)
 //   node scripts/publish-notes.mjs status    what is out, what is next, what is held
@@ -42,8 +44,8 @@
 //   PIXELFED_URL   the server, for example https://pixelfed.social
 //   PIXELFED_TOKEN a personal access token with read and write (Settings > Applications)
 //
-// Pixelfed is pictures first, so only a one-network post with a picture goes
-// there. Notes do not, yet.
+// Pixelfed is pictures first: a post there always has one. It is sent the
+// JPEG copy of a picture where there is one (same name, .jpg).
 //
 // For testing: NOTES_TODAY=2026-10-13 pretends it is that day; NOTES_DRY_RUN=1
 // writes and posts nothing; NOTES_SITE, NOTES_LEDGER, NOTES_FILE, POSTS_LEDGER
@@ -62,7 +64,7 @@ const PIXELFED_LIMIT = 500; // characters in a caption, the default on a Pixelfe
 const BLUESKY_IMAGE_LIMIT = 1_000_000; // bytes
 const FRESH_DAYS = 3;
 /** How many mornings after a note is published each network gets it. */
-const AFTER = { mastodon: 0, bluesky: 1 };
+const AFTER = { mastodon: 0, bluesky: 1, pixelfed: 2 };
 const SENT = process.env.POSTS_LEDGER || `${root}src/lib/server/posts-sent.json`;
 
 const { notes } = await import(process.env.NOTES_FILE || `${root}src/lib/server/notes.ts`);
@@ -87,6 +89,14 @@ const POST_IMAGES = `${root}src/lib/content/post-images/`;
 /** A note's picture, in the shape the two senders take. */
 const noteImage = (n) => (n.image ? { path: imagePath(n), name: n.image.file, alt: n.image.alt, width: 1080, height: 1350 } : null);
 const postImage = (p) => (p.image ? { path: `${POST_IMAGES}${p.image.file}`, name: p.image.file, alt: p.image.alt, width: p.image.width, height: p.image.height } : null);
+
+/** Pixelfed's copy of a picture: the JPEG beside it, where there is one. */
+const asJpeg = (img) => {
+	if (!img) return img;
+	const jpg = img.path.replace(/\.png$/, '.jpg');
+	return jpg !== img.path && existsSync(jpg) ? { ...img, path: jpg, name: img.name.replace(/\.png$/, '.jpg') } : img;
+};
+const pixelfedText = (n) => `${n.pixelfed.caption}\n\nThe full note: ${noteUrl(n)}\n\n${n.pixelfed.tags.map((t) => `#${t}`).join(' ')}`;
 
 /** Whole days, in Dublin, between a moment and today. */
 const daysSince = (iso) => Math.round((Date.parse(today()) - Date.parse(dublinDay(new Date(iso)))) / 86_400_000);
@@ -133,6 +143,13 @@ function problems(n) {
 	if (/\[[^\]]*\]/.test(n.bluesky ?? '')) out.push('there is still a [BRACKET] to fill in, in the Bluesky line');
 	const b = graphemes(blueskyText(n));
 	if (b > BLUESKY_LIMIT) out.push(`the Bluesky version with its link is ${b} characters; Bluesky allows ${BLUESKY_LIMIT}`);
+	if (n.pixelfed) {
+		if (!n.image) out.push('a Pixelfed caption needs the note to have a picture');
+		if (!n.pixelfed.caption?.trim()) out.push('the Pixelfed caption is empty');
+		if (/\[[^\]]*\]/.test(n.pixelfed.caption ?? '')) out.push('there is still a [BRACKET] to fill in, in the Pixelfed caption');
+		for (const t of n.pixelfed.tags ?? []) if (!/^[A-Za-z0-9_]+$/.test(t)) out.push(`the Pixelfed tag "${t}" must be letters and digits only, with no "#"`);
+		else if (pixelfedText(n).length > PIXELFED_LIMIT) out.push(`the Pixelfed caption with its link and tags is ${pixelfedText(n).length} characters; Pixelfed allows ${PIXELFED_LIMIT}`);
+	}
 	const m = mastodonText(n).length;
 	if (m > MASTODON_LIMIT) out.push(`the short version with its link and tags is ${m} characters; Mastodon allows ${MASTODON_LIMIT}`);
 	if (n.image) {
@@ -225,7 +242,7 @@ function status() {
 	for (const n of [...notes].sort((a, b) => (a.date < b.date ? -1 : 1))) {
 		const e = out.get(n.slug);
 		const state = e
-			? `published ${dublinDay(new Date(e.at))}${e.mastodon ? ' · Mastodon' : ''}${e.bluesky ? ' · Bluesky' : ''}`
+			? `published ${dublinDay(new Date(e.at))}${e.mastodon ? ' · Mastodon' : ''}${e.bluesky ? ' · Bluesky' : ''}${e.pixelfed ? ' · Pixelfed' : ''}`
 			: n.hold
 				? `HELD: ${n.hold}`
 				: n.date <= day
@@ -401,7 +418,7 @@ const plain = (html) =>
  * calls as Mastodon. It has no key that stops a repeat, so the account's
  * recent posts are looked through first.
  */
-async function sendPixelfed({ text, image }) {
+async function sendPixelfed({ text, image, same }) {
 	if (keyFault('PIXELFED_TOKEN')) throw new Error(keyFault('PIXELFED_TOKEN'));
 	const base = process.env.PIXELFED_URL.replace(/\/$/, '');
 	const auth = { authorization: `Bearer ${keyOf('PIXELFED_TOKEN')}`, accept: 'application/json' };
@@ -414,7 +431,9 @@ async function sendPixelfed({ text, image }) {
 		const recent = await fetch(`${base}/api/v1/accounts/${account.id}/statuses?limit=20`, { headers: auth });
 		if (recent.ok) {
 			const want = text.replace(/\s+/g, ' ').trim();
-			const found = (await recent.json()).find((s) => plain(s.content) === want || (typeof s.content_text === 'string' && s.content_text.replace(/\s+/g, ' ').trim() === want));
+			const found = (await recent.json()).find((s) =>
+				same ? same(String(s.content ?? '') + String(s.content_text ?? '')) : plain(s.content) === want || (typeof s.content_text === 'string' && s.content_text.replace(/\s+/g, ' ').trim() === want)
+			);
 			if (found) return { id: String(found.id), url: found.url, found: true };
 		}
 	} catch {
@@ -422,7 +441,7 @@ async function sendPixelfed({ text, image }) {
 	}
 
 	const form = new FormData();
-	form.append('file', new Blob([readFileSync(image.path)], { type: 'image/png' }), image.name);
+	form.append('file', new Blob([readFileSync(image.path)], { type: /\.jpe?g$/.test(image.path) ? 'image/jpeg' : 'image/png' }), image.name);
 	form.append('description', image.alt);
 	const up = await fetch(`${base}/api/v1/media`, { method: 'POST', headers: auth, body: form });
 	if (!up.ok) throw await fail('image upload', up);
@@ -519,6 +538,8 @@ async function sendBluesky({ text, image, card, same }) {
 	return { uri, url: web(uri) };
 }
 
+const postPixelfed = (n) => sendPixelfed({ text: pixelfedText(n), image: asJpeg(noteImage(n)), same: (content) => content.includes(noteUrl(n)) });
+
 const postBluesky = (n) =>
 	sendBluesky({
 		text: blueskyText(n),
@@ -613,7 +634,9 @@ async function social() {
 	const on = haveKeys();
 	const networks = [
 		{ key: 'mastodon', name: 'Mastodon', on: on.mastodon, post: postMastodon, text: mastodonText },
-		{ key: 'bluesky', name: 'Bluesky', on: on.bluesky, post: postBluesky, text: blueskyText }
+		{ key: 'bluesky', name: 'Bluesky', on: on.bluesky, post: postBluesky, text: blueskyText },
+		// Only a note with a picture and its own caption goes to Pixelfed.
+		{ key: 'pixelfed', name: 'Pixelfed', on: on.pixelfed, post: postPixelfed, text: pixelfedText, wants: (n) => !!(n.image && n.pixelfed) }
 	];
 	for (const net of networks) if (!net.on) console.log(`${net.name}: no key set, skipped.`);
 
@@ -625,7 +648,7 @@ async function social() {
 		const n = notes.find((x) => x.slug === entry.slug);
 		if (!n) continue;
 		for (const net of networks) {
-			if (!net.on || entry[net.key]) continue;
+			if (!net.on || entry[net.key] || (net.wants && !net.wants(n))) continue;
 			// Each network has its own day.
 			const wait = AFTER[net.key] - age;
 			if (wait > 0) {
@@ -688,7 +711,7 @@ async function sendPosts() {
 				p.network === 'mastodon'
 					? await sendMastodon({ text: p.text, image: postImage(p), key: `vnta-post-${p.id}` })
 					: p.network === 'pixelfed'
-						? await sendPixelfed({ text: p.text, image: postImage(p) })
+						? await sendPixelfed({ text: p.text, image: asJpeg(postImage(p)) })
 						: await sendBluesky({ text: p.text, image: postImage(p), same: (text) => text === p.text });
 			// `ref` is the network's own name for the post. It must not be called `id`: that is ours.
 			ledger.sent.push({ id: p.id, network: p.network, at: now().toISOString(), url: sent.url, ref: sent.id ?? sent.uri });
