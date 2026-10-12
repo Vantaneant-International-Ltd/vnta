@@ -139,6 +139,8 @@ nothing breaks.
 | `MASTODON_TOKEN` | An access token: on that server, Preferences > Development > New application, with `write:statuses` and `write:media` ticked |
 | `BLUESKY_HANDLE` | The handle, for example `vnta.bsky.social` |
 | `BLUESKY_APP_PASSWORD` | An app password: Settings > Privacy and security > App passwords. Never the account password |
+| `PIXELFED_URL` | The Pixelfed server, `https://pixelfed.social` |
+| `PIXELFED_TOKEN` | A personal access token: on that server, Settings > Applications, with read and write. It is long (about 700 to 1,000 characters): select all of it before copying |
 
 A key lets the job post and nothing else. To stop the job posting, delete the
 key on the network, or delete the secret here.
@@ -149,13 +151,17 @@ floods the feed.
 
 ### Posts for one network only
 
-A line that belongs on Mastodon or on Bluesky, and has no page on the site,
-goes in `src/lib/server/posts.ts`: an id, a date, the network, the exact text,
+A line that belongs on Mastodon, on Bluesky or on Pixelfed, and has no page on
+the site, goes in `src/lib/server/posts.ts`: an id, a date, the network, the exact text,
 and a picture if it has one (`src/lib/content/post-images`). The job is
 `.github/workflows/posts.yml`: it runs when that file changes and once a day,
 sends what is due, once, and records it in `src/lib/server/posts-sent.json`.
 A post more than three days late is not sent. Like everything in this
 repository, a post in that file can be read by anyone before it goes out.
+
+Pixelfed (`@vnta@pixelfed.social`) is pictures first: a post there must have a
+picture. Notes are not sent there. If its key is refused, the job says, without
+showing the key, whether it is whole and whether a letter in it is wrong.
 
 ### Seeing a post after it has gone out
 
