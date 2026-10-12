@@ -39,6 +39,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       NOTES_DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
+      # VNTA posts on Bluesky only. Mastodon and Pixelfed are parked: their
+      # accounts and keys stay, and adding them here turns them back on.
+      NOTES_NETWORKS: bluesky
       MASTODON_URL: ${{ secrets.MASTODON_URL }}
       MASTODON_TOKEN: ${{ secrets.MASTODON_TOKEN }}
       BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}

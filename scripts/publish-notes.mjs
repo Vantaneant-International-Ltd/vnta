@@ -63,8 +63,14 @@ const MASTODON_LIMIT = 500; // characters; a link counts as 23 there, we count i
 const PIXELFED_LIMIT = 500; // characters in a caption, the default on a Pixelfed server
 const BLUESKY_IMAGE_LIMIT = 1_000_000; // bytes
 const FRESH_DAYS = 3;
-/** How many mornings after a note is published each network gets it. */
-const AFTER = { mastodon: 0, bluesky: 1, pixelfed: 2 };
+/**
+ * Which networks are posted to at all. VNTA posts on Bluesky only since 12
+ * October 2026 (set in the workflows); the others are parked, not deleted.
+ * Left unset, all three are on.
+ */
+const NETWORKS = new Set((process.env.NOTES_NETWORKS || 'mastodon,bluesky,pixelfed').split(',').map((x) => x.trim()));
+/** How many mornings after a note is published each network gets it. On its own, Bluesky gets it at once. */
+const AFTER = NETWORKS.has('mastodon') ? { mastodon: 0, bluesky: 1, pixelfed: 2 } : { mastodon: 0, bluesky: 0, pixelfed: 2 };
 const SENT = process.env.POSTS_LEDGER || `${root}src/lib/server/posts-sent.json`;
 
 const { notes } = await import(process.env.NOTES_FILE || `${root}src/lib/server/notes.ts`);
@@ -178,7 +184,6 @@ function postProblems(p) {
 		if (!p.image.alt?.trim()) out.push('the image needs a description (alt)');
 		if (!(p.image.width > 0 && p.image.height > 0)) out.push('the image needs its width and height in pixels');
 		if (!/\.(png|jpe?g)$/.test(p.image.file ?? '')) out.push('the image must be a PNG or a JPEG');
-		else if (p.network === 'bluesky' && !/\.png$/.test(p.image.file)) out.push('a Bluesky picture must be a PNG');
 		else if (!existsSync(file)) out.push(`src/lib/content/post-images/${p.image.file} does not exist`);
 		else if (statSync(file).size > BLUESKY_IMAGE_LIMIT) out.push(`${p.image.file} is over ${BLUESKY_IMAGE_LIMIT} bytes`);
 	}
@@ -520,7 +525,7 @@ async function sendBluesky({ text, image, card, same }) {
 	if (facets.length) record.facets = facets;
 
 	if (image) {
-		const up = await fetch(`${pds}/xrpc/com.atproto.repo.uploadBlob`, { method: 'POST', headers: { ...auth, 'content-type': 'image/png' }, body: readFileSync(image.path) });
+		const up = await fetch(`${pds}/xrpc/com.atproto.repo.uploadBlob`, { method: 'POST', headers: { ...auth, 'content-type': /\.jpe?g$/.test(image.path) ? 'image/jpeg' : 'image/png' }, body: readFileSync(image.path) });
 		if (!up.ok) throw await fail('image upload', up);
 		const { blob } = await up.json();
 		record.embed = { $type: 'app.bsky.embed.images', images: [{ alt: image.alt, image: blob, aspectRatio: { width: image.width, height: image.height } }] };
@@ -626,9 +631,9 @@ async function verify(which) {
 // --- Social ----------------------------------------------------------------------
 
 const haveKeys = () => ({
-	mastodon: !!(process.env.MASTODON_URL && process.env.MASTODON_TOKEN),
-	bluesky: !!(process.env.BLUESKY_HANDLE && process.env.BLUESKY_APP_PASSWORD),
-	pixelfed: !!(process.env.PIXELFED_URL && process.env.PIXELFED_TOKEN)
+	mastodon: NETWORKS.has('mastodon') && !!(process.env.MASTODON_URL && process.env.MASTODON_TOKEN),
+	bluesky: NETWORKS.has('bluesky') && !!(process.env.BLUESKY_HANDLE && process.env.BLUESKY_APP_PASSWORD),
+	pixelfed: NETWORKS.has('pixelfed') && !!(process.env.PIXELFED_URL && process.env.PIXELFED_TOKEN)
 });
 
 async function social() {
@@ -639,7 +644,7 @@ async function social() {
 		// Only a note with a picture and its own caption goes to Pixelfed.
 		{ key: 'pixelfed', name: 'Pixelfed', on: on.pixelfed, post: postPixelfed, text: pixelfedText, wants: (n) => !!(n.image && n.pixelfed) }
 	];
-	for (const net of networks) if (!net.on) console.log(`${net.name}: no key set, skipped.`);
+	for (const net of networks) if (!net.on) console.log(`${net.name}: ${NETWORKS.has(net.key) ? 'no key set' : 'parked'}, skipped.`);
 
 	const ledger = readLedger();
 	let failed = 0;

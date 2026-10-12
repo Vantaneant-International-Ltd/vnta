@@ -141,7 +141,7 @@
 						<nav class="foot__follow" aria-labelledby="foot-follow">
 							<h2 id="foot-follow">Follow</h2>
 							<ul class="foot__nav">
-								{#each social as s}
+								{#each social.filter((s) => s.name === 'GitHub').concat(follow) as s}
 									<li><a href={s.href} rel="me noopener">{s.name}</a></li>
 								{/each}
 							</ul>

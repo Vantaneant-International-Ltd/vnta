@@ -69,8 +69,12 @@ export const social: { name: string; href: string }[] = [
 	{ name: 'Bluesky', href: blueskyUrl },
 	{ name: 'Pixelfed', href: pixelfedUrl }
 ];
-/** The ones where VNTA posts. GitHub is code, not posts. */
-export const follow = social.filter((s) => s.name !== 'GitHub');
+/**
+ * Where VNTA posts: Bluesky only, since 12 October 2026. Mastodon and Pixelfed
+ * stay in `social` above, because the accounts are still ours, but the site
+ * does not send people to them.
+ */
+export const follow = social.filter((s) => s.name === 'Bluesky');
 
 // --- The parent: VNTA --------------------------------------------------------
 
