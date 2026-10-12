@@ -15,6 +15,7 @@ import { fileURLToPath } from 'node:url';
 const script = fileURLToPath(new URL('./publish-notes.mjs', import.meta.url));
 // Made-up notes, so the tests do not depend on what the real ones say.
 const fixture = fileURLToPath(new URL('./fixtures/notes.fixture.ts', import.meta.url));
+const postsFixture = fileURLToPath(new URL('./fixtures/posts.fixture.ts', import.meta.url));
 
 /** A pretend Mastodon server and Bluesky server in one, remembering what it was sent. */
 async function pretend() {
@@ -72,13 +73,18 @@ async function pretend() {
 async function world(t, { keys = true } = {}) {
 	const fake = await pretend();
 	t.after(() => fake.close());
-	const ledger = join(mkdtempSync(join(tmpdir(), 'notes-')), 'published.json');
+	const dir = mkdtempSync(join(tmpdir(), 'notes-'));
+	const ledger = join(dir, 'published.json');
 	writeFileSync(ledger, '{ "published": [] }\n');
+	const sent = join(dir, 'sent.json');
+	writeFileSync(sent, '{ "sent": [] }\n');
 	const env = {
 		PATH: process.env.PATH,
 		NOTES_LEDGER: ledger,
 		NOTES_SITE: 'https://vnta.xyz',
 		NOTES_FILE: fixture,
+		POSTS_FILE: postsFixture,
+		POSTS_LEDGER: sent,
 		...(keys ? { MASTODON_URL: fake.origin, MASTODON_TOKEN: 'masto-token', BLUESKY_PDS: fake.origin, BLUESKY_HANDLE: 'vnta.example', BLUESKY_APP_PASSWORD: 'app-pass' } : {})
 	};
 	// Run without blocking: the pretend servers live in this process and must be free to answer.
@@ -94,15 +100,18 @@ async function world(t, { keys = true } = {}) {
 		...fake,
 		run,
 		read: () => JSON.parse(readFileSync(ledger, 'utf8')).published,
-		write: (published) => writeFileSync(ledger, JSON.stringify({ published }))
+		write: (published) => writeFileSync(ledger, JSON.stringify({ published })),
+		sent: () => JSON.parse(readFileSync(sent, 'utf8')).sent,
+		forget: () => writeFileSync(sent, '{ "sent": [] }\n')
 	};
 }
 
 test('the real notes are all fit to publish', async (t) => {
 	const w = await world(t);
-	const r = await w.run('check', '2026-10-11', { NOTES_FILE: '' });
+	const r = await w.run('check', '2026-10-11', { NOTES_FILE: '', POSTS_FILE: '' });
 	assert.equal(r.code, 0, r.out);
 	assert.match(r.out, /notes fit to publish/);
+	assert.match(r.out, /one-network posts fit to send/);
 });
 
 test('the check fails on a note that is not held and not finished', async (t) => {
@@ -146,11 +155,16 @@ test('a backlog is worked off one day at a time', async (t) => {
 	assert.match((await w.run('site', '2026-10-22')).out, /bravo/);
 });
 
-test('a note with a picture goes to both networks, with its link, picture and description', async (t) => {
+test('a note with a picture goes to both networks, each on its own day and in its own words', async (t) => {
 	const w = await world(t);
 	(await w.run('site', '2026-10-13'));
-	const r = (await w.run('social', '2026-10-13'));
+	const first = (await w.run('social', '2026-10-13'));
+	assert.equal(first.code, 0, first.out);
+	assert.match(first.out, /Bluesky: alpha goes out tomorrow/);
+	assert.deepEqual([w.seen.statuses.length, w.seen.records.length], [1, 0], 'the first morning is Mastodon only');
+	const r = (await w.run('social', '2026-10-14'));
 	assert.equal(r.code, 0, r.out);
+	assert.deepEqual([w.seen.statuses.length, w.seen.records.length], [1, 1], 'the next morning is Bluesky only');
 	const url = 'https://vnta.xyz/robotics/notes/alpha';
 
 	// Mastodon
@@ -158,19 +172,21 @@ test('a note with a picture goes to both networks, with its link, picture and de
 	assert.equal(w.seen.media[0].auth, 'Bearer masto-token');
 	assert.ok(w.seen.media[0].hasAlt && w.seen.media[0].bytes > 100_000, 'the picture and its description were sent');
 	const status = w.seen.statuses[0];
-	assert.ok(status.status.includes(url) && status.status.endsWith('#testing #robotics'));
+	assert.ok(status.status.startsWith('The short version of alpha') && status.status.includes(url) && status.status.endsWith('#testing #robotics'));
 	assert.ok(status.status.length <= 500);
 	assert.deepEqual([status.media_ids, status.visibility, status.key], [['m1'], 'public', 'vnta-note-alpha']);
 
 	// Bluesky
 	const record = w.seen.records[0];
 	assert.equal(record.$type, 'app.bsky.feed.post');
+	assert.equal(record.text, `Alpha, in one line for Bluesky.\n\n${url}`, 'Bluesky gets its own line, and no hashtags');
 	assert.ok([...new Intl.Segmenter('en', { granularity: 'grapheme' }).segment(record.text)].length <= 300);
 	const { byteStart, byteEnd } = record.facets[0].index;
 	assert.equal(Buffer.from(record.text, 'utf8').subarray(byteStart, byteEnd).toString(), url, 'the link is marked exactly, in bytes');
 	assert.equal(record.facets[0].features[0].uri, url);
 	assert.equal(record.embed.$type, 'app.bsky.embed.images');
 	assert.ok(record.embed.images[0].alt.length > 20 && record.embed.images[0].image.ref.$link === 'cid1');
+	assert.deepEqual(record.embed.images[0].aspectRatio, { width: 1080, height: 1350 });
 
 	// Recorded, with where each one is.
 	const [entry] = w.read();
@@ -184,6 +200,8 @@ test('nothing is posted twice', async (t) => {
 	(await w.run('social', '2026-10-13'));
 	(await w.run('social', '2026-10-13'));
 	(await w.run('social', '2026-10-14'));
+	(await w.run('social', '2026-10-14'));
+	(await w.run('social', '2026-10-15'));
 	assert.deepEqual([w.seen.statuses.length, w.seen.records.length], [1, 1]);
 });
 
@@ -191,9 +209,10 @@ test('if the record of a Bluesky post is lost, it is found again and not repeate
 	const w = await world(t);
 	(await w.run('site', '2026-10-13'));
 	(await w.run('social', '2026-10-13'));
+	(await w.run('social', '2026-10-14'));
 	// Lose what was recorded about the networks, as a failed save would.
 	w.write(w.read().map(({ slug, at }) => ({ slug, at })));
-	const r = (await w.run('social', '2026-10-13'));
+	const r = (await w.run('social', '2026-10-14'));
 	assert.equal(r.code, 0, r.out);
 	assert.match(r.out, /Bluesky: already there/);
 	assert.equal(w.seen.records.length, 1, 'Bluesky was not posted to a second time');
@@ -206,6 +225,7 @@ test('a note with no picture is posted with a card for the page', async (t) => {
 	(await w.run('site', '2026-10-22'));
 	const r = (await w.run('social', '2026-10-22'));
 	assert.equal(r.code, 0, r.out);
+	assert.equal((await w.run('social', '2026-10-23')).code, 0);
 	const record = w.seen.records.at(-1);
 	assert.equal(record.embed.$type, 'app.bsky.embed.external');
 	assert.equal(record.embed.external.uri, 'https://vnta.xyz/robotics/notes/delta');
@@ -234,14 +254,87 @@ test('with no keys set, the networks are skipped and nothing fails', async (t) =
 test('if one network refuses, the other still gets the note and the run is marked failed', async (t) => {
 	const w = await world(t);
 	(await w.run('site', '2026-10-13'));
-	const r = (await w.run('social', '2026-10-13', { BLUESKY_APP_PASSWORD: 'wrong' }));
+	// Bluesky's day is the 14th. Run only then, so both are due at once.
+	const r = (await w.run('social', '2026-10-14', { BLUESKY_APP_PASSWORD: 'wrong' }));
 	assert.equal(r.code, 1);
 	assert.match(r.out, /Bluesky: alpha was not posted/);
 	const [entry] = w.read();
 	assert.ok(entry.mastodon && !entry.bluesky);
 	// The next run, with the right password, posts only what is missing.
-	assert.equal((await w.run('social', '2026-10-13')).code, 0);
+	assert.equal((await w.run('social', '2026-10-14')).code, 0);
 	assert.deepEqual([w.seen.statuses.length, w.seen.records.length], [1, 1]);
+});
+
+test('a note that missed its morning still goes out for three days, then not at all', async (t) => {
+	const w = await world(t);
+	(await w.run('site', '2026-10-13'));
+	// Bluesky was down on the 14th and 15th.
+	(await w.run('social', '2026-10-13'));
+	assert.equal((await w.run('social', '2026-10-16')).code, 0);
+	assert.equal(w.seen.records.length, 1, 'three days on, it still goes');
+	const late = await world(t);
+	(await late.run('site', '2026-10-13'));
+	(await late.run('social', '2026-10-17'));
+	assert.deepEqual([late.seen.statuses.length, late.seen.records.length], [0, 0], 'four days on, it does not');
+});
+
+test('a one-network post goes to that network only, once, with its picture', async (t) => {
+	const w = await world(t);
+	assert.match((await w.run('posts', '2026-10-11')).out, /No one-network post is due/);
+	const r = await w.run('posts', '2026-10-12');
+	assert.equal(r.code, 0, r.out);
+
+	// Mastodon: exactly the text, the picture with its description, and its own key.
+	assert.equal(w.seen.statuses.length, 1);
+	assert.equal(w.seen.statuses[0].status, 'Hello, fediverse 👀\n\n#introduction');
+	assert.deepEqual([w.seen.statuses[0].media_ids, w.seen.statuses[0].key], [['m1'], 'vnta-post-hello-mastodon']);
+	assert.ok(w.seen.media[0].hasAlt && w.seen.media[0].bytes > 10_000);
+
+	// Bluesky: the hashtag and the link are marked exactly, in bytes, after an emoji.
+	assert.equal(w.seen.records.length, 1);
+	const record = w.seen.records[0];
+	const piece = (f) => Buffer.from(record.text, 'utf8').subarray(f.index.byteStart, f.index.byteEnd).toString();
+	const link = record.facets.find((f) => f.features[0].$type === 'app.bsky.richtext.facet#link');
+	const tag = record.facets.find((f) => f.features[0].$type === 'app.bsky.richtext.facet#tag');
+	assert.deepEqual([piece(link), link.features[0].uri], ['https://vnta.xyz/robotics', 'https://vnta.xyz/robotics'], 'the full stop after the link is not part of it');
+	assert.deepEqual([piece(tag), tag.features[0].tag], ['#robots', 'robots']);
+	assert.deepEqual(record.embed.images[0].aspectRatio, { width: 2001, height: 2001 });
+
+	// Recorded, and not sent again. The held one never goes.
+	assert.deepEqual(w.sent().map((e) => [e.id, e.network, e.url]), [
+		['hello-mastodon', 'mastodon', 'https://social.example/@vnta/1001'],
+		['hello-bluesky', 'bluesky', 'https://bsky.app/profile/vnta.example/post/rk1']
+	]);
+	await w.run('posts', '2026-10-12');
+	await w.run('posts', '2026-10-13');
+	assert.deepEqual([w.seen.statuses.length, w.seen.records.length], [1, 1]);
+
+	// The later one goes on its own day, with no picture and nothing marked.
+	await w.run('posts', '2026-10-20');
+	assert.equal(w.seen.records.length, 2);
+	assert.deepEqual([w.seen.records[1].text, w.seen.records[1].facets, w.seen.records[1].embed], ['A later line, with no picture.', undefined, undefined]);
+});
+
+test('a one-network post that is days late is not sent, and a lost record does not repeat one', async (t) => {
+	const w = await world(t);
+	const late = await w.run('posts', '2026-10-16');
+	assert.match(late.out, /hello-mastodon: more than 3 days late, not sent/);
+	assert.deepEqual([w.seen.statuses.length, w.seen.records.length], [0, 0]);
+
+	const again = await world(t);
+	await again.run('posts', '2026-10-12');
+	again.forget();
+	const r = await again.run('posts', '2026-10-12', { MASTODON_URL: '', MASTODON_TOKEN: '' });
+	assert.match(r.out, /Bluesky: already there/);
+	assert.equal(again.seen.records.length, 1, 'Bluesky was not posted to a second time');
+});
+
+test('a dry run of the one-network posts says what would go and sends nothing', async (t) => {
+	const w = await world(t);
+	const r = await w.run('posts', '2026-10-12', { NOTES_DRY_RUN: '1' });
+	assert.match(r.out, /Would post to Mastodon \(hello-mastodon\)/);
+	assert.match(r.out, /Would post to Bluesky \(hello-bluesky\)/);
+	assert.deepEqual([w.seen.statuses.length, w.seen.records.length, w.sent().length], [0, 0, 0]);
 });
 
 test('a dry run writes and posts nothing', async (t) => {

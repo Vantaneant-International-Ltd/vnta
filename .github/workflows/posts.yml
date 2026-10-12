@@ -1,0 +1,76 @@
+# Sends the posts that belong to one network only (src/lib/server/posts.ts):
+# a line for Mastodon or a line for Bluesky, with no page on the site. Robotics
+# notes are a different job ("Publish notes").
+#
+# A post goes out at the next run on or after its date, once. Runs happen when
+# posts.ts changes, once a day, and by hand: Actions > Social posts > Run
+# workflow (tick "Dry run" to see what would go, and send nothing).
+#
+# It uses the same repository secrets as "Publish notes".
+name: Social posts
+
+on:
+  schedule:
+    # 11:43 UTC every day: 12:43 in Dublin in summer, 11:43 in winter.
+    - cron: '43 11 * * *'
+  push:
+    branches: [main]
+    paths:
+      - src/lib/server/posts.ts
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Dry run: say what would be sent, send nothing'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+# The same group as the deploy and the notes: each of them pushes to main.
+concurrency:
+  group: pages-deploy
+  cancel-in-progress: false
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    env:
+      NOTES_DRY_RUN: ${{ inputs.dry_run && '1' || '' }}
+      MASTODON_URL: ${{ secrets.MASTODON_URL }}
+      MASTODON_TOKEN: ${{ secrets.MASTODON_TOKEN }}
+      BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
+      BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          ref: main
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      # Before anything is sent: can this job save its record? If it cannot,
+      # stop here, rather than send a post and forget that it was sent.
+      - name: Check this job is allowed to save its record
+        run: git push --dry-run origin HEAD:main
+
+      - name: Check every post, and the publisher itself
+        run: |
+          node scripts/publish-notes.mjs check
+          node --test scripts/publish-notes.test.mjs
+
+      - name: Send what is due
+        run: node scripts/publish-notes.mjs posts
+
+      # Even if one network failed, keep the record of the one that worked.
+      - name: Save what was sent
+        if: always()
+        run: |
+          if ! git diff --quiet -- src/lib/server/posts-sent.json; then
+            git config user.name "vnta-notes"
+            git config user.email "studio@vnta.xyz"
+            git add src/lib/server/posts-sent.json
+            git commit -m "Record what was posted"
+            git push origin HEAD:main
+          fi

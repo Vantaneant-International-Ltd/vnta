@@ -15,7 +15,7 @@ const note = (slug: string, date: string, extra: object = {}) => ({
 const picture = { image: { file: 'post-01-the-one-question.png', alt: 'A description of the picture, long enough to be useful.' } };
 
 export const notes = [
-	note('alpha', '2026-10-13', picture),
+	note('alpha', '2026-10-13', { ...picture, bluesky: 'Alpha, in one line for Bluesky.' }),
 	note('bravo', '2026-10-15', picture),
 	note('charlie', '2026-10-20', picture),
 	note('delta', '2026-10-22'), // no picture

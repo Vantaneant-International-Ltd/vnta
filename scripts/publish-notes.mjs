@@ -4,11 +4,20 @@
 // published is recorded in src/lib/server/notes-published.json, and the site
 // shows only what is recorded there.
 //
+// It also sends the posts that belong to one network only and have no page
+// (src/lib/server/posts.ts, recorded in posts-sent.json), run by
+// .github/workflows/posts.yml.
+//
+// The two networks are not given the same thing:
+//   Mastodon   the fuller version with hashtags, the morning the note is published.
+//   Bluesky    its own shorter line, the morning after.
+//
 //   node scripts/publish-notes.mjs check     every note is fit to publish (run in CI)
 //   node scripts/publish-notes.mjs status    what is out, what is next, what is held
 //   node scripts/publish-notes.mjs site      publish the next due note on the site (writes the record)
 //   node scripts/publish-notes.mjs wait <slug>   wait until that note's page is live
 //   node scripts/publish-notes.mjs social    post fresh notes to Mastodon and Bluesky
+//   node scripts/publish-notes.mjs posts     send the one-network posts that are due
 //   node scripts/publish-notes.mjs verify mastodon|bluesky   check a key works, without posting anything
 //   node scripts/publish-notes.mjs assets    copy published notes' pictures into the site (runs before each build)
 //
@@ -17,10 +26,12 @@
 //   - One note a day at most, oldest first. A backlog is worked off a day at a time.
 //   - A note with a [BRACKET] left in it is never published.
 //   - A network with no key set is skipped, quietly. Nothing breaks.
-//   - Only a note published in the last two days is posted to a network, so
+//   - Only a note published in the last three days is posted to a network, so
 //     adding a key later does not flood the feed with old notes.
 //   - Nothing is posted twice: what was posted is recorded, Mastodon is given
 //     the note's address as a key, and Bluesky's recent posts are checked.
+//   - A one-network post goes out once, on or after its date, and not if it
+//     is more than three days late.
 //
 // Keys (GitHub repository secrets; see the README):
 //   MASTODON_URL   the server, for example https://mastodon.social
@@ -30,7 +41,8 @@
 //   BLUESKY_PDS    only if the account is not on bsky.social
 //
 // For testing: NOTES_TODAY=2026-10-13 pretends it is that day; NOTES_DRY_RUN=1
-// writes and posts nothing; NOTES_SITE, NOTES_LEDGER and NOTES_FILE point elsewhere.
+// writes and posts nothing; NOTES_SITE, NOTES_LEDGER, NOTES_FILE, POSTS_LEDGER
+// and POSTS_FILE point elsewhere.
 import { readFileSync, writeFileSync, existsSync, statSync, mkdirSync, rmSync, copyFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 
@@ -42,9 +54,13 @@ const DRY = process.env.NOTES_DRY_RUN === '1';
 const BLUESKY_LIMIT = 300; // graphemes
 const MASTODON_LIMIT = 500; // characters; a link counts as 23 there, we count it in full
 const BLUESKY_IMAGE_LIMIT = 1_000_000; // bytes
-const FRESH_DAYS = 2;
+const FRESH_DAYS = 3;
+/** How many mornings after a note is published each network gets it. */
+const AFTER = { mastodon: 0, bluesky: 1 };
+const SENT = process.env.POSTS_LEDGER || `${root}src/lib/server/posts-sent.json`;
 
 const { notes } = await import(process.env.NOTES_FILE || `${root}src/lib/server/notes.ts`);
+const { posts } = await import(process.env.POSTS_FILE || `${root}src/lib/server/posts.ts`);
 
 // --- Small helpers -------------------------------------------------------------
 
@@ -61,6 +77,22 @@ const noteUrl = (n) => `${SITE}/robotics/notes/${n.slug}`;
 const IMAGES = `${root}src/lib/content/note-images/`;
 const SERVED = `${root}static/notes/`;
 const imagePath = (n) => `${IMAGES}${n.image.file}`;
+const POST_IMAGES = `${root}src/lib/content/post-images/`;
+/** A note's picture, in the shape the two senders take. */
+const noteImage = (n) => (n.image ? { path: imagePath(n), name: n.image.file, alt: n.image.alt, width: 1080, height: 1350 } : null);
+const postImage = (p) => (p.image ? { path: `${POST_IMAGES}${p.image.file}`, name: p.image.file, alt: p.image.alt, width: p.image.width, height: p.image.height } : null);
+
+/** Whole days, in Dublin, between a moment and today. */
+const daysSince = (iso) => Math.round((Date.parse(today()) - Date.parse(dublinDay(new Date(iso)))) / 86_400_000);
+/** Whole days between a YYYY-MM-DD and today. */
+const daysLate = (day) => Math.round((Date.parse(today()) - Date.parse(day)) / 86_400_000);
+
+/** On GitHub, a line that shows on the run's page as well as in its log. */
+const flag = (kind, message) => {
+	const line = message.replace(/\s+/g, ' ').trim();
+	if (process.env.GITHUB_ACTIONS) console.log(`::${kind}::${line}`);
+	else (kind === 'error' ? console.error : console.log)(line);
+};
 
 const readLedger = () => JSON.parse(readFileSync(LEDGER, 'utf8'));
 const writeLedger = (ledger) => {
@@ -68,8 +100,14 @@ const writeLedger = (ledger) => {
 	writeFileSync(LEDGER, JSON.stringify(ledger, null, '\t') + '\n');
 };
 
-/** The text each network gets. */
-const blueskyText = (n) => `${n.short}\n\n${noteUrl(n)}`;
+const readSent = () => JSON.parse(readFileSync(SENT, 'utf8'));
+const writeSent = (ledger) => {
+	if (DRY) return;
+	writeFileSync(SENT, JSON.stringify(ledger, null, '\t') + '\n');
+};
+
+/** The text each network gets. Bluesky has its own shorter line where a note gives one. */
+const blueskyText = (n) => `${n.bluesky ?? n.short}\n\n${noteUrl(n)}`;
 const mastodonText = (n) => {
 	const tags = (n.tags ?? []).map((t) => `#${t}`).join(' ');
 	return `${n.short}\n\n${noteUrl(n)}${tags ? `\n\n${tags}` : ''}`;
@@ -85,8 +123,10 @@ function problems(n) {
 	if (!/^\d{4}-\d{2}-\d{2}$/.test(n.date) || Number.isNaN(Date.parse(n.date))) out.push('the date must be YYYY-MM-DD');
 	if (/\[[^\]]*\]/.test(everything)) out.push('there is still a [BRACKET] to fill in');
 	if (!n.title.trim() || !n.summary.trim() || !n.short.trim() || n.body.length === 0) out.push('title, summary, short and body are all needed');
+	if (n.bluesky !== undefined && !n.bluesky.trim()) out.push('the Bluesky line is empty; delete it to use the short version');
+	if (/\[[^\]]*\]/.test(n.bluesky ?? '')) out.push('there is still a [BRACKET] to fill in, in the Bluesky line');
 	const b = graphemes(blueskyText(n));
-	if (b > BLUESKY_LIMIT) out.push(`the short version with its link is ${b} characters; Bluesky allows ${BLUESKY_LIMIT}`);
+	if (b > BLUESKY_LIMIT) out.push(`the Bluesky version with its link is ${b} characters; Bluesky allows ${BLUESKY_LIMIT}`);
 	const m = mastodonText(n).length;
 	if (m > MASTODON_LIMIT) out.push(`the short version with its link and tags is ${m} characters; Mastodon allows ${MASTODON_LIMIT}`);
 	if (n.image) {
@@ -95,6 +135,27 @@ function problems(n) {
 		else if (statSync(imagePath(n)).size > BLUESKY_IMAGE_LIMIT) out.push(`${n.image.file} is over ${BLUESKY_IMAGE_LIMIT} bytes, Bluesky's limit`);
 	}
 	for (const t of n.tags ?? []) if (!/^[A-Za-z0-9_]+$/.test(t)) out.push(`the tag "${t}" must be letters and digits only, with no "#"`);
+	return out;
+}
+
+/** Everything that would stop a one-network post being sent. */
+function postProblems(p) {
+	const out = [];
+	if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(p.id ?? '')) out.push('the id must be lower-case words joined by hyphens');
+	if (!/^\d{4}-\d{2}-\d{2}$/.test(p.date ?? '') || Number.isNaN(Date.parse(p.date))) out.push('the date must be YYYY-MM-DD');
+	if (!['mastodon', 'bluesky'].includes(p.network)) out.push('the network must be mastodon or bluesky');
+	if (!p.text?.trim()) out.push('there is no text');
+	else if (/\[[^\]]*\]/.test(p.text)) out.push('there is still a [BRACKET] to fill in');
+	else if (p.network === 'bluesky' && graphemes(p.text) > BLUESKY_LIMIT) out.push(`it is ${graphemes(p.text)} characters; Bluesky allows ${BLUESKY_LIMIT}`);
+	else if (p.network === 'mastodon' && p.text.length > MASTODON_LIMIT) out.push(`it is ${p.text.length} characters; Mastodon allows ${MASTODON_LIMIT}`);
+	if (p.image) {
+		const file = `${POST_IMAGES}${p.image.file}`;
+		if (!p.image.alt?.trim()) out.push('the image needs a description (alt)');
+		if (!(p.image.width > 0 && p.image.height > 0)) out.push('the image needs its width and height in pixels');
+		if (!/\.png$/.test(p.image.file ?? '')) out.push('the image must be a PNG');
+		else if (!existsSync(file)) out.push(`src/lib/content/post-images/${p.image.file} does not exist`);
+		else if (statSync(file).size > BLUESKY_IMAGE_LIMIT) out.push(`${p.image.file} is over ${BLUESKY_IMAGE_LIMIT} bytes`);
+	}
 	return out;
 }
 
@@ -116,8 +177,19 @@ function check() {
 	}
 	const published = new Set(readLedger().published.map((e) => e.slug));
 	for (const slug of published) if (!notes.some((n) => n.slug === slug)) (bad += 1), console.error(`✗ ${slug} is recorded as published but is no longer in notes.ts`);
+	const ids = new Set();
+	for (const p of posts) {
+		const problemsHere = postProblems(p);
+		if (ids.has(p.id)) problemsHere.push('another post has the same id');
+		ids.add(p.id);
+		if (p.hold || !problemsHere.length) continue;
+		bad += 1;
+		console.error(`✗ post ${p.id}`);
+		for (const x of problemsHere) console.error(`    ${x}`);
+	}
 	if (bad) process.exit(1);
 	console.log(`${notes.filter((n) => !n.hold).length} notes fit to publish, ${notes.filter((n) => n.hold).length} held.`);
+	console.log(`${posts.filter((p) => !p.hold).length} one-network posts fit to send, ${posts.filter((p) => p.hold).length} held.`);
 }
 
 // --- What is due -----------------------------------------------------------------
@@ -210,16 +282,20 @@ async function wait(slug) {
 
 // --- Mastodon --------------------------------------------------------------------
 
-async function postMastodon(n) {
+/**
+ * Posts to Mastodon. `key` is this post's own name: if the same call is
+ * repeated within the hour, Mastodon returns the first post, not a second one.
+ */
+async function sendMastodon({ text, image, key }) {
 	const base = process.env.MASTODON_URL.replace(/\/$/, '');
 	const auth = { authorization: `Bearer ${process.env.MASTODON_TOKEN}` };
 	const fail = async (what, res) => new Error(`Mastodon ${what}: ${res.status} ${(await res.text()).slice(0, 300)}`);
 
 	const mediaIds = [];
-	if (n.image) {
+	if (image) {
 		const form = new FormData();
-		form.append('file', new Blob([readFileSync(imagePath(n))], { type: 'image/png' }), n.image.file);
-		form.append('description', n.image.alt);
+		form.append('file', new Blob([readFileSync(image.path)], { type: 'image/png' }), image.name);
+		form.append('description', image.alt);
 		const up = await fetch(`${base}/api/v2/media`, { method: 'POST', headers: auth, body: form });
 		if (!up.ok) throw await fail('image upload', up);
 		let media = await up.json();
@@ -235,14 +311,15 @@ async function postMastodon(n) {
 
 	const res = await fetch(`${base}/api/v1/statuses`, {
 		method: 'POST',
-		// The same key for the same note: if this call is repeated within the hour, Mastodon returns the first post.
-		headers: { ...auth, 'content-type': 'application/json', 'idempotency-key': `vnta-note-${n.slug}` },
-		body: JSON.stringify({ status: mastodonText(n), media_ids: mediaIds, visibility: 'public', language: 'en' })
+		headers: { ...auth, 'content-type': 'application/json', 'idempotency-key': key },
+		body: JSON.stringify({ status: text, media_ids: mediaIds, visibility: 'public', language: 'en' })
 	});
 	if (!res.ok) throw await fail('post', res);
 	const status = await res.json();
 	return { id: String(status.id), url: status.url };
 }
+
+const postMastodon = (n) => sendMastodon({ text: mastodonText(n), image: noteImage(n), key: `vnta-note-${n.slug}` });
 
 // --- Bluesky ---------------------------------------------------------------------
 
@@ -266,7 +343,25 @@ async function blueskySignIn(pds) {
 	return res;
 }
 
-async function postBluesky(n) {
+/**
+ * Bluesky does not find links and hashtags in a post by itself: each one is
+ * marked by where it sits in the text, counted in UTF-8 bytes.
+ */
+function blueskyFacets(text) {
+	const bytes = (str) => new TextEncoder().encode(str).length;
+	const mark = (at, piece, feature) => ({ index: { byteStart: bytes(text.slice(0, at)), byteEnd: bytes(text.slice(0, at)) + bytes(piece) }, features: [feature] });
+	const out = [];
+	for (const m of text.matchAll(/https?:\/\/[^\s]*[^\s.,;:!?)\]'"]/g)) out.push(mark(m.index, m[0], { $type: 'app.bsky.richtext.facet#link', uri: m[0] }));
+	for (const m of text.matchAll(/(^|\s)(#([A-Za-z][A-Za-z0-9_]*))/g)) out.push(mark(m.index + m[1].length, m[2], { $type: 'app.bsky.richtext.facet#tag', tag: m[3] }));
+	return out;
+}
+
+/**
+ * Posts to Bluesky. `same` says whether an earlier post is this one: recent
+ * posts are looked through first, so a post whose record was lost is found
+ * and not repeated. `card` is shown when there is no picture.
+ */
+async function sendBluesky({ text, image, card, same }) {
 	const pds = (process.env.BLUESKY_PDS || 'https://bsky.social').replace(/\/$/, '');
 	const fail = async (what, res) => new Error(`Bluesky ${what}: ${res.status} ${(await res.text()).slice(0, 300)}`);
 	const json = { 'content-type': 'application/json' };
@@ -277,34 +372,24 @@ async function postBluesky(n) {
 	const auth = { authorization: `Bearer ${accessJwt}` };
 	const web = (uri) => `https://bsky.app/profile/${handle || process.env.BLUESKY_HANDLE}/post/${uri.split('/').pop()}`;
 
-	// Has this note's address already been posted? Then it was posted, and the record was lost.
-	const url = noteUrl(n);
 	const recent = await fetch(`${pds}/xrpc/com.atproto.repo.listRecords?repo=${encodeURIComponent(did)}&collection=app.bsky.feed.post&limit=50`, { headers: auth });
 	if (recent.ok) {
-		const found = ((await recent.json()).records ?? []).find((r) => typeof r.value?.text === 'string' && r.value.text.includes(url));
+		const found = ((await recent.json()).records ?? []).find((r) => typeof r.value?.text === 'string' && same(r.value.text));
 		if (found) return { uri: found.uri, url: web(found.uri), found: true };
 	}
 
-	const text = blueskyText(n);
-	// A link is marked by where it sits in the text, counted in UTF-8 bytes.
-	const bytes = (s) => new TextEncoder().encode(s).length;
-	const start = bytes(text.slice(0, text.lastIndexOf(url)));
-	const record = {
-		$type: 'app.bsky.feed.post',
-		text,
-		createdAt: new Date().toISOString(),
-		langs: ['en'],
-		facets: [{ index: { byteStart: start, byteEnd: start + bytes(url) }, features: [{ $type: 'app.bsky.richtext.facet#link', uri: url }] }]
-	};
+	const record = { $type: 'app.bsky.feed.post', text, createdAt: new Date().toISOString(), langs: ['en'] };
+	const facets = blueskyFacets(text);
+	if (facets.length) record.facets = facets;
 
-	if (n.image) {
-		const up = await fetch(`${pds}/xrpc/com.atproto.repo.uploadBlob`, { method: 'POST', headers: { ...auth, 'content-type': 'image/png' }, body: readFileSync(imagePath(n)) });
+	if (image) {
+		const up = await fetch(`${pds}/xrpc/com.atproto.repo.uploadBlob`, { method: 'POST', headers: { ...auth, 'content-type': 'image/png' }, body: readFileSync(image.path) });
 		if (!up.ok) throw await fail('image upload', up);
 		const { blob } = await up.json();
-		record.embed = { $type: 'app.bsky.embed.images', images: [{ alt: n.image.alt, image: blob, aspectRatio: { width: 1080, height: 1350 } }] };
-	} else {
+		record.embed = { $type: 'app.bsky.embed.images', images: [{ alt: image.alt, image: blob, aspectRatio: { width: image.width, height: image.height } }] };
+	} else if (card) {
 		// No picture: show the page as a card instead.
-		record.embed = { $type: 'app.bsky.embed.external', external: { uri: url, title: `${n.title} | VNTA Robotics`, description: n.summary } };
+		record.embed = { $type: 'app.bsky.embed.external', external: card };
 	}
 
 	const res = await fetch(`${pds}/xrpc/com.atproto.repo.createRecord`, {
@@ -316,6 +401,15 @@ async function postBluesky(n) {
 	const { uri } = await res.json();
 	return { uri, url: web(uri) };
 }
+
+const postBluesky = (n) =>
+	sendBluesky({
+		text: blueskyText(n),
+		image: noteImage(n),
+		card: { uri: noteUrl(n), title: `${n.title} | VNTA Robotics`, description: n.summary },
+		// Has this note's address already been posted? Then it was posted, and the record was lost.
+		same: (text) => text.includes(noteUrl(n))
+	});
 
 // --- Verify ----------------------------------------------------------------------
 
@@ -363,24 +457,36 @@ async function verify(which) {
 
 // --- Social ----------------------------------------------------------------------
 
+const haveKeys = () => ({
+	mastodon: !!(process.env.MASTODON_URL && process.env.MASTODON_TOKEN),
+	bluesky: !!(process.env.BLUESKY_HANDLE && process.env.BLUESKY_APP_PASSWORD)
+});
+
 async function social() {
+	const on = haveKeys();
 	const networks = [
-		{ key: 'mastodon', name: 'Mastodon', on: !!(process.env.MASTODON_URL && process.env.MASTODON_TOKEN), post: postMastodon },
-		{ key: 'bluesky', name: 'Bluesky', on: !!(process.env.BLUESKY_HANDLE && process.env.BLUESKY_APP_PASSWORD), post: postBluesky }
+		{ key: 'mastodon', name: 'Mastodon', on: on.mastodon, post: postMastodon, text: mastodonText },
+		{ key: 'bluesky', name: 'Bluesky', on: on.bluesky, post: postBluesky, text: blueskyText }
 	];
 	for (const net of networks) if (!net.on) console.log(`${net.name}: no key set, skipped.`);
 
 	const ledger = readLedger();
-	const oldest = now().getTime() - FRESH_DAYS * 86_400_000;
 	let failed = 0;
 	for (const entry of ledger.published) {
-		if (new Date(entry.at).getTime() < oldest) continue;
+		const age = daysSince(entry.at);
+		if (age > FRESH_DAYS) continue;
 		const n = notes.find((x) => x.slug === entry.slug);
 		if (!n) continue;
 		for (const net of networks) {
 			if (!net.on || entry[net.key]) continue;
+			// Each network has its own day.
+			const wait = AFTER[net.key] - age;
+			if (wait > 0) {
+				console.log(`${net.name}: ${n.slug} goes out ${wait === 1 ? 'tomorrow' : `in ${wait} days`}.${DRY ? `\n${net.text(n)}\n` : ''}`);
+				continue;
+			}
 			if (DRY) {
-				console.log(`Would post to ${net.name}:\n${net.key === 'mastodon' ? mastodonText(n) : blueskyText(n)}\n`);
+				console.log(`Would post to ${net.name}:\n${net.text(n)}\n`);
 				continue;
 			}
 			try {
@@ -388,22 +494,72 @@ async function social() {
 				entry[net.key] = posted;
 				// Written at once, so a later failure cannot lose the fact that this went out.
 				writeLedger(ledger);
-				console.log(`${net.name}: ${found ? 'already there' : 'posted'} ${posted.url}`);
+				flag('notice', `${net.name}: ${found ? 'already there' : 'posted'} ${posted.url}`);
 			} catch (e) {
 				failed += 1;
-				console.error(`${net.name}: ${n.slug} was not posted. ${e.message}`);
+				flag('error', `${net.name}: ${n.slug} was not posted. ${e.message}`);
 			}
 		}
 	}
 	if (failed) process.exit(1);
 }
 
+// --- One-network posts -----------------------------------------------------------
+
+async function sendPosts() {
+	const on = haveKeys();
+	const names = { mastodon: 'Mastodon', bluesky: 'Bluesky' };
+	const ledger = readSent();
+	const done = new Set(ledger.sent.map((e) => e.id));
+	const day = today();
+	let failed = 0;
+	let due = 0;
+	for (const p of posts) {
+		if (done.has(p.id) || p.hold || p.date > day) continue;
+		const name = names[p.network];
+		if (daysLate(p.date) > FRESH_DAYS) {
+			console.log(`${p.id}: more than ${FRESH_DAYS} days late, not sent. Change its date if it should still go.`);
+			continue;
+		}
+		const wrong = postProblems(p);
+		if (wrong.length) {
+			failed += 1;
+			flag('error', `${p.id} was not sent: ${wrong.join('; ')}`);
+			continue;
+		}
+		due += 1;
+		if (!on[p.network]) {
+			console.log(`${name}: no key set, ${p.id} skipped.`);
+			continue;
+		}
+		if (DRY) {
+			console.log(`Would post to ${name} (${p.id}):\n${p.text}\n`);
+			continue;
+		}
+		try {
+			const sent =
+				p.network === 'mastodon'
+					? await sendMastodon({ text: p.text, image: postImage(p), key: `vnta-post-${p.id}` })
+					: await sendBluesky({ text: p.text, image: postImage(p), same: (text) => text === p.text });
+			// `ref` is the network's own name for the post. It must not be called `id`: that is ours.
+			ledger.sent.push({ id: p.id, network: p.network, at: now().toISOString(), url: sent.url, ref: sent.id ?? sent.uri });
+			writeSent(ledger);
+			flag('notice', `${name}: ${sent.found ? 'already there' : 'posted'} ${sent.url}`);
+		} catch (e) {
+			failed += 1;
+			flag('error', `${name}: ${p.id} was not posted. ${e.message}`);
+		}
+	}
+	if (!due) console.log('No one-network post is due.');
+	if (failed) process.exit(1);
+}
+
 // --- Go --------------------------------------------------------------------------
 
 const [command, arg] = process.argv.slice(2);
-const commands = { check, status, site, wait: () => wait(arg), social, assets, verify: () => verify(arg) };
+const commands = { check, status, site, wait: () => wait(arg), social, posts: sendPosts, assets, verify: () => verify(arg) };
 if (!commands[command]) {
-	console.error('Usage: node scripts/publish-notes.mjs check | status | site | wait <slug> | social | assets');
+	console.error('Usage: node scripts/publish-notes.mjs check | status | site | wait <slug> | social | posts | assets | verify <network>');
 	process.exit(2);
 }
 await commands[command]();

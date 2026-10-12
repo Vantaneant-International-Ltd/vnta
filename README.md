@@ -112,6 +112,10 @@ the two open networks are signs pointing at it.
   a note's date has come and it has no `hold`, it records the note, deploys the
   site, waits for the page to be live, and posts to the two networks. One note
   a day at most.
+- **The two networks are not given the same thing.** Mastodon gets the fuller
+  `short` text with hashtags, the morning the note is published. Bluesky gets
+  its own shorter `bluesky` line, with no hashtags, the morning after. The
+  days are set by `AFTER` in `scripts/publish-notes.mjs`.
 - **The pictures** are in `src/lib/content/note-images`, outside the served
   folder. A picture is copied into the site only when its note is published,
   so a held note's picture cannot be found by guessing its address.
@@ -140,8 +144,24 @@ A key lets the job post and nothing else. To stop the job posting, delete the
 key on the network, or delete the secret here.
 
 A note published before a network's keys were added is not posted there
-afterwards: only notes from the last two days are, so adding a key never
+afterwards: only notes from the last three days are, so adding a key never
 floods the feed.
+
+### Posts for one network only
+
+A line that belongs on Mastodon or on Bluesky, and has no page on the site,
+goes in `src/lib/server/posts.ts`: an id, a date, the network, the exact text,
+and a picture if it has one (`src/lib/content/post-images`). The job is
+`.github/workflows/posts.yml`: it runs when that file changes and once a day,
+sends what is due, once, and records it in `src/lib/server/posts-sent.json`.
+A post more than three days late is not sent. Like everything in this
+repository, a post in that file can be read by anyone before it goes out.
+
+### Seeing a post after it has gone out
+
+Actions > Screenshots > Run workflow, with the post's address. It photographs
+the page as a visitor who is not signed in sees it. The picture is attached
+to the run and put on a branch called `shots`, which can be deleted.
 
 ## The profiles on Mastodon and Bluesky
 

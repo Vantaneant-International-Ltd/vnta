@@ -5,6 +5,10 @@
 // Each one lives on this site first, at /robotics/notes/<slug>, and a short
 // version with a link back goes to Mastodon and Bluesky.
 //
+// The two networks are not given the same thing:
+//   Mastodon   `short`, the link and the hashtags, the morning it is published.
+//   Bluesky    `bluesky`, its own shorter line, and the link, the morning after.
+//
 // NOTHING HERE IS PUBLIC JUST BECAUSE IT IS IN THIS FILE. A note is published
 // by the daily job (.github/workflows/notes.yml, scripts/publish-notes.mjs),
 // which writes it into notes-published.json. The site shows only what is in
@@ -58,6 +62,12 @@ export type Note = {
 	 */
 	short: string;
 	/**
+	 * Bluesky's own version, without the link: one or two lines, no hashtags.
+	 * Bluesky gets it the morning after the note is published. Left out, it
+	 * gets `short`. It must not say more than `short` does.
+	 */
+	bluesky?: string;
+	/**
 	 * In src/lib/content/note-images, 1080 by 1350. It is copied into the site
 	 * only once the note is published. The alt text goes to both networks.
 	 */
@@ -85,6 +95,7 @@ export const notes: Note[] = [
 			'If you commission mobile robots for a living, we would like to hear how you do this today.'
 		],
 		short: 'What can this robot actually do, and do we have evidence that it works?\n\nWe’re building VNTA Robotics to answer that: connect to a robot, run the same checks, keep every raw message. In development.',
+		bluesky: 'What can this robot actually do, and do we have evidence that it works?\n\nWe’re building VNTA Robotics to answer that. In development.',
 		image: {
 			file: 'post-01-the-one-question.png',
 			alt: 'The question in large type, above the result of one validation run on a virtual vehicle: 32 of 37 checks passed, 13 of 14 capabilities verified.'
@@ -106,6 +117,7 @@ export const notes: Note[] = [
 			'It is a virtual vehicle, not a real one. The point is the shape of the answer.'
 		],
 		short: 'A capability in a manual is a claim. A capability that has been tested is evidence.\n\nOne virtual vehicle: 14 capabilities declared, 13 verified, 1 failed. A real result, on a vehicle that is not real.',
+		bluesky: 'A capability in a manual is a claim. A capability that has been tested is evidence.',
 		image: {
 			file: 'post-02-declared-is-not-verified.png',
 			alt: 'A table of six capabilities, all declared. Five are verified and one, capability discovery, failed.'
@@ -127,6 +139,7 @@ export const notes: Note[] = [
 			'The next step is a real system. That needs a partner who has one.'
 		],
 		short: 'We’ve tested our robot validation software against four systems. None is a real robot.\n\nThree simulators we wrote, with planted faults. One open-source VDA 5050 virtual vehicle we didn’t: 32 of 37 checks passed.',
+		bluesky: 'We’ve tested our robot validation software against four systems. None is a real robot.',
 		image: {
 			file: 'post-03-what-we-tested-against.png',
 			alt: 'Four systems and their verdicts: three simulated robots and one external virtual vehicle.'
@@ -149,6 +162,7 @@ export const notes: Note[] = [
 			'Write to us at vnta.xyz/contact, or reply wherever you are reading this.'
 		],
 		short: 'Do you commission AMRs or AGVs? VNTA Robotics would like 20 minutes of your time.\n\nNothing to sell. Five questions, and you get to pull apart our first test report.',
+		bluesky: 'Do you commission AMRs or AGVs? We’d like 20 minutes of your time. Nothing to sell.',
 		tags: ['robotics', 'AMR', 'AGV']
 	},
 	{
@@ -166,6 +180,7 @@ export const notes: Note[] = [
 			'If you write test tooling for hardware, you probably have your own version of this story.'
 		],
 		short: 'The first bug our robot test rig found was in our robot test rig.\n\nA badly injected fault looks exactly like a fault in the system. Now every finding gets one more question: did we cause this?',
+		bluesky: 'The first bug our robot test rig found was in our robot test rig.',
 		image: {
 			file: 'post-06-our-own-rig-lied-first.png',
 			alt: 'Two bars: 30 seconds to come back with the faulty test rig, about 1 second once the rig was fixed.'
@@ -187,6 +202,7 @@ export const notes: Note[] = [
 			'Which interface would you want tested first?'
 		],
 		short: 'VNTA Robotics doesn’t replace ROS 2, VDA 5050, Open-RMF or your fleet manager. It sits above them, through adapters.\n\nOne adapter works today (VDA 5050 2.1.0). The rest are planned.',
+		bluesky: 'VNTA Robotics doesn’t replace ROS 2, VDA 5050, Open-RMF or your fleet manager. It sits above them.\n\nOne adapter works today (VDA 5050 2.1.0). The rest are planned.',
 		image: {
 			file: 'post-07-above-not-instead.png',
 			alt: 'VNTA Robotics drawn above four interfaces. VDA 5050 works today; ROS 2, Open-RMF and vendor APIs are planned.'
@@ -207,6 +223,7 @@ export const notes: Note[] = [
 			'We also do not retry quietly. Recently one check came back unknown once in about twenty runs, and we could not reproduce it. It is written down as an open issue, not smoothed over.'
 		],
 		short: 'A timeout is not a pass. It is not a fail either.\n\nOur validation reports five outcomes: pass, warning, fail, unsupported, unknown. “We don’t know” is an answer.',
+		bluesky: 'A timeout is not a pass. It is not a fail either.\n\n“We don’t know” is an answer.',
 		image: {
 			file: 'post-08-a-timeout-is-not-a-pass.png',
 			alt: 'The five ways a test can end: pass, warning, fail, unsupported, unknown.'
@@ -226,6 +243,7 @@ export const notes: Note[] = [
 			'We would rather you heard the first list from us.'
 		],
 		short: 'What VNTA Robotics can’t do yet: it has never met a real robot, has one protocol adapter, no SDK, and nobody has paid for it.\n\nWe’d rather you heard that from us.',
+		bluesky: 'What VNTA Robotics can’t do yet: it has never met a real robot, has one protocol adapter, no SDK, and nobody has paid for it.',
 		tags: ['robotics']
 	}
 ];

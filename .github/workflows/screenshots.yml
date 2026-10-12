@@ -1,0 +1,64 @@
+# Takes a picture of one or more public web pages, as a visitor who is not
+# signed in sees them. Used to look at a post after it has gone out.
+#
+# By hand only: Actions > Screenshots > Run workflow, with the addresses
+# separated by spaces. The pictures are attached to the run ("Artifacts") and
+# also put on a branch called `shots`, which is replaced each time and can be
+# deleted.
+name: Screenshots
+
+on:
+  workflow_dispatch:
+    inputs:
+      urls:
+        description: 'Addresses to photograph, separated by spaces'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  shoot:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: '22'
+
+      - name: Get a browser
+        run: |
+          mkdir -p "$RUNNER_TEMP/shoot/out"
+          cd "$RUNNER_TEMP/shoot"
+          cp "$GITHUB_WORKSPACE/scripts/screenshot.mjs" .
+          npm init -y > /dev/null
+          npm install --no-audit --no-fund playwright@1.56.1
+          npx playwright install --with-deps chromium
+
+      - name: Take the pictures
+        working-directory: ${{ runner.temp }}/shoot
+        env:
+          URLS: ${{ inputs.urls }}
+        run: |
+          set -f
+          node screenshot.mjs out $URLS
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: screenshots
+          path: ${{ runner.temp }}/shoot/out
+          retention-days: 7
+
+      - name: Put them on the shots branch
+        working-directory: ${{ runner.temp }}/shoot/out
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git init -q -b shots
+          git config user.name "vnta-notes"
+          git config user.email "studio@vnta.xyz"
+          git add .
+          git commit -q -m "Screenshots"
+          git push -f "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" shots
