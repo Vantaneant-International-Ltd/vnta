@@ -31,7 +31,7 @@
 	import Wordmark from '$lib/components/ui/Wordmark.svelte';
 	import Symbol from '$lib/components/ui/Symbol.svelte';
 	import Icon from '$lib/components/ui/Icon.svelte';
-	import { roboticsUrl, githubUrl, mastodonUrl, pitch, siteUrl } from '$lib/content/site';
+	import { roboticsUrl, mastodonUrl, social, follow, pitch, siteUrl } from '$lib/content/site';
 	import { notesPath } from '$lib/content/notePaths';
 	import { pitch as studioPitch, landings, studioEmail } from '$lib/content/studio';
 
@@ -125,20 +125,28 @@
 						</a>
 						<p class="foot__line">{pitch.headline}</p>
 					</div>
-					<nav aria-label="Site">
-						<ul class="foot__nav">
-							<li><a href="{base}/">VNTA</a></li>
-							<li><a href={robotics}>Robotics</a></li>
-							<li><a href={pricing}>Pricing</a></li>
-							{#if hasNotes}<li><a href="{base}{notesPath}">Notes</a></li>{/if}
-							<li><a href="{base}/#company">Company</a></li>
-							<li><a href={studio}>Studio</a></li>
-							<li><a href={githubUrl} rel="me noopener">GitHub</a></li>
-							<li><a href={mastodonUrl} rel="me noopener">Mastodon</a></li>
-							<li><a href={data.blueskyUrl} rel="me noopener">Bluesky</a></li>
-							<li><a href="{base}/contact">Contact</a></li>
-						</ul>
-					</nav>
+					<div class="foot__navs">
+						<nav aria-label="Site">
+							<ul class="foot__nav">
+								<li><a href="{base}/">VNTA</a></li>
+								<li><a href={robotics}>Robotics</a></li>
+								<li><a href={pricing}>Pricing</a></li>
+								{#if hasNotes}<li><a href="{base}{notesPath}">Notes</a></li>{/if}
+								<li><a href="{base}/#company">Company</a></li>
+								<li><a href={studio}>Studio</a></li>
+								<li><a href="{base}/contact">Contact</a></li>
+							</ul>
+						</nav>
+						<!-- VNTA's own profiles, apart from the site's pages. -->
+						<nav class="foot__follow" aria-labelledby="foot-follow">
+							<h2 id="foot-follow">Follow</h2>
+							<ul class="foot__nav">
+								{#each social as s}
+									<li><a href={s.href} rel="me noopener">{s.name}</a></li>
+								{/each}
+							</ul>
+						</nav>
+					</div>
 				</div>
 
 				<div class="foot__base">
@@ -195,8 +203,9 @@
 						<ul>
 							<li><a href="mailto:{studioEmail}">{studioEmail}</a></li>
 							<li><a href="{studio}#quote">Contact</a></li>
-							<li><a href={mastodonUrl} rel="me noopener">Mastodon</a></li>
-							<li><a href={data.blueskyUrl} rel="me noopener">Bluesky</a></li>
+							{#each follow as s}
+								<li><a href={s.href} rel="me noopener">{s.name}</a></li>
+							{/each}
 							<li><a href="{base}/">VNTA, the company</a></li>
 							<li><a href="{base}/legal">Legal</a></li>
 							<li><a href="{base}/privacy">Privacy</a></li>

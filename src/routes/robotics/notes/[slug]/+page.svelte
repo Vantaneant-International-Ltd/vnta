@@ -5,7 +5,7 @@
 	import Seo from '$lib/components/Seo.svelte';
 	import Icon from '$lib/components/ui/Icon.svelte';
 	import Stage from '$lib/components/Stage.svelte';
-	import { robotics, siteUrl, company } from '$lib/content/site';
+	import { robotics, siteUrl, company, follow } from '$lib/content/site';
 	import { notePath, notesPath, longDate } from '$lib/content/notePaths';
 
 	let { data } = $props();
@@ -58,6 +58,11 @@
 						{#if note.posted.mastodon}<a href={note.posted.mastodon.url} rel="me noopener">Mastodon</a>{/if}
 						{#if note.posted.mastodon && note.posted.bluesky}and{/if}
 						{#if note.posted.bluesky}<a href={note.posted.bluesky.url} rel="me noopener">Bluesky</a>{/if}.
+					</p>
+				{:else}
+					<p class="note__also">
+						Follow on
+						{#each follow as s, i}{#if i > 0}{' '}or{' '}{/if}<a href={s.href} rel="me noopener">{s.name}</a>{/each}.
 					</p>
 				{/if}
 

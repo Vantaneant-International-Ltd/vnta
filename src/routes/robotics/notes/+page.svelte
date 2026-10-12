@@ -5,7 +5,7 @@
 	import { base } from '$app/paths';
 	import Seo from '$lib/components/Seo.svelte';
 	import Stage from '$lib/components/Stage.svelte';
-	import { robotics } from '$lib/content/site';
+	import { robotics, follow } from '$lib/content/site';
 	import { notePath, longDate } from '$lib/content/notePaths';
 	import { breadcrumb } from '$lib/content/structured';
 
@@ -51,10 +51,11 @@
 					</li>
 				{/each}
 			</ol>
-			<p class="feed">
-				Follow without an account: <a class="link" href="{base}/robotics/notes/rss.xml">RSS feed</a>
-			</p>
 		{/if}
+		<p class="feed">
+			Follow on
+			{#each follow as s, i}{#if i > 0}{' '}or{' '}{/if}<a class="link" href={s.href} rel="me noopener">{s.name}</a>{/each}{#if list.length > 0}, or without an account by <a class="link" href="{base}/robotics/notes/rss.xml">RSS feed</a>{/if}.
+		</p>
 	</div>
 </main>
 

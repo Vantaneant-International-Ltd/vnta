@@ -57,10 +57,18 @@ export const roboticsUrl = '/robotics';
  * profile that is real and ours, with its full address.
  */
 export const mastodonUrl = 'https://mastodon.social/@vntagroup';
+/**
+ * The Bluesky account is named after this domain. That name holds for as long
+ * as static/.well-known/atproto-did is on the site.
+ */
+export const blueskyUrl = 'https://bsky.app/profile/vnta.xyz';
 export const social: { name: string; href: string }[] = [
 	{ name: 'GitHub', href: githubUrl },
-	{ name: 'Mastodon', href: mastodonUrl }
+	{ name: 'Mastodon', href: mastodonUrl },
+	{ name: 'Bluesky', href: blueskyUrl }
 ];
+/** The two where VNTA posts. GitHub is code, not posts. */
+export const follow = social.filter((s) => s.name !== 'GitHub');
 
 // --- The parent: VNTA --------------------------------------------------------
 

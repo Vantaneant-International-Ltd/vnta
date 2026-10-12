@@ -431,6 +431,26 @@
 	font-weight: 500;
 	color: var(--ink);
 }
+.shell .foot__navs {
+	display: grid;
+	gap: 10px;
+}
+.shell .foot__follow {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 4px clamp(20px, 3vw, 40px);
+}
+.shell .foot__follow h2 {
+	margin: 0;
+	font-family: var(--font-mono);
+	font-size: 0.74rem;
+	font-weight: 500;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+	color: inherit;
+	opacity: 0.6;
+}
 .shell .foot__nav a:hover {
 	text-decoration: underline;
 	text-underline-offset: 5px;
