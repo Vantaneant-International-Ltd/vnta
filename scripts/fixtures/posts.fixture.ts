@@ -5,6 +5,8 @@ export const posts = [
 	{ id: 'hello-mastodon', date: '2026-10-12', network: 'mastodon', text: 'Hello, fediverse 👀\n\n#introduction', image: mark },
 	// The emoji comes first on purpose: Bluesky counts in bytes, not letters.
 	{ id: 'hello-bluesky', date: '2026-10-12', network: 'bluesky', text: 'Hello 👀 #robots are at https://vnta.xyz/robotics.', image: mark },
+	{ id: 'hello-pixelfed', date: '2026-10-12', network: 'pixelfed', text: 'Hello, Pixelfed 👀\n\n#introduction', image: mark },
+	{ id: 'no-picture', date: '2026-10-12', network: 'pixelfed', text: 'Pixelfed needs a picture, so this is held.', hold: 'Held.' },
 	{ id: 'later', date: '2026-10-20', network: 'bluesky', text: 'A later line, with no picture.' },
 	{ id: 'held', date: '2026-10-12', network: 'bluesky', text: 'This one is held.', hold: 'Held.' }
 ];

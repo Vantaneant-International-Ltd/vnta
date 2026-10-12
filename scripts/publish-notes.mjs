@@ -18,7 +18,7 @@
 //   node scripts/publish-notes.mjs wait <slug>   wait until that note's page is live
 //   node scripts/publish-notes.mjs social    post fresh notes to Mastodon and Bluesky
 //   node scripts/publish-notes.mjs posts     send the one-network posts that are due
-//   node scripts/publish-notes.mjs verify mastodon|bluesky   check a key works, without posting anything
+//   node scripts/publish-notes.mjs verify mastodon|bluesky|pixelfed   check a key works, without posting anything
 //   node scripts/publish-notes.mjs assets    copy published notes' pictures into the site (runs before each build)
 //
 // The rules, in one place:
@@ -39,6 +39,11 @@
 //   BLUESKY_HANDLE the handle, for example vnta.bsky.social
 //   BLUESKY_APP_PASSWORD  an app password (Settings > Privacy and security > App passwords)
 //   BLUESKY_PDS    only if the account is not on bsky.social
+//   PIXELFED_URL   the server, for example https://pixelfed.social
+//   PIXELFED_TOKEN a personal access token with read and write (Settings > Applications)
+//
+// Pixelfed is pictures first, so only a one-network post with a picture goes
+// there. Notes do not, yet.
 //
 // For testing: NOTES_TODAY=2026-10-13 pretends it is that day; NOTES_DRY_RUN=1
 // writes and posts nothing; NOTES_SITE, NOTES_LEDGER, NOTES_FILE, POSTS_LEDGER
@@ -53,6 +58,7 @@ const DRY = process.env.NOTES_DRY_RUN === '1';
 
 const BLUESKY_LIMIT = 300; // graphemes
 const MASTODON_LIMIT = 500; // characters; a link counts as 23 there, we count it in full
+const PIXELFED_LIMIT = 500; // characters in a caption, the default on a Pixelfed server
 const BLUESKY_IMAGE_LIMIT = 1_000_000; // bytes
 const FRESH_DAYS = 3;
 /** How many mornings after a note is published each network gets it. */
@@ -143,11 +149,13 @@ function postProblems(p) {
 	const out = [];
 	if (!/^[a-z0-9]+(-[a-z0-9]+)*$/.test(p.id ?? '')) out.push('the id must be lower-case words joined by hyphens');
 	if (!/^\d{4}-\d{2}-\d{2}$/.test(p.date ?? '') || Number.isNaN(Date.parse(p.date))) out.push('the date must be YYYY-MM-DD');
-	if (!['mastodon', 'bluesky'].includes(p.network)) out.push('the network must be mastodon or bluesky');
+	if (!['mastodon', 'bluesky', 'pixelfed'].includes(p.network)) out.push('the network must be mastodon, bluesky or pixelfed');
+	if (p.network === 'pixelfed' && !p.image) out.push('a Pixelfed post needs a picture');
 	if (!p.text?.trim()) out.push('there is no text');
 	else if (/\[[^\]]*\]/.test(p.text)) out.push('there is still a [BRACKET] to fill in');
 	else if (p.network === 'bluesky' && graphemes(p.text) > BLUESKY_LIMIT) out.push(`it is ${graphemes(p.text)} characters; Bluesky allows ${BLUESKY_LIMIT}`);
 	else if (p.network === 'mastodon' && p.text.length > MASTODON_LIMIT) out.push(`it is ${p.text.length} characters; Mastodon allows ${MASTODON_LIMIT}`);
+	else if (p.network === 'pixelfed' && p.text.length > PIXELFED_LIMIT) out.push(`it is ${p.text.length} characters; Pixelfed allows ${PIXELFED_LIMIT}`);
 	if (p.image) {
 		const file = `${POST_IMAGES}${p.image.file}`;
 		if (!p.image.alt?.trim()) out.push('the image needs a description (alt)');
@@ -321,6 +329,61 @@ async function sendMastodon({ text, image, key }) {
 
 const postMastodon = (n) => sendMastodon({ text: mastodonText(n), image: noteImage(n), key: `vnta-note-${n.slug}` });
 
+// --- Pixelfed --------------------------------------------------------------------
+
+/** Text as a person reads it, from the HTML a server sends back: for comparing, not for showing. */
+const plain = (html) =>
+	String(html ?? '')
+		.replace(/<br\s*\/?>(?=.)/gi, ' ')
+		.replace(/<\/p>\s*<p>/gi, ' ')
+		.replace(/<[^>]*>/g, '')
+		.replace(/&amp;/g, '&')
+		.replace(/&#0?39;|&apos;/g, "'")
+		.replace(/&quot;/g, '"')
+		.replace(/\s+/g, ' ')
+		.trim();
+
+/**
+ * Posts a picture with its caption to Pixelfed, which answers to the same
+ * calls as Mastodon. It has no key that stops a repeat, so the account's
+ * recent posts are looked through first.
+ */
+async function sendPixelfed({ text, image }) {
+	const base = process.env.PIXELFED_URL.replace(/\/$/, '');
+	const auth = { authorization: `Bearer ${process.env.PIXELFED_TOKEN}`, accept: 'application/json' };
+	const fail = async (what, res) => new Error(`Pixelfed ${what}: ${res.status} ${(await res.text()).slice(0, 300)}`);
+
+	const me = await fetch(`${base}/api/v1/accounts/verify_credentials`, { headers: auth });
+	if (!me.ok) throw await fail('sign-in', me);
+	const account = await me.json();
+	try {
+		const recent = await fetch(`${base}/api/v1/accounts/${account.id}/statuses?limit=20`, { headers: auth });
+		if (recent.ok) {
+			const want = text.replace(/\s+/g, ' ').trim();
+			const found = (await recent.json()).find((s) => plain(s.content) === want || (typeof s.content_text === 'string' && s.content_text.replace(/\s+/g, ' ').trim() === want));
+			if (found) return { id: String(found.id), url: found.url, found: true };
+		}
+	} catch {
+		/* Looking was a courtesy. The record of what was sent is the real guard. */
+	}
+
+	const form = new FormData();
+	form.append('file', new Blob([readFileSync(image.path)], { type: 'image/png' }), image.name);
+	form.append('description', image.alt);
+	const up = await fetch(`${base}/api/v1/media`, { method: 'POST', headers: auth, body: form });
+	if (!up.ok) throw await fail('image upload', up);
+	const media = await up.json();
+
+	const res = await fetch(`${base}/api/v1/statuses`, {
+		method: 'POST',
+		headers: { ...auth, 'content-type': 'application/json' },
+		body: JSON.stringify({ status: text, media_ids: [String(media.id)], visibility: 'public' })
+	});
+	if (!res.ok) throw await fail('post', res);
+	const status = await res.json();
+	return { id: String(status.id), url: status.url };
+}
+
 // --- Bluesky ---------------------------------------------------------------------
 
 /**
@@ -451,7 +514,26 @@ async function verify(which) {
 		console.log(`Bluesky: the key works (signed in as ${(await res.json()).handle}).`);
 		return;
 	}
-	console.error('Usage: node scripts/publish-notes.mjs verify mastodon|bluesky');
+	if (which === 'pixelfed') {
+		const base = (process.env.PIXELFED_URL || '').replace(/\/$/, '');
+		if (!base || !process.env.PIXELFED_TOKEN) return console.log('Pixelfed: no key set.');
+		let res;
+		try {
+			res = await fetch(`${base}/api/v1/accounts/verify_credentials`, { headers: { authorization: `Bearer ${process.env.PIXELFED_TOKEN}`, accept: 'application/json' } });
+		} catch (e) {
+			flag('error', `Pixelfed could not be reached at the address in PIXELFED_URL. ${e.message}`);
+			process.exit(1);
+		}
+		if (!res.ok) {
+			flag('error', `Pixelfed refused the key (${res.status}). Check PIXELFED_URL and PIXELFED_TOKEN.`);
+			process.exit(1);
+		}
+		const account = await res.json();
+		// The name is public. It is said in pieces because GitHub hides the server's address in a run's notes.
+		flag('notice', `Pixelfed: the key works (signed in as @${account.username ?? account.acct}).`);
+		return;
+	}
+	console.error('Usage: node scripts/publish-notes.mjs verify mastodon|bluesky|pixelfed');
 	process.exit(2);
 }
 
@@ -459,7 +541,8 @@ async function verify(which) {
 
 const haveKeys = () => ({
 	mastodon: !!(process.env.MASTODON_URL && process.env.MASTODON_TOKEN),
-	bluesky: !!(process.env.BLUESKY_HANDLE && process.env.BLUESKY_APP_PASSWORD)
+	bluesky: !!(process.env.BLUESKY_HANDLE && process.env.BLUESKY_APP_PASSWORD),
+	pixelfed: !!(process.env.PIXELFED_URL && process.env.PIXELFED_TOKEN)
 });
 
 async function social() {
@@ -508,7 +591,7 @@ async function social() {
 
 async function sendPosts() {
 	const on = haveKeys();
-	const names = { mastodon: 'Mastodon', bluesky: 'Bluesky' };
+	const names = { mastodon: 'Mastodon', bluesky: 'Bluesky', pixelfed: 'Pixelfed' };
 	const ledger = readSent();
 	const done = new Set(ledger.sent.map((e) => e.id));
 	const day = today();
@@ -540,7 +623,9 @@ async function sendPosts() {
 			const sent =
 				p.network === 'mastodon'
 					? await sendMastodon({ text: p.text, image: postImage(p), key: `vnta-post-${p.id}` })
-					: await sendBluesky({ text: p.text, image: postImage(p), same: (text) => text === p.text });
+					: p.network === 'pixelfed'
+						? await sendPixelfed({ text: p.text, image: postImage(p) })
+						: await sendBluesky({ text: p.text, image: postImage(p), same: (text) => text === p.text });
 			// `ref` is the network's own name for the post. It must not be called `id`: that is ours.
 			ledger.sent.push({ id: p.id, network: p.network, at: now().toISOString(), url: sent.url, ref: sent.id ?? sent.uri });
 			writeSent(ledger);

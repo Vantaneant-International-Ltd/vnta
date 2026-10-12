@@ -19,7 +19,7 @@ const postsFixture = fileURLToPath(new URL('./fixtures/posts.fixture.ts', import
 
 /** A pretend Mastodon server and Bluesky server in one, remembering what it was sent. */
 async function pretend() {
-	const seen = { statuses: [], media: [], records: [], blobs: 0, sessions: 0 };
+	const seen = { statuses: [], media: [], records: [], blobs: 0, sessions: 0, pix: [], pixMedia: [] };
 	const server = createServer(async (req, res) => {
 		const chunks = [];
 		for await (const c of req) chunks.push(c);
@@ -30,6 +30,21 @@ async function pretend() {
 		};
 		const url = new URL(req.url, 'http://x');
 		if (req.method === 'GET' && url.pathname.startsWith('/robotics/notes/')) return send(200, {});
+		// Pixelfed: the same kind of calls as Mastodon, told apart here by its key.
+		if (req.headers.authorization === 'Bearer pix-token' || url.pathname.startsWith('/api/v1/accounts/')) {
+			if (req.headers.authorization !== 'Bearer pix-token') return send(401, { error: 'Unauthenticated.' });
+			if (url.pathname === '/api/v1/accounts/verify_credentials') return send(200, { id: '77', username: 'vnta', url: 'https://pix.example/vnta' });
+			if (url.pathname === '/api/v1/accounts/77/statuses') return send(200, seen.pix.map((s, i) => ({ id: `p${i + 1}`, url: `https://pix.example/p/vnta/p${i + 1}`, content: s.status.replace(/\n/g, '<br />').replace(/#(\w+)/g, '<a href="https://pix.example/discover/tags/$1">#$1</a>') })));
+			if (url.pathname === '/api/v1/media') {
+				seen.pixMedia.push({ bytes: body.length, hasAlt: body.includes('name="description"') });
+				return send(200, { id: `pm${seen.pixMedia.length}` });
+			}
+			if (url.pathname === '/api/v1/statuses') {
+				seen.pix.push(JSON.parse(body.toString()));
+				return send(200, { id: `p${seen.pix.length}`, url: `https://pix.example/p/vnta/p${seen.pix.length}` });
+			}
+			return send(404, { error: 'no such address' });
+		}
 		// Mastodon
 		if (url.pathname === '/api/v1/apps/verify_credentials') {
 			if (req.headers.authorization !== 'Bearer masto-token' && req.headers.authorization !== 'Bearer wide-token') return send(401, { error: 'The access token is invalid' });
@@ -85,7 +100,7 @@ async function world(t, { keys = true } = {}) {
 		NOTES_FILE: fixture,
 		POSTS_FILE: postsFixture,
 		POSTS_LEDGER: sent,
-		...(keys ? { MASTODON_URL: fake.origin, MASTODON_TOKEN: 'masto-token', BLUESKY_PDS: fake.origin, BLUESKY_HANDLE: 'vnta.example', BLUESKY_APP_PASSWORD: 'app-pass' } : {})
+		...(keys ? { MASTODON_URL: fake.origin, MASTODON_TOKEN: 'masto-token', BLUESKY_PDS: fake.origin, BLUESKY_HANDLE: 'vnta.example', BLUESKY_APP_PASSWORD: 'app-pass', PIXELFED_URL: fake.origin, PIXELFED_TOKEN: 'pix-token' } : {})
 	};
 	// Run without blocking: the pretend servers live in this process and must be free to answer.
 	const run = (command, day, extra = {}) =>
@@ -303,11 +318,16 @@ test('a one-network post goes to that network only, once, with its picture', asy
 	// Recorded, and not sent again. The held one never goes.
 	assert.deepEqual(w.sent().map((e) => [e.id, e.network, e.url]), [
 		['hello-mastodon', 'mastodon', 'https://social.example/@vnta/1001'],
-		['hello-bluesky', 'bluesky', 'https://bsky.app/profile/vnta.example/post/rk1']
+		['hello-bluesky', 'bluesky', 'https://bsky.app/profile/vnta.example/post/rk1'],
+		['hello-pixelfed', 'pixelfed', 'https://pix.example/p/vnta/p1']
 	]);
+
+	// Pixelfed: the caption, and the picture with its description.
+	assert.deepEqual(w.seen.pix, [{ status: 'Hello, Pixelfed 👀\n\n#introduction', media_ids: ['pm1'], visibility: 'public' }]);
+	assert.ok(w.seen.pixMedia[0].hasAlt && w.seen.pixMedia[0].bytes > 10_000);
 	await w.run('posts', '2026-10-12');
 	await w.run('posts', '2026-10-13');
-	assert.deepEqual([w.seen.statuses.length, w.seen.records.length], [1, 1]);
+	assert.deepEqual([w.seen.statuses.length, w.seen.records.length, w.seen.pix.length], [1, 1, 1]);
 
 	// The later one goes on its own day, with no picture and nothing marked.
 	await w.run('posts', '2026-10-20');
@@ -327,6 +347,8 @@ test('a one-network post that is days late is not sent, and a lost record does n
 	const r = await again.run('posts', '2026-10-12', { MASTODON_URL: '', MASTODON_TOKEN: '' });
 	assert.match(r.out, /Bluesky: already there/);
 	assert.equal(again.seen.records.length, 1, 'Bluesky was not posted to a second time');
+	assert.match(r.out, /Pixelfed: already there/);
+	assert.equal(again.seen.pix.length, 1, 'Pixelfed was not posted to a second time');
 });
 
 test('a dry run of the one-network posts says what would go and sends nothing', async (t) => {
@@ -334,7 +356,20 @@ test('a dry run of the one-network posts says what would go and sends nothing', 
 	const r = await w.run('posts', '2026-10-12', { NOTES_DRY_RUN: '1' });
 	assert.match(r.out, /Would post to Mastodon \(hello-mastodon\)/);
 	assert.match(r.out, /Would post to Bluesky \(hello-bluesky\)/);
-	assert.deepEqual([w.seen.statuses.length, w.seen.records.length, w.sent().length], [0, 0, 0]);
+	assert.match(r.out, /Would post to Pixelfed \(hello-pixelfed\)/);
+	assert.deepEqual([w.seen.statuses.length, w.seen.records.length, w.seen.pix.length, w.sent().length], [0, 0, 0, 0]);
+});
+
+test('the Pixelfed key can be checked without posting, and a picture is required there', async (t) => {
+	const w = await world(t);
+	const ok = await w.run('verify pixelfed', '2026-10-12');
+	assert.equal(ok.code, 0, ok.out);
+	assert.match(ok.out, /Pixelfed: the key works \(signed in as @vnta\)/);
+	assert.equal((await w.run('verify pixelfed', '2026-10-12', { PIXELFED_TOKEN: 'nope' })).code, 1);
+	assert.equal(w.seen.pix.length, 0, 'nothing was posted');
+	// The fixture holds a Pixelfed post with no picture: held, so the check passes over it; released, it would fail.
+	const r = await w.run('check', '2026-10-12', { NOTES_FILE: '' });
+	assert.doesNotMatch(r.out, /no-picture/);
 });
 
 test('a dry run writes and posts nothing', async (t) => {

@@ -10,6 +10,8 @@
 //              are how a post is found there). A first post carries
 //              #introduction.
 //   Bluesky    Quicker. One line, the picture, no hashtags.
+//   Pixelfed   Pictures first: every post needs one. A short caption, and
+//              hashtags, which are how a picture is found there.
 //
 // A post goes out at the next run on or after its date (Dublin time), once.
 // The job is .github/workflows/posts.yml; it runs when this file changes and
@@ -28,8 +30,8 @@ export type Post = {
 	id: string;
 	/** The day it may go out, YYYY-MM-DD, Dublin time. */
 	date: string;
-	network: 'mastodon' | 'bluesky';
-	/** Exactly what is posted. Mastodon allows 500 characters, Bluesky 300. */
+	network: 'mastodon' | 'bluesky' | 'pixelfed';
+	/** Exactly what is posted. Mastodon and Pixelfed allow 500 characters, Bluesky 300. */
 	text: string;
 	/** A PNG in src/lib/content/post-images, under 1,000,000 bytes, with its size in pixels. */
 	image?: { file: string; alt: string; width: number; height: number };
@@ -52,6 +54,13 @@ export const posts: Post[] = [
 		date: '2026-10-12',
 		network: 'bluesky',
 		text: 'We’re here. Hello, decentralised network 👀',
+		image: wordmark
+	},
+	{
+		id: 'hello-pixelfed',
+		date: '2026-10-12',
+		network: 'pixelfed',
+		text: 'We’re here. Hello, Pixelfed 👀\n\n#introduction',
 		image: wordmark
 	}
 ];

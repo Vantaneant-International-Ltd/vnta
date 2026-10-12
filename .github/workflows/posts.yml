@@ -1,12 +1,14 @@
 # Sends the posts that belong to one network only (src/lib/server/posts.ts):
-# a line for Mastodon or a line for Bluesky, with no page on the site. Robotics
+# a line for Mastodon, Bluesky or Pixelfed, with no page on the site. Robotics
 # notes are a different job ("Publish notes").
 #
 # A post goes out at the next run on or after its date, once. Runs happen when
 # posts.ts changes, once a day, and by hand: Actions > Social posts > Run
 # workflow (tick "Dry run" to see what would go, and send nothing).
 #
-# It uses the same repository secrets as "Publish notes".
+# It uses the same repository secrets as "Publish notes", and two more for
+# Pixelfed: PIXELFED_URL (the server, for example https://pixelfed.social) and
+# PIXELFED_TOKEN (a personal access token with read and write).
 name: Social posts
 
 on:
@@ -41,6 +43,9 @@ jobs:
       MASTODON_TOKEN: ${{ secrets.MASTODON_TOKEN }}
       BLUESKY_HANDLE: ${{ secrets.BLUESKY_HANDLE }}
       BLUESKY_APP_PASSWORD: ${{ secrets.BLUESKY_APP_PASSWORD }}
+      PIXELFED_URL: ${{ secrets.PIXELFED_URL }}
+      PIXELFED_TOKEN: ${{ secrets.PIXELFED_TOKEN }}
+      HAS_PIXELFED: ${{ secrets.PIXELFED_URL != '' && secrets.PIXELFED_TOKEN != '' }}
     steps:
       - uses: actions/checkout@v5
         with:
@@ -60,7 +65,14 @@ jobs:
           node scripts/publish-notes.mjs check
           node --test scripts/publish-notes.test.mjs
 
+      # Says the account's name, and shows red by name if the key is refused.
+      - name: The Pixelfed key works
+        if: env.HAS_PIXELFED == 'true'
+        run: node scripts/publish-notes.mjs verify pixelfed
+
+      # A refused key for one network must not stop the others.
       - name: Send what is due
+        if: ${{ !cancelled() }}
         run: node scripts/publish-notes.mjs posts
 
       # Even if one network failed, keep the record of the one that worked.
