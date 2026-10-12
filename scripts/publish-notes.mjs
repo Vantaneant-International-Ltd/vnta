@@ -353,6 +353,37 @@ function keyFault(name) {
 	return `${name} is ${[...value].length} characters long and ${odd.length} of them are ${kind} (at ${odd.slice(0, 6).map((o) => o.at).join(', ')}${odd.length > 6 ? ', ...' : ''}). ${shape} A key is plain English letters and digits only. Copy it again with the copy button and save the secret again.`;
 }
 
+/**
+ * When a server refuses a key that looks clean: is the key whole? A Pixelfed
+ * key is three parts joined by full stops. The first two can be read without
+ * any secret, and the third has a fixed length. Says what it finds in plain
+ * words, and never any of the key.
+ */
+function keyShape(name) {
+	const parts = keyOf(name).split('.');
+	if (parts.length !== 3) return `The key has ${parts.length} part(s); a whole one has 3.`;
+	const read = (part) => {
+		try {
+			return JSON.parse(Buffer.from(part, 'base64url').toString('utf8'));
+		} catch {
+			return null;
+		}
+	};
+	const head = read(parts[0]);
+	const body = read(parts[1]);
+	const out = [`The key is ${keyOf(name).length} characters long.`];
+	out.push(head?.alg ? 'Its first part reads properly.' : 'Its first part does not read properly: a letter is wrong or missing.');
+	if (!body) out.push('Its middle part does not read properly: a letter is wrong or missing.');
+	else {
+		const may = Array.isArray(body.scopes) ? body.scopes.join(', ') || 'nothing' : 'unknown';
+		const until = body.exp ? new Date(body.exp * 1000).toISOString().slice(0, 10) : 'unknown';
+		out.push(`Its middle part reads properly: it may ${may}, and runs out on ${until}${body.exp && body.exp * 1000 < Date.now() ? ' (already past)' : ''}.`);
+	}
+	const whole = [342, 683].includes(parts[2].length) && /^[A-Za-z0-9_-]+$/.test(parts[2]);
+	out.push(`Its last part is ${parts[2].length} characters${whole ? ', which is a whole one' : '; a whole one is 342 or 683, so some of it is missing or extra'}.`);
+	return out.join(' ');
+}
+
 /** Text as a person reads it, from the HTML a server sends back: for comparing, not for showing. */
 const plain = (html) =>
 	String(html ?? '')
@@ -552,7 +583,13 @@ async function verify(which) {
 			process.exit(1);
 		}
 		if (!res.ok) {
-			flag('error', `Pixelfed refused the key (${res.status}). Check PIXELFED_URL and PIXELFED_TOKEN.`);
+			let host = 'unreadable';
+			try {
+				host = new URL(base).host === 'pixelfed.social' ? 'pixelfed.social' : 'not pixelfed.social';
+			} catch {
+				/* said as unreadable */
+			}
+			flag('error', `Pixelfed refused the key (${res.status}). ${keyShape('PIXELFED_TOKEN')} The server in PIXELFED_URL is ${host}. If the key is whole, it was made on a different server or account than PIXELFED_URL names, or it has since been deleted.`);
 			process.exit(1);
 		}
 		const account = await res.json();

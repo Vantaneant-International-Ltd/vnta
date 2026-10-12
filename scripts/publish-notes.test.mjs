@@ -365,7 +365,13 @@ test('the Pixelfed key can be checked without posting, and a picture is required
 	const ok = await w.run('verify pixelfed', '2026-10-12');
 	assert.equal(ok.code, 0, ok.out);
 	assert.match(ok.out, /Pixelfed: the key works \(signed in as @vnta\)/);
-	assert.equal((await w.run('verify pixelfed', '2026-10-12', { PIXELFED_TOKEN: 'nope' })).code, 1);
+	const refused = await w.run('verify pixelfed', '2026-10-12', { PIXELFED_TOKEN: 'nope' });
+	assert.equal(refused.code, 1);
+	assert.match(refused.out, /The key has 1 part\(s\); a whole one has 3/);
+	// A key cut short while being copied: the first two parts read, the last is too short.
+	const part = (o) => Buffer.from(JSON.stringify(o)).toString('base64url');
+	const cut = await w.run('verify pixelfed', '2026-10-12', { PIXELFED_TOKEN: `${part({ typ: 'JWT', alg: 'RS256' })}.${part({ scopes: ['read', 'write'], exp: 1900000000 })}.${'a'.repeat(100)}` });
+	assert.match(cut.out, /it may read, write, and runs out on 2030-03-17\. Its last part is 100 characters; a whole one is 342 or 683/);
 	// A key copied out of a picture: the fourth character is a Cyrillic letter that looks like an O.
 	const bent = await w.run('verify pixelfed', '2026-10-12', { PIXELFED_TOKEN: 'eyJ\u041eeXAi' });
 	assert.equal(bent.code, 1);
