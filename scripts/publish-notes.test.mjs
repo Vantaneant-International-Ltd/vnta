@@ -366,6 +366,12 @@ test('the Pixelfed key can be checked without posting, and a picture is required
 	assert.equal(ok.code, 0, ok.out);
 	assert.match(ok.out, /Pixelfed: the key works \(signed in as @vnta\)/);
 	assert.equal((await w.run('verify pixelfed', '2026-10-12', { PIXELFED_TOKEN: 'nope' })).code, 1);
+	// A key copied out of a picture: the fourth character is a Cyrillic letter that looks like an O.
+	const bent = await w.run('verify pixelfed', '2026-10-12', { PIXELFED_TOKEN: 'eyJ\u041eeXAi' });
+	assert.equal(bent.code, 1);
+	assert.match(bent.out, /PIXELFED_TOKEN has a character in it that no key can have/);
+	const sent = await w.run('posts', '2026-10-12', { PIXELFED_TOKEN: 'eyJ\u041eeXAi' });
+	assert.match(sent.out, /hello-pixelfed was not posted. PIXELFED_TOKEN has a character/);
 	assert.equal(w.seen.pix.length, 0, 'nothing was posted');
 	// The fixture holds a Pixelfed post with no picture: held, so the check passes over it; released, it would fail.
 	const r = await w.run('check', '2026-10-12', { NOTES_FILE: '' });
