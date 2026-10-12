@@ -2,7 +2,11 @@
 	"published": [
 		{
 			"slug": "the-one-question",
-			"at": "2026-10-12T09:49:09.475Z"
+			"at": "2026-10-12T09:49:09.475Z",
+			"mastodon": {
+				"id": "117427311713403367",
+				"url": "https://mastodon.social/@vntagroup/117427311713403367"
+			}
 		}
 	]
 }
