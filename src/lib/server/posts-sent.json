@@ -13,6 +13,13 @@
 			"at": "2026-10-12T00:02:16.847Z",
 			"url": "https://bsky.app/profile/vnta.xyz/post/3mxn7omzfsk2a",
 			"ref": "at://did:plc:acp5gumigrkus7q343v3gvyk/app.bsky.feed.post/3mxn7omzfsk2a"
+		},
+		{
+			"id": "hello-pixelfed",
+			"network": "pixelfed",
+			"at": "2026-10-12T00:37:29.613Z",
+			"url": "https://pixelfed.social/p/vnta/1015057846773009156",
+			"ref": "1015057846773009156"
 		}
 	]
 }
