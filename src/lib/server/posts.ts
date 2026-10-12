@@ -33,7 +33,7 @@ export type Post = {
 	network: 'mastodon' | 'bluesky' | 'pixelfed';
 	/** Exactly what is posted. Mastodon and Pixelfed allow 500 characters, Bluesky 300. */
 	text: string;
-	/** A PNG in src/lib/content/post-images, under 1,000,000 bytes, with its size in pixels. */
+	/** A PNG or JPEG in src/lib/content/post-images, under 1,000,000 bytes, with its size in pixels. */
 	image?: { file: string; alt: string; width: number; height: number };
 	/** While this is set the post is not sent. Keep the reason neutral. */
 	hold?: string;
@@ -62,5 +62,32 @@ export const posts: Post[] = [
 		network: 'pixelfed',
 		text: 'We’re here. Hello, Pixelfed 👀\n\n#introduction',
 		image: wordmark
+	},
+
+	// VNTA Studio on Pixelfed: one project a week, on Mondays, so it never
+	// lands on a Robotics day there (Thursday and Saturday). Every fact is
+	// from the studio page (src/lib/content/studio.ts), and every screenshot
+	// is the one that page already shows. Pictures drawn in each project's
+	// own colours, from static/work.
+	{
+		id: 'studio-ezgo-auto-works',
+		date: '2026-10-19',
+		network: 'pixelfed',
+		text: 'EZGO Auto Works, Finglas.\n\nWe designed the brand and built the site. Mechanics, bodywork and detailing under one roof, with the prices shown and a ring or a WhatsApp one tap away.\n\nezgoautoworks.ie\n\n#branding #webdesign #dublin #smallbusiness',
+		image: { file: 'studio-ezgo-auto-works.jpg', alt: 'The EZGO Auto Works website on a laptop and a phone: Fixed. Sprayed. Detailed. beside a photo of a mechanic under a car. Labelled VNTA Studio, brand and website.', width: 1080, height: 1350 }
+	},
+	{
+		id: 'studio-buildt',
+		date: '2026-10-26',
+		network: 'pixelfed',
+		text: 'BUILDT, Dublin.\n\nWe designed the brand and built the site. Customers build their own PC on it, watch the price change, and order. The owner updates stock and prices himself.\n\nbuildt.ie\n\n#branding #webdesign #dublin #pcbuild',
+		image: { file: 'studio-buildt.jpg', alt: 'The BUILDT website on a laptop and a phone: BUILDT by hand. Proven on the bench. Labelled VNTA Studio, brand and website.', width: 1080, height: 1350 }
+	},
+	{
+		id: 'studio-lm-motors',
+		date: '2026-11-02',
+		network: 'pixelfed',
+		text: 'L.M. Motors, Sallins.\n\nA website for a used car dealer, in build. Customers search the stock, shortlist cars, then ring or message about the one they want.\n\nvnta.xyz/studio\n\n#webdesign #kildare #smallbusiness',
+		image: { file: 'studio-lm-motors.jpg', alt: 'The L.M. Motors website on a laptop and a phone: Used cars, exactly as described, with a search by make, model and budget. Labelled VNTA Studio, website, in build.', width: 1080, height: 1350 }
 	}
 ];

@@ -177,7 +177,8 @@ function postProblems(p) {
 		const file = `${POST_IMAGES}${p.image.file}`;
 		if (!p.image.alt?.trim()) out.push('the image needs a description (alt)');
 		if (!(p.image.width > 0 && p.image.height > 0)) out.push('the image needs its width and height in pixels');
-		if (!/\.png$/.test(p.image.file ?? '')) out.push('the image must be a PNG');
+		if (!/\.(png|jpe?g)$/.test(p.image.file ?? '')) out.push('the image must be a PNG or a JPEG');
+		else if (p.network === 'bluesky' && !/\.png$/.test(p.image.file)) out.push('a Bluesky picture must be a PNG');
 		else if (!existsSync(file)) out.push(`src/lib/content/post-images/${p.image.file} does not exist`);
 		else if (statSync(file).size > BLUESKY_IMAGE_LIMIT) out.push(`${p.image.file} is over ${BLUESKY_IMAGE_LIMIT} bytes`);
 	}
@@ -319,7 +320,7 @@ async function sendMastodon({ text, image, key }) {
 	const mediaIds = [];
 	if (image) {
 		const form = new FormData();
-		form.append('file', new Blob([readFileSync(image.path)], { type: 'image/png' }), image.name);
+		form.append('file', new Blob([readFileSync(image.path)], { type: /\.jpe?g$/.test(image.path) ? 'image/jpeg' : 'image/png' }), image.name);
 		form.append('description', image.alt);
 		const up = await fetch(`${base}/api/v2/media`, { method: 'POST', headers: auth, body: form });
 		if (!up.ok) throw await fail('image upload', up);
