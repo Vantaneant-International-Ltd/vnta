@@ -332,14 +332,25 @@ const postMastodon = (n) => sendMastodon({ text: mastodonText(n), image: noteIma
 // --- Pixelfed --------------------------------------------------------------------
 
 /**
+ * A key as it should be sent. Spaces and line breaks picked up while copying
+ * are dropped: no key has any, so nothing is lost.
+ */
+const keyOf = (name) => (process.env[name] ?? '').replace(/\s+/g, '');
+
+/**
  * A key is plain letters, digits and a few signs. One that was retyped, or
  * copied out of a picture, can carry a look-alike letter from another
- * alphabet, and then it cannot even be sent. Says so in plain words.
+ * alphabet, and then it cannot even be sent. Says what is wrong in plain
+ * words, without showing any of the key.
  */
 function keyFault(name) {
-	const value = process.env[name] ?? '';
-	if (/^[\x21-\x7e]+$/.test(value)) return '';
-	return `${name} has a character in it that no key can have (a space, a line break, or a letter from another alphabet). It was probably retyped or copied from a picture. Copy it again with the copy button and save the secret again.`;
+	const value = keyOf(name);
+	const odd = [...value].map((ch, i) => ({ ch, at: i + 1 })).filter(({ ch }) => !/^[\x21-\x7e]$/.test(ch));
+	if (!odd.length) return '';
+	const cyrillic = odd.filter(({ ch }) => /\p{Script=Cyrillic}/u.test(ch)).length;
+	const kind = cyrillic === odd.length ? 'Cyrillic letters' : cyrillic ? 'letters from other alphabets, some Cyrillic' : 'characters that are not plain letters or digits';
+	const shape = /^eyJ/.test(value) && value.split('.').length === 3 ? 'It has the shape of a key otherwise.' : 'It does not have the shape of a key at all (a key starts with "eyJ" and has two full stops in it): something else may have been pasted.';
+	return `${name} is ${[...value].length} characters long and ${odd.length} of them are ${kind} (at ${odd.slice(0, 6).map((o) => o.at).join(', ')}${odd.length > 6 ? ', ...' : ''}). ${shape} A key is plain English letters and digits only. Copy it again with the copy button and save the secret again.`;
 }
 
 /** Text as a person reads it, from the HTML a server sends back: for comparing, not for showing. */
@@ -362,7 +373,7 @@ const plain = (html) =>
 async function sendPixelfed({ text, image }) {
 	if (keyFault('PIXELFED_TOKEN')) throw new Error(keyFault('PIXELFED_TOKEN'));
 	const base = process.env.PIXELFED_URL.replace(/\/$/, '');
-	const auth = { authorization: `Bearer ${process.env.PIXELFED_TOKEN}`, accept: 'application/json' };
+	const auth = { authorization: `Bearer ${keyOf('PIXELFED_TOKEN')}`, accept: 'application/json' };
 	const fail = async (what, res) => new Error(`Pixelfed ${what}: ${res.status} ${(await res.text()).slice(0, 300)}`);
 
 	const me = await fetch(`${base}/api/v1/accounts/verify_credentials`, { headers: auth });
@@ -535,7 +546,7 @@ async function verify(which) {
 		}
 		let res;
 		try {
-			res = await fetch(`${base}/api/v1/accounts/verify_credentials`, { headers: { authorization: `Bearer ${process.env.PIXELFED_TOKEN}`, accept: 'application/json' } });
+			res = await fetch(`${base}/api/v1/accounts/verify_credentials`, { headers: { authorization: `Bearer ${keyOf('PIXELFED_TOKEN')}`, accept: 'application/json' } });
 		} catch (e) {
 			flag('error', `Pixelfed could not be reached at the address in PIXELFED_URL. ${e.message}`);
 			process.exit(1);
