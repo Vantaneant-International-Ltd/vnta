@@ -1,3 +1,18 @@
 {
-	"sent": []
+	"sent": [
+		{
+			"id": "hello-mastodon",
+			"network": "mastodon",
+			"at": "2026-10-12T00:02:14.788Z",
+			"url": "https://mastodon.social/@vntagroup/117425001875268380",
+			"ref": "117425001875268380"
+		},
+		{
+			"id": "hello-bluesky",
+			"network": "bluesky",
+			"at": "2026-10-12T00:02:16.847Z",
+			"url": "https://bsky.app/profile/vnta.xyz/post/3mxn7omzfsk2a",
+			"ref": "at://did:plc:acp5gumigrkus7q343v3gvyk/app.bsky.feed.post/3mxn7omzfsk2a"
+		}
+	]
 }
