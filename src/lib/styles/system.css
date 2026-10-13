@@ -518,3 +518,10 @@
 		display: none;
 	}
 }
+
+/* Page to page: a short, quiet cross-fade (see onNavigate in +layout.svelte). */
+::view-transition-old(root),
+::view-transition-new(root) {
+	animation-duration: 220ms;
+	animation-timing-function: ease;
+}

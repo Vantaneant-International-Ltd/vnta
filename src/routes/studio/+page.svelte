@@ -12,6 +12,7 @@
 	import { base } from '$app/paths';
 	import EnquiryForm from '$lib/components/EnquiryForm.svelte';
 	import Flip from '$lib/studio/Flip.svelte';
+	import Symbol from '$lib/components/ui/Symbol.svelte';
 	import Logos from '$lib/studio/Logos.svelte';
 	import ProjectCard from '$lib/studio/ProjectCard.svelte';
 	import Seo from '$lib/components/Seo.svelte';
@@ -87,6 +88,9 @@
 <main>
 	<!-- HERO: what we do, in one large line, and a real site that turns over -->
 	<section class="band hero" data-theme="tint" aria-labelledby="hero-title">
+		<!-- Studio's own background: the symbol's rays, turning very slowly,
+		     like light moving across a room. Robotics has routes; this is light. -->
+		<div class="hero__sun" aria-hidden="true"><Symbol size={0} /></div>
 		<div class="wrap">
 			<h1 class="hero__title" id="hero-title">{pitch.headline}</h1>
 
@@ -361,8 +365,48 @@
 	.hero {
 		/* The turning card swings a little past its own edges. */
 		overflow-x: clip;
+		position: relative;
+		isolation: isolate;
+	}
+	.hero__sun {
+		position: absolute;
+		top: clamp(-260px, -14vw, -90px);
+		right: clamp(-260px, -14vw, -90px);
+		width: clamp(380px, 58vw, 900px);
+		aspect-ratio: 1;
+		color: var(--ink);
+		opacity: 0.07;
+		pointer-events: none;
+		z-index: 0;
+		animation:
+			sun-turn 240s linear infinite,
+			sun-breathe 14s ease-in-out infinite alternate;
+	}
+	.hero__sun :global(.symbol) {
+		width: 100%;
+		height: 100%;
+	}
+	@keyframes sun-turn {
+		to {
+			transform: rotate(360deg);
+		}
+	}
+	@keyframes sun-breathe {
+		from {
+			opacity: 0.05;
+		}
+		to {
+			opacity: 0.09;
+		}
+	}
+	@media (prefers-reduced-motion: reduce) {
+		.hero__sun {
+			animation: none;
+		}
 	}
 	.hero > .wrap {
+		position: relative;
+		z-index: 1;
 		padding-top: clamp(28px, 4.5vw, 64px);
 		padding-bottom: clamp(40px, 5vw, 64px);
 	}

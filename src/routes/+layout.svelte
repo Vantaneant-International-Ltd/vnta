@@ -25,7 +25,7 @@
 
 	import { base } from '$app/paths';
 	import { page } from '$app/stores';
-	import { afterNavigate } from '$app/navigation';
+	import { afterNavigate, onNavigate } from '$app/navigation';
 	import { trackPageView } from '$lib/analytics';
 	import CookieBanner from '$lib/components/CookieBanner.svelte';
 	import Wordmark from '$lib/components/ui/Wordmark.svelte';
@@ -36,6 +36,19 @@
 	import { pitch as studioPitch, landings, studioEmail } from '$lib/content/studio';
 
 	let { children, data } = $props();
+
+	// Moving between pages: one short cross-fade, where the browser can do it
+	// and the visitor has not asked for less motion. Not within a page.
+	onNavigate((nav) => {
+		if (!document.startViewTransition || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+		if (nav.from?.url.pathname === nav.to?.url.pathname) return;
+		return new Promise((resolve) => {
+			document.startViewTransition(async () => {
+				resolve();
+				await nav.complete;
+			});
+		});
+	});
 
 	// GA page_view on every client navigation (also fires on first mount).
 	afterNavigate(({ to }) => {
