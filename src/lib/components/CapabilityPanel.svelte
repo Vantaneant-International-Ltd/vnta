@@ -262,6 +262,11 @@
 		.rec__head {
 			flex-wrap: wrap;
 		}
+		/* Without a width of its own the name squeezes in beside the verdict
+		   instead of letting the verdict wrap. */
+		.rec__id {
+			flex-basis: calc(100% - 66px);
+		}
 		.rec__verdict {
 			margin-left: 54px;
 		}

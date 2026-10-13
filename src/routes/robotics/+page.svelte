@@ -14,6 +14,7 @@
 	import Stage from '$lib/components/Stage.svelte';
 	import Architecture from '$lib/components/Architecture.svelte';
 	import CapabilityPanel from '$lib/components/CapabilityPanel.svelte';
+	import RouteMap from '$lib/components/RouteMap.svelte';
 	import { robotics, capabilities, modules, progression } from '$lib/content/site';
 	import { roboticsProduct, breadcrumb } from '$lib/content/structured';
 	import { notePath, notesPath, longDate } from '$lib/content/notePaths';
@@ -50,6 +51,7 @@
 
 <main>
 	<section class="band lead" aria-labelledby="robotics-title">
+		<RouteMap />
 		<div class="wrap lead__grid">
 			<div>
 				<div class="lead__top">
@@ -241,9 +243,24 @@
 
 <style>
 	.lead {
+		position: relative;
+		isolation: isolate;
+		overflow: hidden;
 		background:
 			radial-gradient(60% 90% at 80% 0%, #ffffff 0%, rgba(255, 255, 255, 0) 70%),
 			var(--ground);
+	}
+	.lead > .wrap {
+		position: relative;
+		z-index: 1;
+	}
+	/* The route map shows through the panels at the top, softly, so the
+	   robots drive under them. Enough white stays for the words to read. */
+	.lead :global(.rec__frame),
+	.lead .pillar {
+		background: rgba(255, 255, 255, 0.8);
+		-webkit-backdrop-filter: blur(1.5px);
+		backdrop-filter: blur(1.5px);
 	}
 	.lead > .lead__grid {
 		display: grid;
