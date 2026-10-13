@@ -135,6 +135,32 @@
 }
 
 /* --- Masthead ------------------------------------------------------------- */
+.shell .studiobar {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	gap: 2px 12px;
+	padding: 9px 16px;
+	background: var(--ink);
+	color: var(--paper);
+	font-size: 0.86rem;
+	line-height: 1.35;
+	text-align: center;
+}
+.shell .studiobar__ask {
+	opacity: 0.72;
+}
+.shell .studiobar__go {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	font-weight: 600;
+}
+.shell .studiobar:hover .studiobar__go {
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
 .shell .masthead {
 	position: sticky;
 	top: 0;
