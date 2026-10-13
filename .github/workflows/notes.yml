@@ -23,7 +23,13 @@ name: Publish notes
 on:
   schedule:
     # 07:17 UTC every day: 08:17 in Dublin in summer, 07:17 in winter.
+    # GitHub may start a timed run hours late (the first ones were 9 hours
+    # late), so the same job is asked for three more times that morning. It is
+    # safe to run again: a note goes out once a day, and nothing is posted twice.
     - cron: '17 7 * * *'
+    - cron: '47 7 * * *'
+    - cron: '17 8 * * *'
+    - cron: '17 9 * * *'
   workflow_dispatch:
     inputs:
       dry_run:
