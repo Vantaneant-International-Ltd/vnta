@@ -15,7 +15,7 @@ import {
 	siteUrl,
 	contactEmail
 } from '$lib/content/site';
-import { pricing, tiers, enterprise } from '$lib/content/pricing';
+import { pricing, tiers } from '$lib/content/pricing';
 
 export const prerender = true;
 
@@ -39,7 +39,9 @@ export function GET() {
 		'',
 		`## ${robotics.name}`,
 		'',
-		`${robotics.positioning} ${robotics.body}`,
+		`${robotics.positioning} ${robotics.core} ${robotics.body}`,
+		'',
+		`${robotics.independent} It is not ${robotics.isNot.join(', ').toLowerCase()}.`,
 		'',
 		`The question it answers: ${robotics.question}`,
 		'',
@@ -66,10 +68,11 @@ export function GET() {
 		'',
 		`## ${robotics.name} pricing`,
 		'',
-		`${pricing.banner.text} Every price is a starting point, ex VAT, for a scope agreed in advance. There is no online purchase. Priced per integration or deployment, not per robot.`,
+		'Every price is a starting point, ex VAT, for a scope agreed in advance. There is no online purchase. Priced per integration or deployment, not per robot.',
 		'',
-		...tiers.map((t) => `- ${t.label}: ${t.price}${t.per ? ` ${t.per}` : ''}. Availability: ${t.availability.toLowerCase()}. ${t.body}`),
-		`- ${enterprise.label}: ${enterprise.price.toLowerCase()}. ${enterprise.body}`,
+		...tiers.map((t) => `- ${t.label}: ${t.price}. Availability: ${t.availability.toLowerCase()}. ${t.body}`),
+		'',
+		pricing.runtime,
 		'',
 		`More: ${siteUrl}/robotics/pricing`,
 		'',

@@ -11,8 +11,8 @@
 //   The page says VNTA Robotics is in development, and says so plainly.
 // - Priced per integration, per deployment, or per engineering team. Never
 //   per robot per month.
-// - Runtime as an annual platform is planned. It must never look like
-//   something that can be bought today.
+// - Three offers only: what VNTA can deliver now. Runtime as an annual
+//   platform is planned. It is one line of text, never a card or a price.
 // - No enterprise price. No savings claims. No customer logos. No "certified".
 // - A validation report is not a safety certification.
 //
@@ -22,25 +22,23 @@
 
 export const pricing = {
 	eyebrow: 'Pricing',
-	headline: 'Validation for real robot deployments.',
-	lede: 'Start with one integration. Validate what actually works. Scale into Runtime as the platform matures.',
-	banner: {
-		label: 'In development',
-		text: 'VNTA Robotics is currently in development and accepting a limited number of early validation and commissioning projects. So far it has been tested with simulated robots and one external virtual vehicle.'
-	},
+	headline: 'Validation for robot and fleet integrations.',
+	lede: 'Start with one integration. See what actually works, with the evidence behind every result.',
 	vat: 'Ex VAT',
-	primaryCta: 'Request a validation pilot',
-	secondaryCta: 'Talk to engineering'
+	primaryCta: 'Validate an integration',
+	secondaryCta: 'Become a design partner',
+	/** Runtime, said once and quietly. Not an offer. */
+	runtime: 'Runtime subscriptions will be introduced once repeated use across real deployments has been validated.'
 };
 
-export type Availability = 'Limited' | 'Case by case' | 'Coming later';
+export type Availability = 'Limited' | 'Case by case';
 
 export type Tier = {
 	id: string;
+	/** What the request form calls this offer. */
+	interest: string;
 	label: string;
-	title: string;
 	price: string;
-	per?: string;
 	availability: Availability;
 	body: string;
 	includes: string[];
@@ -48,121 +46,69 @@ export type Tier = {
 	note: string;
 	/** The main offer. One tier only. */
 	primary?: boolean;
-	/** Planned, not for sale. Drawn quieter, and its list reads as intentions. */
-	planned?: boolean;
 };
 
 export const tiers: Tier[] = [
 	{
 		id: 'design-partner',
+		interest: 'Design partner',
 		label: 'Design partner',
-		title: 'Early partner',
 		price: 'From €2,500',
 		availability: 'Limited',
-		body: 'For early integrators and operators who can give real technical access and structured feedback while the product is being built.',
+		body: 'For initial production integrations while Validation is being developed.',
 		includes: [
-			'One agreed integration',
-			'Core validation suite',
-			'Compatibility report',
-			'Direct line to the people building it',
-			'A say in what gets built next'
+			'One integration',
+			'Structured validation',
+			'Evidence-backed findings',
+			'Technical access and a direct feedback loop',
+			'Discounted early-partner pricing'
 		],
-		cta: 'Apply for design partner',
+		cta: 'Become a design partner',
 		note: 'In exchange for access to a real robot or fleet environment.'
 	},
 	{
-		id: 'validation-pilot',
-		label: 'Validation pilot',
-		title: 'One real integration',
+		id: 'validation',
+		interest: 'Validation',
+		label: 'Validation',
 		price: 'From €6,500',
 		availability: 'Limited',
 		primary: true,
-		body: 'Validate one robot or fleet integration and receive a readiness report backed by evidence.',
+		body: 'Independent validation of a robot or fleet integration, with evidence and readiness findings.',
 		includes: [
-			'One agreed integration',
-			'Capability discovery',
-			'Validation test suite',
-			'Mission lifecycle testing',
-			'Reconnect and failure testing',
-			'Capability matrix: declared against verified',
-			'Compatibility and readiness report',
-			'Logs and test evidence',
-			'Technical findings review',
-			'Remediation notes where relevant',
-			'Implementation support during the pilot'
+			'Defined test scope',
+			'Capability validation: declared against verified',
+			'Failure and reconnect behaviour, where applicable',
+			'Evidence capture: calls, messages, timestamps',
+			'Readiness result',
+			'Technical report, with remediation notes'
 		],
-		cta: 'Request a pilot',
+		cta: 'Validate an integration',
 		note: 'Final scope and price depend on integration complexity.'
 	},
 	{
-		id: 'advanced-commissioning',
-		label: 'Advanced commissioning',
-		title: 'Broader scope',
-		price: 'From €12,500',
+		id: 'larger',
+		interest: 'Larger deployment',
+		label: 'Larger deployments',
+		price: 'Scoped',
 		availability: 'Case by case',
-		body: 'For multiple robot systems, custom integration work, site-specific scenarios or a more complex fleet manager.',
+		body: 'For multiple systems, sites, vendors or custom adapters.',
 		includes: [
-			'Extended validation suites',
-			'Multiple systems or adapters',
-			'Custom test scenarios',
-			'More detailed technical findings',
-			'Priority engineering support',
-			'Deployment-specific reporting'
+			'Multi-system validation',
+			'More than one adapter or vendor',
+			'Site-specific test scenarios',
+			'Deployment-level reporting'
 		],
-		cta: 'Talk to engineering',
-		note: 'Taken on case by case. Not a standard offer yet.'
-	},
-	{
-		id: 'runtime',
-		label: 'Runtime',
-		title: 'Platform access',
-		price: 'From €24,000',
-		per: 'a year',
-		availability: 'Coming later',
-		planned: true,
-		body: 'For integrators using VNTA Robotics across repeated deployments. Planned: this is not available today.',
-		includes: [
-			'Reusable validation environment',
-			'Multiple projects',
-			'Saved test suites',
-			'Historical validation evidence',
-			'Shared capability model',
-			'SDK and API access as it becomes available',
-			'Connector library',
-			'Team access'
-		],
-		cta: 'Join the waitlist',
-		note: 'What the platform is intended to include. None of it can be bought yet.'
+		cta: 'Discuss an integration',
+		note: 'Scoped and priced by agreement, case by case.'
 	}
 ];
 
-export const enterprise = {
-	label: 'Enterprise',
-	title: 'Larger organisations',
-	price: 'Custom',
-	body: 'For larger integrators and multi-site operators with requirements of their own. Scoped and priced by agreement.',
-	includes: [
-		'Multiple teams and sites',
-		'Private deployment: on-premise or private cloud',
-		'Custom connectors',
-		'Dedicated support and SLA',
-		'Security review'
-	],
-	cta: 'Talk to engineering',
-	note: 'Discussed case by case while the product is in development.'
-};
-
 export const units = {
-	headline: 'Priced around integrations and deployments, not robot count.',
-	body: 'The value today is in integrating and validating, not in running a fleet day to day. So VNTA Robotics is priced by the work it helps reduce.',
+	headline: 'Priced around integrations, not robot count.',
+	body: 'The value today is in validating an integration before it goes into operation, not in running a fleet day to day. So it is priced by the integration.',
 	list: [
 		{ name: 'Per integration', body: 'One robot or fleet system, validated once.' },
-		{ name: 'Per deployment', body: 'A commissioning project with a wider scope.' },
-		{ name: 'Per engineering team', body: 'Platform access for repeated use. Planned.' }
-	],
-	lines: [
-		'The annual platform becomes relevant when VNTA Robotics is used repeatedly across projects.',
-		'Pilot scope and final pricing depend on integration complexity.'
+		{ name: 'Per deployment', body: 'Several systems or sites, validated as one project.' }
 	]
 };
 
@@ -173,60 +119,29 @@ export const workflow = [
 	{ name: 'Technical review', body: 'Interfaces, documentation, access.' },
 	{ name: 'Scope', body: 'What will be tested, and how success is judged.' },
 	{ name: 'Proposal', body: 'A price for that scope.' },
-	{ name: 'Pilot', body: 'The work, and the report.' }
-];
-
-export const status: { when: 'Now' | 'Next' | 'Later'; items: string[] }[] = [
-	{
-		when: 'Now',
-		items: [
-			'Simulated robot validation',
-			'Common capability model',
-			'Validation test runner',
-			'Compatibility and readiness reports',
-			'External VDA 5050 testing, against a virtual vehicle'
-		]
-	},
-	{
-		when: 'Next',
-		items: [
-			'A first real robot or fleet-manager integration',
-			'More external implementations',
-			'Pilot deployments with integrators',
-			'Runtime API and SDK'
-		]
-	},
-	{
-		when: 'Later',
-		items: [
-			'Sending work through one interface',
-			'Access: mission governance',
-			'Identity: machine trust',
-			'Broader autonomous-system infrastructure'
-		]
-	}
+	{ name: 'Validation', body: 'The work, the result and the evidence.' }
 ];
 
 export const faq: { q: string; a: string }[] = [
 	{
-		q: 'Has VNTA Robotics been used on a real robot?',
-		a: 'Not yet. It has been run against simulated robots and one external virtual vehicle: open-source VDA 5050 software that VNTA did not write. A first pilot is the first contact with a real system, and part of it is writing the adapter for that system. That is why early places are limited and scoped carefully.'
+		q: 'Has Validation been used on a real robot?',
+		a: 'Not yet. It has been run against simulated robots and one external virtual vehicle: open-source VDA 5050 software that VNTA did not write. A first project with a design partner is the first contact with a real system, and part of it is writing the adapter for that system. That is why early places are limited and scoped carefully.'
 	},
 	{
-		q: 'What does the pilot include?',
-		a: 'One agreed integration, a defined validation suite, results backed by evidence, a compatibility and readiness report, and a technical review of the findings.'
+		q: 'What does a validation include?',
+		a: 'One agreed integration, a defined test scope, results backed by evidence, a readiness result, and a technical report with remediation notes.'
 	},
 	{
-		q: 'Do you certify robots as safe?',
-		a: 'No. VNTA validation evaluates software integration behaviour. It is not a functional-safety certification and does not replace manufacturer commissioning or safety procedures.'
+		q: 'Is this certification?',
+		a: 'No. VNTA validation evaluates software integration behaviour. It is not safety, functional-safety or regulatory certification, and does not replace manufacturer commissioning or safety procedures.'
 	},
 	{
 		q: 'Do you charge per robot?',
-		a: 'No. Pricing is based on integration scope, deployment use and, later, platform access.'
+		a: 'No. Pricing is based on the integration and the scope of the deployment.'
 	},
 	{
 		q: 'Which standards are supported today?',
-		a: 'VDA 5050 version 2.1.0, tested against one external virtual vehicle. Adapters for ROS 2, Open-RMF and vendor fleet managers are planned and do not exist yet. Support varies by protocol and implementation.'
+		a: 'VDA 5050 version 2.1.0, tested against one external virtual vehicle. VDA 5050 3.0, ROS 2, Open-RMF and vendor fleet managers are planned and have no adapter yet. Support varies by protocol and implementation.'
 	},
 	{
 		q: 'Can you test a simulated system?',
@@ -241,21 +156,17 @@ export const faq: { q: string; a: string }[] = [
 		a: 'No. Every price here is a starting point, shown ex VAT. The scope is agreed before work begins and the proposal is priced for that scope.'
 	},
 	{
-		q: 'Are pilots refundable?',
-		a: 'Commercial terms are agreed before each pilot, based on its scope and success criteria.'
-	},
-	{
-		q: 'Can I buy Runtime today?',
-		a: 'No. Runtime as an annual platform is planned. An early API exists that reads capabilities and starts validation. You can join the waitlist.'
+		q: 'Can I subscribe to a platform?',
+		a: 'Not yet. Runtime subscriptions will be introduced once repeated use across real deployments has been validated.'
 	}
 ];
 
 /** The offers a request can be about. The first is the default. */
-export const interests = ['Validation pilot', 'Design partner', 'Advanced commissioning', 'Runtime waitlist', 'Enterprise', 'Not sure yet'];
+export const interests = ['Validation', 'Design partner', 'Larger deployment', 'Not sure yet'];
 
 export const form = {
-	title: 'Request a validation pilot',
+	title: 'Validate an integration',
 	lede: 'Tell us about the integration. This is not a checkout: we read every request and reply about technical fit.',
-	submit: 'Submit pilot request',
-	thanks: 'Thanks. VNTA is currently selecting a small number of integrations for the development program. We’ll review the technical fit before confirming a pilot.'
+	submit: 'Send request',
+	thanks: 'Thanks. We are taking a small number of early validation projects, and we will review the technical fit before confirming anything.'
 };

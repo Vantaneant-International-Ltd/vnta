@@ -1,24 +1,26 @@
 <script lang="ts">
-	// VNTA Robotics: the current business area, and the only one being built.
-	// This page lives on the parent site for now. When robotics.vnta.xyz
-	// exists it moves there: change roboticsUrl in content/site.ts and add the
-	// redirect in static/_redirects.
+	// VNTA Robotics: the current business area. The page is built in the order
+	// a buyer needs it: the problem, what Validation checks, an example result,
+	// who it is for, what it connects to, where it stands today, what it costs,
+	// and only then where it goes next.
 	//
-	// The product is in development. Everything on this page is either
-	// something that runs today (and says against what), or is marked as next,
-	// later, planned or future. The one panel of results is the output of a
-	// real run against a virtual vehicle, and is labelled as that.
+	// Validation is the one thing that can be engaged today. Runtime, Access and
+	// Identity are shown once, at the foot, marked for what they are. The status
+	// of the product is said once, in its own block, not under every section.
+	// The results shown are from a real run against a virtual vehicle, and are
+	// labelled as that.
 	import { base } from '$app/paths';
 	import Seo from '$lib/components/Seo.svelte';
 	import Icon from '$lib/components/ui/Icon.svelte';
 	import Stage from '$lib/components/Stage.svelte';
-	import Architecture from '$lib/components/Architecture.svelte';
 	import CapabilityPanel from '$lib/components/CapabilityPanel.svelte';
+	import SampleReport from '$lib/components/SampleReport.svelte';
 	import RouteMap from '$lib/components/RouteMap.svelte';
 	import Snow from '$lib/season/Snow.svelte';
 	import { isWinter } from '$lib/season/season';
 	import { onMount } from 'svelte';
-	import { robotics, capabilities, modules, progression } from '$lib/content/site';
+	import { robotics, capabilities, modules, interfaces, buyers, alsoFor } from '$lib/content/site';
+	import { tiers } from '$lib/content/pricing';
 	import { roboticsProduct, breadcrumb } from '$lib/content/structured';
 	import { notePath, notesPath, longDate } from '$lib/content/notePaths';
 
@@ -28,18 +30,12 @@
 
 	const pricing = `${base}/robotics/pricing`;
 
-	// The three things that are built, under the headline.
-	const first = [
-		{ name: 'Connect', body: 'Reach a robot or fleet system through an adapter for the interface it already has.', icon: 'plug' },
-		{ name: 'Validate', body: 'Run the same checks against it, including a dropped link and a restart.', icon: 'shield' },
-		{ name: 'Report', body: 'One readiness verdict, with every call and raw message behind it.', icon: 'audit' }
-	];
-
-	// Three facts kept apart about every capability. This is the idea the product stands on.
-	const facts = [
-		{ name: 'Declared', body: 'What the interface is documented to offer.' },
-		{ name: 'Discovered', body: 'What the system itself says when asked.' },
-		{ name: 'Verified', body: 'What a validation run actually saw work, and when.' }
+	// One claim, one test, one result. A real one: the capability-discovery
+	// failure from the virtual-vehicle run, which is already public.
+	const example = [
+		{ k: 'Declared', v: 'The vehicle describes its own functions when asked.', tone: '' },
+		{ k: 'Integration test', v: 'Asked for its factsheet, it answered, but named no functions.', tone: '' },
+		{ k: 'VNTA evidence', v: 'Failed. The raw reply, its timestamp and the reason are kept with the result.', tone: 'no' }
 	];
 
 	// Winter (14 October to 6 January): snow over the route map, and robots
@@ -49,140 +45,105 @@
 </script>
 
 <Seo
-	title="VNTA Robotics | Developer infrastructure for autonomous machines"
+	title="VNTA Robotics | Independent validation of robot integrations"
 	shareTitle="VNTA Robotics | {robotics.positioning}"
 	image="/share/robotics.png"
-	imageAlt="VNTA Robotics. {robotics.positioning} In development."
-	description="{robotics.what} Capability discovery, declared and verified capabilities, failure testing and readiness reports. Tested so far with simulated robots and one external virtual vehicle."
+	imageAlt="VNTA Robotics. {robotics.positioning} Early access."
+	description="{robotics.core} Capability discovery, declared and verified capabilities, failure and reconnect testing, and readiness reports. Early access."
 	ld={[roboticsProduct(), breadcrumb('Robotics', '/robotics')]}
 />
 
 <main>
+	<!-- 1. The promise, and the result it produces. -->
 	<section class="band lead" aria-labelledby="robotics-title">
 		{#key winter}<RouteMap {winter} />{/key}
 		{#if winter}<Snow fixed={false} count={70} />{/if}
 		<div class="wrap lead__grid">
 			<div>
 				<div class="lead__top">
-					<p class="eyebrow">{robotics.name}</p>
+					<p class="eyebrow">{robotics.name} · Validation</p>
 					<Stage stage={robotics.stage} />
 				</div>
-				<h1 class="lead__title" id="robotics-title">{robotics.positioning}</h1>
+				<h1 class="lead__title" id="robotics-title">{robotics.headline}</h1>
 				<p class="lead__lede">{robotics.what}</p>
 				<div class="lead__cta">
 					<a class="btn btn--solid" href="{pricing}#request">
-						Request a validation pilot
+						Validate an integration
 						<Icon name="arrow" size={18} />
 					</a>
-					<a class="btn btn--ghost" href={pricing}>Pricing</a>
+					<a class="btn btn--ghost" href="#report">See an example result</a>
 				</div>
 			</div>
 			<CapabilityPanel compact />
 		</div>
 
-		<!-- The three things that are built. -->
-		<div class="wrap lead__three">
-			{#each first as c}
-				<div class="pillar card">
+		<!-- The mental model, in three steps. -->
+		<ol class="wrap lead__three" aria-label="How it works">
+			{#each robotics.model as c, i}
+				<li class="pillar card">
 					<span class="well"><Icon name={c.icon} size={20} /></span>
 					<span>
+						<span class="pillar__n">0{i + 1}</span>
 						<span class="pillar__name">{c.name}</span>
 						<span class="pillar__body">{c.body}</span>
 					</span>
-				</div>
+				</li>
 			{/each}
-		</div>
+		</ol>
 	</section>
 
-	<!-- The question, and the idea it rests on. -->
-	<section class="band band--paper" aria-labelledby="question-title">
+	<!-- 2. The problem, with one real example. -->
+	<section class="band band--paper" aria-labelledby="problem-title">
 		<div class="wrap ask">
 			<div>
-				<p class="eyebrow">The question</p>
-				<h2 class="ask__title" id="question-title">{robotics.question}</h2>
-			</div>
-			<div>
+				<p class="eyebrow">The problem</p>
+				<h2 class="ask__title" id="problem-title">Documentation tells you what should work. Deployment reveals what actually works.</h2>
 				<p class="ask__text">
-					A capability that is written in a manual is a claim. A capability that has been tested is evidence. VNTA Robotics keeps the two
-					apart, for every function of every machine.
+					{robotics.question} A capability written in a manual is a claim. A capability that has been tested is evidence. VNTA keeps the
+					two apart, for every function of every machine.
 				</p>
-				<dl class="facts">
-					{#each facts as f}
-						<div>
-							<dt>{f.name}</dt>
-							<dd>{f.body}</dd>
-						</div>
+			</div>
+			<figure class="claim card">
+				<ol class="claim__list">
+					{#each example as e}
+						<li class="claim__row" class:claim__row--no={e.tone === 'no'}>
+							<span class="claim__k">{e.k}</span>
+							<span class="claim__v">
+								{#if e.tone === 'no'}<Icon name="ban" size={14} />{/if}{e.v}
+							</span>
+						</li>
 					{/each}
-				</dl>
-			</div>
+				</ol>
+				<figcaption class="claim__cap">From a real run against a virtual VDA 5050 vehicle.</figcaption>
+			</figure>
 		</div>
 	</section>
 
-	<!-- The four parts, and which one is current. -->
-	<section class="band" id="modules" aria-labelledby="modules-title">
+	<!-- 3. What VNTA validates, and what it is not. -->
+	<section class="band" id="validation" aria-labelledby="validates-title">
 		<div class="wrap">
-			<div class="head">
-				<p class="eyebrow">What it is made of</p>
-				<h2 class="head__title" id="modules-title">One platform. One module today.</h2>
-				<p class="head__text">
-					Runtime is the platform. Validation is the first module and the only current one. Access and Identity are future modules.
-				</p>
-			</div>
-			<ul class="modules">
-				{#each modules as m}
-					<li class="module card" class:module--later={m.state === 'Future'}>
-						<div class="module__top">
-							<span class="well"><Icon name={m.icon} size={20} /></span>
-							<Stage stage={m.state} />
-						</div>
-						<h3 class="module__name">{m.name}</h3>
-						<p class="module__role">{m.role}</p>
-						<p class="module__body">{m.body}</p>
-						<p class="module__detail">{m.detail}</p>
-					</li>
-				{/each}
-			</ul>
-
-			<ol class="steps" aria-label="The order things are built in">
-				{#each progression as p, i}
-					<li class="step" class:step--now={p.when === 'Now'}>
-						<span class="step__when">{p.when}</span>
-						<span class="step__name">{p.name}</span>
-						<span class="step__body">{p.body}</span>
-						{#if i < progression.length - 1}<span class="step__arrow" aria-hidden="true"><Icon name="arrow" size={14} /></span>{/if}
-					</li>
-				{/each}
-			</ol>
-		</div>
-	</section>
-
-	<section class="band band--paper" aria-labelledby="layer-title">
-		<div class="wrap">
-			<div class="head">
-				<p class="eyebrow">Where it sits</p>
-				<h2 class="head__title" id="layer-title">{robotics.headline}</h2>
-				<p class="head__text">{robotics.body}</p>
-			</div>
-			<Architecture />
-		</div>
-	</section>
-
-	<section class="band" id="validation" aria-labelledby="capabilities-title">
-		<div class="wrap">
-			<div class="head">
-				<p class="eyebrow">Validation, today</p>
-				<h2 class="head__title" id="capabilities-title">What the first module does.</h2>
-				<p class="head__text">
-					Each of these runs today, against simulated robots and one external virtual vehicle. None has been run against a real machine yet.
-				</p>
+			<div class="indep">
+				<div>
+					<p class="eyebrow">Independent validation</p>
+					<h2 class="head__title" id="validates-title">An independent pre-deployment check for robot integrations.</h2>
+					<p class="head__text">{robotics.independent}</p>
+					<p class="indep__analogy">{robotics.analogy}</p>
+				</div>
+				<div class="isnot card">
+					<p class="isnot__head">Software and integration validation. It is not:</p>
+					<ul>
+						{#each robotics.isNot as x}<li><Icon name="ban" size={15} />{x}</li>{/each}
+					</ul>
+				</div>
 			</div>
 
+			<h3 class="sub">What a validation run checks</h3>
 			<ul class="caps">
 				{#each capabilities as c}
 					<li class="cap card">
 						<span class="well"><Icon name={c.icon} size={20} /></span>
 						<div>
-							<h3 class="cap__name">{c.name}</h3>
+							<h4 class="cap__name">{c.name}</h4>
 							<p class="cap__body">{c.body}</p>
 						</div>
 					</li>
@@ -191,22 +152,127 @@
 		</div>
 	</section>
 
-	<section class="band band--paper" aria-labelledby="record-title">
+	<!-- 4. What the buyer receives. -->
+	<section class="band band--paper" id="report" aria-labelledby="report-title">
 		<div class="wrap">
 			<div class="head">
-				<p class="eyebrow">A result</p>
-				<h2 class="head__title" id="record-title">Declared, and verified or not.</h2>
+				<p class="eyebrow">Example result</p>
+				<h2 class="head__title" id="report-title">See what the validation produces.</h2>
 				<p class="head__text">
-					One machine after one validation run. Behind each line are the tests that produced it and the raw messages they saw.
+					A readiness verdict, the checks behind it, every failure with its evidence, and what to change. Then the capability matrix:
+					declared, and verified or not.
 				</p>
 			</div>
-			<CapabilityPanel />
-			<p class="disclaimer">{robotics.notSafety}</p>
+			<SampleReport />
+			<div class="matrix">
+				<CapabilityPanel />
+				<p class="disclaimer">{robotics.notSafety}</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- 5. Who benefits. -->
+	<section class="band" aria-labelledby="buyers-title">
+		<div class="wrap">
+			<div class="head">
+				<p class="eyebrow">Who it is for</p>
+				<h2 class="head__title" id="buyers-title">For the people who have to sign off an integration.</h2>
+			</div>
+			<ul class="buyers">
+				{#each buyers as b}
+					<li class="buyer card">
+						<span class="well"><Icon name={b.icon} size={20} /></span>
+						<p class="buyer__who">{b.who}</p>
+						<h3 class="buyer__title">{b.title}</h3>
+						<p class="buyer__body">{b.body}</p>
+					</li>
+				{/each}
+			</ul>
+			<p class="also">{alsoFor}</p>
+		</div>
+	</section>
+
+	<!-- 6. What it connects to. -->
+	<section class="band band--paper" id="integrations" aria-labelledby="ifaces-title">
+		<div class="wrap">
+			<div class="head">
+				<p class="eyebrow">Supported integrations</p>
+				<h2 class="head__title" id="ifaces-title">{robotics.sits}</h2>
+				<p class="head__text">{robotics.body}</p>
+			</div>
+			<ul class="ifaces">
+				{#each interfaces as i}
+					<li class="iface card" class:iface--live={i.support === 'Supported today'}>
+						<span class="iface__name">{i.name}</span>
+						<Stage stage={i.support} />
+						<span class="iface__note">{i.note}</span>
+					</li>
+				{/each}
+			</ul>
+		</div>
+	</section>
+
+	<!-- 7. Where it stands. Said once, here. -->
+	<section class="band" id="status" aria-labelledby="status-title">
+		<div class="wrap">
+			<div class="status card">
+				<div class="status__top">
+					<Stage stage={robotics.stage} />
+					<h2 class="status__title" id="status-title">Where Validation stands today</h2>
+				</div>
+				<p class="status__text">{robotics.honest}</p>
+				<p class="status__more">
+					Part of every first project is writing the adapter for that system, so places are limited and scoped carefully.
+					<a href="{pricing}#status">Technical status in full</a>
+				</p>
+			</div>
+		</div>
+	</section>
+
+	<!-- 8. What it costs. The detail is on the pricing page. -->
+	<section class="band band--paper" aria-labelledby="offers-title">
+		<div class="wrap">
+			<div class="head">
+				<p class="eyebrow">Pricing</p>
+				<h2 class="head__title" id="offers-title">Start with one integration.</h2>
+				<p class="head__text">Priced per integration, not per robot. Every price is a starting point, ex VAT, for a scope agreed before work begins.</p>
+			</div>
+			<ul class="offers">
+				{#each tiers as t}
+					<li class="offer card" class:offer--primary={t.primary}>
+						<p class="offer__label">{t.label}</p>
+						<p class="offer__price">{t.price}</p>
+						<p class="offer__body">{t.body}</p>
+						<a class="offer__go" href="{pricing}#request">{t.cta} <Icon name="arrow" size={15} /></a>
+					</li>
+				{/each}
+			</ul>
+			<p class="offers__all"><a href={pricing}>Full pricing and what each includes <Icon name="arrow" size={16} /></a></p>
+		</div>
+	</section>
+
+	<!-- 9. Where it goes next. Last, and short. -->
+	<section class="band" id="next-layers" aria-labelledby="modules-title">
+		<div class="wrap">
+			<div class="head">
+				<p class="eyebrow">Where VNTA goes next</p>
+				<h2 class="head__title" id="modules-title">One product today. A wider layer later.</h2>
+				<p class="head__text">Validation is the first layer of VNTA's infrastructure for interoperable autonomous systems. The rest is built on it, in order.</p>
+			</div>
+			<ul class="modules">
+				{#each modules as m}
+					<li class="module" class:module--now={m.state === 'Early access'}>
+						<Stage stage={m.state} />
+						<span class="module__name">{m.name}</span>
+						<span class="module__body">{m.role}. {m.body}</span>
+					</li>
+				{/each}
+			</ul>
 		</div>
 	</section>
 
 	{#if latest.length}
-		<section class="band" aria-labelledby="notes-title">
+		<section class="band band--paper" aria-labelledby="notes-title">
 			<div class="wrap">
 				<div class="head">
 					<p class="eyebrow">Notes</p>
@@ -232,19 +298,16 @@
 	<section class="band close" data-theme="ink" aria-labelledby="next-title">
 		<div class="wrap next">
 			<div>
-				<h2 class="head__title" id="next-title">Start with one real integration.</h2>
-				<p class="next__text">
-					{robotics.honest} We are taking a limited number of early validation projects with integrators and operators who have a real
-					robot or fleet system to test.
-				</p>
+				<h2 class="head__title" id="next-title">Validate one integration before standardising the rest.</h2>
+				<p class="next__text">Bring one robot or fleet system. We agree what will be tested, run the suite, and go through the result and the evidence with you.</p>
 				<p class="next__note">{robotics.note}</p>
 			</div>
 			<div class="next__act">
 				<a class="btn btn--solid" href="{pricing}#request">
-					Request a validation pilot
+					Validate an integration
 					<Icon name="arrow" size={18} />
 				</a>
-				<a class="next__link" href={pricing}>See pricing</a>
+				<a class="next__link" href="{pricing}#request">Become a design partner</a>
 			</div>
 		</div>
 	</section>
@@ -353,35 +416,148 @@
 		text-wrap: balance;
 	}
 	.ask__text {
-		margin: 0;
+		margin: 16px 0 0;
 		font-size: var(--t-lede);
 		line-height: 1.5;
 		color: var(--ink-60);
 		text-wrap: pretty;
 	}
-	.facts {
-		margin: 24px 0 0;
-		display: grid;
-		gap: 0;
-		border-top: 1px solid var(--line);
+	/* The three steps under the headline: numbered, in reading order. */
+	.lead__three {
+		list-style: none;
+		margin: 0 auto;
 	}
-	.facts div {
-		display: grid;
-		grid-template-columns: 7.5rem minmax(0, 1fr);
-		gap: 16px;
-		padding: 13px 0;
-		border-bottom: 1px solid var(--line);
+	.pillar__n {
+		display: block;
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+		color: var(--ink-40);
 	}
-	.facts dt {
+
+	/* One claim, one test, one result. */
+	.claim {
+		margin: 0;
+		padding: clamp(16px, 2vw, 22px);
+		box-shadow: var(--lift);
+	}
+	.claim__list {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+	}
+	.claim__row {
+		display: grid;
+		grid-template-columns: 8.6rem minmax(0, 1fr);
+		gap: 14px;
+		padding: 12px 0;
+		border-bottom: 1px solid var(--line-soft);
+	}
+	.claim__row:first-child {
+		padding-top: 0;
+	}
+	/* On a phone each label sits above its line, so the words get the width. */
+	@media (max-width: 560px) {
+		.claim__row {
+			grid-template-columns: 1fr;
+			gap: 4px;
+		}
+		.cap {
+			padding: 12px 14px;
+		}
+		.cap .well {
+			display: none;
+		}
+	}
+	.claim__k {
+		font-size: var(--t-micro);
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--ink-60);
+		padding-top: 3px;
+	}
+	.claim__v {
+		color: var(--ink);
+		line-height: 1.45;
+	}
+	.claim__row--no .claim__v {
+		color: var(--red);
+		font-weight: 500;
+	}
+	.claim__row--no .claim__v :global(svg) {
+		display: inline-block;
+		vertical-align: -2px;
+		margin-right: 6px;
+	}
+	.claim__cap {
+		margin-top: 12px;
+		font-size: 0.8rem;
+		color: var(--ink-60);
+	}
+
+	/* Independent validation, and what it is not. */
+	.indep {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: clamp(20px, 3vw, 48px);
+		align-items: start;
+	}
+	.indep .head__text {
+		margin-top: 14px;
+	}
+	.indep__analogy {
+		margin: 14px 0 0;
+		padding-left: 14px;
+		border-left: 2px solid var(--line);
+		max-width: 40rem;
+		font-size: 0.95rem;
+		line-height: 1.55;
+		color: var(--ink-60);
+		text-wrap: pretty;
+	}
+	.isnot {
+		padding: 18px;
+		background: var(--ground);
+	}
+	.isnot__head {
+		margin: 0;
 		font-weight: 600;
 		color: var(--ink);
 	}
-	.facts dd {
-		margin: 0;
+	.isnot ul {
+		list-style: none;
+		margin: 12px 0 0;
+		padding: 0;
+		display: grid;
+		gap: 8px;
+		font-size: 0.94rem;
+		color: var(--ink-80);
+	}
+	.isnot li {
+		display: grid;
+		grid-template-columns: 15px minmax(0, 1fr);
+		gap: 9px;
+		align-items: start;
+	}
+	.isnot :global(svg) {
+		margin-top: 2px;
+		color: var(--ink-40);
+	}
+	.sub {
+		margin: clamp(32px, 4vw, 52px) 0 14px;
+		font-size: var(--t-micro);
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--ink-60);
+	}
+	.matrix {
+		margin-top: clamp(24px, 3vw, 36px);
 	}
 
-	/* The four parts. The current one is the only one in green. */
-	.modules {
+	/* Two buyers, side by side. */
+	.buyers {
 		list-style: none;
 		margin: 0;
 		padding: 0;
@@ -389,93 +565,195 @@
 		grid-template-columns: 1fr;
 		gap: 10px;
 	}
-	.module {
-		display: flex;
-		flex-direction: column;
-		padding: 18px;
+	.buyer {
+		padding: clamp(18px, 2vw, 26px);
 	}
-	.module--later {
+	.buyer__who {
+		margin: 16px 0 0;
+		font-size: var(--t-micro);
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--blue);
+	}
+	.buyer__title {
+		margin: 6px 0 0;
+		font-size: clamp(1.2rem, 1.8vw, 1.45rem);
+		letter-spacing: -0.02em;
+		text-wrap: balance;
+	}
+	.buyer__body {
+		margin: 10px 0 0;
+		line-height: 1.55;
+		color: var(--ink-60);
+		max-width: 32rem;
+		text-wrap: pretty;
+	}
+	.also {
+		margin: 16px 0 0;
+		font-size: var(--t-small);
+		color: var(--ink-60);
+	}
+
+	/* Supported integrations: one row each, with its status. */
+	.ifaces {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 10px;
+	}
+	.iface {
+		display: grid;
+		gap: 8px;
+		justify-items: start;
+		align-content: start;
+		padding: 16px;
 		background: transparent;
 		border-style: dashed;
 		border-color: var(--ink-20);
 	}
-	.module__top {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 10px;
+	.iface--live {
+		background: #fff;
+		border-style: solid;
+		border-color: var(--green);
+		box-shadow: 0 0 0 1px var(--green);
 	}
-	.module__name {
-		margin: 16px 0 0;
-		font-size: 1.2rem;
-	}
-	.module__role {
-		margin: 2px 0 0;
-		font-size: var(--t-micro);
+	.iface__name {
 		font-weight: 600;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-		color: var(--ink-60);
-	}
-	.module__body {
-		margin: 12px 0 0;
-		font-size: 0.94rem;
-		line-height: 1.5;
-		text-wrap: pretty;
-	}
-	.module__detail {
-		margin: auto 0 0;
-		padding-top: 14px;
-		font-size: 0.84rem;
-		line-height: 1.45;
-		color: var(--ink-60);
-	}
-	.module--later .module__name,
-	.module--later .module__body {
-		color: var(--ink-60);
-	}
-
-	/* The order things are built in: six small steps on one line. */
-	.steps {
-		list-style: none;
-		margin: clamp(24px, 3vw, 36px) 0 0;
-		padding: 0;
-		display: grid;
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		gap: 18px 14px;
-	}
-	.step {
-		position: relative;
-		display: grid;
-		gap: 2px;
-		align-content: start;
-		padding-top: 12px;
-		border-top: 2px solid var(--ink-20);
-	}
-	.step--now {
-		border-top-color: var(--green);
-	}
-	.step__when {
-		font-size: var(--t-micro);
-		font-weight: 600;
-		letter-spacing: 0.1em;
-		text-transform: uppercase;
-		color: var(--ink-60);
-	}
-	.step--now .step__when {
-		color: var(--green);
-	}
-	.step__name {
-		font-weight: 600;
+		font-size: 1.05rem;
 		color: var(--ink);
 	}
-	.step__body {
-		font-size: 0.86rem;
+	.iface__note {
+		font-size: 0.88rem;
 		line-height: 1.4;
 		color: var(--ink-60);
 	}
-	.step__arrow {
-		display: none;
+
+	/* The one status block. */
+	.status {
+		padding: clamp(18px, 2.4vw, 30px);
+		border-left: 3px solid var(--green);
+	}
+	.status__top {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 10px 14px;
+	}
+	.status__title {
+		margin: 0;
+		font-size: var(--t-h3, 1.4rem);
+		letter-spacing: -0.02em;
+	}
+	.status__text {
+		margin: 12px 0 0;
+		font-size: var(--t-lede);
+		line-height: 1.5;
+		color: var(--ink-80);
+		max-width: 46rem;
+		text-wrap: pretty;
+	}
+	.status__more {
+		margin: 10px 0 0;
+		font-size: var(--t-small);
+		line-height: 1.5;
+		color: var(--ink-60);
+		max-width: 46rem;
+	}
+	.status__more a {
+		font-weight: 600;
+		color: var(--blue);
+		white-space: nowrap;
+	}
+
+	/* Three offers, in brief. */
+	.offers {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 10px;
+	}
+	.offer {
+		display: flex;
+		flex-direction: column;
+		padding: 18px;
+	}
+	.offer--primary {
+		border-color: var(--navy);
+		box-shadow: 0 0 0 1px var(--navy);
+	}
+	.offer__label {
+		margin: 0;
+		font-size: var(--t-micro);
+		font-weight: 600;
+		letter-spacing: 0.1em;
+		text-transform: uppercase;
+		color: var(--ink-60);
+	}
+	.offer__price {
+		margin: 6px 0 0;
+		font-size: 1.5rem;
+		font-weight: 600;
+		letter-spacing: -0.03em;
+		color: var(--ink);
+	}
+	.offer__body {
+		margin: 8px 0 0;
+		font-size: 0.93rem;
+		line-height: 1.5;
+		color: var(--ink-60);
+		text-wrap: pretty;
+	}
+	.offer__go {
+		display: inline-flex;
+		align-items: center;
+		gap: 6px;
+		margin-top: auto;
+		padding-top: 14px;
+		font-weight: 600;
+		color: var(--blue);
+	}
+	.offers__all {
+		margin: 18px 0 0;
+	}
+	.offers__all a {
+		display: inline-flex;
+		align-items: center;
+		gap: 8px;
+		font-weight: 600;
+		color: var(--blue);
+	}
+
+	/* Where it goes next: a quiet list, one line each. */
+	.modules {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		border-top: 1px solid var(--line);
+	}
+	.module {
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 6px;
+		justify-items: start;
+		padding: 14px 0;
+		border-bottom: 1px solid var(--line);
+	}
+	.module__name {
+		font-weight: 600;
+		color: var(--ink-60);
+	}
+	.module--now .module__name {
+		color: var(--ink);
+	}
+	.module__body {
+		font-size: 0.92rem;
+		line-height: 1.45;
+		color: var(--ink-60);
 	}
 
 	/* What the first module does: a dense grid of small panels. */
@@ -603,11 +881,14 @@
 
 	@media (min-width: 640px) {
 		.caps,
-		.modules {
+		.buyers,
+		.ifaces {
 			grid-template-columns: repeat(2, minmax(0, 1fr));
 		}
-		.steps {
-			grid-template-columns: repeat(3, minmax(0, 1fr));
+		.module {
+			grid-template-columns: 8.5rem 8rem minmax(0, 1fr);
+			align-items: baseline;
+			gap: 16px;
 		}
 	}
 	@media (min-width: 900px) {
@@ -623,15 +904,17 @@
 		.ask {
 			grid-template-columns: minmax(0, 6fr) minmax(0, 5fr);
 		}
+		.indep {
+			grid-template-columns: minmax(0, 7fr) minmax(0, 4fr);
+		}
+		.offers {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
 	}
 	@media (min-width: 1100px) {
 		.caps,
-		.modules {
+		.ifaces {
 			grid-template-columns: repeat(4, minmax(0, 1fr));
-		}
-		.steps {
-			grid-template-columns: repeat(6, minmax(0, 1fr));
-			gap: 14px;
 		}
 	}
 </style>

@@ -124,7 +124,7 @@
 				</nav>
 				{#if path.startsWith('/robotics')}
 					<a class="btn btn--solid btn--small masthead__cta" href="{pricing}#request">
-						Request a pilot
+						Validate an integration
 						<Icon name="arrow" size={16} />
 					</a>
 				{:else}
@@ -155,7 +155,9 @@
 								<li><a href={pricing}>Pricing</a></li>
 								{#if hasNotes}<li><a href="{base}{notesPath}">Notes</a></li>{/if}
 								<li><a href="{base}/#company">Company</a></li>
-								<li><a href={studio}>Studio</a></li>
+								<!-- Studio stays findable from the company pages, but a robotics
+								     buyer does not need it in their way. -->
+								{#if !path.startsWith('/robotics')}<li><a href={studio}>Studio</a></li>{/if}
 								<li><a href="{base}/contact">Contact</a></li>
 							</ul>
 						</nav>

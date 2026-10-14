@@ -1,8 +1,8 @@
 <script lang="ts">
-	// Pricing for VNTA Robotics. The page has two jobs: say plainly what an
-	// early engagement costs, and say just as plainly that the product is in
-	// development. There is no checkout. Every button leads to the request
-	// form at the foot of the page, and the form promises nothing.
+	// Pricing for VNTA Robotics. Three offers, all of them things VNTA can
+	// deliver now. Runtime is one line of text, not an offer. The product's
+	// status is said once, in the status section. There is no checkout: every
+	// button leads to the request form at the foot of the page.
 	//
 	// All the words and numbers are in $lib/content/pricing.ts.
 	import { base } from '$app/paths';
@@ -11,72 +11,57 @@
 	import Stage from '$lib/components/Stage.svelte';
 	import PilotForm from '$lib/components/PilotForm.svelte';
 	import { robotics, support } from '$lib/content/site';
-	import { pricing, tiers, enterprise, units, workflow, status, faq, form, interests } from '$lib/content/pricing';
+	import { pricing, tiers, units, workflow, faq, form, interests } from '$lib/content/pricing';
 	import { breadcrumb, faqPage } from '$lib/content/structured';
 
 	// Which offer the form is about. A card's button sets it on the way down.
 	let interest = $state(interests[0]);
-	const pick: Record<string, string> = {
-		'design-partner': 'Design partner',
-		'validation-pilot': 'Validation pilot',
-		'advanced-commissioning': 'Advanced commissioning',
-		runtime: 'Runtime waitlist'
-	};
 </script>
 
 <Seo
 	title="Pricing | VNTA Robotics"
 	shareTitle="VNTA Robotics pricing | {pricing.headline}"
 	image="/share/robotics-pricing.png"
-	imageAlt="VNTA Robotics pricing. {pricing.headline} In development."
-	description="Validation pilots for robot and fleet integrations, from €6,500 ex VAT. Priced per integration, not per robot. VNTA Robotics is in development and taking a limited number of early projects."
+	imageAlt="VNTA Robotics pricing. {pricing.headline}"
+	description="Independent validation of robot and fleet integrations, from €6,500 ex VAT. Design partner places from €2,500. Priced per integration, not per robot. Early access."
 	ld={[breadcrumb('Robotics', '/robotics'), faqPage(faq)]}
 />
 
 <main>
-	<!-- Said first, quietly: this is being built. -->
-	<aside class="banner" aria-label="Development status">
-		<div class="wrap banner__in">
-			<Stage stage={pricing.banner.label} />
-			<p>{pricing.banner.text}</p>
-			<a class="banner__go" href="#status">Development status</a>
-		</div>
-	</aside>
-
 	<section class="band top" aria-labelledby="pricing-title">
 		<div class="wrap">
-			<p class="eyebrow">{robotics.name} · {pricing.eyebrow}</p>
+			<div class="top__eyebrow">
+				<p class="eyebrow">{robotics.name} · {pricing.eyebrow}</p>
+				<Stage stage={robotics.stage} />
+			</div>
 			<h1 class="top__title" id="pricing-title">{pricing.headline}</h1>
 			<p class="top__lede">{pricing.lede}</p>
 			<div class="top__cta">
-				<a class="btn btn--solid" href="#request" onclick={() => (interest = 'Validation pilot')}>
+				<a class="btn btn--solid" href="#request" onclick={() => (interest = 'Validation')}>
 					{pricing.primaryCta}
 					<Icon name="arrow" size={18} />
 				</a>
-				<a class="btn btn--ghost" href="#request" onclick={() => (interest = 'Not sure yet')}>{pricing.secondaryCta}</a>
+				<a class="btn btn--ghost" href="#request" onclick={() => (interest = 'Design partner')}>{pricing.secondaryCta}</a>
 			</div>
 
 			<ul class="tiers">
 				{#each tiers as t}
-					<li class="tier card" class:tier--primary={t.primary} class:tier--planned={t.planned}>
+					<li class="tier card" class:tier--primary={t.primary}>
 						{#if t.primary}<p class="tier__flag">Recommended</p>{/if}
 						<div class="tier__top">
 							<Stage stage={t.availability} />
-							<p class="eyebrow">{t.label}</p>
 						</div>
-						<h2 class="tier__title">{t.title}</h2>
-						<p class="tier__price">
-							{t.price}{#if t.per}<span class="tier__per">&nbsp;{t.per}</span>{/if}
-						</p>
-						<p class="tier__vat">{pricing.vat}{t.planned ? ' · planned' : ''}</p>
+						<h2 class="tier__title">{t.label}</h2>
+						<p class="tier__price">{t.price}</p>
+						<p class="tier__vat">{t.price === 'Scoped' ? 'Priced by agreement' : pricing.vat}</p>
 						<p class="tier__body">{t.body}</p>
-						<a class="btn {t.primary ? 'btn--solid' : 'btn--ghost'} tier__cta" href="#request" onclick={() => (interest = pick[t.id])}>
+						<a class="btn {t.primary ? 'btn--solid' : 'btn--ghost'} tier__cta" href="#request" onclick={() => (interest = t.interest)}>
 							{t.cta}
 						</a>
-						<p class="tier__list-head">{t.planned ? 'Intended to include' : 'Includes'}</p>
+						<p class="tier__list-head">Includes</p>
 						<ul class="tier__list">
 							{#each t.includes as i}
-								<li><Icon name={t.planned ? 'clock' : 'check'} size={16} />{i}</li>
+								<li><Icon name="check" size={16} />{i}</li>
 							{/each}
 						</ul>
 						<p class="tier__note">{t.note}</p>
@@ -84,23 +69,7 @@
 				{/each}
 			</ul>
 
-			<div class="ent card">
-				<div class="ent__say">
-					<p class="eyebrow">{enterprise.label}</p>
-					<h2 class="ent__title">{enterprise.title}</h2>
-					<p class="ent__body">{enterprise.body}</p>
-				</div>
-				<ul class="ent__list">
-					{#each enterprise.includes as i}
-						<li><Icon name="check" size={16} />{i}</li>
-					{/each}
-				</ul>
-				<div class="ent__act">
-					<p class="ent__price">{enterprise.price}</p>
-					<a class="btn btn--ghost" href="#request" onclick={() => (interest = 'Enterprise')}>{enterprise.cta}</a>
-					<p class="tier__note">{enterprise.note}</p>
-				</div>
-			</div>
+			<p class="runtime"><Icon name="clock" size={16} />{pricing.runtime}</p>
 
 			<p class="small-print">
 				Every price is a starting point, shown ex VAT. There is no online payment: scope is agreed before work begins.
@@ -124,9 +93,6 @@
 					</li>
 				{/each}
 			</ul>
-			<ul class="lines">
-				{#each units.lines as l}<li>{l}</li>{/each}
-			</ul>
 		</div>
 	</section>
 
@@ -136,7 +102,7 @@
 				<p class="eyebrow">How an engagement runs</p>
 				<h2 class="head__title" id="flow-title">Start with one real integration.</h2>
 				<p class="head__text">
-					Connect one robot or fleet system, agree what will be tested, run the suite, and go through the report together. Nothing is
+					Connect one robot or fleet system, agree what will be tested, run the suite, and go through the result together. Nothing is
 					bought with a button.
 				</p>
 			</div>
@@ -155,25 +121,12 @@
 	<section class="band band--paper" id="status" aria-labelledby="status-title">
 		<div class="wrap">
 			<div class="head">
-				<p class="eyebrow">Development status</p>
-				<h2 class="head__title" id="status-title">What exists, and what does not yet.</h2>
+				<div class="status__top">
+					<p class="eyebrow">Technical status</p>
+					<Stage stage={robotics.stage} />
+				</div>
+				<h2 class="head__title" id="status-title">What runs today, and what does not yet.</h2>
 				<p class="head__text">{robotics.honest} No dates are given, because none are committed.</p>
-			</div>
-			<div class="cols">
-				{#each status as s}
-					<div class="col card">
-						<Stage stage={s.when} />
-						<ul>
-							{#each s.items as i}<li>{i}</li>{/each}
-						</ul>
-					</div>
-				{/each}
-			</div>
-
-			<div class="head head--second">
-				<p class="eyebrow">Integrations</p>
-				<h2 class="head__title">Supported, experimental, planned.</h2>
-				<p class="head__text">Support varies by protocol and implementation. Only the first column runs today.</p>
 			</div>
 			<div class="cols">
 				<div class="col card">
@@ -219,13 +172,13 @@
 		<div class="wrap">
 			<div class="quote">
 				<div>
-					<p class="eyebrow">Pilot request</p>
+					<p class="eyebrow">Request</p>
 					<h2 class="quote__title" id="request-title">{form.title}</h2>
 					<p class="quote__text">{form.lede}</p>
 					<ul class="promise">
 						<li><Icon name="check" size={16} />No payment, no card, no automatic sign-up.</li>
-						<li><Icon name="check" size={16} />Pilot scope is agreed before work begins.</li>
-						<li><Icon name="check" size={16} />Not every request can be taken on while the product is in development.</li>
+						<li><Icon name="check" size={16} />Scope is agreed before work begins.</li>
+						<li><Icon name="check" size={16} />Early places are limited, so not every request can be taken on.</li>
 					</ul>
 				</div>
 				<div class="quote__form card">
@@ -239,54 +192,21 @@
 	<section class="band close" data-theme="ink" aria-labelledby="next-title">
 		<div class="wrap next">
 			<div>
-				<h2 class="head__title" id="next-title">Validate one deployment before standardising the rest.</h2>
+				<h2 class="head__title" id="next-title">Validate one integration before standardising the rest.</h2>
 				<p class="next__text">{robotics.note}</p>
 			</div>
 			<div class="next__act">
-				<a class="btn btn--solid" href="#request" onclick={() => (interest = 'Validation pilot')}>
-					Request a pilot
+				<a class="btn btn--solid" href="#request" onclick={() => (interest = 'Validation')}>
+					Validate an integration
 					<Icon name="arrow" size={18} />
 				</a>
-				<a class="next__link" href="{base}/robotics">What VNTA Robotics is</a>
+				<a class="next__link" href="{base}/robotics#report">View sample validation report</a>
 			</div>
 		</div>
 	</section>
 </main>
 
 <style>
-	/* --- The development banner: pale blue, never a warning. ---------------- */
-	.banner {
-		background: var(--blue-soft);
-		border-bottom: 1px solid color-mix(in srgb, var(--blue) 14%, transparent);
-		color: var(--ink-80);
-		font-size: var(--t-small);
-	}
-	.banner__in {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: 8px 14px;
-		padding-top: 10px;
-		padding-bottom: 10px;
-	}
-	.banner :global(.stage) {
-		background: var(--paper);
-	}
-	.banner p {
-		margin: 0;
-		flex: 1 1 28rem;
-		line-height: 1.45;
-	}
-	.banner__go {
-		font-weight: 600;
-		color: var(--blue);
-		white-space: nowrap;
-	}
-	.banner__go:hover {
-		text-decoration: underline;
-		text-underline-offset: 4px;
-	}
-
 	/* --- Top ---------------------------------------------------------------- */
 	.top {
 		background:
@@ -342,11 +262,6 @@
 			0 0 0 1px var(--navy),
 			var(--lift);
 	}
-	.tier--planned {
-		background: transparent;
-		border-style: dashed;
-		border-color: var(--ink-20);
-	}
 	.tier__flag {
 		position: absolute;
 		top: -11px;
@@ -380,16 +295,6 @@
 		color: var(--ink);
 		font-variant-numeric: tabular-nums;
 	}
-	.tier--planned .tier__price,
-	.tier--planned .tier__title {
-		color: var(--ink-60);
-	}
-	.tier__per {
-		font-size: 0.95rem;
-		font-weight: 500;
-		letter-spacing: 0;
-		color: var(--ink-60);
-	}
 	.tier__vat {
 		margin: 4px 0 0;
 		font-size: 0.8rem;
@@ -416,7 +321,6 @@
 		color: var(--ink-60);
 	}
 	.tier__list,
-	.ent__list,
 	.promise {
 		list-style: none;
 		margin: 10px 0 0;
@@ -428,7 +332,6 @@
 		text-wrap: pretty;
 	}
 	.tier__list li,
-	.ent__list li,
 	.promise li {
 		display: grid;
 		grid-template-columns: 16px minmax(0, 1fr);
@@ -436,16 +339,9 @@
 		align-items: start;
 	}
 	.tier__list :global(svg),
-	.ent__list :global(svg),
 	.promise :global(svg) {
 		margin-top: 2px;
 		color: var(--green);
-	}
-	.tier--planned .tier__list {
-		color: var(--ink-60);
-	}
-	.tier--planned .tier__list :global(svg) {
-		color: var(--ink-40);
 	}
 	.tier__note {
 		margin: auto 0 0;
@@ -455,44 +351,26 @@
 		color: var(--ink-60);
 	}
 
-	/* --- Enterprise: one wide panel under the four. ------------------------- */
-	.ent {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 20px;
-		margin-top: 12px;
-		padding: 22px 20px;
-	}
-	.ent__title {
-		margin: 12px 0 0;
-		font-size: 1.2rem;
-	}
-	.ent__body {
-		margin: 8px 0 0;
-		font-size: 0.94rem;
+	.runtime {
+		display: flex;
+		align-items: flex-start;
+		gap: 9px;
+		margin: 18px 0 0;
+		font-size: var(--t-small);
 		line-height: 1.5;
-		max-width: 34rem;
+		color: var(--ink-60);
 	}
-	.ent__list {
-		margin: 0;
-		align-content: start;
+	.runtime :global(svg) {
+		flex: none;
+		margin-top: 2px;
+		color: var(--ink-40);
 	}
-	.ent__act {
-		display: grid;
-		gap: 10px;
-		align-content: start;
-		justify-items: start;
-	}
-	.ent__price {
-		margin: 0;
-		font-size: 1.5rem;
-		font-weight: 600;
-		letter-spacing: -0.03em;
-		color: var(--ink);
-	}
-	.ent__act .tier__note {
-		margin: 0;
-		padding: 0;
+	.top__eyebrow,
+	.status__top {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 10px 12px;
 	}
 	.small-print {
 		margin: 20px 0 0;
@@ -531,17 +409,6 @@
 		color: var(--ink);
 		max-width: 22rem;
 	}
-	.lines {
-		list-style: none;
-		margin: 24px 0 0;
-		padding: 0;
-		display: grid;
-		gap: 6px;
-		font-size: var(--t-small);
-		color: var(--ink-60);
-		max-width: 46rem;
-	}
-
 	/* --- The six steps ------------------------------------------------------ */
 	.flow {
 		list-style: none;
@@ -601,9 +468,6 @@
 		width: 5px;
 		height: 1.5px;
 		background: var(--ink-40);
-	}
-	.head--second {
-		margin-top: clamp(40px, 5vw, 64px);
 	}
 
 	/* --- Questions ---------------------------------------------------------- */
@@ -691,25 +555,16 @@
 	}
 
 	@media (min-width: 640px) {
-		.tiers {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-		}
 		.flow {
 			grid-template-columns: repeat(3, minmax(0, 1fr));
 		}
 		.units {
-			grid-template-columns: repeat(3, minmax(0, 1fr));
+			grid-template-columns: repeat(2, minmax(0, 1fr));
 			gap: 0 32px;
 			border-top: 0;
 		}
 		.unit {
 			border-top: 1px solid var(--line);
-		}
-		.ent {
-			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-		}
-		.ent__act {
-			grid-column: 1 / -1;
 		}
 	}
 	@media (min-width: 900px) {
@@ -719,22 +574,14 @@
 		.next {
 			grid-template-columns: minmax(0, 1fr) auto;
 		}
-		.ent {
-			grid-template-columns: minmax(0, 5fr) minmax(0, 5fr) minmax(0, 3fr);
-			align-items: start;
-			padding: 26px 24px;
-		}
-		.ent__act {
-			grid-column: auto;
+		.tiers {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
 		}
 	}
 	@media (min-width: 1140px) {
-		.tiers {
-			grid-template-columns: repeat(4, minmax(0, 1fr));
-		}
-		/* Four lines of description, so the four buttons sit on one line. */
+		/* Equal description height, so the three buttons sit on one line. */
 		.tier__body {
-			min-height: 6em;
+			min-height: 4.5em;
 		}
 		.flow {
 			grid-template-columns: repeat(6, minmax(0, 1fr));

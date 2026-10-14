@@ -81,7 +81,8 @@ export const follow = social.filter((s) => s.name === 'Bluesky');
 export const pitch = {
 	eyebrow: 'Autonomous infrastructure',
 	headline: 'Infrastructure for autonomous systems.',
-	lede: 'VNTA is designing the software infrastructure that will allow autonomous machines and intelligent systems to operate securely in the real world.',
+	/** Ties the thesis to the one thing that can be bought today. */
+	lede: 'Starting with software that validates robot integrations before deployment: an independent check of what actually works, with the evidence kept.',
 	/** One line for search results and share cards. */
 	short: 'VNTA is an independent technology company developing infrastructure for autonomous systems.'
 };
@@ -91,16 +92,16 @@ export const statement = {
 	body: 'Robots, intelligent agents, vehicles and machines are becoming increasingly autonomous. VNTA is building the infrastructure to connect them, verify what they can actually do, and later govern and trust them across organisations and environments.'
 };
 
-/** A system's standing. "In development" is the one being built. */
-export type Stage = 'In development' | 'Research';
+/** A system's standing. "Early access" is the one that can be engaged today. */
+export type Stage = 'Early access' | 'In development' | 'Research';
 
 /** The three kinds of autonomous system the infrastructure is meant to reach. */
 export const systems: { name: string; layer: string; body: string; stage: Stage; icon: string }[] = [
 	{
 		name: 'Robots',
-		layer: 'Developer infrastructure',
-		body: 'Physical machines operating across warehouses, factories and field environments.',
-		stage: 'In development',
+		layer: 'Integration validation',
+		body: 'Independent validation of robot and fleet integrations in warehouses and factories, before they go into operation.',
+		stage: 'Early access',
 		icon: 'robot'
 	},
 	{
@@ -144,21 +145,60 @@ export const company = {
 
 export const robotics = {
 	name: 'VNTA Robotics',
-	stage: 'In development' as Stage,
-	positioning: 'Developer infrastructure for autonomous machines.',
-	/** The question the first module answers. */
+	stage: 'Early access' as Stage,
+	/** One line, used for titles and share cards. */
+	positioning: 'Independent validation before deployment.',
+	/** The /robotics headline. */
+	headline: 'Know what your robot integration actually does before deployment.',
+	/** Under the headline. */
+	what: 'VNTA tests robot and fleet integrations against a repeatable validation suite and produces a readiness result backed by the messages, calls and failures it observed.',
+	/** The one sentence the whole site is built around. */
+	core: 'VNTA independently tests robot and fleet integrations, verifies which capabilities actually work, and keeps the evidence behind every result.',
+	/** The mental model, in three steps. Keep it the same everywhere. */
+	model: [
+		{ name: 'The vendor says what should work', body: 'Documentation, datasheets and the interface itself declare what the system can do.', icon: 'nodes' },
+		{ name: 'VNTA tests what actually works', body: 'The same repeatable checks, including a dropped link and a restart, run against the connected system.', icon: 'shield' },
+		{ name: 'You get the evidence', body: 'One readiness verdict, with every call, answer and raw message behind it.', icon: 'audit' }
+	],
+	/** The question Validation answers. */
 	question: 'What can this machine actually do, and do we have evidence that it works?',
-	what: 'VNTA Robotics connects to a robot or fleet system, tests what it can actually do, and keeps the evidence. In development.',
+	/** Where VNTA stands between the parties. */
+	independent: 'VNTA provides independent technical validation of robot integrations. We test the behaviour of the connected software system and preserve the evidence behind each result.',
+	/** The one analogy, used once, as supporting copy. Not a product name. */
+	analogy: 'Think of it as an MOT for the integration: a structured check of what actually works before deployment. VNTA provides technical validation, not regulatory certification.',
+	/** What a validation is not. Said once, plainly. */
+	isNot: ['Safety certification', 'Regulatory certification', 'Manufacturer commissioning', 'Mechanical performance testing'],
 	/** Above the architecture picture. */
-	headline: 'Above the systems you already run.',
-	body: 'VNTA Robotics is designed to sit above VDA 5050, ROS 2, Open-RMF and vendor APIs, reaching each one through an adapter. It replaces none of them.',
-	/** Said wherever the product is shown, so nobody mistakes work in progress for a finished product. */
-	honest: 'VNTA Robotics is in development. Today it runs against simulated robots and one external virtual vehicle. It has not been tested with a real machine.',
+	sits: 'Above the systems you already run.',
+	body: 'VNTA Robotics sits above VDA 5050, ROS 2, Open-RMF and vendor APIs, reaching each one through an adapter. It replaces none of them.',
+	/**
+	 * The one status statement. Said once per page, in one place, rather than
+	 * repeated under every section. When a real system is connected, change it here.
+	 */
+	honest: 'Validation has been tested against simulated systems and one external VDA 5050 implementation. It has not yet been run against a real robot. We are now taking on our first production design partners.',
 	/** Said wherever a report or a result is shown. */
 	notSafety: 'VNTA validation evaluates software integration behaviour against a chosen set of checks. It is not a functional-safety certification and does not replace manufacturer commissioning procedures.',
 	/** The small note at the foot of the robotics pages. */
-	note: 'VNTA Robotics is currently in development. Product scope, supported integrations and pricing may change as the platform is validated with early partners.'
+	note: 'Product scope, supported integrations and pricing may change as Validation is used with early partners.'
 };
+
+/** Who buys a validation, and what it gives each of them. */
+export const buyers = [
+	{
+		who: 'For integrators',
+		title: 'Catch integration failures before site acceptance.',
+		body: 'Run the same validation approach across vendors and deployments, preserve the evidence, and give your customer a clear readiness result.',
+		icon: 'plug'
+	},
+	{
+		who: 'For operators',
+		title: 'Verify what you are accepting.',
+		body: 'See which capabilities were actually demonstrated before standardising an integration across a site or fleet.',
+		icon: 'check'
+	}
+];
+/** Named, but not given a section of their own. */
+export const alsoFor = 'Robot makers can use the same suite to check an interface before it ships.';
 
 /** The order things are built in. Each step stands on the one before. */
 export type When = 'Now' | 'Next' | 'Later';
@@ -172,14 +212,14 @@ export const progression: { name: string; body: string; when: When }[] = [
 ];
 
 /** The four parts of VNTA Robotics, and where each one stands. Only one is current. */
-export type ModuleState = 'Current' | 'In development' | 'Future';
+export type ModuleState = 'Early access' | 'In development' | 'Future';
 export const modules: { name: string; role: string; body: string; state: ModuleState; detail: string; icon: string }[] = [
 	{
 		name: 'Validation',
 		role: 'The first module',
 		body: 'Connects to an integration, finds out what it can do, tests it, and reports with evidence.',
-		state: 'Current',
-		detail: 'Open to a limited number of pilots.',
+		state: 'Early access',
+		detail: 'Taking design partners and early validation projects.',
 		icon: 'shield'
 	},
 	{
@@ -253,17 +293,22 @@ export const capabilities = [
 	{ name: 'Unknown is not a pass', body: 'A timeout is reported as unknown. Never as a pass, never as a fail.', icon: 'clock' }
 ];
 
-/** What VNTA Robotics reaches, and how far each has got. Only the first works. */
-export type Support = 'Works today' | 'Planned';
+/**
+ * What VNTA Robotics reaches, and how far each has got. "Supported today"
+ * means an adapter has run in the vnta-robotics repository. When the VDA 5050
+ * 3.0 adapter is built, change its `support` to 'In development', and to
+ * 'Supported today' once it has run: the pages and the picture follow.
+ */
+export type Support = 'Supported today' | 'In development' | 'Planned';
 export const interfaces: { name: string; note: string; support: Support }[] = [
-	{ name: 'VDA 5050', note: 'Version 2.1.0', support: 'Works today' },
-	{ name: 'ROS 2', note: 'No adapter yet', support: 'Planned' },
-	{ name: 'Open-RMF', note: 'No adapter yet', support: 'Planned' },
-	{ name: 'Vendor APIs', note: 'Case by case', support: 'Planned' }
+	{ name: 'VDA 5050 2.1', note: 'Version 2.1.0, over MQTT', support: 'Supported today' },
+	{ name: 'VDA 5050 3.0', note: 'Not supported yet', support: 'Planned' },
+	{ name: 'ROS 2 · Open-RMF', note: 'Future adapters, built with design partners', support: 'Planned' },
+	{ name: 'Vendor APIs', note: 'Case by case, with design partners', support: 'Planned' }
 ];
 
 /** Who it is for, on the other side of the picture. */
-export const audiences = ['Integrators', 'Operators', 'Robot makers', 'Developers'];
+export const audiences = ['Integrators', 'Operators', 'Robot makers'];
 
 /**
  * Supported, experimental, planned. "Supported" means it runs in the

@@ -3,7 +3,7 @@
 	// blue for what is being built or comes next; hollow grey for what is a
 	// direction or a plan, not a product.
 	let { stage }: { stage: string } = $props();
-	const now = ['Current', 'Works today', 'Now', 'Supported now'];
+	const now = ['Current', 'Early access', 'Works today', 'Supported today', 'Now', 'Supported now'];
 	const build = ['In development', 'Next', 'Experimental', 'Limited', 'Limited availability', 'Open'];
 </script>
 

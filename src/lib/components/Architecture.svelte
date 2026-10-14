@@ -20,7 +20,7 @@
 			<p class="arch__note">Reached through adapters. VNTA replaces none of them.</p>
 			<ul class="arch__tiles arch__tiles--2 arch__tiles--status">
 				{#each interfaces as i}
-					<li class:is-live={i.support === 'Works today'}>
+					<li class:is-live={i.support === 'Supported today'}>
 						<span class="arch__iface">{i.name}</span>
 						<span class="arch__state">{i.support}</span>
 						<span class="arch__sub">{i.note}</span>
@@ -57,8 +57,8 @@
 		</div>
 	</div>
 	<figcaption class="arch__cap">
-		<span class="stage stage--build">{robotics.stage}</span>
-		<span>Architecture of the design. Only VDA 5050 2.1.0 has an adapter today. {robotics.honest}</span>
+		<span class="stage stage--now">{robotics.stage}</span>
+		<span>Architecture of the design. Only VDA 5050 2.1.0 has an adapter today.</span>
 	</figcaption>
 </figure>
 

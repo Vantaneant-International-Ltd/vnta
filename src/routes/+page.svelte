@@ -21,7 +21,6 @@
 		principles,
 		company,
 		robotics,
-		layer,
 		roboticsUrl
 	} from '$lib/content/site';
 	import { organisation, website } from '$lib/content/structured';
@@ -35,7 +34,7 @@
 	title="VNTA | Infrastructure for autonomous systems"
 	shareTitle="VNTA | {pitch.headline}"
 	image="/share/home.png"
-	description="{pitch.short} Its current work, VNTA Robotics, is developer infrastructure for autonomous machines: it connects to a robot or fleet system, tests what it can actually do, and keeps the evidence. In development."
+	description="{pitch.short} Its first product is Validation, from VNTA Robotics. {robotics.core}"
 	ld={[organisation(), website()]}
 />
 
@@ -85,14 +84,11 @@
 					</tbody>
 				</table>
 
-				<div class="panel__foot">
-					<p class="eyebrow">VNTA Robotics today</p>
-					<ul class="chips">
-						{#each layer as l}
-							<li><Icon name={l.icon} size={15} />{l.name}</li>
-						{/each}
-					</ul>
-				</div>
+				<a class="panel__foot panel__now" href={roboticsHref}>
+					<p class="eyebrow">Available now</p>
+					<p class="panel__now-name">Validation <span>· {robotics.name}</span></p>
+					<p class="panel__now-body">{robotics.positioning} Robot and fleet integrations, tested before they go into operation.</p>
+				</a>
 			</div>
 		</div>
 	</section>
@@ -110,12 +106,26 @@
 		<div class="wrap">
 			<div class="lead">
 				<div class="lead__say">
-					<p class="eyebrow">01 / {robotics.name}</p>
-					<h2 class="head__title" id="robotics-title">{robotics.headline}</h2>
-					<p class="head__text">{robotics.what} {robotics.body}</p>
-					<a class="go" href={roboticsHref}>Explore Robotics <Icon name="arrow" size={16} /></a>
+					<div class="lead__top">
+						<p class="eyebrow">01 / {robotics.name}</p>
+						<Stage stage={robotics.stage} />
+					</div>
+					<h2 class="head__title" id="robotics-title">{robotics.positioning}</h2>
+					<p class="head__text">{robotics.core}</p>
+					<a class="go" href={roboticsHref}>See how Validation works <Icon name="arrow" size={16} /></a>
 				</div>
 			</div>
+			<ol class="model">
+				{#each robotics.model as m, i}
+					<li class="model__step card">
+						<span class="well"><Icon name={m.icon} size={20} /></span>
+						<span class="model__n">0{i + 1}</span>
+						<span class="model__name">{m.name}</span>
+						<span class="model__body">{m.body}</span>
+					</li>
+				{/each}
+			</ol>
+			<p class="model__sits">{robotics.sits} {robotics.body}</p>
 			<Architecture />
 		</div>
 	</section>
@@ -298,24 +308,87 @@
 	.panel__foot {
 		margin-top: 16px;
 	}
-	.chips {
-		list-style: none;
-		margin: 10px 0 0;
-		padding: 0;
+	/* The one thing that can be engaged today, at the foot of the panel. */
+	.panel__now {
+		display: block;
+		padding: 14px 16px;
+		border-radius: 10px;
+		background: var(--green-soft);
+		border: 1px solid color-mix(in srgb, var(--green) 25%, transparent);
+		transition: border-color var(--dur) var(--ease);
+	}
+	.panel__now:hover {
+		border-color: var(--green);
+	}
+	.panel__now .eyebrow {
+		color: var(--green);
+	}
+	.panel__now-name {
+		margin: 6px 0 0;
+		font-size: 1.05rem;
+		font-weight: 600;
+		color: var(--ink);
+	}
+	.panel__now-name span {
+		font-weight: 500;
+		color: var(--ink-60);
+	}
+	.panel__now-body {
+		margin: 4px 0 0;
+		font-size: 0.88rem;
+		line-height: 1.45;
+		color: var(--ink-80);
+	}
+
+	/* Vendor says, VNTA tests, you get the evidence. */
+	.lead__top {
 		display: flex;
 		flex-wrap: wrap;
-		gap: 6px;
-	}
-	.chips li {
-		display: inline-flex;
 		align-items: center;
-		gap: 6px;
-		padding: 5px 10px 5px 8px;
-		border: 1px solid var(--line);
-		border-radius: var(--r-chip);
-		font-size: 0.82rem;
-		font-weight: 500;
-		color: var(--ink-80);
+		gap: 10px 12px;
+	}
+	.model {
+		list-style: none;
+		margin: clamp(24px, 3vw, 36px) 0 0;
+		padding: 0;
+		display: grid;
+		grid-template-columns: 1fr;
+		gap: 10px;
+	}
+	.model__step {
+		display: grid;
+		gap: 4px;
+		align-content: start;
+		padding: 18px;
+	}
+	.model__step .well {
+		margin-bottom: 10px;
+	}
+	.model__n {
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+		color: var(--ink-40);
+	}
+	.model__name {
+		font-weight: 600;
+		color: var(--ink);
+	}
+	.model__body {
+		font-size: 0.92rem;
+		line-height: 1.45;
+		color: var(--ink-60);
+	}
+	.model__sits {
+		margin: clamp(28px, 3.4vw, 44px) 0 16px;
+		max-width: 46rem;
+		font-size: var(--t-small);
+		line-height: 1.5;
+		color: var(--ink-60);
+	}
+	@media (min-width: 760px) {
+		.model {
+			grid-template-columns: repeat(3, minmax(0, 1fr));
+		}
 	}
 
 	/* --- A heading on one side, its paragraph on the other. --------------- */
