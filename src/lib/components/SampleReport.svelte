@@ -5,10 +5,11 @@
 	// here is from that run and agrees with CapabilityPanel. It is labelled as
 	// an example, from a virtual vehicle, to every visitor.
 	//
-	// Two of the three failed protocol checks are described only as "in the
-	// full report": the detail of those findings is not published (see
-	// vnta-robotics docs/strategy/07-EXPERIMENT-RESULTS.md). If that changes,
-	// name them here. Do not add findings that a run did not produce.
+	// The three findings are the real findings of that run, published on
+	// 14 October 2026 by the owner's decision. They are observations about one
+	// version of one open-source library in one configuration, not a judgement
+	// of it, and the library is not named. Do not add findings a run did not
+	// produce.
 	import Icon from '$lib/components/ui/Icon.svelte';
 
 	const meta = [
@@ -43,11 +44,18 @@
 			fix: 'Supply a factsheet that lists the vehicle’s functions, so a master control can discover them.'
 		},
 		{
-			id: 'Protocol',
-			area: 'Two further protocol checks',
+			id: 'PRO-09',
+			area: 'Connection topic QoS',
 			result: 'Fail',
-			what: 'Recorded with their messages and timestamps. Shown in the full report, not on this page.',
-			fix: 'Each comes with the rule it was judged against and a suggested change.'
+			what: 'The standard asks for the connection topic at QoS level 1. The vehicle’s ONLINE message and its last will both arrived at QoS 0.',
+			fix: 'Publish connection messages at QoS 1, as VDA 5050 2.1.0 requires.'
+		},
+		{
+			id: 'PRO-11',
+			area: 'Connection state after reconnect',
+			result: 'Fail',
+			what: 'After a cut link was restored, state messages resumed within about a second, but no ONLINE message followed. A late subscriber was handed the retained CONNECTIONBROKEN while the vehicle was connected and publishing. Every individual message was schema-valid; the fault only showed over time.',
+			fix: 'Publish ONLINE on the connection topic after every reconnect, not only after a restart, so a master control does not treat a live vehicle as lost.'
 		}
 	];
 
@@ -71,7 +79,7 @@
 				<div>
 					<p class="rep__k">Verdict</p>
 					<p class="rep__verdict">Conditionally ready</p>
-					<p class="rep__why">Every behavioural check passed: orders, pause, resume, cancel, duplicates, charging, recovery after a restart. Capability discovery failed, and two further protocol checks did not pass.</p>
+					<p class="rep__why">Every behavioural check passed: orders, pause, resume, cancel, duplicates, charging, recovery after a restart. Three findings: capability discovery, and two on the connection topic.</p>
 				</div>
 				<dl class="rep__meta">
 					{#each meta as m}
@@ -129,8 +137,8 @@
 		</div>
 	</div>
 	<figcaption class="rep__cap">
-		An example, built from a real run against a virtual vehicle rather than a customer system. The capability matrix from the same run
-		follows.
+		Findings from VNTA’s own test of an open-source VDA 5050 virtual vehicle, unmodified. Not a production or customer deployment, and
+		not a judgement of the software. The capability matrix from the same run follows.
 	</figcaption>
 </figure>
 

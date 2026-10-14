@@ -38,6 +38,9 @@
 		{ k: 'VNTA evidence', v: 'Failed. The raw reply, its timestamp and the reason are kept with the result.', tone: 'no' }
 	];
 
+	// On a phone the list of checks starts short; the reader can open it.
+	let allChecks = $state(false);
+
 	// Winter (14 October to 6 January): snow over the route map, and robots
 	// leaving tracks in it. Decided in the visitor's browser.
 	let winter = $state(false);
@@ -138,7 +141,7 @@
 			</div>
 
 			<h3 class="sub">What a validation run checks</h3>
-			<ul class="caps">
+			<ul class="caps" class:caps--all={allChecks} id="checks">
 				{#each capabilities as c}
 					<li class="cap card">
 						<span class="well"><Icon name={c.icon} size={20} /></span>
@@ -149,6 +152,9 @@
 					</li>
 				{/each}
 			</ul>
+			<button class="more" type="button" aria-controls="checks" aria-expanded={allChecks} onclick={() => (allChecks = !allChecks)}>
+				{allChecks ? 'Show fewer checks' : `View all ${capabilities.length} checks`}
+			</button>
 		</div>
 	</section>
 
@@ -467,6 +473,27 @@
 		}
 		.cap .well {
 			display: none;
+		}
+		.caps:not(.caps--all) > li:nth-child(n + 4) {
+			display: none;
+		}
+	}
+	/* The control exists only where the list is folded: on a phone. */
+	.more {
+		display: none;
+	}
+	@media (max-width: 560px) {
+		.more {
+			display: inline-flex;
+			margin-top: 12px;
+			padding: 10px 16px;
+			border: 1px solid var(--line);
+			border-radius: var(--r-chip);
+			background: #fff;
+			font: inherit;
+			font-weight: 600;
+			color: var(--ink);
+			cursor: pointer;
 		}
 	}
 	.claim__k {
