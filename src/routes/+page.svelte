@@ -1,4 +1,10 @@
 <script lang="ts">
+	import Snow from '$lib/season/Snow.svelte';
+	import { isWinter } from '$lib/season/season';
+	import { onMount as onMountSeason } from 'svelte';
+	// Winter (1 December to 6 January): a light snowfall over the page.
+	let winter = $state(false);
+	onMountSeason(() => (winter = isWinter(new Date(), location.search)));
 	// The home page of the parent company. It says what VNTA is building, shows
 	// the one business area in development (VNTA Robotics), and is honest about
 	// what is still research. Kept short. All of the words live in
@@ -22,6 +28,8 @@
 
 	const roboticsHref = roboticsUrl.startsWith('http') ? roboticsUrl : `${base}${roboticsUrl}`;
 </script>
+
+{#if winter}<Snow count={34} />{/if}
 
 <Seo
 	title="VNTA | Infrastructure for autonomous systems"

@@ -7,6 +7,9 @@
 	// when it is off screen or the tab is hidden.
 	import { onMount } from 'svelte';
 
+	// In winter the routes are under snow: robots leave tracks, not light.
+	let { winter = false }: { winter?: boolean } = $props();
+
 	let canvas: HTMLCanvasElement;
 
 	onMount(() => {
@@ -24,6 +27,16 @@
 		let nodes: Node[] = [];
 		let edges = new Map<string, number>(); // "a-b" -> how lit, 0..1
 		let robots: Robot[] = [];
+		type Mark = { x: number; y: number; dx: number; dy: number; age: number };
+		let tracks: Mark[] = [];
+		const TRACK_LIFE = 12;
+		const pos = (r: Robot) => {
+			const a = nodes[r.from];
+			const b = nodes[r.to];
+			const e = r.p < 0.5 ? 2 * r.p * r.p : 1 - Math.pow(-2 * r.p + 2, 2) / 2;
+			return { x: a.x + (b.x - a.x) * e, y: a.y + (b.y - a.y) * e, dx: Math.sign(b.x - a.x), dy: Math.sign(b.y - a.y) };
+		};
+		const lastMark = new Map<Robot, { x: number; y: number }>();
 
 		let seed = 7;
 		const rand = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
@@ -92,6 +105,22 @@
 				ctx!.lineTo(nodes[b].x, nodes[b].y);
 				ctx!.stroke();
 			}
+			// Tracks in the snow: two short marks, side by side, fading.
+			if (winter) {
+				ctx!.lineWidth = 1.4;
+				for (const m of tracks) {
+					const fade = 1 - m.age / TRACK_LIFE;
+					ctx!.strokeStyle = `rgba(90, 110, 140, ${0.32 * fade})`;
+					const px = -m.dy * 3;
+					const py = m.dx * 3;
+					for (const side of [1, -1]) {
+						ctx!.beginPath();
+						ctx!.moveTo(m.x + px * side - m.dx * 2.5, m.y + py * side - m.dy * 2.5);
+						ctx!.lineTo(m.x + px * side + m.dx * 2.5, m.y + py * side + m.dy * 2.5);
+						ctx!.stroke();
+					}
+				}
+			}
 			// The points.
 			ctx!.fillStyle = `rgba(${BLUE}, 0.22)`;
 			for (const n of nodes) {
@@ -101,11 +130,7 @@
 			}
 			// The robots: a small square, as seen from above, with a soft halo.
 			for (const r of robots) {
-				const a = nodes[r.from];
-				const b = nodes[r.to];
-				const e = r.p < 0.5 ? 2 * r.p * r.p : 1 - Math.pow(-2 * r.p + 2, 2) / 2;
-				const x = a.x + (b.x - a.x) * e;
-				const y = a.y + (b.y - a.y) * e;
+				const { x, y } = pos(r);
 				const halo = ctx!.createRadialGradient(x, y, 0, x, y, 18);
 				halo.addColorStop(0, `rgba(${BLUE}, 0.25)`);
 				halo.addColorStop(1, `rgba(${BLUE}, 0)`);
@@ -123,9 +148,22 @@
 				const next = v - dt * 0.22;
 				next <= 0 ? edges.delete(k) : edges.set(k, next);
 			}
+			if (winter) {
+				for (const m of tracks) m.age += dt;
+				tracks = tracks.filter((m) => m.age < TRACK_LIFE);
+			}
 			for (const r of robots) {
 				r.p += dt * r.speed;
-				edges.set(key(r.from, r.to), 1);
+				if (winter) {
+					const now = pos(r);
+					const prev = lastMark.get(r);
+					if (!prev || Math.hypot(now.x - prev.x, now.y - prev.y) >= 9) {
+						if (now.dx || now.dy) tracks.push({ ...now, age: 0 });
+						lastMark.set(r, { x: now.x, y: now.y });
+					}
+				} else {
+					edges.set(key(r.from, r.to), 1);
+				}
 				if (r.p >= 1) {
 					// Arrived. Pick the next route, preferring not to turn straight back.
 					const n = neighbours(r.to);

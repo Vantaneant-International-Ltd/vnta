@@ -13,6 +13,13 @@
 	import EnquiryForm from '$lib/components/EnquiryForm.svelte';
 	import Flip from '$lib/studio/Flip.svelte';
 	import Symbol from '$lib/components/ui/Symbol.svelte';
+	import Snow from '$lib/season/Snow.svelte';
+	import { isWinter } from '$lib/season/season';
+	import { onMount as onMountSeason } from 'svelte';
+	// Winter (1 December to 6 January): the symbol glows warm, like the star
+	// at the top of a tree, and soft points of light drift down.
+	let winter = $state(false);
+	onMountSeason(() => (winter = isWinter(new Date(), location.search)));
 	import Logos from '$lib/studio/Logos.svelte';
 	import ProjectCard from '$lib/studio/ProjectCard.svelte';
 	import Seo from '$lib/components/Seo.svelte';
@@ -90,7 +97,9 @@
 	<section class="band hero" data-theme="tint" aria-labelledby="hero-title">
 		<!-- Studio's own background: the symbol's rays, turning very slowly,
 		     like light moving across a room. Robotics has routes; this is light. -->
-		<div class="hero__sun" aria-hidden="true"><Symbol size={0} /></div>
+		{#if winter}<div class="hero__glow" aria-hidden="true"></div>{/if}
+		<div class="hero__sun" class:hero__sun--warm={winter} aria-hidden="true"><Symbol size={0} /></div>
+		{#if winter}<Snow fixed={false} warm colour="214, 168, 90" count={26} />{/if}
 		<div class="wrap">
 			<h1 class="hero__title" id="hero-title">{pitch.headline}</h1>
 
@@ -365,6 +374,8 @@
 	.hero {
 		/* The turning card swings a little past its own edges. */
 		overflow-x: clip;
+		/* Nor does the symbol rise above the section, into the bar and menu. */
+		clip-path: inset(0 0 -400px 0);
 		position: relative;
 		isolation: isolate;
 	}
@@ -381,6 +392,32 @@
 		animation:
 			sun-turn 240s linear infinite,
 			sun-breathe 14s ease-in-out infinite alternate;
+	}
+	.hero__sun--warm {
+		color: #c9933f;
+		opacity: 0.2;
+		animation:
+			sun-turn 240s linear infinite,
+			sun-warm 9s ease-in-out infinite alternate;
+	}
+	@keyframes sun-warm {
+		from {
+			opacity: 0.16;
+		}
+		to {
+			opacity: 0.26;
+		}
+	}
+	/* A warm light behind the star. */
+	.hero__glow {
+		position: absolute;
+		top: clamp(-200px, -10vw, -60px);
+		right: clamp(-200px, -10vw, -60px);
+		width: clamp(380px, 58vw, 900px);
+		aspect-ratio: 1;
+		background: radial-gradient(circle, rgba(232, 180, 96, 0.28) 0%, rgba(232, 180, 96, 0) 62%);
+		pointer-events: none;
+		z-index: 0;
 	}
 	.hero__sun :global(.symbol) {
 		width: 100%;

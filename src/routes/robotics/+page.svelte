@@ -15,6 +15,9 @@
 	import Architecture from '$lib/components/Architecture.svelte';
 	import CapabilityPanel from '$lib/components/CapabilityPanel.svelte';
 	import RouteMap from '$lib/components/RouteMap.svelte';
+	import Snow from '$lib/season/Snow.svelte';
+	import { isWinter } from '$lib/season/season';
+	import { onMount } from 'svelte';
 	import { robotics, capabilities, modules, progression } from '$lib/content/site';
 	import { roboticsProduct, breadcrumb } from '$lib/content/structured';
 	import { notePath, notesPath, longDate } from '$lib/content/notePaths';
@@ -38,6 +41,11 @@
 		{ name: 'Discovered', body: 'What the system itself says when asked.' },
 		{ name: 'Verified', body: 'What a validation run actually saw work, and when.' }
 	];
+
+	// Winter (1 December to 6 January): snow over the route map, and robots
+	// leaving tracks in it. Decided in the visitor's browser.
+	let winter = $state(false);
+	onMount(() => (winter = isWinter(new Date(), location.search)));
 </script>
 
 <Seo
@@ -51,7 +59,8 @@
 
 <main>
 	<section class="band lead" aria-labelledby="robotics-title">
-		<RouteMap />
+		{#key winter}<RouteMap {winter} />{/key}
+		{#if winter}<Snow fixed={false} count={38} />{/if}
 		<div class="wrap lead__grid">
 			<div>
 				<div class="lead__top">
