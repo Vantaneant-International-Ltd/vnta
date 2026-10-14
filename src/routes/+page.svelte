@@ -2,7 +2,7 @@
 	import Snow from '$lib/season/Snow.svelte';
 	import { isWinter } from '$lib/season/season';
 	import { onMount as onMountSeason } from 'svelte';
-	// Winter (1 December to 6 January): a light snowfall over the page.
+	// Winter (14 October to 6 January): a light snowfall over the page.
 	let winter = $state(false);
 	onMountSeason(() => (winter = isWinter(new Date(), location.search)));
 	// The home page of the parent company. It says what VNTA is building, shows

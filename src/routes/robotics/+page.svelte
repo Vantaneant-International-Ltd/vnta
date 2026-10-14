@@ -42,7 +42,7 @@
 		{ name: 'Verified', body: 'What a validation run actually saw work, and when.' }
 	];
 
-	// Winter (1 December to 6 January): snow over the route map, and robots
+	// Winter (14 October to 6 January): snow over the route map, and robots
 	// leaving tracks in it. Decided in the visitor's browser.
 	let winter = $state(false);
 	onMount(() => (winter = isWinter(new Date(), location.search)));

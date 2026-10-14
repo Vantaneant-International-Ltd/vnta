@@ -16,7 +16,7 @@
 	import Snow from '$lib/season/Snow.svelte';
 	import { isWinter } from '$lib/season/season';
 	import { onMount as onMountSeason } from 'svelte';
-	// Winter (1 December to 6 January): the symbol glows warm, like the star
+	// Winter (14 October to 6 January): the symbol glows warm, like the star
 	// at the top of a tree, and soft points of light drift down.
 	let winter = $state(false);
 	onMountSeason(() => (winter = isWinter(new Date(), location.search)));
