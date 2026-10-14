@@ -7,7 +7,7 @@
 	import { lessMotion } from './season';
 
 	let {
-		colour = '150, 165, 190',
+		colour = '168, 184, 208',
 		count = 42,
 		fixed = true,
 		warm = false
@@ -25,11 +25,11 @@
 		const make = (top: boolean): Flake => ({
 			x: Math.random() * w,
 			y: top ? -10 - Math.random() * 40 : Math.random() * h,
-			r: 1 + Math.random() * (warm ? 1.6 : 2.2),
+			r: 1.3 + Math.random() * (warm ? 2 : 2.6),
 			v: 12 + Math.random() * 22,
 			sway: 6 + Math.random() * 14,
 			phase: Math.random() * Math.PI * 2,
-			a: 0.35 + Math.random() * 0.45
+			a: 0.55 + Math.random() * 0.4
 		});
 
 		function layout() {
@@ -58,9 +58,15 @@
 					ctx!.arc(x, f.y, f.r * 4, 0, Math.PI * 2);
 					ctx!.fill();
 				} else {
-					ctx!.fillStyle = `rgba(${colour}, ${f.a})`;
+					// A soft, solid flake in a cold blue-grey: pure white would
+					// vanish on a white page.
+					const g = ctx!.createRadialGradient(x, f.y, 0, x, f.y, f.r * 1.6);
+					g.addColorStop(0, `rgba(${colour}, ${f.a})`);
+					g.addColorStop(0.55, `rgba(${colour}, ${f.a * 0.8})`);
+					g.addColorStop(1, `rgba(${colour}, 0)`);
+					ctx!.fillStyle = g;
 					ctx!.beginPath();
-					ctx!.arc(x, f.y, f.r, 0, Math.PI * 2);
+					ctx!.arc(x, f.y, f.r * 1.6, 0, Math.PI * 2);
 					ctx!.fill();
 				}
 			}
