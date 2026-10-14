@@ -99,7 +99,7 @@
 		     like light moving across a room. Robotics has routes; this is light. -->
 		{#if winter}<div class="hero__glow" aria-hidden="true"></div>{/if}
 		<div class="hero__sun" class:hero__sun--warm={winter} aria-hidden="true"><Symbol size={0} /></div>
-		{#if winter}<Snow fixed={false} warm colour="214, 168, 90" count={64} />{/if}
+		{#if winter}<Snow fixed={false} warm colour="#c9933f" count={60} />{/if}
 		<div class="wrap">
 			<h1 class="hero__title" id="hero-title">{pitch.headline}</h1>
 

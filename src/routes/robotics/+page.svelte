@@ -60,7 +60,7 @@
 <main>
 	<section class="band lead" aria-labelledby="robotics-title">
 		{#key winter}<RouteMap {winter} />{/key}
-		{#if winter}<Snow fixed={false} count={100} />{/if}
+		{#if winter}<Snow fixed={false} count={70} />{/if}
 		<div class="wrap lead__grid">
 			<div>
 				<div class="lead__top">

@@ -29,7 +29,7 @@
 	const roboticsHref = roboticsUrl.startsWith('http') ? roboticsUrl : `${base}${roboticsUrl}`;
 </script>
 
-{#if winter}<Snow count={95} />{/if}
+{#if winter}<Snow count={70} />{/if}
 
 <Seo
 	title="VNTA | Infrastructure for autonomous systems"

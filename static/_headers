@@ -23,3 +23,8 @@
 /.well-known/atproto-did
   Content-Type: text/plain; charset=utf-8
   Cache-Control: public, max-age=300
+
+# The winter script other brands' sites load (see static/season/winter.js).
+# An hour, so a change reaches them the same day.
+/season/*
+  Cache-Control: public, max-age=3600
