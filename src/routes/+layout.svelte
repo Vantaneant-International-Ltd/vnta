@@ -101,8 +101,15 @@
 
 {#if frame === 'company'}
 	<div class="shell" data-sveltekit-preload-data="hover">
-		<!-- VNTA Studio is reached from the foot and the Company section, not from
-		     a bar over the front door. -->
+		<!-- On the home page only: a business owner looking for a website lands
+		     here too. It scrolls away with the page. The robotics pages speak
+		     to a different reader and do not carry it. -->
+		{#if path === '/'}
+			<a class="studiobar" href={studio}>
+				<span class="studiobar__ask">Looking for VNTA Studio?</span>
+				<span class="studiobar__go">Brands and websites for your business <Icon name="arrow" size={14} /></span>
+			</a>
+		{/if}
 		<header class="masthead">
 			<div class="wrap">
 				<a class="masthead__mark" href="{base}/" aria-label="VNTA home">
