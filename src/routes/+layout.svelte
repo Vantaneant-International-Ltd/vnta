@@ -101,14 +101,15 @@
 
 {#if frame === 'company'}
 	<div class="shell" data-sveltekit-preload-data="hover">
-		<!-- The top stays pinned while the page scrolls: the studio bar, then
-		     the menu. A business owner looking for a website lands on any of
-		     these pages too, so the way to the studio is always in view. -->
-		<div class="pinned">
-		<a class="studiobar" href={studio}>
-			<span class="studiobar__ask">Looking for VNTA Studio?</span>
-			<span class="studiobar__go">Brands and websites for your business <Icon name="arrow" size={14} /></span>
-		</a>
+		<!-- On the home page only: a business owner looking for a website lands
+		     here too. It scrolls away with the page. The robotics pages speak
+		     to a different reader and do not carry it. -->
+		{#if path === '/'}
+			<a class="studiobar" href={studio}>
+				<span class="studiobar__ask">Looking for VNTA Studio?</span>
+				<span class="studiobar__go">Brands and websites for your business <Icon name="arrow" size={14} /></span>
+			</a>
+		{/if}
 		<header class="masthead">
 			<div class="wrap">
 				<a class="masthead__mark" href="{base}/" aria-label="VNTA home">
@@ -134,7 +135,6 @@
 				{/if}
 			</div>
 		</header>
-		</div>
 
 		{@render children()}
 
@@ -184,6 +184,14 @@
 	</div>
 {:else if frame === 'studio'}
 	<div class="studio" data-sveltekit-preload-data="hover">
+		<!-- The way back: on the studio's home page only, a quiet line saying
+		     whose studio this is. -->
+		{#if path === '/studio'}
+			<a class="parentbar" href="{base}/">
+				<span class="parentbar__ask">Part of VNTA</span>
+				<span class="parentbar__go">The technology company <Icon name="arrow" size={13} /></span>
+			</a>
+		{/if}
 		<header class="masthead">
 			<div class="wrap">
 				<a class="masthead__mark" href={studio} aria-label="VNTA Studio home">

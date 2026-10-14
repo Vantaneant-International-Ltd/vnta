@@ -131,8 +131,7 @@
 	padding-bottom: var(--section-y);
 }
 .shell .band[id] {
-	/* The pinned studio bar and menu sit above it. */
-	scroll-margin-top: 120px;
+	scroll-margin-top: 64px;
 }
 
 /* --- Masthead ------------------------------------------------------------- */
@@ -162,13 +161,10 @@
 	text-decoration: underline;
 	text-underline-offset: 4px;
 }
-.shell .pinned {
+.shell .masthead {
 	position: sticky;
 	top: 0;
 	z-index: 20;
-}
-.shell .masthead {
-	position: relative;
 	background: rgba(255, 255, 255, 0.86);
 	-webkit-backdrop-filter: saturate(180%) blur(16px);
 	backdrop-filter: saturate(180%) blur(16px);
