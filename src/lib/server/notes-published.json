@@ -14,7 +14,11 @@
 		},
 		{
 			"slug": "declared-is-not-verified",
-			"at": "2026-10-15T12:39:40.219Z"
+			"at": "2026-10-15T12:39:40.219Z",
+			"bluesky": {
+				"uri": "at://did:plc:acp5gumigrkus7q343v3gvyk/app.bsky.feed.post/3mxw3i4fmta2d",
+				"url": "https://bsky.app/profile/vnta.xyz/post/3mxw3i4fmta2d"
+			}
 		}
 	]
 }
