@@ -20,6 +20,13 @@
 			"at": "2026-10-12T00:37:29.613Z",
 			"url": "https://pixelfed.social/p/vnta/1015057846773009156",
 			"ref": "1015057846773009156"
+		},
+		{
+			"id": "studio-ezgo-auto-works",
+			"network": "bluesky",
+			"at": "2026-10-19T17:46:37.303Z",
+			"url": "https://bsky.app/profile/vnta.xyz/post/3myaogab3rn2j",
+			"ref": "at://did:plc:acp5gumigrkus7q343v3gvyk/app.bsky.feed.post/3myaogab3rn2j"
 		}
 	]
 }
