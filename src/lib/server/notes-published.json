@@ -30,7 +30,11 @@
 		},
 		{
 			"slug": "twenty-minutes",
-			"at": "2026-10-22T12:58:17.688Z"
+			"at": "2026-10-22T12:58:17.688Z",
+			"bluesky": {
+				"uri": "at://did:plc:acp5gumigrkus7q343v3gvyk/app.bsky.feed.post/3myhpqgfaoi2i",
+				"url": "https://bsky.app/profile/vnta.xyz/post/3myhpqgfaoi2i"
+			}
 		}
 	]
 }
