@@ -27,6 +27,10 @@
 				"uri": "at://did:plc:acp5gumigrkus7q343v3gvyk/app.bsky.feed.post/3mycnxxz3yf2k",
 				"url": "https://bsky.app/profile/vnta.xyz/post/3mycnxxz3yf2k"
 			}
+		},
+		{
+			"slug": "twenty-minutes",
+			"at": "2026-10-22T12:58:17.688Z"
 		}
 	]
 }
