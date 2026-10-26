@@ -27,6 +27,13 @@
 			"at": "2026-10-19T17:46:37.303Z",
 			"url": "https://bsky.app/profile/vnta.xyz/post/3myaogab3rn2j",
 			"ref": "at://did:plc:acp5gumigrkus7q343v3gvyk/app.bsky.feed.post/3myaogab3rn2j"
+		},
+		{
+			"id": "studio-buildt",
+			"network": "bluesky",
+			"at": "2026-10-26T17:38:57.204Z",
+			"url": "https://bsky.app/profile/vnta.xyz/post/3mysbayn3bc2d",
+			"ref": "at://did:plc:acp5gumigrkus7q343v3gvyk/app.bsky.feed.post/3mysbayn3bc2d"
 		}
 	]
 }
