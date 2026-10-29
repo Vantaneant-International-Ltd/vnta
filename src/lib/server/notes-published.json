@@ -38,7 +38,11 @@
 		},
 		{
 			"slug": "our-own-rig-lied-first",
-			"at": "2026-10-29T14:18:26.846Z"
+			"at": "2026-10-29T14:18:26.846Z",
+			"bluesky": {
+				"uri": "at://did:plc:acp5gumigrkus7q343v3gvyk/app.bsky.feed.post/3myzhiq327l23",
+				"url": "https://bsky.app/profile/vnta.xyz/post/3myzhiq327l23"
+			}
 		}
 	]
 }
