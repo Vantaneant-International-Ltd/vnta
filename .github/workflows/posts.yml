@@ -55,11 +55,11 @@ jobs:
       PIXELFED_TOKEN: ${{ secrets.PIXELFED_TOKEN }}
       HAS_PIXELFED: ${{ secrets.PIXELFED_URL != '' && secrets.PIXELFED_TOKEN != '' }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v7
         with:
           ref: main
 
-      - uses: actions/setup-node@v5
+      - uses: actions/setup-node@v7
         with:
           node-version: '22'
 
