@@ -54,7 +54,11 @@
 		},
 		{
 			"slug": "a-timeout-is-not-a-pass",
-			"at": "2026-11-05T15:27:39.557Z"
+			"at": "2026-11-05T15:27:39.557Z",
+			"bluesky": {
+				"uri": "at://did:plc:acp5gumigrkus7q343v3gvyk/app.bsky.feed.post/3mzl6mfdqtl2z",
+				"url": "https://bsky.app/profile/vnta.xyz/post/3mzl6mfdqtl2z"
+			}
 		}
 	]
 }
