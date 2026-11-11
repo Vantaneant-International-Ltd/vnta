@@ -269,7 +269,7 @@
 		margin: 0;
 		min-height: 100vh;
 		background: #ffffff;
-		color: #0c1626;
+		color: #0b0a10;
 		font-family: var(--font-body);
 		font-size: var(--t-body);
 		line-height: 1.6;

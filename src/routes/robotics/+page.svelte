@@ -325,6 +325,8 @@
 		isolation: isolate;
 		overflow: hidden;
 		background:
+			radial-gradient(40% 60% at 96% 0%, rgba(253, 143, 50, 0.14) 0%, rgba(253, 143, 50, 0) 70%),
+			radial-gradient(55% 80% at 76% 0%, rgba(112, 34, 252, 0.14) 0%, rgba(112, 34, 252, 0) 70%),
 			radial-gradient(60% 90% at 80% 0%, #ffffff 0%, rgba(255, 255, 255, 0) 70%),
 			var(--ground);
 	}

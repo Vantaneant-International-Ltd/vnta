@@ -75,7 +75,7 @@
 		max-width: 400px;
 		padding: 18px 20px;
 		border-radius: 14px;
-		background: #0f1b2d;
+		background: #010102;
 		border: 1px solid #26364d;
 		color: #d6dde8;
 		font-family: 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -114,7 +114,7 @@
 	.cb__btn--solid {
 		background: #ffffff;
 		border-color: #ffffff;
-		color: #0f1b2d;
+		color: #010102;
 	}
 	.cb__btn--solid:hover {
 		background: #e6ebf2;

@@ -16,7 +16,7 @@
 		const ctx = canvas.getContext('2d');
 		if (!ctx) return;
 		const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-		const BLUE = '31, 85, 214';
+		const BLUE = '112, 34, 252'; // Deep Lavender
 
 		type Node = { x: number; y: number };
 		type Robot = { from: number; to: number; p: number; speed: number; prev: number };

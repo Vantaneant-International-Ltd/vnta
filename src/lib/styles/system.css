@@ -12,19 +12,27 @@
 
 .shell {
 	/* --- Colour ---------------------------------------------------------- */
+	/* The palette (November 2026): Space Black #010102, Deep Lavender
+	   #7022FC, Sunrise Orange #FD8F32. Lavender is the accent (links, the
+	   live status, the robots); orange appears only with it, in the
+	   lavender-to-orange glow. The greys lean slightly violet to sit with
+	   them. `--blue` keeps its name so nothing else has to change. */
 	--paper:      #ffffff;  /* panels */
-	--ground:     #f5f7fa;  /* the page behind them */
-	--ground-2:   #eef2f6;  /* a quiet fill: icon wells, table heads */
-	--ink:        #0c1626;  /* headings */
-	--ink-80:     #2b3648;  /* reading text on white */
-	--ink-60:     #5c6778;  /* quiet text: 5.6 to 1 on white */
-	--ink-40:     #8c96a5;  /* not for running text */
-	--ink-20:     #d3d9e2;
-	--line:       #e2e7ee;  /* the edge of a panel */
-	--line-soft:  #edf0f4;  /* a rule inside one */
-	--navy:       #0f1b2d;  /* the solid button, the core of the diagram, the foot */
-	--blue:       #1f55d6;  /* links and the one live status */
-	--blue-soft:  #e9f0fe;
+	--ground:     #f7f6fa;  /* the page behind them */
+	--ground-2:   #efedf5;  /* a quiet fill: icon wells, table heads */
+	--ink:        #0b0a10;  /* headings */
+	--ink-80:     #2c2a36;  /* reading text on white */
+	--ink-60:     #615e6e;  /* quiet text: 6.1 to 1 on white */
+	--ink-40:     #9693a3;  /* not for running text */
+	--ink-20:     #d7d4df;
+	--line:       #e6e3ec;  /* the edge of a panel */
+	--line-soft:  #efedf3;  /* a rule inside one */
+	--navy:       #010102;  /* Space Black: the solid button, the core of the diagram, the foot */
+	--blue:       #7022fc;  /* Deep Lavender: links and the one live status. 6.6 to 1 on white */
+	--blue-soft:  #f1eaff;
+	--orange:     #fd8f32;  /* Sunrise Orange: only in the glow, never for text on white */
+	--orange-soft: #fff1e4;
+	--glow:       linear-gradient(120deg, #7022fc 0%, #b84fd0 50%, #fd8f32 100%);
 	--green:      #118a4a;
 	--green-soft: #e4f5ec;
 	--amber:      #a15c07;
@@ -60,7 +68,7 @@
 	--r-chip:    7px;
 	--r-pill:    999px;
 	/* One soft shadow, for the one panel that floats over the page. */
-	--lift: 0 1px 2px rgba(15, 27, 45, 0.04), 0 18px 40px -18px rgba(15, 27, 45, 0.18);
+	--lift: 0 1px 2px rgba(11, 10, 16, 0.04), 0 18px 40px -18px rgba(40, 20, 90, 0.2);
 
 	--ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 	--dur:  160ms;
@@ -94,20 +102,20 @@
 
 /* --- The dark surface: the foot and the core of the diagram. -------------- */
 .shell [data-theme='ink'] {
-	--paper:     #0f1b2d;
-	--ground:    #0f1b2d;
-	--ground-2:  #1a2940;
-	--card:      #162338;
-	--field:     #162338;
+	--paper:     #010102;
+	--ground:    #010102;
+	--ground-2:  #15131d;
+	--card:      #0f0d16;
+	--field:     #0f0d16;
 	--ink:       #ffffff;
-	--ink-80:    #d6dde8;
-	--ink-60:    #9aa7ba;
-	--ink-40:    #6f7d92;
-	--ink-20:    #33435b;
-	--line:      #26364d;
-	--line-soft: #1f2e45;
-	--blue:      #8fb4ff;
-	--blue-soft: #1c2f52;
+	--ink-80:    #dcd9e6;
+	--ink-60:    #a29fb3;
+	--ink-40:    #75718a;
+	--ink-20:    #38344a;
+	--line:      #26223a;
+	--line-soft: #1b1829;
+	--blue:      #b08cff;
+	--blue-soft: #231a40;
 	color: var(--ink-80);
 }
 
