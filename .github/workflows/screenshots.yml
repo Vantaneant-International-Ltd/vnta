@@ -25,7 +25,8 @@ permissions:
 
 jobs:
   shoot:
-    runs-on: ubuntu-latest
+    # Pinned: the browser cannot yet install its system parts on the newer image.
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v5
 
