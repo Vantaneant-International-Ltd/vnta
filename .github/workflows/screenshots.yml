@@ -14,6 +14,11 @@ on:
         description: 'Addresses to photograph, separated by spaces'
         required: true
         type: string
+      size:
+        description: 'Window width x height in pixels (taken at twice that). A phone is 390x844'
+        required: false
+        default: '600x1000'
+        type: string
 
 permissions:
   contents: write
@@ -41,6 +46,7 @@ jobs:
         working-directory: ${{ runner.temp }}/shoot
         env:
           URLS: ${{ inputs.urls }}
+          SHOT_SIZE: ${{ inputs.size }}
         run: |
           set -f
           node screenshot.mjs out $URLS

@@ -28,7 +28,8 @@ for (const [i, url] of urls.entries()) {
 	}
 	const file = `${String(i + 1).padStart(2, '0')}-${host}.png`;
 	// A phone-shaped window, twice as sharp: both networks show a single post well at this width.
-	const page = await browser.newPage({ viewport: { width: 600, height: 1000 }, deviceScaleFactor: 2, locale: 'en-IE', timezoneId: 'Europe/Dublin' });
+	const [vw, vh] = (process.env.SHOT_SIZE || '600x1000').split('x').map((n) => Math.min(4000, Math.max(200, parseInt(n, 10) || 0)));
+	const page = await browser.newPage({ viewport: { width: vw || 600, height: vh || 1000 }, deviceScaleFactor: 2, locale: 'en-IE', timezoneId: 'Europe/Dublin' });
 	try {
 		const res = await page.goto(url, { waitUntil: 'domcontentloaded', timeout: 60_000 });
 		// Both are apps that draw themselves after loading. Give them time, and the picture time to arrive.
