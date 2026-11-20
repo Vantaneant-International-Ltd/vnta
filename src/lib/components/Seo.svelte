@@ -11,7 +11,7 @@
 		description,
 		shareTitle = title,
 		image = '/og.png', // the company card. Each main page passes its own from /share
-		imageAlt = 'VNTA. Infrastructure for autonomous systems.',
+		imageAlt = 'VNTA. Life, handled.',
 		ld = []
 	}: {
 		title: string;

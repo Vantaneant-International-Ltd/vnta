@@ -1,6 +1,6 @@
 // Draws the share cards: the picture that shows when a link to the site is
 // sent on WhatsApp, iMessage, LinkedIn, X and the rest. One card per page, so
-// a Robotics link and a Studio link never look the same. 1200 by 630, into
+// a company link and a Studio link never look the same. 1200 by 630, into
 // static/share/.
 //
 //   npm i --no-save playwright && npx playwright install chromium   (once)

@@ -13,14 +13,7 @@ const config = {
 			base: ''
 		},
 		prerender: {
-			entries: ['*'],
-			// A note has a page only once it has been published, so before the
-			// first one goes out /robotics/notes/[slug] has nothing to build.
-			// That one route may be empty; any other unseen route is still an error.
-			handleUnseenRoutes: ({ routes, message }) => {
-				if (routes.every((r) => r === '/robotics/notes/[slug]')) return;
-				throw new Error(message);
-			}
+			entries: ['*']
 		}
 	}
 };

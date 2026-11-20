@@ -77,11 +77,11 @@ test('an empty profile gets its links and description, and the site link earns t
 	const w = await world(t);
 	const r = await w.run('apply');
 	assert.equal(r.code, 0, r.out);
-	assert.deepEqual(w.seen.updates[0].fields, ['Website=https://vnta.xyz', 'Robotics=https://vnta.xyz/robotics', 'Studio=https://vnta.xyz/studio', 'Based=Dublin, Ireland']);
+	assert.deepEqual(w.seen.updates[0].fields, ['Website=https://vnta.xyz', 'Private beta=https://vnta.xyz/#beta', 'Studio=https://vnta.xyz/studio', 'Based=Dublin, Ireland']);
 	assert.equal(w.seen.updates[0].note, 'A VNTA picture.');
-	assert.match(r.out, /green tick on Website, Robotics, Studio/);
+	assert.match(r.out, /green tick on Website, Private beta, Studio/);
 	// Bluesky: the description is set, and what was already on the profile is kept.
-	assert.equal(w.seen.puts[0].description, 'Infrastructure for autonomous systems. Dublin.\nA VNTA picture.');
+	assert.equal(w.seen.puts[0].description, 'Personal Intelligence. Life, handled. Dublin.');
 	assert.deepEqual([w.seen.puts[0].displayName, w.seen.puts[0].avatar.ref], ['VNTA', 'pic']);
 });
 

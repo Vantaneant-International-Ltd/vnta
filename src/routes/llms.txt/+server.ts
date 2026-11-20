@@ -1,21 +1,6 @@
-// /llms.txt: a plain summary of who VNTA is and what it is designing, for the AI
-// assistants people now ask instead of searching. Written from the same
-// content file as the pages, so the two can never disagree.
-import {
-	pitch,
-	statement,
-	systems,
-	principles,
-	company,
-	robotics,
-	capabilities,
-	modules,
-	support,
-	social,
-	siteUrl,
-	contactEmail
-} from '$lib/content/site';
-import { pricing, tiers } from '$lib/content/pricing';
+// /llms.txt: a plain summary of VNTA for AI assistants, written from the same
+// content file as the pages so the two cannot disagree.
+import { pitch, company, handles, steps, privacy, faq, siteUrl, contactEmail } from '$lib/content/site';
 
 export const prerender = true;
 
@@ -23,82 +8,32 @@ export function GET() {
 	const lines = [
 		'# VNTA',
 		'',
-		`> ${pitch.short} ${pitch.lede} VNTA is the trading name of ${company.legalName}.`,
+		`> ${pitch.short} VNTA is the trading name of ${company.legalName}, based in ${company.place}.`,
 		'',
-		'## At a glance',
+		'## Status',
 		'',
-		'- What: software infrastructure for autonomous systems. Today: connecting to robot and fleet systems, validating what they can actually do, and keeping the evidence.',
-		`- Current business area: ${robotics.name}. ${robotics.what}`,
-		`- Status: ${robotics.honest}`,
-		'- What VNTA is: a technology company first. It also runs a small studio (see VNTA Studio below); the studio is not the company\'s main work.',
-		`- Founded: ${company.founded}. Based in ${company.place}.`,
+		pitch.status,
 		'',
-		'## Why',
+		'## What it is designed to handle',
 		'',
-		statement.body,
+		...handles.map((h) => `- ${h.name}: ${h.body}`),
 		'',
-		`## ${robotics.name}`,
+		'## How it works',
 		'',
-		`${robotics.positioning} ${robotics.core} ${robotics.body}`,
+		...steps.map((s, i) => `${i + 1}. ${s.name}: ${s.body}`),
 		'',
-		`${robotics.independent} It is not ${robotics.isNot.join(', ').toLowerCase()}.`,
+		'## Privacy and control (design rules for the beta, not certifications)',
 		'',
-		`The question it answers: ${robotics.question}`,
+		...privacy.map((p) => `- ${p.name}: ${p.body}`),
 		'',
-		'Names: VNTA is the company. VNTA Robotics is the robotics business area. Inside it, Runtime is the platform and Validation, Access and Identity are modules.',
+		'## Questions',
 		'',
-		...modules.map((m) => `- ${m.name} (${m.state.toLowerCase()}): ${m.body} ${m.detail}`),
+		...faq.flatMap((f) => [`**${f.q}**`, f.a, '']),
+		'## Other',
 		'',
-		'What Validation does today, against simulated robots and one external virtual vehicle:',
-		'',
-		...capabilities.map((c) => `- ${c.name}: ${c.body}`),
-		'',
-		'Supported now:',
-		...support.now.map((x) => `- ${x}`),
-		'',
-		'Experimental:',
-		...support.experimental.map((x) => `- ${x}`),
-		'',
-		'Planned, not built:',
-		...support.planned.map((x) => `- ${x}`),
-		'',
-		robotics.notSafety,
-		'',
-		`More: ${siteUrl}/robotics`,
-		'',
-		`## ${robotics.name} pricing`,
-		'',
-		'Every price is a starting point, ex VAT, for a scope agreed in advance. There is no online purchase. Priced per integration or deployment, not per robot.',
-		'',
-		...tiers.map((t) => `- ${t.label}: ${t.price}. Availability: ${t.availability.toLowerCase()}. ${t.body}`),
-		'',
-		pricing.runtime,
-		'',
-		`More: ${siteUrl}/robotics/pricing`,
-		'',
-		'## One infrastructure layer, many autonomous systems',
-		'',
-		...systems.map((s) => `- ${s.name} (${s.stage.toLowerCase()}): ${s.body}`),
-		'',
-		`Only robotics is being worked on today. ${robotics.honest} Agents and compute are research directions, not products.`,
-		'',
-		'## Principles',
-		'',
-		...principles.map((p) => `- ${p.name}: ${p.body}`),
-		'',
-		'## VNTA Studio',
-		'',
-		`${company.studio} It is separate from the technology work and has its own pages: ${siteUrl}/studio`,
-		'',
-		'## Contact',
-		'',
-		`- Contact page: ${siteUrl}/contact`,
-		`- Email: ${contactEmail}`,
-		...social.map((p) => `- ${p.name}: ${p.href}`),
+		`- VNTA also runs a small design studio for Irish businesses: ${siteUrl}/studio`,
+		`- Contact: ${contactEmail}`,
 		''
 	];
-
-	return new Response(lines.join('\n'), {
-		headers: { 'content-type': 'text/plain; charset=utf-8' }
-	});
+	return new Response(lines.join('\n'), { headers: { 'content-type': 'text/plain; charset=utf-8' } });
 }

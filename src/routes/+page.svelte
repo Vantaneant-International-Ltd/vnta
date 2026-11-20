@@ -1,550 +1,311 @@
 <script lang="ts">
-	import Snow from '$lib/season/Snow.svelte';
-	import { isWinter } from '$lib/season/season';
-	import { onMount as onMountSeason } from 'svelte';
-	// Winter (14 October to 6 January): a light snowfall over the page.
-	let winter = $state(false);
-	onMountSeason(() => (winter = isWinter(new Date(), location.search)));
-	// The home page of the parent company. It says what VNTA is building, shows
-	// the one business area in development (VNTA Robotics), and is honest about
-	// what is still research. Kept short. All of the words live in
-	// $lib/content/site.ts.
-	import { base } from '$app/paths';
+	// Home: the public face of VNTA Personal. Words come from content/site.ts.
 	import Seo from '$lib/components/Seo.svelte';
 	import Icon from '$lib/components/ui/Icon.svelte';
-	import Stage from '$lib/components/Stage.svelte';
-	import Architecture from '$lib/components/Architecture.svelte';
-	import {
-		pitch,
-		statement,
-		systems,
-		principles,
-		company,
-		robotics,
-		roboticsUrl
-	} from '$lib/content/site';
-	import { organisation, website } from '$lib/content/structured';
-
-	const roboticsHref = roboticsUrl.startsWith('http') ? roboticsUrl : `${base}${roboticsUrl}`;
+	import HeroPreview from '$lib/components/home/HeroPreview.svelte';
+	import DemoPanel from '$lib/components/home/DemoPanel.svelte';
+	import BetaForm from '$lib/components/home/BetaForm.svelte';
+	import { pitch, handles, steps, privacy, faq } from '$lib/content/site';
+	import { organisation, website, faqPage } from '$lib/content/structured';
 </script>
 
-{#if winter}<Snow count={70} />{/if}
-
 <Seo
-	title="VNTA | Infrastructure for autonomous systems"
-	shareTitle="VNTA | {pitch.headline}"
-	image="/share/home.png"
-	description="{pitch.short} Its first product is Validation, from VNTA Robotics. {robotics.core}"
-	ld={[organisation(), website()]}
+	title="VNTA | Life, handled."
+	description={pitch.short}
+	ld={[organisation(), website(), faqPage()]}
 />
 
 <main>
-	<!-- HERO: what VNTA builds, and a panel that reads like the product: the
-	     systems and where each one stands. Nothing in it is a metric. -->
-	<section class="band hero" aria-labelledby="hero-title">
+	<!-- 1. Hero -->
+	<section class="band hero">
 		<div class="wrap hero__grid">
-			<div class="hero__say">
-				<p class="eyebrow">{pitch.eyebrow}</p>
-				<h1 class="hero__title" id="hero-title">{pitch.headline}</h1>
-				<p class="hero__lede">{pitch.lede}</p>
-				<div class="hero__cta">
-					<a class="btn btn--solid" href={roboticsHref}>
-						Explore VNTA Robotics
-						<Icon name="arrow" size={18} />
-					</a>
-					<a class="btn btn--ghost" href="#company">About VNTA</a>
+			<div class="hero__text">
+				<p class="eyebrow">{pitch.descriptor}</p>
+				<h1>VNTA<span class="stop">.</span><br /><span class="tag">{pitch.headline}</span></h1>
+				<p class="lede">{pitch.lede}</p>
+				<div class="cta">
+					<a class="btn btn--solid" href="#beta">Join the private beta <Icon name="arrow" size={16} /></a>
+					<a class="btn btn--ghost" href="#how">See how it works</a>
 				</div>
+				<p class="status">{pitch.status}</p>
 			</div>
-
-			<div class="panel card" aria-label="VNTA systems and where each one stands">
-				<div class="panel__head">
-					<span class="well"><Icon name="layers" size={20} /></span>
-					<div>
-						<p class="panel__title">VNTA infrastructure</p>
-						<p class="panel__sub">One layer. Three kinds of system.</p>
-					</div>
-				</div>
-
-				<table class="panel__table">
-					<thead>
-						<tr>
-							<th scope="col">System</th>
-							<th scope="col" class="panel__wide">Layer</th>
-							<th scope="col">Status</th>
-						</tr>
-					</thead>
-					<tbody>
-						{#each systems as s}
-							<tr>
-								<th scope="row"><Icon name={s.icon} size={18} />{s.name}</th>
-								<td class="panel__wide">{s.layer}</td>
-								<td><Stage stage={s.stage} /></td>
-							</tr>
-						{/each}
-					</tbody>
-				</table>
-
-				<a class="panel__foot panel__now" href={roboticsHref}>
-					<p class="eyebrow">Available now</p>
-					<p class="panel__now-name">Validation <span>· {robotics.name}</span></p>
-					<p class="panel__now-body">{robotics.positioning} Robot and fleet integrations, tested before they go into operation.</p>
-				</a>
-			</div>
+			<div class="hero__art"><HeroPreview /></div>
 		</div>
 	</section>
 
-	<!-- STATEMENT -->
-	<section class="band band--paper" aria-labelledby="why-title">
-		<div class="wrap split">
-			<h2 class="head__title" id="why-title">{statement.headline}</h2>
-			<p class="split__text">{statement.body}</p>
-		</div>
-	</section>
-
-	<!-- 01 / VNTA ROBOTICS: the one system being worked on -->
-	<section class="band" id="robotics" aria-labelledby="robotics-title">
+	<!-- 2. What VNTA handles -->
+	<section class="band band--paper" id="handles">
 		<div class="wrap">
-			<div class="lead">
-				<div class="lead__say">
-					<div class="lead__top">
-						<p class="eyebrow">01 / {robotics.name}</p>
-						<Stage stage={robotics.stage} />
-					</div>
-					<h2 class="head__title" id="robotics-title">{robotics.positioning}</h2>
-					<p class="head__text">{robotics.core}</p>
-					<a class="go" href={roboticsHref}>See how Validation works <Icon name="arrow" size={16} /></a>
-				</div>
+			<div class="head">
+				<p class="eyebrow">01 · What it handles</p>
+				<h2 class="head__title">The paperwork that quietly runs your life.</h2>
+				<p class="head__text">VNTA is designed around five things people forget until it is late.</p>
 			</div>
-			<ol class="model">
-				{#each robotics.model as m, i}
-					<li class="model__step card">
-						<span class="well"><Icon name={m.icon} size={20} /></span>
-						<span class="model__n">0{i + 1}</span>
-						<span class="model__name">{m.name}</span>
-						<span class="model__body">{m.body}</span>
+			<ul class="grid">
+				{#each handles as h}
+					<li>
+						<span class="ico"><Icon name={h.icon} size={20} /></span>
+						<h3>{h.name}</h3>
+						<p>{h.body}</p>
+					</li>
+				{/each}
+			</ul>
+		</div>
+	</section>
+
+	<!-- 3. How it works -->
+	<section class="band" id="how">
+		<div class="wrap">
+			<div class="head">
+				<p class="eyebrow">02 · How it works</p>
+				<h2 class="head__title">Collect. Understand. Prepare. Track.</h2>
+				<p class="head__text">Four steps, and you stay in charge of each one.</p>
+			</div>
+			<ol class="steps">
+				{#each steps as s, i}
+					<li>
+						<span class="n">0{i + 1}</span>
+						<h3>{s.name}</h3>
+						<p>{s.body}</p>
 					</li>
 				{/each}
 			</ol>
-			<p class="model__sits">{robotics.sits} {robotics.body}</p>
-			<Architecture />
 		</div>
 	</section>
 
-	<!-- TECHNOLOGY: one layer, three kinds of system. Only one is being worked on. -->
-	<section class="band band--paper" id="technology" aria-labelledby="technology-title">
+	<!-- 4. Demonstration -->
+	<section class="band band--paper" id="demo">
 		<div class="wrap">
 			<div class="head">
-				<p class="eyebrow">Technology</p>
-				<h2 class="head__title" id="technology-title">
-					One infrastructure layer. Many autonomous systems.
-				</h2>
+				<p class="eyebrow">03 · Try it</p>
+				<h2 class="head__title">See what VNTA would find in a letter.</h2>
+				<p class="head__text">
+					This runs here, in your browser, on a made-up letter. Select a highlighted sentence to see where a
+					suggestion came from. Approve or dismiss it. Draft a reply. Nothing is sent, paid or saved.
+				</p>
 			</div>
+			<DemoPanel />
+		</div>
+	</section>
 
-			<div class="systems">
-				{#each systems as s}
-					<article class="system card" class:system--later={s.stage !== 'In development'}>
-						<div class="system__top">
-							<span class="well"><Icon name={s.icon} size={20} /></span>
-							<Stage stage={s.stage} />
-						</div>
-						<h3 class="system__name">{s.name}</h3>
-						<p class="system__body">{s.body}</p>
-						{#if s.stage === 'In development'}
-							<a class="go" href={roboticsHref}>{robotics.name} <Icon name="arrow" size={16} /></a>
-						{/if}
-					</article>
+	<!-- 5. Privacy and control -->
+	<section class="band" id="privacy">
+		<div class="wrap">
+			<div class="head">
+				<p class="eyebrow">04 · Privacy and control</p>
+				<h2 class="head__title">You decide. VNTA shows its working.</h2>
+				<p class="head__text">
+					These are the rules the private beta is being built to. They are commitments we hold ourselves to, not
+					certifications.
+				</p>
+			</div>
+			<ul class="grid grid--four">
+				{#each privacy as p}
+					<li>
+						<h3>{p.name}</h3>
+						<p>{p.body}</p>
+					</li>
 				{/each}
-			</div>
+			</ul>
+		</div>
+	</section>
 
-			<!-- PRINCIPLES -->
-			<div class="head head--second">
-				<p class="eyebrow">Approach</p>
-				<h2 class="head__title">Built from the infrastructure layer up.</h2>
+	<!-- 6. FAQ and beta -->
+	<section class="band band--paper" id="faq">
+		<div class="wrap">
+			<div class="head">
+				<p class="eyebrow">05 · Questions</p>
+				<h2 class="head__title">Plain answers.</h2>
 			</div>
-
-			<div class="principles">
-				{#each principles as p}
-					<div class="principle">
-						<span class="well"><Icon name={p.icon} size={20} /></span>
-						<h3 class="principle__name">{p.name}</h3>
-						<p class="principle__body">{p.body}</p>
-					</div>
+			<div class="faq">
+				{#each faq as f}
+					<details>
+						<summary>{f.q}</summary>
+						<p>{f.a}</p>
+					</details>
 				{/each}
 			</div>
 		</div>
 	</section>
 
-	<!-- COMPANY -->
-	<section class="band" id="company" aria-labelledby="company-title">
-		<div class="wrap split split--company">
+	<section class="band beta" id="beta" data-theme="ink">
+		<div class="wrap beta__grid">
 			<div>
-				<p class="eyebrow">Company</p>
-				<h2 class="company__title" id="company-title">VNTA</h2>
-				<p class="split__text">{company.body}</p>
-				<p class="company__also">
-					{company.studio}
-					<a class="link" href="{base}/studio">VNTA Studio</a>
+				<p class="eyebrow">Private beta</p>
+				<h2 class="head__title">Be among the first to try VNTA.</h2>
+				<p class="head__text">
+					We are letting people in slowly. Leave your email and we will write when there is room.
 				</p>
 			</div>
-			<dl class="facts card">
-				<div class="facts__row">
-					<dt><Icon name="calendar" size={18} />Founded</dt>
-					<dd>{company.founded}</dd>
-				</div>
-				<div class="facts__row">
-					<dt><Icon name="pin" size={18} />Based</dt>
-					<dd>{company.place}</dd>
-				</div>
-				<div class="facts__row">
-					<dt><Icon name="layers" size={18} />First system</dt>
-					<dd><a class="link" href={roboticsHref}>{robotics.name}</a></dd>
-				</div>
-			</dl>
+			<BetaForm />
 		</div>
 	</section>
 </main>
 
 <style>
-	/* --- Hero ------------------------------------------------------------- */
-	.hero {
-		background:
-			radial-gradient(42% 60% at 92% 4%, rgba(253, 143, 50, 0.16) 0%, rgba(253, 143, 50, 0) 70%),
-			radial-gradient(55% 75% at 72% 0%, rgba(112, 34, 252, 0.16) 0%, rgba(112, 34, 252, 0) 70%),
-			radial-gradient(60% 80% at 85% 10%, #ffffff 0%, rgba(255, 255, 255, 0) 70%),
-			var(--ground);
-	}
-	.band > .hero__grid {
+	.hero__grid {
 		display: grid;
-		grid-template-columns: minmax(0, 1fr);
-		gap: clamp(32px, 5vw, 64px);
+		gap: clamp(32px, 5vw, 72px);
 		align-items: center;
-		padding-top: clamp(40px, 6vw, 88px);
-		padding-bottom: clamp(48px, 6vw, 88px);
 	}
-	.hero__title {
-		margin: 16px 0 0;
-		font-size: var(--t-hero);
-		line-height: 1.03;
-		letter-spacing: -0.04em;
-		text-wrap: balance;
+	@media (min-width: 960px) {
+		.hero__grid {
+			grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
+		}
 	}
-	.hero__lede {
-		margin: clamp(16px, 1.8vw, 22px) 0 0;
-		font-size: var(--t-lede);
-		line-height: 1.5;
-		color: var(--ink-60);
-		max-width: 34rem;
-		text-wrap: pretty;
-	}
-	.hero__cta {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 10px;
-		margin-top: clamp(22px, 2.6vw, 32px);
-	}
-
-	/* The panel: a small control screen. Systems down the side, where each
-	   one stands on the right. */
-	.panel {
-		padding: clamp(16px, 1.8vw, 22px);
-		box-shadow: var(--lift);
-		min-width: 0;
-	}
-	.panel__head {
-		display: flex;
-		align-items: center;
-		gap: 12px;
-	}
-	.panel__title {
-		margin: 0;
-		font-size: 1rem;
+	h1 {
+		margin: 14px 0 20px;
+		font-size: clamp(3.4rem, 9vw, 6.5rem);
 		font-weight: 600;
-		letter-spacing: -0.01em;
+		letter-spacing: -0.055em;
+		line-height: 0.95;
 		color: var(--ink);
 	}
-	.panel__sub {
-		margin: 1px 0 0;
-		font-size: var(--t-small);
-		color: var(--ink-60);
+	.stop {
+		color: var(--blue);
 	}
-	.panel__table {
-		width: 100%;
-		margin-top: 16px;
-		border-collapse: collapse;
-		font-size: 0.92rem;
-	}
-	.panel__table thead th {
-		padding: 9px 10px;
-		background: var(--ground);
-		font-size: var(--t-micro);
-		font-weight: 600;
-		letter-spacing: 0.12em;
-		text-transform: uppercase;
-		text-align: left;
-		color: var(--ink-60);
-	}
-	.panel__table thead th:first-child {
-		border-radius: 8px 0 0 8px;
-	}
-	.panel__table thead th:last-child {
-		border-radius: 0 8px 8px 0;
-	}
-	.panel__table tbody th,
-	.panel__table tbody td {
-		padding: 13px 10px;
-		border-bottom: 1px solid var(--line-soft);
-		text-align: left;
-		vertical-align: middle;
-		color: var(--ink-60);
-	}
-	.panel__table tbody th {
-		display: flex;
-		align-items: center;
-		gap: 9px;
-		font-weight: 600;
-		color: var(--ink);
-	}
-	.panel__wide {
-		display: none;
-	}
-	.panel__foot {
-		margin-top: 16px;
-	}
-	/* The one thing that can be engaged today, at the foot of the panel. */
-	.panel__now {
-		display: block;
-		padding: 14px 16px;
-		border-radius: 10px;
-		background: var(--green-soft);
-		border: 1px solid color-mix(in srgb, var(--green) 25%, transparent);
-		transition: border-color var(--dur) var(--ease);
-	}
-	.panel__now:hover {
-		border-color: var(--green);
-	}
-	.panel__now .eyebrow {
-		color: var(--green);
-	}
-	.panel__now-name {
-		margin: 6px 0 0;
-		font-size: 1.05rem;
-		font-weight: 600;
-		color: var(--ink);
-	}
-	.panel__now-name span {
+	.tag {
+		display: inline-block;
+		margin-top: 0.12em;
+		font-size: 0.42em;
 		font-weight: 500;
-		color: var(--ink-60);
-	}
-	.panel__now-body {
-		margin: 4px 0 0;
-		font-size: 0.88rem;
-		line-height: 1.45;
+		letter-spacing: -0.035em;
 		color: var(--ink-80);
 	}
-
-	/* Vendor says, VNTA tests, you get the evidence. */
-	.lead__top {
+	.lede {
+		margin: 0 0 28px;
+		max-width: 30rem;
+		font-size: var(--t-lede);
+		color: var(--ink-60);
+		text-wrap: pretty;
+	}
+	.cta {
 		display: flex;
 		flex-wrap: wrap;
-		align-items: center;
-		gap: 10px 12px;
+		gap: 12px;
 	}
-	.model {
+	.status {
+		margin: 20px 0 0;
+		font-size: var(--t-small);
+		color: var(--ink-60);
+	}
+
+	.grid {
 		list-style: none;
-		margin: clamp(24px, 3vw, 36px) 0 0;
+		margin: 0;
 		padding: 0;
 		display: grid;
-		grid-template-columns: 1fr;
-		gap: 10px;
+		gap: 0;
+		border-top: 1px solid var(--line);
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
 	}
-	.model__step {
+	.grid li {
+		padding: 24px 24px 28px 0;
+		border-bottom: 1px solid var(--line);
+	}
+	.ico {
+		display: inline-grid;
+		place-items: center;
+		width: 40px;
+		height: 40px;
+		border-radius: 12px;
+		background: var(--ground-2);
+		color: var(--ink);
+		margin-bottom: 14px;
+	}
+	h3 {
+		margin: 0 0 6px;
+		font-size: 1.1rem;
+		letter-spacing: -0.02em;
+		color: var(--ink);
+	}
+	.grid p,
+	.steps p {
+		margin: 0;
+		color: var(--ink-60);
+		font-size: 0.95rem;
+		text-wrap: pretty;
+	}
+
+	.steps {
+		list-style: none;
+		margin: 0;
+		padding: 0;
 		display: grid;
-		gap: 4px;
-		align-content: start;
-		padding: 18px;
+		border-top: 1px solid var(--line);
+		grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr));
 	}
-	.model__step .well {
-		margin-bottom: 10px;
+	.steps li {
+		padding: 24px 24px 28px 0;
+		border-bottom: 1px solid var(--line);
 	}
-	.model__n {
+	.n {
+		display: block;
+		margin-bottom: 18px;
 		font-family: var(--font-mono);
-		font-size: 0.72rem;
-		color: var(--ink-40);
+		font-size: 0.8rem;
+		color: var(--blue);
 	}
-	.model__name {
+
+	.faq {
+		max-width: 46rem;
+		border-top: 1px solid var(--line);
+	}
+	details {
+		border-bottom: 1px solid var(--line);
+	}
+	summary {
+		cursor: pointer;
+		list-style: none;
+		padding: 18px 32px 18px 0;
+		position: relative;
 		font-weight: 600;
 		color: var(--ink);
 	}
-	.model__body {
-		font-size: 0.92rem;
-		line-height: 1.45;
+	summary::-webkit-details-marker {
+		display: none;
+	}
+	summary::after {
+		content: '+';
+		position: absolute;
+		right: 4px;
+		top: 16px;
+		font-weight: 400;
+		font-size: 1.3rem;
 		color: var(--ink-60);
 	}
-	.model__sits {
-		margin: clamp(28px, 3.4vw, 44px) 0 16px;
-		max-width: 46rem;
-		font-size: var(--t-small);
-		line-height: 1.5;
-		color: var(--ink-60);
+	details[open] summary::after {
+		content: '–';
 	}
-	@media (min-width: 760px) {
-		.model {
-			grid-template-columns: repeat(3, minmax(0, 1fr));
-		}
+	summary:focus-visible {
+		outline: 2px solid var(--blue);
+		outline-offset: 2px;
+	}
+	details p {
+		margin: 0 0 18px;
+		color: var(--ink-60);
+		max-width: 40rem;
+		text-wrap: pretty;
 	}
 
-	/* --- A heading on one side, its paragraph on the other. --------------- */
-	.split {
+	.beta {
+		background: var(--ground);
+		color: var(--ink-80);
+	}
+	.beta__grid {
 		display: grid;
-		grid-template-columns: 1fr;
-		gap: clamp(16px, 3vw, 56px);
+		gap: clamp(28px, 5vw, 72px);
 		align-items: start;
 	}
-	.split__text {
-		margin: 0;
-		font-size: var(--t-lede);
-		line-height: 1.55;
-		color: var(--ink-60);
-		max-width: 38rem;
-		text-wrap: pretty;
+	@media (min-width: 900px) {
+		.beta__grid {
+			grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+		}
 	}
-
-	/* --- Robotics: the words, then the diagram. --------------------------- */
-	.lead {
-		margin-bottom: clamp(28px, 3.6vw, 48px);
-	}
-	.lead__say {
-		display: grid;
-		gap: 14px;
-		max-width: 42rem;
-		justify-items: start;
-	}
-
-	/* --- The three kinds of system. The one being worked on is solid; the two
-	   in research are drawn with a broken edge and stand back. ------------- */
-	.systems {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 12px;
-	}
-	.system {
-		display: flex;
-		flex-direction: column;
-		padding: clamp(18px, 2vw, 24px);
-	}
-	.system--later {
-		background: transparent;
-		border-style: dashed;
-		border-color: var(--ink-20);
-	}
-	.system__top {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 12px;
-	}
-	.system__name {
-		margin: 18px 0 0;
-		font-size: 1.25rem;
-		line-height: 1.2;
-	}
-	.system__body {
-		margin: 8px 0 0;
-		color: var(--ink-60);
-		text-wrap: pretty;
-		flex: 1;
-	}
-	.system .go {
+	.beta .head__title {
 		margin-top: 10px;
 	}
-
-	/* --- Principles ------------------------------------------------------- */
-	.head--second {
-		margin-top: clamp(56px, 7vw, 96px);
-	}
-	.principles {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 24px clamp(20px, 3vw, 40px);
-	}
-	.principle__name {
-		margin: 14px 0 0;
-		font-size: var(--t-h3);
-	}
-	.principle__body {
-		margin: 6px 0 0;
-		font-size: 0.97rem;
-		color: var(--ink-60);
-		text-wrap: pretty;
-	}
-
-	/* --- Company ---------------------------------------------------------- */
-	.company__title {
-		margin: 12px 0 14px;
-		font-size: var(--t-h1);
-		line-height: 1;
-		letter-spacing: -0.04em;
-	}
-	.company__also {
-		margin: 16px 0 0;
-		font-size: var(--t-small);
-		line-height: 1.5;
-		color: var(--ink-60);
-		max-width: 34rem;
-	}
-	.facts {
-		margin: 0;
-		padding: 6px clamp(16px, 2vw, 22px);
-	}
-	.facts__row {
-		display: flex;
-		align-items: center;
-		justify-content: space-between;
-		gap: 16px;
-		padding: 14px 0;
-		border-top: 1px solid var(--line-soft);
-	}
-	.facts__row:first-child {
-		border-top: 0;
-	}
-	.facts dt {
-		display: inline-flex;
-		align-items: center;
-		gap: 9px;
-		font-size: var(--t-small);
-		color: var(--ink-60);
-	}
-	.facts dd {
-		margin: 0;
-		font-weight: 600;
-		color: var(--ink);
-		text-align: right;
-	}
-
-	/* --- Wide ------------------------------------------------------------- */
-	@media (min-width: 560px) {
-		.panel__wide {
-			display: table-cell;
-		}
-		.principles {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
-		}
-	}
-	@media (min-width: 900px) {
-		.band > .hero__grid {
-			grid-template-columns: minmax(0, 11fr) minmax(0, 10fr);
-		}
-		.split {
-			grid-template-columns: minmax(0, 5fr) minmax(0, 6fr);
-		}
-		.split--company {
-			align-items: center;
-		}
-		.systems {
-			grid-template-columns: repeat(3, minmax(0, 1fr));
-		}
-		.principles {
-			grid-template-columns: repeat(4, minmax(0, 1fr));
-		}
+	.beta .head__text {
+		margin-top: 14px;
 	}
 </style>

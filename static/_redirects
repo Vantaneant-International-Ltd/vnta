@@ -11,6 +11,7 @@
 /online-shops              /studio/online-shops              301
 /web-design-dublin         /studio/web-design-dublin         301
 
-# When robotics.vnta.xyz exists, send the page there (and change roboticsUrl in
-# src/lib/content/site.ts):
-# /robotics  https://robotics.vnta.xyz  301
+# The robotics pages were archived in November 2026 when VNTA became a personal
+# product. Their old addresses forward to the home page.
+/robotics            /  301
+/robotics/*          /  301

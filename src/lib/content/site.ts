@@ -4,63 +4,24 @@
 // Everything the public pages say that is likely to change. Change it here,
 // once: the pages, the search data and /llms.txt all read from this file.
 //
-// VNTA is a technology company. It builds infrastructure for autonomous
-// systems. Its current business area is VNTA Robotics: developer
-// infrastructure for autonomous machines. VNTA is not an agency, a consultancy
-// or a studio, and nothing on the site should read as one.
-//
-// Names. Use these and no others:
-//   VNTA            the company
-//   VNTA Robotics   the robotics business area
-//   Runtime         the platform inside it (in development)
-//   Validation      the first module (the current one)
-//   Access          a future module: mission governance
-//   Identity        a future module: machine identity and trust
-// Not "VNTA for Robots", not "VNTA Validation", not "VNTA Access".
-//
 // House rules for copy:
-// - Short, technical, quiet, precise. No hype, no "revolutionary", no
-//   "AI-powered", no startup cliches.
-// - Nothing is claimed that is not true today (October 2026). VNTA Robotics
-//   is in development. Validation runs against three simulated robots VNTA
-//   wrote and one external virtual vehicle VNTA did not write. No real
-//   machine has been connected, no pilot has been run, and nobody has paid.
-//   Only VDA 5050 2.1.0 is supported; ROS 2, Open-RMF and vendor APIs are
-//   planned. When that changes, change `robotics.honest` and `support` below
-//   and the whole site follows.
-// - A validation report is not a safety certification. Never imply it is.
-// - Roadmap is never shown as capability. Access and Identity are never shown
-//   as current; Runtime's API and SDK are never shown as finished.
-// - No customer names, no metrics, no testimonials, no logos until they are
-//   real. No named third parties as partners.
-// - The parent, VNTA, is wider than robotics. Agents and compute are research
-//   directions, not products: never present them as available.
+// - Calm, plain, precise. No hype, no "AI-powered", no "revolutionary".
+// - Nothing is claimed that is not true today. VNTA Personal is in private
+//   development. The only working part is the demonstration on the home page,
+//   which runs in the visitor's browser on a made-up letter. Features that do
+//   not exist yet are written as what they are designed to do.
+// - No testimonials, customer numbers, awards, certifications or accuracy
+//   figures until they are real.
+// - A suggestion is never called a result, and a draft is never called sent.
+// - The robotics work is archived (see docs/ARCHIVE.md). Do not mention it here.
 // =============================================================================
 
 export const siteUrl = 'https://vnta.xyz';
 export const contactEmail = 'studio@vnta.xyz';
 export const githubUrl = 'https://github.com/Vantaneant-International-Ltd';
 
-/**
- * Where "Explore Robotics" goes. Today it is a page on this site. When
- * robotics.vnta.xyz exists, change this one value to
- * 'https://robotics.vnta.xyz' and redirect /robotics there in
- * static/_redirects. The app, the API and the docs are planned at
- * app.vnta.xyz, api.vnta.xyz and docs.vnta.xyz; none of them exists yet, so
- * nothing on the site links to them.
- */
-export const roboticsUrl = '/robotics';
-
-/**
- * VNTA's own public profiles. Each one listed here is shown in the foot and is
- * handed to search engines as "this profile is the same VNTA". Only add a
- * profile that is real and ours, with its full address.
- */
+/** VNTA's own public profiles. Only add a profile that is real and ours. */
 export const mastodonUrl = 'https://mastodon.social/@vntagroup';
-/**
- * The Bluesky account is named after this domain. That name holds for as long
- * as static/.well-known/atproto-did is on the site.
- */
 export const blueskyUrl = 'https://bsky.app/profile/vnta.xyz';
 export const pixelfedUrl = 'https://pixelfed.social/vnta';
 export const social: { name: string; href: string }[] = [
@@ -69,271 +30,74 @@ export const social: { name: string; href: string }[] = [
 	{ name: 'Bluesky', href: blueskyUrl },
 	{ name: 'Pixelfed', href: pixelfedUrl }
 ];
-/**
- * Where VNTA posts: Bluesky only, since 12 October 2026. Mastodon and Pixelfed
- * stay in `social` above, because the accounts are still ours, but the site
- * does not send people to them.
- */
 export const follow = social.filter((s) => s.name === 'Bluesky');
 
-// --- The parent: VNTA --------------------------------------------------------
-
 export const pitch = {
-	eyebrow: 'Autonomous infrastructure',
-	headline: 'Infrastructure for autonomous systems.',
-	/** Ties the thesis to the one thing that can be bought today. */
-	lede: 'Starting with software that validates robot integrations before deployment: an independent check of what actually works, with the evidence kept.',
+	name: 'VNTA',
+	descriptor: 'Personal Intelligence',
+	headline: 'Life, handled.',
+	lede: 'The important things in life, organised in one place.',
 	/** One line for search results and share cards. */
-	short: 'VNTA is an independent technology company developing infrastructure for autonomous systems.'
+	short: 'VNTA is a personal assistant for everyday paperwork. It reads what you give it, finds what needs doing, and helps you deal with it.',
+	status: 'In private development. Join the list to be invited to the private beta.'
 };
-
-export const statement = {
-	headline: 'The autonomous world needs infrastructure.',
-	body: 'Robots, intelligent agents, vehicles and machines are becoming increasingly autonomous. VNTA is building the infrastructure to connect them, verify what they can actually do, and later govern and trust them across organisations and environments.'
-};
-
-/** A system's standing. "Early access" is the one that can be engaged today. */
-export type Stage = 'Early access' | 'In development' | 'Research';
-
-/** The three kinds of autonomous system the infrastructure is meant to reach. */
-export const systems: { name: string; layer: string; body: string; stage: Stage; icon: string }[] = [
-	{
-		name: 'Robots',
-		layer: 'Integration validation',
-		body: 'Independent validation of robot and fleet integrations in warehouses and factories, before they go into operation.',
-		stage: 'Early access',
-		icon: 'robot'
-	},
-	{
-		name: 'Agents',
-		layer: 'Autonomous software',
-		body: 'Autonomous software systems acting on behalf of people and organisations.',
-		stage: 'Research',
-		icon: 'agent'
-	},
-	{
-		name: 'Compute',
-		layer: 'Resource coordination',
-		body: 'Infrastructure for coordinating the resources autonomous systems depend on.',
-		stage: 'Research',
-		icon: 'compute'
-	}
-];
-
-/** The principles the infrastructure is designed on. */
-export const principles = [
-	{ name: 'Open', body: 'Designed around interoperable standards and APIs.', icon: 'open' },
-	{ name: 'Evidence first', body: 'What a machine can do is tested, not assumed, and the evidence is kept.', icon: 'shield' },
-	{ name: 'Vendor-neutral', body: 'Designed to sit above the standards and vendor systems already in use.', icon: 'neutral' },
-	{
-		name: 'Extensible',
-		body: 'Infrastructure that can expand from robots into broader autonomous systems.',
-		icon: 'extend'
-	}
-];
 
 export const company = {
-	body: 'VNTA is an independent technology company developing infrastructure for autonomous systems.',
-	/** VNTA also runs a studio, at /studio. One plain sentence, and no more: the parent is not an agency. */
-	studio: 'VNTA also runs a studio that designs brands and builds websites for Irish businesses.',
 	founded: '2025',
 	place: 'Dublin, Ireland',
 	legalName: 'Vantanéant International Ltd'
 };
 
-// --- The current business area: VNTA Robotics --------------------------------
-
-export const robotics = {
-	name: 'VNTA Robotics',
-	stage: 'Early access' as Stage,
-	/** One line, used for titles and share cards. */
-	positioning: 'Independent validation before deployment.',
-	/** The /robotics headline. */
-	headline: 'Know what your robot integration actually does before deployment.',
-	/** Under the headline. */
-	what: 'VNTA tests robot and fleet integrations against a repeatable validation suite and produces a readiness result backed by the messages, calls and failures it observed.',
-	/** The one sentence the whole site is built around. */
-	core: 'VNTA independently tests robot and fleet integrations, verifies which capabilities actually work, and keeps the evidence behind every result.',
-	/** The mental model, in three steps. Keep it the same everywhere. */
-	model: [
-		{ name: 'The vendor says what should work', body: 'Documentation, datasheets and the interface itself declare what the system can do.', icon: 'nodes' },
-		{ name: 'VNTA tests what actually works', body: 'The same repeatable checks, including a dropped link and a restart, run against the connected system.', icon: 'shield' },
-		{ name: 'You get the evidence', body: 'One readiness verdict, with every call, answer and raw message behind it.', icon: 'audit' }
-	],
-	/** The question Validation answers. */
-	question: 'What can this machine actually do, and do we have evidence that it works?',
-	/** Where VNTA stands between the parties. */
-	independent: 'VNTA provides independent technical validation of robot integrations. We test the behaviour of the connected software system and preserve the evidence behind each result.',
-	/** The one analogy, used once, as supporting copy. Not a product name. */
-	analogy: 'Think of it as an MOT for the integration: a structured check of what actually works before deployment. VNTA provides technical validation, not regulatory certification.',
-	/** What a validation is not. Said once, plainly. */
-	isNot: ['Safety certification', 'Regulatory certification', 'Manufacturer commissioning', 'Mechanical performance testing'],
-	/** Above the architecture picture. */
-	sits: 'Above the systems you already run.',
-	body: 'VNTA Robotics sits above VDA 5050, ROS 2, Open-RMF and vendor APIs, reaching each one through an adapter. It replaces none of them.',
-	/**
-	 * The one status statement. Said once per page, in one place, rather than
-	 * repeated under every section. When a real system is connected, change it here.
-	 */
-	honest: 'Validation has been tested against simulated systems and one external VDA 5050 implementation. It has not yet been run against a real robot. We are now taking on our first production design partners.',
-	/** Said wherever a report or a result is shown. */
-	notSafety: 'VNTA validation evaluates software integration behaviour against a chosen set of checks. It is not a functional-safety certification and does not replace manufacturer commissioning procedures.',
-	/** The small note at the foot of the robotics pages. */
-	note: 'Product scope, supported integrations and pricing may change as Validation is used with early partners.'
-};
-
-/** Who buys a validation, and what it gives each of them. */
-export const buyers = [
-	{
-		who: 'For integrators',
-		title: 'Catch integration failures before site acceptance.',
-		body: 'Run the same validation approach across vendors and deployments, preserve the evidence, and give your customer a clear readiness result.',
-		icon: 'plug'
-	},
-	{
-		who: 'For operators',
-		title: 'Verify what you are accepting.',
-		body: 'See which capabilities were actually demonstrated before standardising an integration across a site or fleet.',
-		icon: 'check'
-	}
-];
-/** Named, but not given a section of their own. */
-export const alsoFor = 'Robot makers can use the same suite to check an interface before it ships.';
-
-/** The order things are built in. Each step stands on the one before. */
-export type When = 'Now' | 'Next' | 'Later';
-export const progression: { name: string; body: string; when: When }[] = [
-	{ name: 'Connect', body: 'Reach a robot or fleet system through an adapter.', when: 'Now' },
-	{ name: 'Validate', body: 'Test what it does and keep the evidence.', when: 'Now' },
-	{ name: 'Normalise', body: 'Offer tested capabilities through one API.', when: 'Next' },
-	{ name: 'Operate', body: 'Send work through that one interface.', when: 'Later' },
-	{ name: 'Govern', body: 'Decide which missions are allowed.', when: 'Later' },
-	{ name: 'Trust', body: 'Give each machine an identity that can be checked.', when: 'Later' }
+/** What VNTA is designed to handle. */
+export const handles: { name: string; body: string; icon: string }[] = [
+	{ name: 'Documents', body: 'Letters, bills, policies and contracts, kept with the words that matter marked.', icon: 'doc' },
+	{ name: 'Deadlines', body: 'Dates you must act by, with the exact sentence they came from.', icon: 'clock' },
+	{ name: 'Renewals', body: 'Insurance, subscriptions, licences and anything else that quietly runs out.', icon: 'repeat' },
+	{ name: 'Messages', body: 'A reply drafted for you to read, change and send yourself.', icon: 'mail' },
+	{ name: 'Appointments', body: 'Times and places pulled from confirmations, shown beside everything else.', icon: 'calendar' }
 ];
 
-/** The four parts of VNTA Robotics, and where each one stands. Only one is current. */
-export type ModuleState = 'Early access' | 'In development' | 'Future';
-export const modules: { name: string; role: string; body: string; state: ModuleState; detail: string; icon: string }[] = [
+export const steps: { name: string; body: string }[] = [
+	{ name: 'Collect', body: 'You choose what to add. A PDF or a text file, one at a time.' },
+	{ name: 'Understand', body: 'VNTA reads the text and marks possible deadlines, payments, renewals and requests.' },
+	{ name: 'Prepare', body: 'Each one becomes a suggested step, with a draft reply where one helps.' },
+	{ name: 'Track', body: 'You review, correct, approve or dismiss. VNTA keeps what is due in view.' }
+];
+
+/** Design rules for the beta. They are intentions we hold ourselves to, not certifications. */
+export const privacy: { name: string; body: string }[] = [
+	{ name: 'You approve every step', body: 'VNTA suggests. It does not pay, send or submit anything for you.' },
+	{ name: 'You see where it came from', body: 'Every suggestion points back to the document and the exact words behind it.' },
+	{ name: 'Only what you add', body: 'VNTA works from what you deliberately upload. It does not read your inbox.' },
+	{ name: 'Yours to export or delete', body: 'You will be able to download everything, and delete it, from Settings.' }
+];
+
+export const faq: { q: string; a: string }[] = [
 	{
-		name: 'Validation',
-		role: 'The first module',
-		body: 'Connects to an integration, finds out what it can do, tests it, and reports with evidence.',
-		state: 'Early access',
-		detail: 'Taking design partners and early validation projects.',
-		icon: 'shield'
+		q: 'Is VNTA available now?',
+		a: 'Not yet. It is in private development. The demonstration on this page works, but it uses a made-up letter. Join the list and we will invite people to the private beta in small groups.'
 	},
 	{
-		name: 'Runtime',
-		role: 'The platform',
-		body: 'Adapters, one capability model, and an API and SDK over capabilities that have been tested.',
-		state: 'In development',
-		detail: 'An early API reads capabilities and starts validation. No SDK yet.',
-		icon: 'layers'
+		q: 'Will VNTA pay a bill or send an email for me?',
+		a: 'No. VNTA can suggest a step and draft a reply. You read it, change it and send it yourself. Nothing is paid, sent or submitted for you.'
 	},
 	{
-		name: 'Access',
-		role: 'Mission governance',
-		body: 'Who may ask a machine to do what: policy, approvals, and a record before dispatch.',
-		state: 'Future',
-		detail: 'Not available.',
-		icon: 'lock'
+		q: 'Does it use AI?',
+		a: 'The first version finds dates, amounts and requests with fixed rules. If we later add an AI model, we will say so, tell you which provider, and ask for your consent before any of your documents are sent to it.'
 	},
 	{
-		name: 'Identity',
-		role: 'Machine trust',
-		body: 'A verifiable identity for each machine: credentials, ownership, revocation.',
-		state: 'Future',
-		detail: 'Not available.',
-		icon: 'identity'
+		q: 'What if VNTA gets something wrong?',
+		a: 'It can. Every suggestion shows its source and how sure VNTA is. When a date could be read two ways, for example 03/04/2027, VNTA does not pick one. It shows you both.'
+	},
+	{
+		q: 'What happens to my documents?',
+		a: 'Only documents you choose to add are used. The beta is being built so that you can download or delete your data at any time. We will publish the full privacy details before anyone is invited.'
+	},
+	{
+		q: 'Is it free?',
+		a: 'Pricing is not decided. Joining the list does not commit you to anything.'
 	}
 ];
 
-/** The parts of the Runtime as drawn in the architecture, and listed on the home page. */
-export const layer = [
-	{ name: 'Adapters', icon: 'plug' },
-	{ name: 'Capabilities', icon: 'layers' },
-	{ name: 'Validation', icon: 'shield' },
-	{ name: 'Evidence', icon: 'audit' },
-	{ name: 'Reports', icon: 'check' },
-	{ name: 'API', icon: 'open' }
-];
-
-/**
- * What Validation does today. Every line here runs in the repository, against
- * simulated robots and one external virtual vehicle. Not a list of plans.
- */
-export const capabilities = [
-	{ name: 'Capability discovery', body: 'Asks the system what it can do, where its interface allows.', icon: 'nodes' },
-	{
-		name: 'Declared and verified',
-		body: 'Keeps what an interface claims apart from what a test saw work.',
-		icon: 'check'
-	},
-	{
-		name: 'Mission lifecycle testing',
-		body: 'Send, pause, resume, cancel, and what happens when the same order arrives twice.',
-		icon: 'flow'
-	},
-	{
-		name: 'Failure and reconnect testing',
-		body: 'Cuts the link and restarts the system, then watches what comes back.',
-		icon: 'pulse'
-	},
-	{
-		name: 'Protocol checks',
-		body: 'For VDA 5050 2.1.0: every message judged against the official schemas, and behaviour over time.',
-		icon: 'open'
-	},
-	{ name: 'Evidence', body: 'Every call, answer, latency and raw message, kept with the result.', icon: 'audit' },
-	{
-		name: 'Readiness report',
-		body: 'One verdict with its reasons: ready, conditionally ready, not ready or incomplete.',
-		icon: 'grid'
-	},
-	{ name: 'Unknown is not a pass', body: 'A timeout is reported as unknown. Never as a pass, never as a fail.', icon: 'clock' }
-];
-
-/**
- * What VNTA Robotics reaches, and how far each has got. "Supported today"
- * means an adapter has run in the vnta-robotics repository. When the VDA 5050
- * 3.0 adapter is built, change its `support` to 'In development', and to
- * 'Supported today' once it has run: the pages and the picture follow.
- */
-export type Support = 'Supported today' | 'In development' | 'Planned';
-export const interfaces: { name: string; note: string; support: Support }[] = [
-	{ name: 'VDA 5050 2.1', note: 'Version 2.1.0, over MQTT', support: 'Supported today' },
-	{ name: 'VDA 5050 3.0', note: 'Not supported yet', support: 'Planned' },
-	{ name: 'ROS 2 · Open-RMF', note: 'Future adapters, built with design partners', support: 'Planned' },
-	{ name: 'Vendor APIs', note: 'Case by case, with design partners', support: 'Planned' }
-];
-
-/** Who it is for, on the other side of the picture. */
-export const audiences = ['Integrators', 'Operators', 'Robot makers'];
-
-/**
- * Supported, experimental, planned. "Supported" means it runs in the
- * repository today. "Experimental" means it exists and is expected to change.
- * "Planned" means not built: an intention, not a compatibility claim.
- */
-export const support = {
-	now: [
-		'VDA 5050 2.1.0 over MQTT, tested against one external virtual vehicle',
-		'VNTA simulated adapters, for trying the suite without a robot',
-		'Capability records: declared, discovered, verified',
-		'Validation suite, evidence and readiness reports'
-	],
-	experimental: [
-		'Runtime API v0: reads capabilities and starts validation. It will change.',
-		'Sending missions through an adapter: inside validation runs only.'
-	],
-	planned: [
-		'A first real robot or fleet-manager integration',
-		'Runtime SDK',
-		'ROS 2 adapter',
-		'Open-RMF adapter',
-		'Vendor fleet-manager connectors',
-		'VDA 5050 3.0.0',
-		'Access: mission governance',
-		'Identity: machine trust'
-	]
-};
+/** Pages that exist. Used for the sitemap and llms.txt. */
+export const publicPaths = ['/', '/contact', '/legal', '/privacy', '/terms'];

@@ -1,45 +1,42 @@
 /* =============================================================================
    VNTA — the public site's system
    -----------------------------------------------------------------------------
-   White, cool grey and navy, with one blue. The language is that of the
-   product itself: panels with a hairline edge, small status marks, tables that
-   read like a control screen. Type is one sans, set tight for headings.
+   Off-white surfaces, graphite text and one restrained muted violet. Swiss
+   editorial type (Inter), hairline borders, generous space, no gradients for
+   mood and no glow. Subtle motion only where it helps.
 
    Everything here lives under .shell, the wrapper around the public pages
-   (src/routes/+layout.svelte). The client portal sits outside it and keeps
-   the older tokens in tokens.css untouched.
+   (src/routes/+layout.svelte). The client portal and the studio sit outside
+   it and keep the older tokens in tokens.css untouched.
    ========================================================================== */
 
 .shell {
 	/* --- Colour ---------------------------------------------------------- */
-	/* The palette (November 2026): Space Black #010102, Deep Lavender
-	   #7022FC, Sunrise Orange #FD8F32. Lavender is the accent (links, the
-	   live status, the robots); orange appears only with it, in the
-	   lavender-to-orange glow. The greys lean slightly violet to sit with
-	   them. `--blue` keeps its name so nothing else has to change. */
-	--paper:      #ffffff;  /* panels */
-	--ground:     #f7f6fa;  /* the page behind them */
-	--ground-2:   #efedf5;  /* a quiet fill: icon wells, table heads */
-	--ink:        #0b0a10;  /* headings */
-	--ink-80:     #2c2a36;  /* reading text on white */
-	--ink-60:     #615e6e;  /* quiet text: 6.1 to 1 on white */
-	--ink-40:     #9693a3;  /* not for running text */
-	--ink-20:     #d7d4df;
-	--line:       #e6e3ec;  /* the edge of a panel */
-	--line-soft:  #efedf3;  /* a rule inside one */
-	--navy:       #010102;  /* Space Black: the solid button, the core of the diagram, the foot */
-	--blue:       #7022fc;  /* Deep Lavender: links and the one live status. 6.6 to 1 on white */
-	--blue-soft:  #f1eaff;
-	--orange:     #fd8f32;  /* Sunrise Orange: only in the glow, never for text on white */
-	--orange-soft: #fff1e4;
-	--glow:       linear-gradient(120deg, #7022fc 0%, #b84fd0 50%, #fd8f32 100%);
-	--green:      #118a4a;
-	--green-soft: #e4f5ec;
-	--amber:      #a15c07;
-	--amber-soft: #fdf1dc;
-	--red:        #c0352b;
-	--red-soft:   #fde9e7;
-	--field:      #ffffff;
+	/* `--blue` and `--navy` keep their names so nothing else has to change:
+	   --blue is the one muted violet accent; --navy is graphite. */
+	--paper:      #fdfcfa;  /* panels */
+	--ground:     #f6f4ef;  /* the page behind them */
+	--ground-2:   #eeebe4;  /* a quiet fill: icon wells, table heads */
+	--ink:        #1d1d22;  /* headings: graphite */
+	--ink-80:     #34343b;  /* reading text */
+	--ink-60:     #66656d;  /* quiet text: 5.4 to 1 on the page */
+	--ink-40:     #9a98a0;  /* not for running text */
+	--ink-20:     #d9d6cf;
+	--line:       #e4e0d8;  /* the edge of a panel */
+	--line-soft:  #ece9e2;  /* a rule inside one */
+	--navy:       #1d1d22;  /* the solid button and the foot */
+	--blue:       #6a5a96;  /* muted violet: links, focus, the one live state. 5.5 to 1 on white */
+	--blue-soft:  #ece8f4;
+	--orange:     #6a5a96;  /* retired; kept so older rules still resolve */
+	--orange-soft: #ece8f4;
+	--glow:       var(--blue); /* retired: no gradients */
+	--green:      #2f6f4f;
+	--green-soft: #e6f0ea;
+	--amber:      #8a5a12;
+	--amber-soft: #f6ecd9;
+	--red:        #a8372e;
+	--red-soft:   #f7e6e3;
+	--field:      #fdfcfa;
 	--card:       var(--paper);
 	--accent:     var(--blue);
 
@@ -68,7 +65,7 @@
 	--r-chip:    7px;
 	--r-pill:    999px;
 	/* One soft shadow, for the one panel that floats over the page. */
-	--lift: 0 1px 2px rgba(11, 10, 16, 0.04), 0 18px 40px -18px rgba(40, 20, 90, 0.2);
+	--lift: 0 1px 2px rgba(29, 29, 34, 0.04), 0 18px 40px -22px rgba(29, 29, 34, 0.22);
 
 	--ease: cubic-bezier(0.22, 0.61, 0.36, 1);
 	--dur:  160ms;
@@ -102,20 +99,20 @@
 
 /* --- The dark surface: the foot and the core of the diagram. -------------- */
 .shell [data-theme='ink'] {
-	--paper:     #010102;
-	--ground:    #010102;
-	--ground-2:  #15131d;
-	--card:      #0f0d16;
-	--field:     #0f0d16;
-	--ink:       #ffffff;
-	--ink-80:    #dcd9e6;
-	--ink-60:    #a29fb3;
-	--ink-40:    #75718a;
-	--ink-20:    #38344a;
-	--line:      #26223a;
-	--line-soft: #1b1829;
-	--blue:      #b08cff;
-	--blue-soft: #231a40;
+	--paper:     #1d1d22;
+	--ground:    #1d1d22;
+	--ground-2:  #26262c;
+	--card:      #232329;
+	--field:     #232329;
+	--ink:       #f6f4ef;
+	--ink-80:    #dedbd4;
+	--ink-60:    #a9a7ae;
+	--ink-40:    #7b7981;
+	--ink-20:    #3a3a42;
+	--line:      #32323a;
+	--line-soft: #2a2a31;
+	--blue:      #b9acd8;
+	--blue-soft: #2d2940;
 	color: var(--ink-80);
 }
 
@@ -173,9 +170,7 @@
 	position: sticky;
 	top: 0;
 	z-index: 20;
-	background: rgba(255, 255, 255, 0.86);
-	-webkit-backdrop-filter: saturate(180%) blur(16px);
-	backdrop-filter: saturate(180%) blur(16px);
+	background: var(--ground);
 	border-bottom: 1px solid var(--line);
 }
 @supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
@@ -238,7 +233,7 @@
 	color: #ffffff;
 }
 .shell .btn--solid:hover {
-	background: #1b2c47;
+	background: #34343b;
 }
 .shell .btn--ghost {
 	background: var(--paper);
@@ -260,7 +255,7 @@
 /* The solid button on the dark foot turns over: white on navy. */
 .shell [data-theme='ink'] .btn--solid {
 	background: #ffffff;
-	color: #0f1b2d;
+	color: #1d1d22;
 }
 .shell [data-theme='ink'] .btn--solid:hover {
 	background: #e6ebf2;

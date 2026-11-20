@@ -1,21 +1,14 @@
-// =============================================================================
-// Structured data
-// -----------------------------------------------------------------------------
-// The same facts as the page, written in the form search engines and AI
-// assistants read (schema.org, as JSON-LD). It answers, without guessing: who
-// VNTA is, where it is, and what it is designing. Everything here is read from
-// site.ts. Nothing is offered for sale, so there are no prices and no offers.
-// =============================================================================
-import { siteUrl, contactEmail, social, pitch, company, robotics, capabilities } from '$lib/content/site';
+// Structured data (schema.org JSON-LD), read from site.ts. Nothing is offered
+// for sale, so there are no prices, offers or ratings.
+import { siteUrl, contactEmail, social, pitch, company, faq as faqItems } from '$lib/content/site';
 import { studioPaths } from '$lib/content/studioStructured';
 
 const ORG = `${siteUrl}/#organisation`;
 const SITE = `${siteUrl}/#website`;
 
 /** Every public page, for the sitemap and llms.txt. */
-export const publicPaths = () => ['/', '/robotics', '/robotics/pricing', ...studioPaths(), '/contact', '/legal', '/privacy', '/terms'];
+export const publicPaths = () => ['/', ...studioPaths(), '/contact', '/legal', '/privacy', '/terms'];
 
-/** VNTA itself. */
 export const organisation = () => ({
 	'@context': 'https://schema.org',
 	'@type': 'Organization',
@@ -31,21 +24,7 @@ export const organisation = () => ({
 	slogan: pitch.headline,
 	foundingDate: company.founded,
 	address: { '@type': 'PostalAddress', addressLocality: 'Dublin', addressCountry: 'IE' },
-	knowsAbout: [
-		'Autonomous systems',
-		'Robotics infrastructure',
-		'Machine identity',
-		'Fleet orchestration',
-		'Access control for autonomous machines',
-		'Audit logging'
-	],
-	contactPoint: {
-		'@type': 'ContactPoint',
-		contactType: 'general',
-		email: contactEmail,
-		url: `${siteUrl}/contact`,
-		availableLanguage: 'en'
-	},
+	contactPoint: { '@type': 'ContactPoint', contactType: 'general', email: contactEmail, url: `${siteUrl}/contact`, availableLanguage: 'en' },
 	...(social.length ? { sameAs: social.map((s) => s.href) } : {})
 });
 
@@ -59,24 +38,6 @@ export const website = () => ({
 	publisher: { '@id': ORG }
 });
 
-/**
- * VNTA Robotics, described as what it is: software in development. No price,
- * no rating and no availability in the data: the prices on the pricing page
- * are starting points for a scoped engagement, not offers a machine should
- * read as a product for sale.
- */
-export const roboticsProduct = () => ({
-	'@context': 'https://schema.org',
-	'@type': 'SoftwareApplication',
-	'@id': `${siteUrl}/robotics#software`,
-	name: robotics.name,
-	applicationCategory: 'Robotics infrastructure',
-	description: `${robotics.what} ${robotics.honest} ${robotics.notSafety}`,
-	url: `${siteUrl}/robotics`,
-	creator: { '@id': ORG },
-	featureList: capabilities.map((c) => c.name)
-});
-
 export const breadcrumb = (name: string, path: string) => ({
 	'@context': 'https://schema.org',
 	'@type': 'BreadcrumbList',
@@ -87,7 +48,7 @@ export const breadcrumb = (name: string, path: string) => ({
 });
 
 /** The questions on a page, for search engines. The same words the page shows. */
-export const faqPage = (items: { q: string; a: string }[]) => ({
+export const faqPage = (items: { q: string; a: string }[] = faqItems) => ({
 	'@context': 'https://schema.org',
 	'@type': 'FAQPage',
 	mainEntity: items.map((i) => ({ '@type': 'Question', name: i.q, acceptedAnswer: { '@type': 'Answer', text: i.a } }))

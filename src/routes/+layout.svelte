@@ -2,7 +2,7 @@
 	// Chrome for every public page: the masthead and the foot. There are three
 	// kinds of page, and each gets its own frame:
 	//
-	//   company   VNTA, the technology company. Everything except the two below.
+	//   company   VNTA Personal: the public site. Everything except the two below.
 	//             Wrapped in .shell and drawn by styles/system.css.
 	//   studio    /studio and the pages under it: VNTA's design studio, with
 	//             its own masthead, foot and older look. Wrapped in .studio and
@@ -31,11 +31,10 @@
 	import Wordmark from '$lib/components/ui/Wordmark.svelte';
 	import Symbol from '$lib/components/ui/Symbol.svelte';
 	import Icon from '$lib/components/ui/Icon.svelte';
-	import { roboticsUrl, mastodonUrl, social, follow, pitch, siteUrl } from '$lib/content/site';
-	import { notesPath } from '$lib/content/notePaths';
+	import { mastodonUrl, social, follow, pitch, siteUrl } from '$lib/content/site';
 	import { pitch as studioPitch, landings, studioEmail } from '$lib/content/studio';
 
-	let { children, data } = $props();
+	let { children } = $props();
 
 	// Moving between pages: one short cross-fade, where the browser can do it
 	// and the visitor has not asked for less motion. Not within a page.
@@ -60,23 +59,15 @@
 		path.startsWith('/portal') ? 'portal' : path === '/studio' || path.startsWith('/studio/') ? 'studio' : 'company'
 	);
 
-	// Robotics is a page of its own today and a site of its own later, so its
-	// address comes from one place (roboticsUrl in content/site.ts).
-	const robotics = roboticsUrl.startsWith('http') ? roboticsUrl : `${base}${roboticsUrl}`;
-
-	// Four places, and no more. Technology and Company are parts of the home
-	// page; Pricing is VNTA Robotics' pricing.
-	const pricing = `${base}/robotics/pricing`;
+	// The sections of the home page. The one call to action is the beta list.
 	const nav = [
-		{ label: 'Technology', href: `${base}/#technology` },
-		{ label: 'Robotics', href: robotics },
-		{ label: 'Pricing', href: pricing },
-		{ label: 'Company', href: `${base}/#company` }
+		{ label: 'What it handles', href: `${base}/#handles` },
+		{ label: 'How it works', href: `${base}/#how` },
+		{ label: 'Privacy', href: `${base}/#privacy` },
+		{ label: 'FAQ', href: `${base}/#faq` }
 	];
+	const beta = `${base}/#beta`;
 	const host = siteUrl.replace(/^https?:\/\//, '');
-
-	// Notes are linked only once one has been published (see +layout.server.ts).
-	const hasNotes = $derived(data.hasNotes);
 
 	// The studio's own places: all parts of its one long page.
 	const studio = `${base}/studio`;
@@ -93,7 +84,7 @@
 	<link rel="icon" href="{base}/favicon.ico" sizes="48x48" />
 	<link rel="icon" type="image/svg+xml" href="{base}/symbol.svg" />
 	<link rel="apple-touch-icon" href="{base}/apple-touch-icon.png" />
-	<meta name="theme-color" content="#ffffff" />
+	<meta name="theme-color" content="#f6f4ef" />
 	<!-- "This profile is ours." Mastodon reads this on every page and shows a
 	     green tick beside a link to the site on the profile. -->
 	<link rel="me" href={mastodonUrl} />
@@ -101,42 +92,27 @@
 
 {#if frame === 'company'}
 	<div class="shell" data-sveltekit-preload-data="hover">
-		<!-- On the home page only: a business owner looking for a website lands
-		     here too. It scrolls away with the page. The robotics pages speak
-		     to a different reader and do not carry it. -->
-		{#if path === '/'}
-			<a class="studiobar" href={studio}>
-				<span class="studiobar__ask">Looking for VNTA Studio?</span>
-				<span class="studiobar__go">Brands and websites for your business <Icon name="arrow" size={14} /></span>
-			</a>
-		{/if}
+		<a class="skip" href="#main">Skip to content</a>
 		<header class="masthead">
 			<div class="wrap">
 				<a class="masthead__mark" href="{base}/" aria-label="VNTA home">
-					<Wordmark height={17} />
+					<Wordmark height={17} /><span class="dot" aria-hidden="true">.</span>
 				</a>
 				<nav class="masthead__nav" aria-label="Primary">
 					{#each nav as item}
-						<a href={item.href} aria-current={(path === '/robotics' && item.label === 'Robotics') || (path === '/robotics/pricing' && item.label === 'Pricing') ? 'page' : undefined}>
-							{item.label}
-						</a>
+						<a href={item.href}>{item.label}</a>
 					{/each}
 				</nav>
-				{#if path.startsWith('/robotics')}
-					<a class="btn btn--solid btn--small masthead__cta" href="{pricing}#request">
-						Validate an integration
-						<Icon name="arrow" size={16} />
-					</a>
-				{:else}
-					<a class="btn btn--solid btn--small masthead__cta" href={robotics}>
-						Explore Robotics
-						<Icon name="arrow" size={16} />
-					</a>
-				{/if}
+				<a class="btn btn--solid btn--small masthead__cta" href={beta}>
+					Join the private beta
+					<Icon name="arrow" size={16} />
+				</a>
 			</div>
 		</header>
 
-		{@render children()}
+		<div id="main" class="main-target" tabindex="-1">
+			{@render children()}
+		</div>
 
 		<footer class="foot" data-theme="ink">
 			<div class="wrap">
@@ -145,19 +121,16 @@
 						<a class="foot__mark" href="{base}/" aria-label="VNTA home">
 							<Wordmark height={20} />
 						</a>
-						<p class="foot__line">{pitch.headline}</p>
+						<p class="foot__line">{pitch.descriptor}. {pitch.headline}</p>
 					</div>
 					<div class="foot__navs">
 						<nav aria-label="Site">
 							<ul class="foot__nav">
-								<li><a href="{base}/">VNTA</a></li>
-								<li><a href={robotics}>Robotics</a></li>
-								<li><a href={pricing}>Pricing</a></li>
-								{#if hasNotes}<li><a href="{base}{notesPath}">Notes</a></li>{/if}
-								<li><a href="{base}/#company">Company</a></li>
-								<!-- Studio stays findable from the company pages, but a robotics
-								     buyer does not need it in their way. -->
-								{#if !path.startsWith('/robotics')}<li><a href={studio}>Studio</a></li>{/if}
+								<li><a href="{base}/#handles">What it handles</a></li>
+								<li><a href="{base}/#how">How it works</a></li>
+								<li><a href="{base}/#privacy">Privacy</a></li>
+								<li><a href="{base}/#faq">FAQ</a></li>
+								<li><a href={studio}>VNTA Studio</a></li>
 								<li><a href="{base}/contact">Contact</a></li>
 							</ul>
 						</nav>
@@ -191,7 +164,7 @@
 		{#if path === '/studio'}
 			<a class="parentbar" href="{base}/">
 				<span class="parentbar__ask">Part of VNTA</span>
-				<span class="parentbar__go">The technology company <Icon name="arrow" size={13} /></span>
+				<span class="parentbar__go">Back to VNTA <Icon name="arrow" size={13} /></span>
 			</a>
 		{/if}
 		<header class="masthead">
@@ -324,6 +297,30 @@
 	.studio .masthead__mark {
 		align-items: baseline;
 		gap: 10px;
+	}
+	.shell .masthead__mark .dot {
+		color: var(--blue);
+		font-weight: 700;
+		font-size: 1.5rem;
+		line-height: 1;
+		margin-left: 1px;
+		align-self: flex-end;
+	}
+	.main-target {
+		display: contents;
+	}
+	.skip {
+		position: absolute;
+		left: -9999px;
+		top: 8px;
+		background: var(--paper);
+		color: var(--ink);
+		padding: 8px 12px;
+		border-radius: 8px;
+		z-index: 10;
+	}
+	.skip:focus {
+		left: 12px;
 	}
 	.masthead__sub {
 		font-family: var(--font-label);
