@@ -60,7 +60,7 @@ export async function startLogin(env: Env, emailRaw: unknown, mailer: Mailer | n
 }
 
 /** Returns a new session token, creating the account the first time an email signs in. */
-export async function verifyLogin(env: Env, emailRaw: unknown, codeRaw: unknown): Promise<string> {
+export async function verifyLogin(env: Env, emailRaw: unknown, codeRaw: unknown, device: string | null = null): Promise<string> {
 	const email = normaliseEmail(emailRaw);
 	const code = String(codeRaw ?? '').replace(/\s/g, '');
 	const bad = new ApiError(400, 'That code is not right, or it has expired.');
@@ -82,15 +82,43 @@ export async function verifyLogin(env: Env, emailRaw: unknown, codeRaw: unknown)
 		await env.DB.prepare('INSERT INTO users (id, email, created_at) VALUES (?,?,?)').bind(id, email, t).run();
 		user = { id };
 	}
+	return createSession(env, user.id, 'code', device);
+}
+
+/** Opens a session and records it in the person's sign-in activity. */
+export async function createSession(env: Env, userId: string, method: 'code' | 'passkey', device: string | null): Promise<string> {
+	const t = now();
 	const token = randomToken(32);
-	await env.DB.prepare('INSERT INTO sessions (token_hash, user_id, created_at, expires_at) VALUES (?,?,?,?)')
-		.bind(await sha256Hex(token), user.id, t, t + SESSION_TTL)
+	await env.DB.prepare('INSERT INTO sessions (token_hash, user_id, created_at, expires_at, method, device) VALUES (?,?,?,?,?,?)')
+		.bind(await sha256Hex(token), userId, t, t + SESSION_TTL, method, device)
 		.run();
+	await logEvent(env, userId, method === 'passkey' ? 'signin_passkey' : 'signin_code', device);
 	return token;
+}
+
+export async function logEvent(env: Env, userId: string, kind: string, device: string | null): Promise<void> {
+	await env.DB.prepare('INSERT INTO security_events (id, user_id, kind, device, at) VALUES (?,?,?,?,?)')
+		.bind(randomToken(8), userId, kind, device, now())
+		.run();
+	// Keep only the newest 20, as Settings says. Tidy finished sessions while here.
+	await env.DB.prepare('DELETE FROM security_events WHERE user_id = ? AND id NOT IN (SELECT id FROM security_events WHERE user_id = ? ORDER BY at DESC, rowid DESC LIMIT 20)')
+		.bind(userId, userId)
+		.run();
+	await env.DB.prepare('DELETE FROM sessions WHERE user_id = ? AND expires_at < ?').bind(userId, now()).run();
+}
+
+/** "Chrome on Mac": enough for a person to recognise their own device, nothing more. */
+export function deviceLabel(request: Request): string {
+	const ua = request.headers.get('user-agent') ?? '';
+	const browser = /Edg\//.test(ua) ? 'Edge' : /Firefox\//.test(ua) ? 'Firefox' : /Chrome\//.test(ua) ? 'Chrome' : /Safari\//.test(ua) ? 'Safari' : 'Browser';
+	const os = /iPhone|iPad/.test(ua) ? 'iPhone/iPad' : /Android/.test(ua) ? 'Android' : /Mac OS X/.test(ua) ? 'Mac' : /Windows/.test(ua) ? 'Windows' : /Linux/.test(ua) ? 'Linux' : 'a device';
+	return `${browser} on ${os}`;
 }
 
 export interface User {
 	id: string;
+	/** First 16 characters of the hashed session token: names the current session without exposing it. */
+	sessionId: string;
 	email: string;
 	retentionDays: number;
 	createdAt: number;
@@ -109,12 +137,13 @@ export function readCookie(request: Request, name = COOKIE): string | null {
 export async function sessionUser(env: Env, request: Request): Promise<User | null> {
 	const token = readCookie(request);
 	if (!token || !/^[0-9a-f]{64}$/.test(token)) return null;
+	const hash = await sha256Hex(token);
 	const row = await env.DB.prepare(
 		'SELECT u.id, u.email, u.retention_days, u.created_at FROM sessions s JOIN users u ON u.id = s.user_id WHERE s.token_hash = ? AND s.expires_at > ?'
 	)
-		.bind(await sha256Hex(token), now())
+		.bind(hash, now())
 		.first<{ id: string; email: string; retention_days: number; created_at: number }>();
-	return row ? { id: row.id, email: row.email, retentionDays: row.retention_days, createdAt: row.created_at } : null;
+	return row ? { id: row.id, sessionId: hash.slice(0, 16), email: row.email, retentionDays: row.retention_days, createdAt: row.created_at } : null;
 }
 
 export async function endSession(env: Env, request: Request): Promise<void> {

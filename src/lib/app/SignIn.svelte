@@ -2,6 +2,7 @@
 	// Email, then the six-digit code that was sent to it. No password.
 	import { api, ApiFailure } from './api';
 	import { session } from './session.svelte';
+	import { passkeysSupported, signInWithPasskey } from './passkey';
 	import Wordmark from '$lib/components/ui/Wordmark.svelte';
 
 	let step = $state<'email' | 'code'>('email');
@@ -17,6 +18,18 @@
 		try {
 			await api.start(email.trim());
 			step = 'code';
+		} catch (err) {
+			error = err instanceof ApiFailure ? err.message : 'Something went wrong.';
+		} finally {
+			busy = false;
+		}
+	}
+	async function withPasskey() {
+		busy = true;
+		error = '';
+		try {
+			await signInWithPasskey();
+			await session.init();
 		} catch (err) {
 			error = err instanceof ApiFailure ? err.message : 'Something went wrong.';
 		} finally {
@@ -43,13 +56,17 @@
 		<div class="mark"><Wordmark height={18} /><span class="dot" aria-hidden="true">.</span></div>
 		{#if step === 'email'}
 			<h1>Sign in</h1>
+			{#if passkeysSupported()}
+				<button class="btn btn--solid" type="button" disabled={busy} onclick={withPasskey}>Sign in with a passkey</button>
+				<p class="or"><span>or use your email</span></p>
+			{/if}
 			<p class="sub">We will email you a six-digit code. There is no password to remember.</p>
 			<form onsubmit={send}>
 				<label>
 					<span>Email</span>
 					<input type="email" autocomplete="email" inputmode="email" required bind:value={email} />
 				</label>
-				<button class="btn btn--solid" disabled={busy}>{busy ? 'Sending…' : 'Send me a code'}</button>
+				<button class={passkeysSupported() ? 'btn btn--ghost' : 'btn btn--solid'} disabled={busy}>{busy ? 'Sending…' : 'Send me a code'}</button>
 			</form>
 		{:else}
 			<h1>Check your email</h1>
@@ -143,6 +160,21 @@
 		text-underline-offset: 3px;
 		cursor: pointer;
 		justify-self: start;
+	}
+	.or {
+		margin: 0;
+		display: flex;
+		align-items: center;
+		gap: 12px;
+		color: var(--ink-60);
+		font-size: var(--t-small);
+	}
+	.or::before,
+	.or::after {
+		content: '';
+		flex: 1;
+		height: 1px;
+		background: var(--line);
 	}
 	.err {
 		margin: 0;

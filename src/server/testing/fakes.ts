@@ -7,7 +7,8 @@ import type { D1Like, D1Statement, Env, Mailer, R2Like } from '../types';
 export function fakeD1(): D1Like {
 	const db = new DatabaseSync(':memory:');
 	db.exec('PRAGMA foreign_keys = ON');
-	db.exec(readFileSync(new URL('../../../migrations/0001_app.sql', import.meta.url), 'utf8'));
+	for (const f of ['0001_app.sql', '0002_security.sql'])
+		db.exec(readFileSync(new URL(`../../../migrations/${f}`, import.meta.url), 'utf8'));
 	const stmt = (sql: string, values: unknown[] = []): D1Statement => ({
 		bind: (...v) => stmt(sql, v),
 		run: async () => db.prepare(sql).run(...(values as any[])),

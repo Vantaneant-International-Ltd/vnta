@@ -10,7 +10,9 @@
 	const held = [
 		{ what: 'Your email address', why: 'To sign you in and to contact you about your account.', keep: 'Until you delete your account.' },
 		{ what: 'Sign-in codes', why: 'To check it is you. Only a scrambled (hashed) copy is stored.', keep: '10 minutes, or until used.' },
-		{ what: 'Your session', why: 'To keep you signed in on this device. Only a hashed copy of the token is stored.', keep: '30 days, or until you sign out.' },
+		{ what: 'Your sessions', why: 'To keep you signed in. Only a hashed copy of the token is stored, with a label such as “Chrome on Mac” so you can recognise the device. No IP address.', keep: '30 days, or until you sign out.' },
+		{ what: 'Passkeys', why: 'To let you sign in with your fingerprint, face or device PIN. We keep only the public key, a name, and when it was added and last used. The private key stays on your device.', keep: 'Until you remove it or delete your account.' },
+		{ what: 'Sign-in activity', why: 'So you can spot a sign-in that was not you: what happened and on which device, never an IP address.', keep: 'The latest 20 events.' },
 		{ what: 'Documents you add', why: 'To read them and find what may need doing. We keep the file you added and the text read from it.', keep: 'For the period you choose in Settings (default 1 year), or until you delete them.' },
 		{ what: 'Suggestions and your decisions', why: 'Dates, amounts and the exact sentences VNTA quoted from your documents, with what you decided and any date you set.', keep: 'With the document they came from.' },
 		{ what: 'Drafts', why: 'Text you asked VNTA to prepare. VNTA never sends it.', keep: 'With the suggestion they belong to.' },

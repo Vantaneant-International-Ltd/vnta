@@ -42,6 +42,14 @@ desktop and phone screens.
 
 **Extractor** (`src/lib/extract/`, 22 tests): see "Known limits" below.
 
+**Passkeys and session controls** (branch `security-passkeys`): add a passkey in Settings, sign in with it
+(discoverable, device must confirm it is you), remove it, see signed-in devices, sign one or all others out,
+recent activity. Verified by 16 server tests against real WebAuthn messages (replay, look-alike site,
+missing user verification, cloned counter, other users' challenges) and by a real Chrome run with a virtual
+authenticator against the local Cloudflare runtime. NOT verified: a real phone or security key, Safari, Firefox.
+Email codes remain a fallback, so an attacker with the person's inbox can still sign in. A passkey-only lock
+(no email fallback) is not built because it needs a recovery path first.
+
 **Privacy policy** (`/privacy`): rewritten to describe what the app really does.
 Drafted, not reviewed by a lawyer. Its launch-time claims are listed in
 `docs/DEPLOY-APP.md`. No analytics run inside the app (tested), and the old policy's

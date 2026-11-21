@@ -11,9 +11,9 @@
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"test": "node --test src/lib/extract/extract.test.ts src/lib/analytics.test.ts src/server/app.test.ts scripts/social-profile.test.mjs",
+		"test": "node --test src/lib/extract/extract.test.ts src/lib/analytics.test.ts src/server/app.test.ts src/server/passkeys.test.ts scripts/social-profile.test.mjs",
 		"test:extract": "node --test src/lib/extract/extract.test.ts",
-		"test:server": "node --test src/server/app.test.ts",
+		"test:server": "node --test src/server/app.test.ts src/server/passkeys.test.ts",
 		"app:migrate": "wrangler d1 migrations apply DB --local --config dev/wrangler.dev.toml",
 		"app:dev": "npm run build && npm run app:migrate && npm run app:serve",
 		"app:serve": "wrangler pages dev build --port 8788 --persist-to dev/.wrangler/state --d1 DB --d1 INQUIRIES --r2 FILES --binding DEV_LOG_LOGIN_CODES=1"
@@ -34,6 +34,8 @@
 		"@fontsource/manrope": "^5.2.8",
 		"@fontsource/marcellus": "^5.2.8",
 		"@fontsource/marcellus-sc": "^5.2.8",
+		"@simplewebauthn/browser": "^14.0.0",
+		"@simplewebauthn/server": "^14.1.0",
 		"magic-snowflakes": "7.1.0",
 		"unpdf": "^1.9.1"
 	}

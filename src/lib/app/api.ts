@@ -43,6 +43,12 @@ export type AddResult =
 	| { duplicate: true; document: Doc }
 	| { duplicate: false; document: Doc; findingCount: number; rejectedCount: number };
 
+export interface Security {
+	passkeys: { id: string; name: string; createdAt: number; lastUsedAt: number | null }[];
+	sessions: { id: string; method: 'code' | 'passkey'; device: string; createdAt: number; current: boolean }[];
+	events: { kind: string; device: string | null; at: number }[];
+}
+
 export class ApiFailure extends Error {
 	status: number;
 	constructor(status: number, message: string) {
@@ -88,5 +94,14 @@ export const api = {
 	drafts: (id: string) => call<{ drafts: Draft[] }>('GET', `/findings/${id}/drafts`),
 	makeDraft: (id: string) => call<{ finding: Finding; draft: Draft }>('POST', `/findings/${id}/drafts`),
 	setRetention: (retentionDays: number) => call<{ retentionDays: number }>('PATCH', '/settings', { retentionDays }),
+	security: () => call<Security>('GET', '/security'),
+	passkeyRegisterOptions: () => call<{ options: any; challengeId: string }>('POST', '/passkeys/register/options'),
+	passkeyRegisterVerify: (challengeId: string, response: unknown, name: string) =>
+		call<{ id: string; name: string }>('POST', '/passkeys/register/verify', { challengeId, response, name }),
+	passkeySigninOptions: () => call<{ options: any; challengeId: string }>('POST', '/auth/passkey/options'),
+	passkeySigninVerify: (challengeId: string, response: unknown) => call<{ ok: true }>('POST', '/auth/passkey/verify', { challengeId, response }),
+	removePasskey: (id: string) => call<{ ok: true }>('DELETE', `/passkeys/${id}`),
+	signOutDevice: (id: string) => call<{ ok: true }>('DELETE', `/sessions/${id}`),
+	signOutOthers: () => call<{ ok: true }>('POST', '/sessions/revoke-others'),
 	deleteAccount: () => call<{ ok: true }>('DELETE', '/account', { confirm: 'delete my account' })
 };

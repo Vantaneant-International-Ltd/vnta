@@ -49,6 +49,11 @@ and change the page in the same commit if one is not true:
 - [ ] The retention, export and delete controls work on the live site.
 - [ ] A lawyer has read the privacy page and the terms. They were drafted, not reviewed.
 
+Passkeys are bound to the site's hostname. They work on whatever address the app is served from
+(vnta.xyz today). If the app later moves to `app.vnta.xyz`, existing passkeys will stop working and
+people will need to add them again, so decide the final address before inviting users.
+Apply `migrations/0002_security.sql` as well as `0001_app.sql`.
+
 ## 5. Before inviting anyone
 
 - Publish a privacy policy that matches what the app really does.

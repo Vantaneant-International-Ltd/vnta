@@ -5,6 +5,7 @@ import { ApiError, type Env, type Mailer } from './types.ts';
 import * as auth from './auth.ts';
 import { addDocument, deleteDocument, getDocument, listDocuments } from './documents.ts';
 import { createDraft, listDrafts, listFindings, updateFinding } from './findings.ts';
+import * as pk from './passkeys.ts';
 import { deleteAccount, exportAll, purgeExpired, setRetention } from './account.ts';
 
 const json = (data: unknown, status = 200, headers: Record<string, string> = {}) =>
@@ -47,7 +48,12 @@ export async function handle(request: Request, env: Env, mailer: Mailer | null =
 		}
 		if (method === 'POST' && path === '/auth/verify') {
 			const b = await body(request);
-			const token = await auth.verifyLogin(env, b.email, b.code);
+			const token = await auth.verifyLogin(env, b.email, b.code, auth.deviceLabel(request));
+			return json({ ok: true }, 200, { 'set-cookie': auth.cookieHeader(token) });
+		}
+		if (method === 'POST' && path === '/auth/passkey/options') return json(await pk.signinOptions(env, request));
+		if (method === 'POST' && path === '/auth/passkey/verify') {
+			const token = await pk.signinVerify(env, request, await body(request), auth.deviceLabel(request));
 			return json({ ok: true }, 200, { 'set-cookie': auth.cookieHeader(token) });
 		}
 		if (method === 'POST' && path === '/auth/logout') {
@@ -75,6 +81,29 @@ export async function handle(request: Request, env: Env, mailer: Mailer | null =
 			if (b.confirm !== 'delete my account') throw new ApiError(400, 'Type the confirmation phrase to delete.');
 			await deleteAccount(env, user.id);
 			return json({ ok: true }, 200, { 'set-cookie': auth.clearCookieHeader() });
+		}
+
+		// --- Account security ---
+		const device = auth.deviceLabel(request);
+		if (method === 'GET' && path === '/security') return json(await pk.securityOverview(env, user));
+		if (method === 'POST' && path === '/passkeys/register/options') return json(await pk.registrationOptions(env, user, request));
+		if (method === 'POST' && path === '/passkeys/register/verify') return json(await pk.registrationVerify(env, user, request, await body(request), device));
+		m0: {
+			const pm = path.match(/^\/passkeys\/([A-Za-z0-9_-]{1,512})$/);
+			if (pm && method === 'DELETE') {
+				await pk.removePasskey(env, user, pm[1], device);
+				return json({ ok: true });
+			}
+			const sm = path.match(/^\/sessions\/([0-9a-f]{16})$/);
+			if (sm && method === 'DELETE') {
+				await pk.revokeSession(env, user, sm[1], device);
+				return json({ ok: true });
+			}
+			break m0;
+		}
+		if (method === 'POST' && path === '/sessions/revoke-others') {
+			await pk.revokeOthers(env, user, device);
+			return json({ ok: true });
 		}
 
 		if (method === 'GET' && path === '/documents') return json({ documents: await listDocuments(env, user.id) });

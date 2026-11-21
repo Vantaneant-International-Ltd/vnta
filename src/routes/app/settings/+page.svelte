@@ -4,7 +4,9 @@
 	import { goto } from '$app/navigation';
 	import PageHead from '$lib/app/PageHead.svelte';
 	import Section from '$lib/app/Section.svelte';
-	import { api, ApiFailure } from '$lib/app/api';
+	import { onMount } from 'svelte';
+	import { api, ApiFailure, type Security } from '$lib/app/api';
+	import { addPasskey, passkeysSupported } from '$lib/app/passkey';
 	import { session } from '$lib/app/session.svelte';
 
 	let saved = $state('');
@@ -12,6 +14,43 @@
 	let confirming = $state(false);
 	let phrase = $state('');
 	let busy = $state(false);
+
+	let sec = $state<Security | null>(null);
+	let secBusy = $state(false);
+	let secMsg = $state('');
+	const supported = passkeysSupported();
+
+	async function loadSecurity() {
+		try {
+			sec = await api.security();
+		} catch {
+			sec = null;
+		}
+	}
+	onMount(loadSecurity);
+
+	async function secDo(fn: () => Promise<unknown>, done: string) {
+		secBusy = true;
+		error = secMsg = '';
+		try {
+			await fn();
+			secMsg = done;
+			await loadSecurity();
+		} catch (err) {
+			error = err instanceof ApiFailure ? err.message : 'That did not work.';
+		} finally {
+			secBusy = false;
+		}
+	}
+	const when = (t: number) => new Date(t * 1000).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' });
+	const eventText: Record<string, string> = {
+		signin_code: 'Signed in with an emailed code',
+		signin_passkey: 'Signed in with a passkey',
+		passkey_added: 'Passkey added',
+		passkey_removed: 'Passkey removed',
+		session_revoked: 'A device was signed out',
+		sessions_revoked: 'Signed out of all other devices'
+	};
 
 	const periods = [
 		{ v: 30, l: '30 days' },
@@ -53,9 +92,65 @@
 
 <Section title="Account">
 	<div class="box row">
-		<div><b>{session.email}</b><small>You sign in with an emailed code.</small></div>
+		<div><b>{session.email}</b><small>Sign in with a passkey or an emailed code.</small></div>
 		<button class="btn btn--ghost" onclick={() => session.signOut()}>Sign out</button>
 	</div>
+</Section>
+
+<Section title="Security">
+	<div class="box">
+		<b>Passkeys</b>
+		<small>
+			A passkey lets you sign in with your fingerprint, face or device PIN. It cannot be guessed, reused on a fake site or
+			intercepted in an email. VNTA keeps only the public half; the private half never leaves your device.
+		</small>
+		{#if sec && sec.passkeys.length}
+			<ul class="list">
+				{#each sec.passkeys as p (p.id)}
+					<li>
+						<span><b>{p.name}</b><small>Added {when(p.createdAt)}{p.lastUsedAt ? ` · last used ${when(p.lastUsedAt)}` : ' · not used yet'}</small></span>
+						<button class="btn btn--ghost" disabled={secBusy} onclick={() => secDo(() => api.removePasskey(p.id), 'Passkey removed.')}>Remove</button>
+					</li>
+				{/each}
+			</ul>
+		{:else if sec}
+			<small>You have no passkeys yet. Right now only an emailed code protects your account.</small>
+		{/if}
+		{#if supported}
+			<button class="btn btn--solid" disabled={secBusy} onclick={() => secDo(() => addPasskey('This device'), 'Passkey added.')}>Add a passkey</button>
+		{:else}
+			<small>This browser cannot make passkeys. Try an up-to-date Safari, Chrome, Edge or Firefox.</small>
+		{/if}
+		{#if secMsg}<small class="ok" role="status">{secMsg}</small>{/if}
+	</div>
+	<div class="box">
+		<b>Where you are signed in</b>
+		{#if sec}
+			<ul class="list">
+				{#each sec.sessions as s (s.id)}
+					<li>
+						<span><b>{s.device}{s.current ? ' (this device)' : ''}</b><small>{s.method === 'passkey' ? 'Passkey' : 'Emailed code'} · {when(s.createdAt)}</small></span>
+						{#if !s.current}<button class="btn btn--ghost" disabled={secBusy} onclick={() => secDo(() => api.signOutDevice(s.id), 'Device signed out.')}>Sign out</button>{/if}
+					</li>
+				{/each}
+			</ul>
+			{#if sec.sessions.length > 1}
+				<button class="btn btn--ghost" disabled={secBusy} onclick={() => secDo(api.signOutOthers, 'Signed out everywhere else.')}>Sign out everywhere else</button>
+			{/if}
+		{/if}
+		<small>Don’t recognise a device? Sign it out, then add a passkey.</small>
+	</div>
+	{#if sec?.events.length}
+		<div class="box">
+			<b>Recent activity</b>
+			<ul class="list plain">
+				{#each sec.events as e}
+					<li><span>{eventText[e.kind] ?? e.kind}{e.device ? ` · ${e.device}` : ''}</span><small>{when(e.at)}</small></li>
+				{/each}
+			</ul>
+			<small>We keep the last 20 events and never record IP addresses.</small>
+		</div>
+	{/if}
 </Section>
 
 <Section title="Privacy and data">
@@ -124,6 +219,29 @@
 		display: grid;
 		gap: 6px;
 		justify-items: start;
+	}
+	.list {
+		list-style: none;
+		margin: 4px 0;
+		padding: 0;
+		display: grid;
+		gap: 10px;
+		width: 100%;
+	}
+	.list li {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		gap: 12px;
+		flex-wrap: wrap;
+	}
+	.list li span {
+		display: grid;
+		gap: 2px;
+	}
+	.plain li {
+		font-size: 0.9rem;
+		color: var(--ink-80);
 	}
 	.row {
 		grid-template-columns: 1fr auto;
