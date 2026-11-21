@@ -5,40 +5,52 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 
 		<!-- ============================================================
-		     Google Analytics (gtag.js) with Consent Mode v2
+		     Google Analytics (gtag.js) with Consent Mode v2: public pages only
 		     ============================================================
-		     GA loads on every page but is GATED on cookie consent. Default is
-		     "denied" for analytics_storage; CookieBanner.svelte flips it to
-		     "granted" on Accept. Until granted, gtag drops no cookies and sends
-		     only cookie-less pings (advanced consent mode). GDPR-compliant.
+		     NEVER inside the signed-in app (/app). Its addresses carry document ids
+		     and its pages show a person's paperwork, so Google must not be
+		     contacted from there at all: the script is not even downloaded.
+
+		     On public pages the default is "denied" for analytics_storage;
+		     CookieBanner.svelte flips it to "granted" on Accept. Until then gtag
+		     drops no cookies and sends only cookie-less pings (advanced consent mode).
 
 		     Auto-pageview is off (send_page_view: false): SvelteKit navigates
 		     client-side, so $lib/analytics emits page_view on every afterNavigate. -->
-		<script async src="https://www.googletagmanager.com/gtag/js?id=G-81P6Q4C2QR"></script>
 		<script>
 			window.dataLayer = window.dataLayer || [];
 			function gtag(){dataLayer.push(arguments);}
-			window.gtag = gtag;
-			gtag('js', new Date());
+			var VNTA_IN_APP = location.pathname === '/app' || location.pathname.indexOf('/app/') === 0;
+			if (VNTA_IN_APP) {
+				window['ga-disable-G-81P6Q4C2QR'] = true;
+				window.gtag = function () {};
+			} else {
+				window.gtag = gtag;
+				var gs = document.createElement('script');
+				gs.async = true;
+				gs.src = 'https://www.googletagmanager.com/gtag/js?id=G-81P6Q4C2QR';
+				document.head.appendChild(gs);
+				gtag('js', new Date());
 
-			// Read prior-visit consent BEFORE the first config call.
-			var VNTA_CONSENT_KEY = 'vnta-cookie-consent';
-			var __vntaConsent = null;
-			try { __vntaConsent = localStorage.getItem(VNTA_CONSENT_KEY); } catch (e) {}
-			var __vntaAnalyticsGranted = __vntaConsent === 'all';
+				// Read prior-visit consent BEFORE the first config call.
+				var VNTA_CONSENT_KEY = 'vnta-cookie-consent';
+				var __vntaConsent = null;
+				try { __vntaConsent = localStorage.getItem(VNTA_CONSENT_KEY); } catch (e) {}
+				var __vntaAnalyticsGranted = __vntaConsent === 'all';
 
-			gtag('consent', 'default', {
-				ad_storage: 'denied',
-				ad_user_data: 'denied',
-				ad_personalization: 'denied',
-				analytics_storage: __vntaAnalyticsGranted ? 'granted' : 'denied',
-				wait_for_update: 500
-			});
+				gtag('consent', 'default', {
+					ad_storage: 'denied',
+					ad_user_data: 'denied',
+					ad_personalization: 'denied',
+					analytics_storage: __vntaAnalyticsGranted ? 'granted' : 'denied',
+					wait_for_update: 500
+				});
 
-			gtag('config', 'G-81P6Q4C2QR', {
-				anonymize_ip: true,
-				send_page_view: false
-			});
+				gtag('config', 'G-81P6Q4C2QR', {
+					anonymize_ip: true,
+					send_page_view: false
+				});
+			}
 		</script>
 		%sveltekit.head%
 	</head>

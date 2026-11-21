@@ -6,9 +6,12 @@ nothing is deployed from this repository without an explicit decision.
 
 ## 1. Create the storage
 
+Create both in the EU. The privacy policy says the app's database and files are stored in
+Europe, so this step makes that sentence true.
+
 ```sh
-npx wrangler d1 create vnta-app
-npx wrangler r2 bucket create vnta-files
+npx wrangler d1 create vnta-app --location weur
+npx wrangler r2 bucket create vnta-files --jurisdiction eu
 npx wrangler d1 migrations apply vnta-app --remote   # run from a wrangler config that names the DB; or paste migrations/0001_app.sql in the dashboard
 ```
 
@@ -33,7 +36,20 @@ the existing `INQUIRIES` binding. The file in `dev/` is for local use only.
 Add `vnta.xyz` in Resend, add the DNS records it asks for, then send yourself a test
 sign-in code from the live site.
 
-## 4. Before inviting anyone
+## 4. Claims to verify at launch
+
+`/privacy` makes statements the code cannot prove. Check each one before anyone is invited,
+and change the page in the same commit if one is not true:
+
+- [ ] D1 database and R2 bucket were created in the EU (step 1).
+- [ ] Resend and Cloudflare have signed data-processing terms with the company, and the
+      international-transfer wording on the page matches them.
+- [ ] No analytics or third-party script loads inside `/app` (open the app with the browser's
+      network tab and confirm no request to Google).
+- [ ] The retention, export and delete controls work on the live site.
+- [ ] A lawyer has read the privacy page and the terms. They were drafted, not reviewed.
+
+## 5. Before inviting anyone
 
 - Publish a privacy policy that matches what the app really does.
 - Try the whole path with a real inbox: sign in, add a document, export, delete.

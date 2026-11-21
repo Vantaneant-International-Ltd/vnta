@@ -11,7 +11,7 @@
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"test": "node --test src/lib/extract/extract.test.ts src/server/app.test.ts scripts/social-profile.test.mjs",
+		"test": "node --test src/lib/extract/extract.test.ts src/lib/analytics.test.ts src/server/app.test.ts scripts/social-profile.test.mjs",
 		"test:extract": "node --test src/lib/extract/extract.test.ts",
 		"test:server": "node --test src/server/app.test.ts",
 		"app:migrate": "wrangler d1 migrations apply DB --local --config dev/wrangler.dev.toml",

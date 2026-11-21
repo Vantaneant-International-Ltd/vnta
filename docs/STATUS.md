@@ -42,6 +42,11 @@ desktop and phone screens.
 
 **Extractor** (`src/lib/extract/`, 22 tests): see "Known limits" below.
 
+**Privacy policy** (`/privacy`): rewritten to describe what the app really does.
+Drafted, not reviewed by a lawyer. Its launch-time claims are listed in
+`docs/DEPLOY-APP.md`. No analytics run inside the app (tested), and the old policy's
+statement that declining sends no analytics was wrong and is corrected.
+
 ## Mocked or illustrative
 
 - The hero preview on the homepage is a drawing, labelled as such.
@@ -67,7 +72,7 @@ live site.
 - Email, calendar and any external action. Not in v1 by design.
 - Reminders or notifications
 - Retention runs when the person opens the app, not on a schedule
-- Product privacy policy and terms (the public pages still describe the old site)
+- Terms of service for the product (the terms page still describes the old site)
 - Automated browser tests in CI. The browser run is a manual script for now.
 - Email-code sign-in has no CAPTCHA or per-IP limit. Per-email limits only.
 
