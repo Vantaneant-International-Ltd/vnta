@@ -19,7 +19,7 @@
 		"app:serve": "wrangler pages dev build --port 8788 --persist-to dev/.wrangler/state --d1 DB --d1 INQUIRIES --r2 FILES --binding DEV_LOG_LOGIN_CODES=1"
 	},
 	"devDependencies": {
-		"@sveltejs/adapter-static": "^3.0.0",
+		"@sveltejs/adapter-static": "^3.0.11",
 		"@sveltejs/kit": "^2.49.1",
 		"@sveltejs/vite-plugin-svelte": "^6.2.1",
 		"@types/node": "^25.9.1",
