@@ -32,7 +32,7 @@
 		margin: 0;
 		background: var(--paper);
 		border: 1px solid var(--line);
-		border-radius: var(--r-card);
+		border-radius: 28px;
 		box-shadow: var(--lift);
 		overflow: hidden;
 	}
@@ -90,7 +90,7 @@
 		place-items: center;
 		width: 36px;
 		height: 36px;
-		border-radius: 10px;
+		border-radius: 12px;
 		background: var(--ground-2);
 		color: var(--ink-80);
 	}

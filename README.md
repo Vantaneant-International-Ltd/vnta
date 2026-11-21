@@ -50,10 +50,13 @@ the sitemap and `/llms.txt` all read from it.
 
 ## Look
 
-Off-white surfaces, graphite text, one muted violet (`--blue` in `system.css`).
-Inter, hairline borders, generous space. No gradients for mood, no glow, no robot
-graphics. Every rule in `system.css` sits under `.shell`, so the studio and the
-portal keep their own looks.
+Clean, in the spirit of Apple: the system font (SF on Apple devices, Inter elsewhere),
+large quiet type, white cards on soft grey, pill buttons, one violet accent
+(`--blue` in `system.css`). Two things are only VNTA's: the violet full stop in
+`VNTA.`, and the highlighted-source underline (`.hl`), the same mark the app uses to
+show where a suggestion came from. No gradients for mood, no glow, no robot graphics.
+Every rule in `system.css` sits under `.shell`, so the studio and the portal keep
+their own looks.
 
 ## Getting started
 

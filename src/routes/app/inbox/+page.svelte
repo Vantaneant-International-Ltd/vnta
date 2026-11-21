@@ -301,7 +301,7 @@
 		color: var(--ink);
 	}
 	mark.on {
-		background: #ddd5ee;
+		background: #e4e0fa;
 	}
 	h2 {
 		margin: 32px 0 12px;

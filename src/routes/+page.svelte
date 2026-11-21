@@ -18,17 +18,16 @@
 <main>
 	<!-- 1. Hero -->
 	<section class="band hero">
-		<div class="wrap hero__grid">
-			<div class="hero__text">
-				<p class="eyebrow">{pitch.descriptor}</p>
-				<h1>VNTA<span class="stop">.</span><br /><span class="tag">{pitch.headline}</span></h1>
-				<p class="lede">{pitch.lede}</p>
-				<div class="cta">
-					<a class="btn btn--solid" href="#beta">Join the private beta <Icon name="arrow" size={16} /></a>
-					<a class="btn btn--ghost" href="#how">See how it works</a>
-				</div>
-				<p class="status">{pitch.status}</p>
+		<div class="wrap hero__stack">
+			<p class="eyebrow">{pitch.descriptor}</p>
+			<h1>VNTA<span class="stop">.</span></h1>
+			<p class="tag">Life, <span class="hl">handled</span>.</p>
+			<p class="lede">{pitch.lede}</p>
+			<div class="cta">
+				<a class="btn btn--solid" href="#beta">Join the private beta</a>
+				<a class="btn btn--ghost" href="#how">See how it works <Icon name="arrow" size={16} /></a>
 			</div>
+			<p class="status">{pitch.status}</p>
 			<div class="hero__art"><HeroPreview /></div>
 		</div>
 	</section>
@@ -143,51 +142,58 @@
 </main>
 
 <style>
-	.hero__grid {
+	.hero__stack {
 		display: grid;
-		gap: clamp(32px, 5vw, 72px);
-		align-items: center;
-	}
-	@media (min-width: 960px) {
-		.hero__grid {
-			grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-		}
+		justify-items: center;
+		text-align: center;
+		padding-block: clamp(24px, 5vw, 64px) 0;
 	}
 	h1 {
-		margin: 14px 0 20px;
-		font-size: clamp(3.4rem, 9vw, 6.5rem);
+		margin: 18px 0 0;
+		font-size: clamp(4.5rem, 16vw, 10rem);
 		font-weight: 600;
-		letter-spacing: -0.055em;
-		line-height: 0.95;
+		letter-spacing: -0.065em;
+		line-height: 0.9;
 		color: var(--ink);
 	}
 	.stop {
 		color: var(--blue);
 	}
 	.tag {
-		display: inline-block;
-		margin-top: 0.12em;
-		font-size: 0.42em;
-		font-weight: 500;
-		letter-spacing: -0.035em;
-		color: var(--ink-80);
+		margin: 18px 0 0;
+		font-size: clamp(1.9rem, 5vw, 3.4rem);
+		font-weight: 600;
+		letter-spacing: -0.04em;
+		color: var(--ink);
+	}
+	/* The mark VNTA uses everywhere for "this is where it came from". */
+	.hl {
+		background: var(--blue-soft);
+		border-bottom: 0.09em solid var(--blue);
+		padding: 0 0.08em;
 	}
 	.lede {
-		margin: 0 0 28px;
-		max-width: 30rem;
+		margin: 18px 0 28px;
+		max-width: 32rem;
 		font-size: var(--t-lede);
 		color: var(--ink-60);
-		text-wrap: pretty;
+		text-wrap: balance;
 	}
 	.cta {
 		display: flex;
 		flex-wrap: wrap;
+		justify-content: center;
 		gap: 12px;
 	}
 	.status {
 		margin: 20px 0 0;
 		font-size: var(--t-small);
 		color: var(--ink-60);
+	}
+	.hero__art {
+		width: min(100%, 46rem);
+		margin-top: clamp(40px, 6vw, 80px);
+		text-align: left;
 	}
 
 	.grid {
@@ -200,7 +206,7 @@
 		grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
 	}
 	.grid li {
-		padding: 24px 24px 28px 0;
+		padding: 28px 28px 32px 0;
 		border-bottom: 1px solid var(--line);
 	}
 	.ico {

@@ -74,7 +74,7 @@
 		display: grid;
 		place-items: center;
 		padding: 24px;
-		background: var(--ground);
+		background: var(--ground-2);
 	}
 	.card {
 		width: min(100%, 26rem);

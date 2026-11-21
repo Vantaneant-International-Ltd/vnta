@@ -75,7 +75,7 @@
 		max-width: 400px;
 		padding: 18px 20px;
 		border-radius: 14px;
-		background: #1d1d22;
+		background: #1d1d1f;
 		border: 1px solid #26364d;
 		color: #d6dde8;
 		font-family: 'Inter Variable', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;

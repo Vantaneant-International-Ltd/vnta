@@ -215,7 +215,7 @@
 		transition: background var(--dur) var(--ease);
 	}
 	.mark.on {
-		background: #ddd5ee;
+		background: #e4e0fa;
 	}
 	.mark:focus-visible {
 		outline: 2px solid var(--blue);
@@ -338,7 +338,7 @@
 		min-height: 36px;
 		padding: 0 12px;
 		border: 1px solid var(--ink-20);
-		border-radius: var(--r-ctl);
+		border-radius: var(--r-pill);
 		background: var(--paper);
 		color: var(--ink);
 		font: inherit;
