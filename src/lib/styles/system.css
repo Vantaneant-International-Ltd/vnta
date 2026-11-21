@@ -135,7 +135,7 @@
 	padding-bottom: var(--section-y);
 }
 .shell .band[id] {
-	scroll-margin-top: 64px;
+	scroll-margin-top: 104px;
 }
 
 /* --- Masthead ------------------------------------------------------------- */

@@ -102,6 +102,11 @@
 	<div class="shell" data-sveltekit-preload-data="hover">
 		<a class="skip" href="#main">Skip to content</a>
 		<header class="masthead">
+			<!-- Pinned with the header on every main-site page: the way into the studio. -->
+			<a class="studiobar" href={studio}>
+				<span class="studiobar__ask">Need a website or brand built?</span>
+				<span class="studiobar__go">VNTA Studio <Icon name="arrow" size={14} /></span>
+			</a>
 			<div class="wrap">
 				<a class="masthead__mark" href="{base}/" aria-label="VNTA home">
 					<Wordmark height={17} /><span class="dot" aria-hidden="true">.</span>
