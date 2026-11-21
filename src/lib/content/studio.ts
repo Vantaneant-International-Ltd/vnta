@@ -376,7 +376,7 @@ export type House = {
 	href: string;
 	domain: string;
 	line: string;
-	status: string;
+	status?: string;
 	image: string;
 	alt: string;
 	built?: string[]; // the lead house only
@@ -390,7 +390,6 @@ export const houses: House[] = [
 		href: 'https://carbonwheels.ie',
 		domain: 'carbonwheels.ie',
 		line: 'Carbon steering wheels for BMW. Brand new and complete, with the airbag and buttons already fitted.',
-		status: 'Opens 1 November',
 		image: 'carbon-wheels',
 		alt: 'The Carbon Wheels home page on a laptop and a phone: Carbon steering wheels, done properly, beside a photo of a steering wheel.',
 		built: [

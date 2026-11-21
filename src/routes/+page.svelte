@@ -1,43 +1,27 @@
 <script lang="ts">
-	// VNTA's front page: the studio. (VNTA Personal is built and parked at /personal,
-	// hidden from search and from every menu, until it is ready.) One scroll, in the order a business
-	// owner asks the questions: what do you do, show me, how does it work, how
-	// much, how do I start. VNTA is a brand studio first; the website prices
-	// are here too, lower down. All of the words and numbers live in
-	// $lib/content/studio.ts.
+	// VNTA Studio, the front page. Rebuilt in the brand book's own terms
+	// (Felixto Brandworks, v1.0): black and white, Optima, hairlines, nothing
+	// decorative, nothing centred. Restraint, silence, precision, timelessness.
 	//
-	// The look: one large line, then a card that shows a real site and turns
-	// over to show the next. Each job after that sits in the client's own
-	// colours. The page is light and closes on one dark section.
-	import { base } from '$app/paths';
+	// The studio's clients keep their own loud colours in their own pictures.
+	// The page around them says almost nothing, so the work does the talking.
+	// VNTA Personal is built and parked at /personal until it is ready.
+	// All words and numbers live in $lib/content/studio.ts.
 	import EnquiryForm from '$lib/components/EnquiryForm.svelte';
-	import Flip from '$lib/studio/Flip.svelte';
 	import Symbol from '$lib/components/ui/Symbol.svelte';
-	import Snow from '$lib/season/Snow.svelte';
-	import { isWinter } from '$lib/season/season';
-	import { onMount as onMountSeason } from 'svelte';
-	// Winter (14 October to 6 January): the symbol glows warm, like the star
-	// at the top of a tree, and soft points of light drift down.
-	let winter = $state(false);
-	onMountSeason(() => (winter = isWinter(new Date(), location.search)));
-	import Logos from '$lib/studio/Logos.svelte';
-	import ProjectCard from '$lib/studio/ProjectCard.svelte';
 	import Seo from '$lib/components/Seo.svelte';
 	import { organisation, website } from '$lib/content/structured';
 	import {
 		pitch,
 		offer,
-		offerPrices,
 		sitDown,
-		wall,
 		work,
+		houses,
 		plans,
 		priceNotes,
 		steps,
 		questions,
-		houses,
 		landings,
-		worldStyle,
 		shot,
 		studioEmail,
 		replyWithin,
@@ -45,43 +29,16 @@
 	} from '$lib/content/studio';
 	import { faq, portfolio } from '$lib/content/studioStructured';
 
-	// The first house leads; the others follow in a row beneath it.
-	const [leadHouse, ...otherHouses] = houses;
-
 	const fromBuild = Math.min(...plans.map((p) => p.build));
-
 	const description = `VNTA Studio is a brand studio in Dublin. We look at your business, tell you plainly what to change, then design the brand and build the website. A sit-down is ${euro(sitDown.price)}.`;
 
-	// Each plan links to the page that says more about it.
 	const more: Record<string, string> = {
 		Website: 'websites-for-garages',
 		'Website with stock': 'websites-for-car-dealers',
 		'Online shop': 'online-shops'
 	};
 	const moreFor = (plan: string) => landings.find((l) => l.slug === more[plan]);
-
-	// The card at the top turns through every client job, then our own lead
-	// house: one real site at a time.
-	const reel = [
-		...work.map((j) => ({
-			world: j.world,
-			image: j.image,
-			name: j.name,
-			meta: `${j.trade}, ${j.place}`,
-			status: j.status,
-			live: j.status === 'Live',
-			href: j.href
-		})),
-		{
-			world: leadHouse.world,
-			image: leadHouse.image,
-			name: leadHouse.name,
-			meta: `Our own ${(leadHouse.kind ?? 'company').toLowerCase()}`,
-			status: leadHouse.status,
-			live: false,
-			href: leadHouse.href
-		}
-	];
+	const pad = (n: number) => String(n).padStart(2, '0');
 </script>
 
 <Seo
@@ -93,166 +50,99 @@
 	ld={[organisation(), website(), faq(questions), portfolio()]}
 />
 
-<main>
-	<!-- HERO: what we do, in one large line, and a real site that turns over -->
-	<section class="band hero" data-theme="tint" aria-labelledby="hero-title">
-		<!-- Studio's own background: the symbol's rays, turning very slowly,
-		     like light moving across a room. Robotics has routes; this is light. -->
-		{#if winter}<div class="hero__glow" aria-hidden="true"></div>{/if}
-		<div class="hero__sun" class:hero__sun--warm={winter} aria-hidden="true"><Symbol size={0} /></div>
-		{#if winter}<Snow fixed={false} warm colour="#c9933f" count={60} />{/if}
-		<div class="wrap">
-			<h1 class="hero__title" id="hero-title">{pitch.headline}</h1>
-
-			<div class="hero__row">
-				<p class="hero__lede">{pitch.lede}</p>
-				<div class="hero__cta">
-					<a class="btn btn--solid" href="#quote">Talk to us</a>
-					<a class="btn btn--ghost" href="#work">See the work</a>
-				</div>
-			</div>
-
-			<Flip slides={reel} />
-
+<main class="vx" id="top">
+	<!-- OPENING -->
+	<section class="open" aria-labelledby="open-title">
+		<div class="open__sun" aria-hidden="true"><Symbol size={0} /></div>
+		<div class="vx-wrap">
+			<p class="meta open__meta"><span>VNTA Studio</span><span>Dublin</span></p>
+			<h1 id="open-title">{pitch.headline}</h1>
+			<p class="open__lede">{pitch.lede}</p>
+			<p class="open__go">
+				<a class="line" href="#quote">Talk to us <span aria-hidden="true">→</span></a>
+				<a class="line line--quiet" href="#work">See the work</a>
+			</p>
+		</div>
+		<div class="vx-wrap">
 			<dl class="facts">
-				<div class="fact">
-					<dt>It starts with a sit-down</dt>
-					<dd>{euro(sitDown.price)}</dd>
-				</div>
-				<div class="fact">
-					<dt>We reply</dt>
-					<dd>within {replyWithin}</dd>
-				</div>
-				<div class="fact">
-					<dt>A new website</dt>
-					<dd>from {euro(fromBuild)}</dd>
-				</div>
+				<div><dt>It starts with a sit-down</dt><dd>{euro(sitDown.price)}</dd></div>
+				<div><dt>We reply</dt><dd>within {replyWithin}</dd></div>
+				<div><dt>A new website</dt><dd>from {euro(fromBuild)}</dd></div>
 			</dl>
 		</div>
 	</section>
 
-	<!-- WHAT WE DO: first the wall of who we have worked for and what we build
-	     on, then the three things we do. You can come for any one of them. -->
-	<section class="band" id="what" aria-labelledby="what-title">
-		<div class="wrap">
-			<div class="who">
-				<Logos marks={wall} title="Who we have worked for, and what we build on" />
-			</div>
-
-			<div class="head">
-				<h2 class="head__title" id="what-title">What we do</h2>
-				<p class="head__text">Not only websites. We start with the business.</p>
-			</div>
-
-			<div class="offer">
-				{#each offer as item, i}
-					<div class="offer__item">
-						<h3 class="offer__name">{item.name}</h3>
-						<p class="offer__body">{item.body}</p>
-						<p class="offer__price">{offerPrices[i]}</p>
-					</div>
-				{/each}
-			</div>
-		</div>
-	</section>
-
 	<!-- WORK -->
-	<section class="band" id="work" data-theme="tint" aria-labelledby="work-title">
-		<div class="wrap">
-			<div class="head">
-				<h2 class="head__title" id="work-title">The work</h2>
-				<p class="head__text">Three Irish businesses. The brand, the website, or both.</p>
-			</div>
+	<section class="sec" id="work" aria-labelledby="work-title">
+		<div class="vx-wrap">
+			<header class="sec__head">
+				<p class="meta"><span>01</span><span>Work</span></p>
+				<h2 id="work-title">Three Irish businesses.</h2>
+			</header>
 
-			<div class="jobs jobs--stack">
-				{#each work as job, i}
-					<div class="jobs__slot" style="--i:{i}">
-						<ProjectCard
-							world={job.world}
-							image={job.image}
-							alt={job.alt}
-							meta="{job.trade}, {job.place}"
-							status={job.status}
-							live={job.status === 'Live'}
-							name={job.name}
-							did={job.did}
-							href={job.href}
-							domain={job.domain}
-							summary={job.summary}
-							built={job.built}
-						/>
+			{#each work as job}
+				<article class="job">
+					<div class="job__say">
+						<h3>{job.name}</h3>
+						<p class="meta meta--stack">
+							<span>{job.did}</span>
+							<span>{job.trade}, {job.place}</span>
+							<span>{job.status === 'Live' ? 'Live' : 'In build'}</span>
+						</p>
+						<p class="job__sum">{job.summary}</p>
+						{#if job.href}
+							<a class="line" href={job.href} rel="noopener">{job.domain} <span aria-hidden="true">↗</span></a>
+						{/if}
 					</div>
-				{/each}
-			</div>
+					<figure class="job__shot">
+						<img
+							src={shot(job.image)}
+							srcset="{shot(job.image, '-720')} 580w, {shot(job.image)} 1090w"
+							sizes="(min-width: 900px) 62vw, 100vw"
+							alt={job.alt}
+							width="1090"
+							height="680"
+							loading="lazy"
+							decoding="async"
+						/>
+					</figure>
+				</article>
+			{/each}
+		</div>
+	</section>
 
-			<div class="head head--second" id="houses">
-				<h2 class="head__title" id="houses-title">Our own houses</h2>
-				<p class="head__text">
-					We build and run our own companies too, the same way we build yours.
-				</p>
-			</div>
-
-			<ProjectCard
-				world={leadHouse.world}
-				image={leadHouse.image}
-				alt={leadHouse.alt}
-				meta={leadHouse.kind ?? ''}
-				status={leadHouse.status}
-				name={leadHouse.name}
-				href={leadHouse.href}
-				domain={leadHouse.domain}
-				summary={leadHouse.line}
-				built={leadHouse.built}
-			/>
-
-			<div class="houses">
-				{#each otherHouses as house}
-					<a class="house world" style={worldStyle(house.world)} href={house.href} rel="noopener">
-						<div class="house__shot">
-							<img
-								src="{base}{shot(house.image)}"
-								srcset="{base}{shot(house.image, '-720')} 720w, {base}{shot(house.image)} 1440w"
-								sizes="(min-width: 700px) 46vw, 92vw"
-								width="1440"
-								height="900"
-								loading="lazy"
-								decoding="async"
-								alt={house.alt}
-							/>
-						</div>
-						<div class="house__text">
-							<div>
-								<h3 class="house__name">{house.name}</h3>
-								<p class="house__line">{house.line}</p>
-							</div>
-							<p class="house__foot">
-								<span class="tag tag--quiet">{house.status}</span>
-								<span class="house__domain">{house.domain}</span>
-							</p>
-						</div>
-					</a>
+	<!-- WHAT WE DO -->
+	<section class="sec" id="what" aria-labelledby="what-title">
+		<div class="vx-wrap">
+			<header class="sec__head">
+				<p class="meta"><span>02</span><span>What we do</span></p>
+				<h2 id="what-title">Not only websites. We start with the business.</h2>
+			</header>
+			<div class="rows">
+				{#each offer as o}
+					<div class="row">
+						<h3>{o.name}</h3>
+						<p>{o.body}</p>
+						<p class="meta">{o.price}</p>
+					</div>
 				{/each}
 			</div>
 		</div>
 	</section>
 
-	<!-- HOW IT WORKS: the steps, in order, as ruled rows -->
-	<section class="band" id="how" aria-labelledby="how-title">
-		<div class="wrap">
-			<div class="head">
-				<h2 class="head__title" id="how-title">How it works</h2>
-				<p class="head__text">
-					People design and build your site, with AI helping along the way. We are proud
-					of that.
-				</p>
-			</div>
-
-			<ol class="steps">
-				{#each steps as step, i}
-					<li class="step">
-						<span class="step__n" aria-hidden="true">{i + 1}</span>
-						<h3 class="step__name">{step.name}</h3>
-						<p class="step__body">{step.body}</p>
+	<!-- HOW -->
+	<section class="sec" id="how" aria-labelledby="how-title">
+		<div class="vx-wrap">
+			<header class="sec__head">
+				<p class="meta"><span>03</span><span>How it works</span></p>
+				<h2 id="how-title">Four steps, in this order.</h2>
+			</header>
+			<ol class="rows steps">
+				{#each steps as s, i}
+					<li class="row">
+						<span class="num">{pad(i + 1)}</span>
+						<h3>{s.name}</h3>
+						<p>{s.body}</p>
 					</li>
 				{/each}
 			</ol>
@@ -260,89 +150,80 @@
 	</section>
 
 	<!-- PRICES -->
-	<section class="band" id="prices" data-theme="tint" aria-labelledby="prices-title">
-		<div class="wrap">
-			<div class="head">
-				<h2 class="head__title" id="prices-title">Prices</h2>
-				<p class="head__text">
-					Start with the sit-down. Brand work is priced after it, once we know what
-					you need. Websites start at the prices here.
-				</p>
-			</div>
+	<section class="sec" id="prices" aria-labelledby="prices-title">
+		<div class="vx-wrap">
+			<header class="sec__head">
+				<p class="meta"><span>04</span><span>Prices</span></p>
+				<h2 id="prices-title">Start with the sit-down.</h2>
+				<p class="sec__note">Brand work is priced after it, once we know what you need. Websites start at the prices here.</p>
+			</header>
 
-			<!-- The sit-down: the first thing we sell, and where everyone starts. -->
-			<article class="sit card">
-				<div class="sit__say">
-					<h3 class="plan__name">The sit-down</h3>
-					<p class="plan__for">For any business. The place to start.</p>
-					<p class="plan__price">
-						<span class="plan__build">{euro(sitDown.price)}</span>
-					</p>
+			<div class="table" role="table" aria-label="Prices">
+				<div class="tr tr--head" role="row">
+					<span role="columnheader">What</span><span role="columnheader">For</span><span role="columnheader">Price</span><span role="columnheader">Then</span><span role="columnheader">Ready</span>
 				</div>
-				<ul class="list sit__list">
-					<li>Takes {sitDown.length}</li>
-					<li>We look at the whole business with you</li>
-					<li>You get {sitDown.leaves}</li>
-					<li>{sitDown.credit}</li>
-				</ul>
-				<p class="sit__go"><a class="btn btn--solid" href="#quote">Book a sit-down</a></p>
-			</article>
-
-			<div class="plans">
-				{#each plans as plan}
-					<article class="plan card">
-						<h3 class="plan__name">{plan.name}</h3>
-						<p class="plan__for">{plan.for}</p>
-						<p class="plan__price">
-							<span class="plan__from">from</span>
-							<span class="plan__build">{euro(plan.build)}</span>
-						</p>
-						<p class="plan__monthly">then {euro(plan.monthly)} a month</p>
-						<ul class="list plan__list">
-							{#each plan.includes as line}
-								<li>{line}</li>
-							{/each}
-						</ul>
-						<p class="plan__time">{plan.time}</p>
-						{#if moreFor(plan.name)}
-							<p class="plan__more">
-								<a class="link" href="{base}/studio/{moreFor(plan.name)?.slug}">{moreFor(plan.name)?.label}</a>
-							</p>
-						{/if}
-					</article>
-				{/each}
-			</div>
-
-			<dl class="group notes">
-				{#each priceNotes as note}
-					<div class="group__row">
-						<dt class="group__term">{note.name}</dt>
-						<dd class="group__desc">{note.body}</dd>
+				<div class="tr" role="row">
+					<b role="cell">The sit-down</b>
+					<span role="cell">Any business. {sitDown.credit}</span>
+					<span role="cell" class="price">{euro(sitDown.price)}</span>
+					<span role="cell">once</span>
+					<span role="cell">{sitDown.length}</span>
+				</div>
+				{#each plans as p}
+					<div class="tr" role="row">
+						<b role="cell">
+							{p.name}
+							{#if moreFor(p.name)}<a class="line line--small" href="/studio/{moreFor(p.name)?.slug}">{moreFor(p.name)?.label}</a>{/if}
+						</b>
+						<span role="cell">{p.for}</span>
+						<span role="cell" class="price"><small>from</small> {euro(p.build)}</span>
+						<span role="cell">{euro(p.monthly)} a month</span>
+						<span role="cell">{p.time.replace('Live in ', '')}</span>
 					</div>
 				{/each}
-			</dl>
+			</div>
 
-			<p class="prices__cta">
-				<a class="btn btn--solid" href="#quote">Get a price</a>
-				<span>Not sure which one? Tell us what you do and we will say.</span>
-			</p>
+			<dl class="notes">
+				{#each priceNotes as n}
+					<div><dt>{n.name}</dt><dd>{n.body}</dd></div>
+				{/each}
+			</dl>
+		</div>
+	</section>
+
+	<!-- OUR OWN HOUSES -->
+	<section class="sec" id="houses" aria-labelledby="houses-title">
+		<div class="vx-wrap">
+			<header class="sec__head">
+				<p class="meta"><span>05</span><span>Our own houses</span></p>
+				<h2 id="houses-title">We build and run our own companies too.</h2>
+			</header>
+			<div class="houses">
+				{#each houses as h}
+					<div class="house">
+						<h3>{h.name}</h3>
+						<p>{h.line}</p>
+						<p class="meta meta--stack">
+							{#if h.kind}<span>{h.kind}</span>{/if}
+							{#if h.status}<span>{h.status}</span>{/if}
+						</p>
+						<a class="line" href={h.href} rel="noopener">{h.domain} <span aria-hidden="true">↗</span></a>
+					</div>
+				{/each}
+			</div>
 		</div>
 	</section>
 
 	<!-- QUESTIONS -->
-	<section class="band" id="questions" aria-labelledby="questions-title">
-		<div class="wrap asks">
-			<div class="asks__head">
-				<h2 class="head__title" id="questions-title">Questions</h2>
-				<p class="head__text">
-					Something else? Email
-					<a class="link" href="mailto:{studioEmail}">{studioEmail}</a>
-				</p>
-			</div>
-
+	<section class="sec" id="questions" aria-labelledby="q-title">
+		<div class="vx-wrap">
+			<header class="sec__head">
+				<p class="meta"><span>06</span><span>Questions</span></p>
+				<h2 id="q-title">Asked before we start.</h2>
+			</header>
 			<div class="qa">
 				{#each questions as item}
-					<details class="qa__item">
+					<details>
 						<summary>{item.q}</summary>
 						<p>{item.a}</p>
 					</details>
@@ -351,18 +232,17 @@
 		</div>
 	</section>
 
-	<!-- QUOTE: the dark close. It runs straight into the foot. -->
-	<section class="band band--close" id="quote" data-theme="ink" aria-labelledby="quote-title">
-		<div class="wrap">
-			<div class="quote">
-				<div class="quote__say">
-					<h2 class="quote__title" id="quote-title">Talk to us</h2>
-					<p class="quote__text">
-						Tell us about your business. We reply within {replyWithin}. It costs
-						nothing to ask.
-					</p>
+	<!-- CONTACT -->
+	<section class="close" id="quote" data-theme="ink" aria-labelledby="quote-title">
+		<div class="vx-wrap">
+			<p class="meta"><span>07</span><span>Contact</span></p>
+			<div class="close__grid">
+				<div>
+					<h2 id="quote-title">Tell us about your business.</h2>
+					<p class="close__text">We reply within {replyWithin}. It costs nothing to ask.</p>
+					<p class="close__text"><a class="line" href="mailto:{studioEmail}">{studioEmail}</a></p>
 				</div>
-				<div class="quote__form">
+				<div class="close__form">
 					<EnquiryForm source="/studio" studio />
 				</div>
 			</div>
@@ -371,379 +251,464 @@
 </main>
 
 <style>
-	/* --- Hero ------------------------------------------------------------- */
-	.hero {
-		/* The turning card swings a little past its own edges. */
-		overflow-x: clip;
-		/* Nor does the symbol rise above the section, into the bar and menu. */
-		clip-path: inset(0 0 -400px 0);
+	/* The page's own palette: the brand book's black and white, and its greys. */
+	.vx {
+		--k: #000;
+		--w: #fff;
+		--g80: #333;
+		--g60: #666;
+		--g40: #999;
+		--g20: #ccc;
+		--hair: rgba(0, 0, 0, 0.18);
+		--hair-w: rgba(255, 255, 255, 0.22);
+		--max: 1320px;
+		--pad: clamp(20px, 4vw, 56px);
+		--serif: var(--font-display);
+		--sans: var(--font-ui);
+		background: var(--w);
+		color: var(--k);
+		font-family: var(--sans);
+	}
+	.vx-wrap {
+		width: 100%;
+		max-width: var(--max);
+		margin: 0 auto;
+		padding-inline: var(--pad);
+		box-sizing: border-box;
+	}
+
+	/* Small labels, in the manner of the guideline's page furniture: "Topic — 1.0". */
+	.meta {
+		margin: 0;
+		display: flex;
+		gap: 1.4em;
+		font-family: var(--font-mono);
+		font-size: 0.72rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--g60);
+	}
+	.meta--stack {
+		flex-direction: column;
+		gap: 0.35em;
+	}
+
+	/* The one kind of link: text with a hairline under it. */
+	.line {
+		display: inline-block;
+		color: inherit;
+		text-decoration: none;
+		border-bottom: 1px solid currentColor;
+		padding-bottom: 2px;
+		font-size: 0.98rem;
+		transition: opacity 0.2s;
+	}
+	.line:hover {
+		opacity: 0.6;
+	}
+	.line--quiet {
+		border-bottom-color: transparent;
+		opacity: 0.7;
+	}
+	.line--small {
+		display: block;
+		width: max-content;
+		margin-top: 8px;
+		font-size: 0.8rem;
+		font-weight: 400;
+		color: var(--g60);
+	}
+	.line:focus-visible,
+	summary:focus-visible {
+		outline: 2px solid currentColor;
+		outline-offset: 4px;
+	}
+
+	/* --- Opening: black, as the brand book opens ----------------------------- */
+	.open {
 		position: relative;
+		overflow: hidden;
+		background: var(--k);
+		color: var(--w);
+		min-height: min(92vh, 960px);
+		display: grid;
+		grid-template-rows: 1fr auto;
 		isolation: isolate;
 	}
-	.hero__sun {
+	.open .meta {
+		color: rgba(255, 255, 255, 0.6);
+	}
+	.open__sun {
 		position: absolute;
-		top: clamp(-260px, -14vw, -90px);
-		right: clamp(-260px, -14vw, -90px);
-		width: clamp(380px, 58vw, 900px);
+		right: clamp(-340px, -14vw, -120px);
+		top: 50%;
+		translate: 0 -50%;
+		width: clamp(520px, 78vw, 1080px);
 		aspect-ratio: 1;
-		color: var(--ink);
-		opacity: 0.07;
-		pointer-events: none;
-		z-index: 0;
-		animation:
-			sun-turn 240s linear infinite,
-			sun-breathe 14s ease-in-out infinite alternate;
+		color: rgba(255, 255, 255, 0.16);
+		z-index: -1;
 	}
-	.hero__sun--warm {
-		color: #c9933f;
-		opacity: 0.2;
-		animation:
-			sun-turn 240s linear infinite,
-			sun-warm 9s ease-in-out infinite alternate;
-	}
-	@keyframes sun-warm {
-		from {
-			opacity: 0.16;
-		}
-		to {
-			opacity: 0.26;
-		}
-	}
-	/* A warm light behind the star. */
-	.hero__glow {
-		position: absolute;
-		top: clamp(-200px, -10vw, -60px);
-		right: clamp(-200px, -10vw, -60px);
-		width: clamp(380px, 58vw, 900px);
-		aspect-ratio: 1;
-		background: radial-gradient(circle, rgba(232, 180, 96, 0.28) 0%, rgba(232, 180, 96, 0) 62%);
-		pointer-events: none;
-		z-index: 0;
-	}
-	.hero__sun :global(.symbol) {
+	.open__sun :global(svg) {
 		width: 100%;
 		height: 100%;
 	}
-	@keyframes sun-turn {
-		to {
-			transform: rotate(360deg);
-		}
+	.open > .vx-wrap:nth-of-type(2) {
+		align-self: center;
+		padding-block: clamp(96px, 16vh, 168px) clamp(48px, 8vh, 96px);
 	}
-	@keyframes sun-breathe {
-		from {
-			opacity: 0.05;
-		}
-		to {
-			opacity: 0.09;
-		}
+	.open__meta {
+		margin-bottom: clamp(28px, 6vh, 64px);
 	}
-	@media (prefers-reduced-motion: reduce) {
-		.hero__sun {
-			animation: none;
-		}
-	}
-	.hero > .wrap {
-		position: relative;
-		z-index: 1;
-		padding-top: clamp(28px, 4.5vw, 64px);
-		padding-bottom: clamp(40px, 5vw, 64px);
-	}
-	/* The one large thing on the page. */
-	.hero__title {
+	h1 {
 		margin: 0;
-		font-size: var(--t-giant);
-		line-height: 1;
-		letter-spacing: -0.018em;
-		color: var(--ink);
+		max-width: 14ch;
+		font-family: var(--serif);
+		font-weight: 400;
+		font-size: clamp(2.6rem, 6.6vw, 5.8rem);
+		line-height: 1.02;
+		letter-spacing: -0.02em;
 		text-wrap: balance;
 	}
-	.hero__row {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: 24px clamp(24px, 4vw, 56px);
-		margin-top: clamp(18px, 2.2vw, 28px);
+	.open__lede {
+		margin: clamp(24px, 4vh, 44px) 0 0;
+		max-width: 34rem;
+		font-size: 1.08rem;
+		line-height: 1.65;
+		color: rgba(255, 255, 255, 0.72);
 	}
-	.hero__lede {
-		margin: 0;
-		font-size: var(--t-lede);
-		line-height: 1.4;
-		color: var(--ink-80);
-		max-width: 34ch;
-		text-wrap: pretty;
-	}
-	.hero__cta {
+	.open__go {
+		margin: clamp(28px, 5vh, 52px) 0 0;
 		display: flex;
 		flex-wrap: wrap;
-		gap: 10px;
+		gap: 12px 32px;
 	}
-
-	/* Three plain facts, ruled off, read across. */
 	.facts {
-		display: grid;
-		grid-template-columns: 1fr;
-		margin: clamp(28px, 4vw, 56px) 0 0;
-	}
-	.fact {
-		display: flex;
-		flex-direction: column;
-		gap: 2px;
-		padding: 14px 0;
-		border-top: 1px solid var(--line);
-	}
-	.fact dt {
-		font-family: var(--font-label);
-		font-size: var(--t-small);
-		letter-spacing: 0.07em;
-		color: var(--ink-60);
-	}
-	.fact dd {
 		margin: 0;
-		font-family: var(--font-display);
-		font-size: var(--t-h3);
-		line-height: 1.15;
-		color: var(--ink);
-	}
-
-	/* --- The wall sits at the top of its band, with room before the title. */
-	#what > .wrap {
-		padding-top: clamp(40px, 5vw, 64px);
-	}
-	.who {
-		margin-bottom: clamp(56px, 7vw, 104px);
-	}
-
-	/* --- What we do: three things side by side, each under its own rule. -- */
-	.offer {
+		border-top: 1px solid var(--hair-w);
 		display: grid;
-		grid-template-columns: 1fr;
-		gap: 0 clamp(24px, 4vw, 56px);
+		grid-template-columns: repeat(3, 1fr);
 	}
-	.offer__item {
-		padding: 20px 0 clamp(20px, 3vw, 28px);
-		border-top: 1px solid var(--line);
+	.facts div {
+		padding: 22px 0 28px;
 	}
-	.offer__name {
-		margin: 0;
-		font-size: var(--t-h3);
-		line-height: 1.15;
-		color: var(--ink);
+	.facts div + div {
+		padding-left: clamp(16px, 3vw, 40px);
 	}
-	.offer__body {
-		margin: 10px 0 0;
-		font-size: var(--t-body);
-		line-height: 1.5;
-		color: var(--ink-60);
-		max-width: 38ch;
-		text-wrap: pretty;
-	}
-	.offer__price {
-		margin: 14px 0 0;
-		font-family: var(--font-label);
-		font-size: var(--t-body);
+	.facts dt {
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
 		letter-spacing: 0.06em;
-		color: var(--ink);
+		text-transform: uppercase;
+		color: rgba(255, 255, 255, 0.55);
+	}
+	.facts dd {
+		margin: 8px 0 0;
+		font-family: var(--serif);
+		font-size: clamp(1.15rem, 2.2vw, 1.7rem);
 	}
 
-	/* --- The sit-down's own price card: one wide card over the three plans. */
-	.sit {
+	/* --- Sections ------------------------------------------------------------- */
+	.sec {
+		border-top: 1px solid var(--hair);
+	}
+	.sec:first-of-type {
+		border-top: 0;
+	}
+	.sec > .vx-wrap {
+		padding-block: clamp(64px, 11vw, 140px);
+	}
+	.sec__head {
 		display: grid;
-		grid-template-columns: 1fr;
-		gap: clamp(18px, 2.4vw, 32px);
-		align-items: center;
-		padding: clamp(22px, 2.6vw, 36px);
-		margin-bottom: clamp(12px, 1.4vw, 20px);
+		gap: 22px;
+		margin-bottom: clamp(36px, 6vw, 72px);
+		max-width: 52rem;
 	}
-	.sit .plan__price {
-		margin-top: clamp(14px, 1.8vw, 22px);
-	}
-	.sit__list {
-		font-size: var(--t-body);
-		gap: 10px;
-	}
-	.sit__list li::before {
-		top: 0.72em;
-	}
-	.sit__go {
+	h2 {
 		margin: 0;
+		font-family: var(--serif);
+		font-weight: 400;
+		font-size: clamp(1.9rem, 4.4vw, 3.4rem);
+		line-height: 1.08;
+		letter-spacing: -0.015em;
+		text-wrap: balance;
+	}
+	h3 {
+		margin: 0;
+		font-family: var(--serif);
+		font-weight: 400;
+		font-size: clamp(1.35rem, 2.2vw, 1.9rem);
+		line-height: 1.15;
+	}
+	.sec__note {
+		margin: 0;
+		color: var(--g60);
+		line-height: 1.65;
+		max-width: 38rem;
 	}
 
-	/* --- Work: on a tall wide screen each job holds its place while the next
-	   one slides up over it, like cards dealt onto a table. ---------------- */
-	.jobs__slot {
-		min-width: 0;
-	}
-	@media (min-width: 1000px) and (min-height: 760px) {
-		.jobs--stack {
-			gap: clamp(24px, 3vw, 40px);
-		}
-		.jobs__slot {
-			position: sticky;
-			top: calc(80px + var(--i) * 18px);
-		}
-	}
-
-	/* --- Our own houses: one lead, the same as a job, then two beside each
-	   other. Every one shows its real, live site. --------------------------- */
-	.head--second {
-		margin-top: clamp(64px, 7.5vw, 112px);
-		scroll-margin-top: 88px;
-	}
-	.houses {
+	/* Work: the picture leads, the words stand beside it. */
+	.job {
 		display: grid;
-		grid-template-columns: 1fr;
-		gap: clamp(16px, 2vw, 24px);
-		margin-top: clamp(16px, 2vw, 24px);
+		grid-template-columns: minmax(0, 4fr) minmax(0, 8fr);
+		gap: clamp(24px, 5vw, 80px);
+		padding-block: clamp(28px, 4vw, 56px);
+		border-top: 1px solid var(--hair);
 	}
-	.house {
-		display: flex;
-		flex-direction: column;
-		overflow: hidden;
-		border-radius: clamp(20px, 2.2vw, 28px);
-		border: 1px solid var(--w-line);
+	.job__say {
+		display: grid;
+		gap: 20px;
+		align-content: start;
 	}
-	.house__shot {
-		line-height: 0;
-		border-bottom: 1px solid var(--w-line);
+	.job__sum {
+		margin: 0;
+		color: var(--g80);
+		line-height: 1.65;
+		max-width: 26rem;
 	}
-	.house__shot img {
+	.job__shot {
+		margin: 0;
+		border: 1px solid var(--hair);
+		background: var(--k);
+	}
+	.job__shot img {
 		display: block;
 		width: 100%;
 		height: auto;
+		/* Quiet until you look at it. A touch screen has no hover, so it sees colour. */
 	}
-	.house__text {
-		flex: 1;
-		display: flex;
-		flex-direction: column;
-		justify-content: space-between;
-		gap: 20px;
-		padding: clamp(18px, 2.4vw, 32px);
-	}
-	.house__name {
-		margin: 0;
-		font-size: var(--t-h3);
-		line-height: 1.1;
-		color: var(--ink);
-	}
-	.house__line {
-		margin: 8px 0 0;
-		font-size: var(--t-body);
-		line-height: 1.4;
-		color: var(--ink-60);
-		text-wrap: pretty;
-	}
-	.house__foot {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		gap: 8px 12px;
-		margin: 0;
-		font-size: var(--t-small);
-		color: var(--ink-60);
-	}
-	.house:hover .house__domain {
-		color: var(--ink);
-		text-decoration: underline;
-		text-decoration-color: var(--w-accent);
-		text-underline-offset: 4px;
+	@media (hover: hover) {
+		.job__shot img {
+			filter: grayscale(1);
+			transition: filter 0.5s ease;
+		}
+		.job:hover .job__shot img {
+			filter: none;
+		}
 	}
 
-	/* --- Steps: a real sequence, so it is numbered. Each one is a ruled row
-	   with its name set large. ---------------------------------------------- */
-	.steps {
-		list-style: none;
+	/* Rows: a hairline, a heading, a few words. */
+	.rows {
 		margin: 0;
 		padding: 0;
-		border-bottom: 1px solid var(--line);
+		list-style: none;
+		border-bottom: 1px solid var(--hair);
 	}
-	.step {
+	.row {
 		display: grid;
-		grid-template-columns: auto minmax(0, 1fr);
-		gap: 6px clamp(14px, 3vw, 48px);
+		grid-template-columns: minmax(0, 4fr) minmax(0, 6fr) minmax(0, 3fr);
+		gap: clamp(16px, 3vw, 48px);
+		padding-block: 28px;
+		border-top: 1px solid var(--hair);
 		align-items: baseline;
-		padding: clamp(18px, 2.2vw, 28px) 0;
-		border-top: 1px solid var(--line);
 	}
-	.step__n,
-	.step__name {
-		font-family: var(--font-display);
-		font-size: clamp(1.5rem, 2.4vw, 2.1rem);
-		line-height: 1.1;
-		letter-spacing: var(--track-display);
-	}
-	.step__n {
-		min-width: 1.4em;
-		color: var(--ink-40);
-	}
-	.step__name {
+	.row p {
 		margin: 0;
-		color: var(--ink);
-		text-wrap: balance;
+		color: var(--g80);
+		line-height: 1.65;
 	}
-	.step__body {
-		grid-column: 2;
-		margin: 0;
-		font-size: var(--t-lede);
-		line-height: 1.4;
-		color: var(--ink-60);
-		max-width: 30ch;
-		text-wrap: pretty;
+	.steps .row {
+		grid-template-columns: 4rem minmax(0, 4fr) minmax(0, 8fr);
+	}
+	.num {
+		font-family: var(--font-mono);
+		font-size: 0.8rem;
+		color: var(--g60);
 	}
 
-	/* --- Questions: the title holds on the left while the list runs. ------ */
-	.asks {
-		display: grid;
-		grid-template-columns: 1fr;
-		gap: clamp(28px, 4vw, 56px);
+	/* Prices: a table, not a shop window. */
+	.table {
+		border-bottom: 1px solid var(--hair);
 	}
-	.asks__head {
+	.tr {
 		display: grid;
-		gap: 14px;
+		grid-template-columns: minmax(0, 3.2fr) minmax(0, 4fr) minmax(0, 2fr) minmax(0, 2.2fr) minmax(0, 1.6fr);
+		gap: clamp(12px, 2vw, 32px);
+		padding-block: 24px;
+		border-top: 1px solid var(--hair);
+		align-items: baseline;
+		line-height: 1.5;
+		color: var(--g80);
+	}
+	.tr b {
+		font-family: var(--serif);
+		font-weight: 400;
+		font-size: 1.3rem;
+		color: var(--k);
+	}
+	.tr--head {
+		padding-block: 14px;
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--g60);
+	}
+	.price {
+		font-family: var(--serif);
+		font-size: 1.5rem;
+		color: var(--k);
+	}
+	.price small {
+		font-family: var(--font-mono);
+		font-size: 0.65rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--g60);
+		margin-right: 4px;
+	}
+	.notes {
+		margin: 36px 0 0;
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		gap: clamp(16px, 3vw, 48px);
+	}
+	.notes dt {
+		font-family: var(--font-mono);
+		font-size: 0.7rem;
+		letter-spacing: 0.06em;
+		text-transform: uppercase;
+		color: var(--g60);
+	}
+	.notes dd {
+		margin: 8px 0 0;
+		color: var(--g80);
+		line-height: 1.6;
+	}
+
+	/* Our houses */
+	.houses {
+		display: grid;
+		grid-template-columns: repeat(3, 1fr);
+		border-top: 1px solid var(--hair);
+	}
+	.house {
+		display: grid;
+		gap: 16px;
 		align-content: start;
+		padding: 32px clamp(16px, 3vw, 40px) 36px 0;
+	}
+	.house + .house {
+		padding-left: clamp(16px, 3vw, 40px);
+		border-left: 1px solid var(--hair);
+	}
+	.house p:not(.meta) {
+		margin: 0;
+		color: var(--g80);
+		line-height: 1.6;
 	}
 
-	/* --- Wide ------------------------------------------------------------- */
-	@media (min-width: 700px) {
-		.facts {
-			grid-template-columns: repeat(3, minmax(0, 1fr));
-			gap: 0 clamp(20px, 3vw, 48px);
+	/* Questions */
+	.qa {
+		border-bottom: 1px solid var(--hair);
+		max-width: 54rem;
+	}
+	details {
+		border-top: 1px solid var(--hair);
+	}
+	summary {
+		list-style: none;
+		cursor: pointer;
+		display: flex;
+		justify-content: space-between;
+		gap: 24px;
+		padding-block: 24px;
+		font-family: var(--serif);
+		font-size: 1.3rem;
+		line-height: 1.3;
+	}
+	summary::-webkit-details-marker {
+		display: none;
+	}
+	summary::after {
+		content: '+';
+		font-family: var(--sans);
+		color: var(--g60);
+	}
+	details[open] summary::after {
+		content: '–';
+	}
+	details p {
+		margin: 0 0 28px;
+		max-width: 40rem;
+		color: var(--g80);
+		line-height: 1.7;
+	}
+
+	/* Contact: black, and it runs into the foot. */
+	.close {
+		background: var(--k);
+		color: var(--w);
+	}
+	.close > .vx-wrap {
+		padding-block: clamp(64px, 11vw, 140px);
+	}
+	.close .meta {
+		color: rgba(255, 255, 255, 0.6);
+		margin-bottom: clamp(28px, 5vw, 56px);
+	}
+	.close__grid {
+		display: grid;
+		grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+		gap: clamp(32px, 6vw, 96px);
+	}
+	.close__text {
+		margin: 22px 0 0;
+		color: rgba(255, 255, 255, 0.72);
+		line-height: 1.65;
+	}
+
+	@media (max-width: 899px) {
+		.job,
+		.close__grid {
+			grid-template-columns: 1fr;
 		}
-		.fact {
-			gap: 6px;
-			padding: 18px 0 0;
+		.row,
+		.steps .row {
+			grid-template-columns: 1fr;
+			gap: 8px;
+			padding-block: 22px;
 		}
+		.steps .row {
+			grid-template-columns: 1fr;
+		}
+		.tr {
+			grid-template-columns: 1fr 1fr;
+			row-gap: 6px;
+		}
+		.tr--head {
+			display: none;
+		}
+		.tr b,
+		.tr > span:nth-child(2) {
+			grid-column: 1 / -1;
+		}
+		.notes,
 		.houses {
-			grid-template-columns: repeat(2, minmax(0, 1fr));
+			grid-template-columns: 1fr;
 		}
-		.offer {
-			grid-template-columns: repeat(3, minmax(0, 1fr));
+		.house,
+		.house + .house {
+			padding: 24px 0;
+			border-left: 0;
+			border-top: 1px solid var(--hair);
 		}
-		.offer__item {
-			padding-bottom: 0;
+		.house:first-child {
+			border-top: 0;
+		}
+		.facts {
+			grid-template-columns: 1fr;
+		}
+		.facts div + div {
+			padding-left: 0;
+			border-top: 1px solid var(--hair-w);
+		}
+		.facts div {
+			padding: 16px 0;
 		}
 	}
-	@media (min-width: 900px) {
-		.hero__row {
-			grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
-			align-items: end;
-		}
-		.hero__cta {
-			justify-content: flex-end;
-		}
-		.step {
-			grid-template-columns: auto minmax(0, 7fr) minmax(0, 4fr);
-		}
-		.step__body {
-			grid-column: auto;
-		}
-		.asks {
-			grid-template-columns: minmax(0, 4fr) minmax(0, 7fr);
-		}
-		.sit {
-			grid-template-columns: minmax(0, 4fr) minmax(0, 5fr) auto;
-		}
-		.asks__head {
-			position: sticky;
-			top: 96px;
+	@media (prefers-reduced-motion: reduce) {
+		.job__shot img {
+			transition: none;
 		}
 	}
 </style>

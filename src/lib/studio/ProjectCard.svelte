@@ -25,7 +25,7 @@
 		image: string;
 		alt: string;
 		meta: string;
-		status: string;
+		status?: string;
 		live?: boolean;
 		name: string;
 		did?: string; // what we made: 'Brand and website', 'Website'
@@ -41,7 +41,7 @@
 	<div class="job__text">
 		<div>
 			<p class="job__meta">
-				<span class="tag" class:tag--live={live} class:tag--quiet={!live}>{status}</span>
+				{#if status}<span class="tag" class:tag--live={live} class:tag--quiet={!live}>{status}</span>{/if}
 				{meta}
 			</p>
 			<svelte:element this={`h${level}`} class="job__name">{name}</svelte:element>

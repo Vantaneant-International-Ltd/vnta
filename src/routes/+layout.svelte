@@ -16,6 +16,7 @@
 	import '$lib/styles/tokens.css';
 	import '$lib/styles/system.css';
 	import '$lib/styles/studio.css';
+	import '$lib/styles/vnta.css';
 	import '@fontsource-variable/inter';
 	// The faces of the studio pages and the portal.
 	import '@fontsource/marcellus/400.css';

@@ -15,7 +15,9 @@
 
 	const offered = $derived(plans.filter((p) => l.plans.includes(p.name)));
 	const jobs = $derived(work.filter((w) => l.examples.includes(w.name)));
-	const ours = $derived(houses.filter((h) => l.examples.includes(h.name)));
+	// Carbon Wheels is held back until its screenshots are retaken: the ones in /work are from October and the shop has changed.
+	const stale = ['Carbon Wheels'];
+	const ours = $derived(houses.filter((h) => l.examples.includes(h.name) && !stale.includes(h.name)));
 	const others = $derived(landings.filter((o) => o.slug !== l.slug));
 </script>
 
