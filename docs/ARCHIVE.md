@@ -8,15 +8,15 @@ work was archived, not deleted.
 
 | What | Where |
 | --- | --- |
-| The whole site as it was, before the pivot | git tag `archive/robotics-site-2026-11-20` (commit `a398702`) |
+| The whole site as it was, before the pivot | commit `a398702` (the last commit on `main` before the pivot). A local tag `archive/robotics-site-2026-11-20` points at it, but pushing tags was blocked, so use the commit. |
 | Robotics product code, `STATUS.md`, pricing and margin rules | the private `vnta-robotics` repository. **Not touched.** |
-| The robotics pages, components, notes and pricing | in git history at the tag above |
+| The robotics pages, components, notes and pricing | in git history at that commit |
 
-To look at an old file: `git show archive/robotics-site-2026-11-20:src/routes/robotics/+page.svelte`.
-To bring the old site back: `git checkout archive/robotics-site-2026-11-20 -- <path>`.
+To look at an old file: `git show a398702:src/routes/robotics/+page.svelte`.
+To bring the old site back: `git checkout a398702 -- <path>`.
 
-The tag exists locally until it is pushed. Push it with
-`git push origin archive/robotics-site-2026-11-20`.
+A tag would be nicer than a commit hash. Someone with tag-push access can run
+`git tag archive/robotics-site-2026-11-20 a398702 && git push origin archive/robotics-site-2026-11-20`.
 
 ## What was removed from the working tree
 

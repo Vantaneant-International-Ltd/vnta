@@ -11,8 +11,9 @@
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"test": "node --test src/lib/extract/extract.test.ts scripts/social-profile.test.mjs",
-		"test:extract": "node --test src/lib/extract/extract.test.ts"
+		"test": "node --test src/lib/extract/extract.test.ts src/server/app.test.ts scripts/social-profile.test.mjs",
+		"test:extract": "node --test src/lib/extract/extract.test.ts",
+		"test:server": "node --test src/server/app.test.ts"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^3.0.0",
@@ -22,13 +23,15 @@
 		"svelte": "^5.45.6",
 		"svelte-check": "^4.3.4",
 		"typescript": "^5.9.3",
-		"vite": "^7.2.6"
+		"vite": "^7.2.6",
+		"wrangler": "^4.166.0"
 	},
 	"dependencies": {
 		"@fontsource-variable/inter": "^5.3.0",
 		"@fontsource/manrope": "^5.2.8",
 		"@fontsource/marcellus": "^5.2.8",
 		"@fontsource/marcellus-sc": "^5.2.8",
-		"magic-snowflakes": "7.1.0"
+		"magic-snowflakes": "7.1.0",
+		"unpdf": "^1.9.1"
 	}
 }
