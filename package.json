@@ -13,7 +13,10 @@
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
 		"test": "node --test src/lib/extract/extract.test.ts src/server/app.test.ts scripts/social-profile.test.mjs",
 		"test:extract": "node --test src/lib/extract/extract.test.ts",
-		"test:server": "node --test src/server/app.test.ts"
+		"test:server": "node --test src/server/app.test.ts",
+		"app:migrate": "wrangler d1 migrations apply DB --local --config dev/wrangler.dev.toml",
+		"app:dev": "npm run build && npm run app:migrate && npm run app:serve",
+		"app:serve": "wrangler pages dev build --port 8788 --persist-to dev/.wrangler/state --d1 DB --d1 INQUIRIES --r2 FILES --binding DEV_LOG_LOGIN_CODES=1"
 	},
 	"devDependencies": {
 		"@sveltejs/adapter-static": "^3.0.0",

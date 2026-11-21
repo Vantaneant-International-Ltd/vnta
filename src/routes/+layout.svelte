@@ -4,6 +4,8 @@
 	//
 	//   company   VNTA Personal: the public site. Everything except the two below.
 	//             Wrapped in .shell and drawn by styles/system.css.
+	//   app       /app and the pages under it: the signed-in product, which draws
+	//             its own shell and carries no public header, footer or cookie banner.
 	//   studio    /studio and the pages under it: VNTA's design studio, with
 	//             its own masthead, foot and older look. Wrapped in .studio and
 	//             drawn by styles/studio.css on the tokens in tokens.css.
@@ -56,7 +58,13 @@
 
 	const path = $derived($page.url.pathname.replace(base, '') || '/');
 	const frame = $derived(
-		path.startsWith('/portal') ? 'portal' : path === '/studio' || path.startsWith('/studio/') ? 'studio' : 'company'
+		path.startsWith('/portal')
+			? 'portal'
+			: path === '/app' || path.startsWith('/app/')
+				? 'app'
+				: path === '/studio' || path.startsWith('/studio/')
+					? 'studio'
+					: 'company'
 	);
 
 	// The sections of the home page. The one call to action is the beta list.
@@ -157,6 +165,9 @@
 			</div>
 		</footer>
 	</div>
+{:else if frame === 'app'}
+	<!-- The app draws its own shell (routes/app/+layout.svelte). Nothing public wraps it. -->
+	<div class="shell shell--app">{@render children()}</div>
 {:else if frame === 'studio'}
 	<div class="studio" data-sveltekit-preload-data="hover">
 		<!-- The way back: on the studio's home page only, a quiet line saying
@@ -235,7 +246,7 @@
 	{@render children()}
 {/if}
 
-<CookieBanner />
+{#if frame !== 'app'}<CookieBanner />{/if}
 
 <style>
 	:global(body) {

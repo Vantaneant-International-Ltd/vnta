@@ -9,3 +9,8 @@ supabase/.temp/
 
 # Pictures of published notes, copied in before each build (scripts/publish-notes.mjs assets)
 /static/notes/
+
+# Local Cloudflare state (wrangler pages dev)
+.wrangler/
+.dev.vars
+dev/.wrangler/

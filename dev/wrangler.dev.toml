@@ -1,0 +1,32 @@
+# LOCAL DEVELOPMENT ONLY. Used by `npm run app:migrate` (D1 migrations). `npm run app:serve`
+# declares the same bindings with flags, because `wrangler pages dev` ignores --config.
+#
+# It must never be named wrangler.toml at the repo root: on Cloudflare Pages a
+# root wrangler.toml takes over the project's settings from the dashboard and
+# would drop the bindings the live site already uses.
+#
+# Local D1 and R2 here are files under .wrangler/ on your machine. No real
+# Cloudflare resources are touched, and the IDs below are local names, not real ids.
+name = "vnta-dev"
+pages_build_output_dir = "../build"
+compatibility_date = "2025-06-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "vnta-app-dev"
+database_id = "DB"
+migrations_dir = "../migrations"
+
+[[d1_databases]]
+binding = "INQUIRIES"
+database_name = "vnta-inquiries-dev"
+database_id = "INQUIRIES"
+
+[[r2_buckets]]
+binding = "FILES"
+bucket_name = "vnta-files-dev"
+
+[vars]
+# Prints sign-in codes to this terminal instead of emailing them. Local only:
+# do not set this variable on the live site.
+DEV_LOG_LOGIN_CODES = "1"

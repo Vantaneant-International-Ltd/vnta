@@ -26,12 +26,17 @@ see [docs/ARCHIVE.md](docs/ARCHIVE.md).
 
 ```
 src/lib/extract/     The extractor, its tests, and the made-up sample letter
+src/lib/app/         The app's browser code: API client, session, cards
+src/routes/app/      The five views: Home, Inbox, Actions, Timeline, Settings
+src/server/          The app's backend (sign-in, uploads, findings, privacy controls)
+migrations/          D1 schema
+functions/api/app/   Cloudflare Pages Function that serves src/server
 src/lib/content/     site.ts holds the public words; studio.ts the studio's
 src/lib/components/  home/ (hero preview, demo, beta form), Seo, ui/
 src/lib/styles/      system.css (the site, under .shell), studio.css, tokens.css
 src/routes/          / (home), /contact, legal pages, /studio, /portal
 functions/           Cloudflare Pages Functions: contact form, client portal data
-docs/                STATUS.md, ARCHIVE.md
+docs/                STATUS.md, ARCHIVE.md, DEPLOY-APP.md
 ```
 
 Two other things live here and are not part of VNTA Personal: **VNTA Studio**
@@ -64,11 +69,13 @@ npm run dev
 | `npm run dev` | Local dev server |
 | `npm run build` | Production build into `build/` |
 | `npm run check` | Svelte type-check |
-| `npm test` | Extractor and social-profile tests |
+| `npm test` | All tests: extractor, app server, social profiles |
+| `npm run test:server` | App server tests only (real SQLite, in-memory files) |
+| `npm run app:dev` | Build and run the whole app locally on Cloudflare's runtime (:8788) |
 | `npm run test:extract` | Extractor tests only |
 
-The beta form posts to `/api/inquiry`, which only exists on Cloudflare. In local
-dev it shows its error message; that is expected.
+`npm run dev` serves the pages only. The app and the beta form need Cloudflare's
+functions: use `npm run app:dev`. Sign-in codes print in that terminal.
 
 ## Deploying
 
