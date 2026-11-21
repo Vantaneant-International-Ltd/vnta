@@ -10,8 +10,8 @@
 		title,
 		description,
 		shareTitle = title,
-		image = '/og.png', // the company card. Each main page passes its own from /share
-		imageAlt = 'VNTA. Life, handled.',
+		image = '/share/studio.png', // the studio card. Pages may pass their own from /share
+		imageAlt = 'VNTA Studio. Brand design and websites, Dublin.',
 		ld = []
 	}: {
 		title: string;

@@ -62,29 +62,31 @@
 			? 'portal'
 			: path === '/app' || path.startsWith('/app/')
 				? 'app'
-				: path === '/studio' || path.startsWith('/studio/')
-					? 'studio'
-					: 'company'
+				: path === '/personal'
+					? 'company'
+					: 'studio'
 	);
 
 	// The sections of the home page. The one call to action is the beta list.
 	const nav = [
-		{ label: 'What it handles', href: `${base}/#handles` },
-		{ label: 'How it works', href: `${base}/#how` },
-		{ label: 'Privacy', href: `${base}/#privacy` },
-		{ label: 'FAQ', href: `${base}/#faq` }
+		{ label: 'What it handles', href: `${base}/personal#handles` },
+		{ label: 'How it works', href: `${base}/personal#how` },
+		{ label: 'Privacy', href: `${base}/personal#privacy` },
+		{ label: 'FAQ', href: `${base}/personal#faq` }
 	];
-	const beta = `${base}/#beta`;
+	const beta = `${base}/personal#beta`;
 	const host = siteUrl.replace(/^https?:\/\//, '');
 
 	// The studio's own places: all parts of its one long page.
+	// The studio is the front page. Its pages for each kind of job live under /studio.
 	const studio = `${base}/studio`;
+	const home = `${base}/`;
 	const studioNav = [
-		{ label: 'What we do', href: `${studio}#what` },
-		{ label: 'Work', href: `${studio}#work` },
-		{ label: 'How it works', href: `${studio}#how` },
-		{ label: 'Prices', href: `${studio}#prices` },
-		{ label: 'Questions', href: `${studio}#questions` }
+		{ label: 'What we do', href: `${home}#what` },
+		{ label: 'Work', href: `${home}#work` },
+		{ label: 'How it works', href: `${home}#how` },
+		{ label: 'Prices', href: `${home}#prices` },
+		{ label: 'Questions', href: `${home}#questions` }
 	];
 </script>
 
@@ -103,7 +105,7 @@
 		<a class="skip" href="#main">Skip to content</a>
 		<header class="masthead">
 			<!-- Pinned with the header on every main-site page: the way into the studio. -->
-			<a class="studiobar" href={studio}>
+			<a class="studiobar" href={home}>
 				<span class="studiobar__ask">Need a website or brand built?</span>
 				<span class="studiobar__go">VNTA Studio <Icon name="arrow" size={14} /></span>
 			</a>
@@ -139,11 +141,11 @@
 					<div class="foot__navs">
 						<nav aria-label="Site">
 							<ul class="foot__nav">
-								<li><a href="{base}/#handles">What it handles</a></li>
-								<li><a href="{base}/#how">How it works</a></li>
-								<li><a href="{base}/#privacy">Privacy</a></li>
-								<li><a href="{base}/#faq">FAQ</a></li>
-								<li><a href={studio}>VNTA Studio</a></li>
+								<li><a href="{base}/personal#handles">What it handles</a></li>
+								<li><a href="{base}/personal#how">How it works</a></li>
+								<li><a href="{base}/personal#privacy">Privacy</a></li>
+								<li><a href="{base}/personal#faq">FAQ</a></li>
+								<li><a href={home}>VNTA Studio</a></li>
 								<li><a href="{base}/contact">Contact</a></li>
 							</ul>
 						</nav>
@@ -175,17 +177,9 @@
 	<div class="shell shell--app">{@render children()}</div>
 {:else if frame === 'studio'}
 	<div class="studio" data-sveltekit-preload-data="hover">
-		<!-- The way back: on the studio's home page only, a quiet line saying
-		     whose studio this is. -->
-		{#if path === '/studio'}
-			<a class="parentbar" href="{base}/">
-				<span class="parentbar__ask">Part of VNTA</span>
-				<span class="parentbar__go">Back to VNTA <Icon name="arrow" size={13} /></span>
-			</a>
-		{/if}
 		<header class="masthead">
 			<div class="wrap">
-				<a class="masthead__mark" href={studio} aria-label="VNTA Studio home">
+				<a class="masthead__mark" href={home} aria-label="VNTA Studio home">
 					<Wordmark height={17} />
 					<span class="masthead__sub">Studio</span>
 				</a>
@@ -193,7 +187,7 @@
 					{#each studioNav as item}
 						<a href={item.href}>{item.label}</a>
 					{/each}
-					<a class="btn btn--solid btn--small" href="{studio}#quote">Talk to us</a>
+					<a class="btn btn--solid btn--small" href="{home}#quote">Talk to us</a>
 				</nav>
 			</div>
 		</header>
@@ -212,7 +206,7 @@
 					<nav class="foot__col" aria-labelledby="foot-build">
 						<h2 id="foot-build">What we build</h2>
 						<ul>
-							<li><a href="{studio}#what">Brands</a></li>
+							<li><a href="{home}#what">Brands</a></li>
 							{#each landings as l}
 								<li><a href="{studio}/{l.slug}">{l.label}</a></li>
 							{/each}
@@ -223,11 +217,10 @@
 						<h2 id="foot-studio">The studio</h2>
 						<ul>
 							<li><a href="mailto:{studioEmail}">{studioEmail}</a></li>
-							<li><a href="{studio}#quote">Contact</a></li>
+							<li><a href="{home}#quote">Contact</a></li>
 							{#each follow as s}
 								<li><a href={s.href} rel="me noopener">{s.name}</a></li>
 							{/each}
-							<li><a href="{base}/">VNTA, the company</a></li>
 							<li><a href="{base}/legal">Legal</a></li>
 							<li><a href="{base}/privacy">Privacy</a></li>
 							<li><a href="{base}/terms">Terms</a></li>

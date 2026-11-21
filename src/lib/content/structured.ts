@@ -1,13 +1,14 @@
 // Structured data (schema.org JSON-LD), read from site.ts. Nothing is offered
 // for sale, so there are no prices, offers or ratings.
 import { siteUrl, contactEmail, social, pitch, company, faq as faqItems } from '$lib/content/site';
+import { pitch as studioPitch } from '$lib/content/studio';
 import { studioPaths } from '$lib/content/studioStructured';
 
 const ORG = `${siteUrl}/#organisation`;
 const SITE = `${siteUrl}/#website`;
 
 /** Every public page, for the sitemap and llms.txt. */
-export const publicPaths = () => ['/', ...studioPaths(), '/contact', '/legal', '/privacy', '/terms'];
+export const publicPaths = () => [...studioPaths(), '/legal', '/privacy', '/terms'];
 
 export const organisation = () => ({
 	'@context': 'https://schema.org',
@@ -20,11 +21,11 @@ export const organisation = () => ({
 	logo: { '@type': 'ImageObject', url: `${siteUrl}/icon-512.png`, width: 512, height: 512 },
 	image: `${siteUrl}/og.png`,
 	email: contactEmail,
-	description: pitch.short,
-	slogan: pitch.headline,
+	description: studioPitch.short,
+	slogan: studioPitch.headline,
 	foundingDate: company.founded,
 	address: { '@type': 'PostalAddress', addressLocality: 'Dublin', addressCountry: 'IE' },
-	contactPoint: { '@type': 'ContactPoint', contactType: 'general', email: contactEmail, url: `${siteUrl}/contact`, availableLanguage: 'en' },
+	contactPoint: { '@type': 'ContactPoint', contactType: 'general', email: contactEmail, url: `${siteUrl}/#quote`, availableLanguage: 'en' },
 	...(social.length ? { sameAs: social.map((s) => s.href) } : {})
 });
 

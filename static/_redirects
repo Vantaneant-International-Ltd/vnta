@@ -15,3 +15,10 @@
 # product. Their old addresses forward to the home page.
 /robotics            /  301
 /robotics/*          /  301
+
+# The studio is the front page. VNTA Personal is parked: the app and its pages
+# go to the front page until it is ready (its code is kept in the repo).
+/studio  /  301
+/app     /  302
+/app/*   /  302
+/contact  /#quote  301

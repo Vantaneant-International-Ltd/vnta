@@ -26,14 +26,15 @@
 	ld={[breadcrumb('Privacy', '/privacy')]}
 />
 
+<div class="shell">
 <main class="band">
 	<div class="wrap">
 		<article>
 			<p class="eyebrow">Privacy</p>
 			<h1>What VNTA does with your information.</h1>
 			<p class="lede">
-				Written in plain words, for people who are handing us their paperwork. VNTA is in private development, and
-				this page describes how it is built to work.
+				Written in plain words. VNTA Studio’s website collects very little. VNTA’s document app is built but not open
+				to the public yet; the parts of this page about the app describe how it is built to work, and apply when it opens.
 			</p>
 
 			<h2>The short version</h2>
@@ -150,6 +151,7 @@
 		</article>
 	</div>
 </main>
+</div>
 
 <style>
 	article {

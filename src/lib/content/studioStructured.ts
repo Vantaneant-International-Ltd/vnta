@@ -75,10 +75,10 @@ export const breadcrumb = (l: Landing) => ({
 	'@type': 'BreadcrumbList',
 	itemListElement: [
 		{ '@type': 'ListItem', position: 1, name: 'VNTA', item: `${siteUrl}/` },
-		{ '@type': 'ListItem', position: 2, name: 'Studio', item: `${siteUrl}/studio` },
+		{ '@type': 'ListItem', position: 2, name: 'Studio', item: `${siteUrl}/` },
 		{ '@type': 'ListItem', position: 3, name: l.title, item: `${siteUrl}/studio/${l.slug}` }
 	]
 });
 
 /** The studio's public pages, for the sitemap. */
-export const studioPaths = () => ['/studio', ...landings.map((l) => `/studio/${l.slug}`)];
+export const studioPaths = () => ['/', ...landings.map((l) => `/studio/${l.slug}`)];

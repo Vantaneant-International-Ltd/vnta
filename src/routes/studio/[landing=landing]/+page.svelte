@@ -70,7 +70,7 @@
 			</div>
 			<p class="offer__note">
 				No contract. You get the exact price in writing before we start.
-				<a class="link" href="{base}/studio#prices">See all prices</a>
+				<a class="link" href="{base}/#prices">See all prices</a>
 			</p>
 		</div>
 	</section>
@@ -131,7 +131,7 @@
 				{/each}
 			</div>
 			<p class="offer__note">
-				<a class="link" href="{base}/studio#questions">More questions and answers</a>
+				<a class="link" href="{base}/#questions">More questions and answers</a>
 			</p>
 		</div>
 	</section>

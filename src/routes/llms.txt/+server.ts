@@ -1,38 +1,35 @@
-// /llms.txt: a plain summary of VNTA for AI assistants, written from the same
+// /llms.txt: a plain summary of VNTA Studio for AI assistants, written from the same
 // content file as the pages so the two cannot disagree.
-import { pitch, company, handles, steps, privacy, faq, siteUrl, contactEmail } from '$lib/content/site';
+import { pitch, offer, plans, steps, questions, sitDown, siteUrl, studioEmail, replyWithin, euro } from '$lib/content/studio';
 
 export const prerender = true;
 
 export function GET() {
 	const lines = [
-		'# VNTA',
+		'# VNTA Studio',
 		'',
-		`> ${pitch.short} VNTA is the trading name of ${company.legalName}, based in ${company.place}.`,
+		`> ${pitch.short} VNTA is the trading name of Vantanéant International Ltd, Dublin, Ireland.`,
 		'',
-		'## Status',
+		'## What we do',
 		'',
-		pitch.status,
+		...offer.map((o) => `- ${o.name}: ${o.body} (${o.price})`),
 		'',
-		'## What it is designed to handle',
+		'## Prices',
 		'',
-		...handles.map((h) => `- ${h.name}: ${h.body}`),
+		`- The sit-down: ${euro(sitDown.price)}, ${sitDown.length}. ${sitDown.credit}`,
+		...plans.map((p) => `- ${p.name}: from ${euro(p.build)}, then ${euro(p.monthly)} a month. ${p.for} ${p.time}.`),
 		'',
 		'## How it works',
 		'',
-		...steps.map((s, i) => `${i + 1}. ${s.name}: ${s.body}`),
-		'',
-		'## Privacy and control (design rules for the beta, not certifications)',
-		'',
-		...privacy.map((p) => `- ${p.name}: ${p.body}`),
+		...steps.map((s, i) => `${i + 1}. ${s.name}`),
 		'',
 		'## Questions',
 		'',
-		...faq.flatMap((f) => [`**${f.q}**`, f.a, '']),
-		'## Other',
+		...questions.flatMap((f) => [`**${f.q}**`, f.a, '']),
+		'## Contact',
 		'',
-		`- VNTA also runs a small design studio for Irish businesses: ${siteUrl}/studio`,
-		`- Contact: ${contactEmail}`,
+		`- ${studioEmail}. We reply within ${replyWithin}.`,
+		`- ${siteUrl}`,
 		''
 	];
 	return new Response(lines.join('\n'), { headers: { 'content-type': 'text/plain; charset=utf-8' } });

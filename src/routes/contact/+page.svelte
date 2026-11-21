@@ -6,6 +6,8 @@
 	import { follow } from '$lib/content/site';
 </script>
 
+<svelte:head><meta name="robots" content="noindex" /></svelte:head>
+
 <Seo
 	title="Contact | VNTA"
 	imageAlt="Talk to VNTA."

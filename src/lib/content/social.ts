@@ -24,8 +24,8 @@ export const mastodon = {
 	/** Mastodon shows up to four. A link here is checked against this site. */
 	fields: [
 		{ name: 'Website', value: 'https://vnta.xyz' },
-		{ name: 'Private beta', value: 'https://vnta.xyz/#beta' },
-		{ name: 'Studio', value: 'https://vnta.xyz/studio' },
+		{ name: 'Prices', value: 'https://vnta.xyz/#prices' },
+		{ name: 'Contact', value: 'https://vnta.xyz/#quote' },
 		{ name: 'Based', value: 'Dublin, Ireland' }
 	]
 };
@@ -34,5 +34,5 @@ export const bluesky = {
 	/** The name the account was made with. It becomes vnta.xyz once the domain is verified. */
 	firstHandle: 'vntagroup.bsky.social',
 	domain: 'vnta.xyz',
-	bio: 'Personal Intelligence. Life, handled. Dublin.'
+	bio: 'VNTA Studio. Brand design and websites. Dublin.'
 };
